@@ -1,0 +1,50 @@
+{
+  "id": "chemistry-catalyst",
+  "lab": "chemistry",
+  "level": "advanced",
+  "grades": "11-12",
+  "order": 2,
+  "title": "Activation energy and catalysts",
+  "goal": "Speed up the breakdown of hydrogen peroxide with manganese dioxide and predict what happens to the catalyst.",
+  "intro": "Hydrogen peroxide breaks down into water and oxygen, but very slowly on its own. Tip in some manganese dioxide and watch it fizz.",
+  "minutes": 3,
+  "stage": "catalyst",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "slider",
+      "id": "catalyst",
+      "label": "Manganese dioxide",
+      "min": 0,
+      "max": 2,
+      "step": 0.1,
+      "unit": "g",
+      "initial": 1
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "When the fizzing stops, the catalyst left will be…",
+    "options": ["All of it", "Some of it", "None of it"]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "catalyst.leftFraction", "op": ">=", "value": 0.99 }, "answer": "All of it" },
+      { "when": { "reading": "catalyst.leftFraction", "op": "<=", "value": 0.01 }, "answer": "None of it" }
+    ],
+    "otherwise": "Some of it"
+  },
+  "misconceptions": ["catalyst-used-up"],
+  "allowedEdits": [
+    {
+      "id": "double",
+      "label": "Double the catalyst to 2 g",
+      "edit": { "op": "set", "setting": "catalyst", "value": 2 }
+    },
+    { "id": "none", "label": "Leave the catalyst out", "edit": { "op": "set", "setting": "catalyst", "value": 0 } }
+  ],
+  "theoryId": "catalysts",
+  "safety": "Wear goggles and gloves: hydrogen peroxide irritates skin and eyes, and manganese dioxide is harmful if swallowed or breathed in."
+}

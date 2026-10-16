@@ -1,0 +1,31 @@
+{
+  "greet": [
+    "Hey, I'm Ano. Want to break some science?",
+    "Hi! I'm Ano. Let's go find a wrong idea and break it."
+  ],
+  "building": [
+    "Nice. What do you think will happen?",
+    "Looking good. Make your call before you run it."
+  ],
+  "correct": [
+    "Nailed it! That's exactly how a scientist thinks.",
+    "Spot on. Your prediction matched reality."
+  ],
+  "wrong": [
+    "Whoa, did you see that? Let's figure out why.",
+    "Huh. Reality disagreed with you. That's the fun part."
+  ],
+  "stuck": [
+    "Want a hint? Just a small one.",
+    "Let's look at the one part that matters."
+  ],
+  "levelUp": [
+    "Level complete! Ready for the next one?",
+    "That's the level. Onward?"
+  ],
+  "hero": {
+    "wrong": "Whoa, did you see that? They hit the floor together. Let's find out why.",
+    "correct": "Nailed it! Weight doesn't change how fast things fall. Most people guess wrong here.",
+    "next": "Want more? Pick your level."
+  }
+}

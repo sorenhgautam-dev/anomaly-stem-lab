@@ -1,0 +1,7 @@
+{
+  "id": "pwm-stutters",
+  "lab": "robotics",
+  "title": "Switching on and off makes a motor stutter",
+  "belief": "If the power keeps switching on and off, the motor must keep stopping and starting. You'd see it jerk.",
+  "conceptIds": ["pwm", "inertia"]
+}

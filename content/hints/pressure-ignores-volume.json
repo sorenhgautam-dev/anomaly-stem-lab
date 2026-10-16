@@ -1,0 +1,8 @@
+{
+  "misconceptionId": "pressure-ignores-volume",
+  "hints": [
+    "Watch the pressure gauge as the plunger goes in. Does the number stay put?",
+    "The same particles in less space hit each bit of wall more often. At the same temperature, half the volume means double the pressure: P₁V₁ = P₂V₂.",
+    "Squeeze it to 20 mL, a third of the start. Check that the pressure has gone up about three times."
+  ]
+}

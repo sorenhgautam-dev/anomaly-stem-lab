@@ -1,0 +1,8 @@
+{
+  "misconceptionId": "current-used-up",
+  "hints": [
+    "Compare the current readings for bulb A and bulb B. Are they different?",
+    "In a single loop, the same current flows through every part. A bulb turns electrical energy into light and heat, but the current coming out of it is the same as the current going in.",
+    "Flip the battery so the current reaches bulb B first, and see whether bulb B gets any brighter."
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "id": "heat-adds-particles",
+  "lab": "chemistry",
+  "title": "Heating makes more particles",
+  "belief": "Heating the air makes more air particles. They need more room, so the balloon grows.",
+  "conceptIds": ["particle-model", "gases"]
+}

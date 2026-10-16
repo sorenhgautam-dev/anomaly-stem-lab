@@ -1,0 +1,14 @@
+{
+  "id": "one-wire-enough",
+  "lab": "robotics",
+  "title": "One wire is enough",
+  "belief": "A bulb just needs power from the battery's plus end. One wire from there to the bulb is enough to light it.",
+  "conceptIds": [
+    "complete-circuit",
+    "current-paths"
+  ],
+  "sources": [
+    "Winters, V. & Hammer, D. (2009). Fourth graders' framing of an electric circuits task. Physics Education Research Conference 2009. https://responsiveteachinginscience.as.tufts.edu/suggested_reading/WintersHammer_PERC2009.pdf",
+    "Engelhardt, P. V., Gray, K. E. & Rebello, N. S. (2004). How many students does it take before we see the light? The Physics Teacher 42, 216–221. https://www.phys.ksu.edu/personal/srebello/research/career/papers/LightBulbPaper.pdf"
+  ]
+}

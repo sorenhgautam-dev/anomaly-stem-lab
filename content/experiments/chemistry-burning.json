@@ -1,0 +1,49 @@
+{
+  "id": "chemistry-burning",
+  "lab": "chemistry",
+  "level": "medium",
+  "grades": "9-10",
+  "order": 4,
+  "title": "Burning in open vs sealed containers",
+  "goal": "Burn steel wool on a scale and predict whether the mass goes up, goes down or stays the same.",
+  "intro": "Steel wool burns with a bright orange glow. Will what's left on the scale weigh more, less or the same?",
+  "minutes": 3,
+  "stage": "burn",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    { "type": "toggle", "id": "sealed", "label": "Jar", "onLabel": "Sealed", "offLabel": "Open", "initial": false },
+    {
+      "type": "slider",
+      "id": "wool",
+      "label": "Steel wool",
+      "min": 1,
+      "max": 4,
+      "step": 0.5,
+      "unit": "g",
+      "initial": 2
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "When the steel wool stops glowing, the scale will read…",
+    "options": ["More", "The same", "Less"]
+  },
+  "answer": {
+    "kind": "compare",
+    "a": "scale.end",
+    "b": "scale.start",
+    "tolerance": 0.0001,
+    "aBigger": "More",
+    "bBigger": "Less",
+    "same": "The same"
+  },
+  "misconceptions": ["burning-destroys-matter", "oxygen-only-helps"],
+  "allowedEdits": [
+    { "id": "seal-jar", "label": "Seal the jar", "edit": { "op": "set", "setting": "sealed", "value": true } },
+    { "id": "open-jar", "label": "Take the lid off", "edit": { "op": "set", "setting": "sealed", "value": false } },
+    { "id": "more-wool", "label": "Use 4 g of steel wool", "edit": { "op": "set", "setting": "wool", "value": 4 } }
+  ],
+  "theoryId": "burning-and-mass",
+  "safety": "Burn steel wool only on a heat-proof mat, with goggles on and nothing flammable nearby; it stays hot after the glow fades."
+}

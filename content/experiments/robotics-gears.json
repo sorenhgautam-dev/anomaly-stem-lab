@@ -1,0 +1,39 @@
+{
+  "id": "robotics-gears",
+  "lab": "robotics",
+  "level": "advanced",
+  "grades": "11-12",
+  "order": 2,
+  "title": "Gears: speed vs strength",
+  "goal": "Find out how the size of the output gear changes its speed and turning force.",
+  "intro": "A small motor gear drives a big output gear. Which one spins faster, and what do you get in return?",
+  "minutes": 3,
+  "stage": "gears",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    { "type": "slider", "id": "driver", "label": "Motor gear", "min": 8, "max": 40, "step": 4, "unit": "teeth", "initial": 12 },
+    { "type": "slider", "id": "driven", "label": "Output gear", "min": 8, "max": 40, "step": 4, "unit": "teeth", "initial": 36 }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "The output gear will turn…",
+    "options": ["Faster than the motor", "Slower than the motor", "At the same speed"]
+  },
+  "answer": {
+    "kind": "compare",
+    "a": "driven.rpm",
+    "b": "driver.rpm",
+    "tolerance": 0.05,
+    "aBigger": "Faster than the motor",
+    "bBigger": "Slower than the motor",
+    "same": "At the same speed"
+  },
+  "misconceptions": ["big-gear-faster", "gears-keep-speed"],
+  "allowedEdits": [
+    { "id": "small-output", "label": "Use a small 8-tooth output gear", "edit": { "op": "set", "setting": "driven", "value": 8 } },
+    { "id": "big-motor-gear", "label": "Use a big 36-tooth motor gear", "edit": { "op": "set", "setting": "driver", "value": 36 } },
+    { "id": "equal-gears", "label": "Give the output gear 12 teeth", "edit": { "op": "set", "setting": "driven", "value": 12 } }
+  ],
+  "theoryId": "gear-ratios"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "burning-and-mass",
+  "title": "Burning adds oxygen",
+  "body": [
+    "Burning is a chemical reaction with oxygen. When steel wool burns, its iron atoms join with oxygen atoms from the air to make iron oxide.",
+    "So the solid left behind weighs more than the steel wool did. The extra mass is the oxygen it took from the air. Nothing is destroyed; the atoms are just rearranged.",
+    "In a sealed jar, the oxygen comes from the air already inside, which was on the scale all along, so the reading doesn't change. Open the lid afterwards and air rushes in to refill the jar."
+  ],
+  "equation": "3Fe + 2O₂ → Fe₃O₄",
+  "realWorld": "Wood and candles seem to lose mass when they burn because their products, carbon dioxide and water vapour, are gases that float away. Catch those gases, and the products weigh more than the fuel did, just like the steel wool."
+}

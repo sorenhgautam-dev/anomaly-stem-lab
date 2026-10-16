@@ -1,0 +1,34 @@
+{
+  "id": "robotics-steering",
+  "lab": "robotics",
+  "level": "medium",
+  "grades": "9-10",
+  "order": 2,
+  "title": "Turning robot",
+  "goal": "Work out which way a robot turns when one wheel spins faster than the other.",
+  "intro": "This robot has two wheels, each with its own motor. Set the speeds, then call the turn.",
+  "minutes": 2,
+  "stage": "robot",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    { "type": "slider", "id": "left", "label": "Left wheel", "min": 0, "max": 100, "step": 5, "unit": "%", "initial": 30 },
+    { "type": "slider", "id": "right", "label": "Right wheel", "min": 0, "max": 100, "step": 5, "unit": "%", "initial": 80 }
+  ],
+  "prediction": { "type": "choice", "question": "Which way will the robot turn?", "options": ["Left", "Right", "Straight"] },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "robot.turn", "op": ">", "value": 10 }, "answer": "Left" },
+      { "when": { "reading": "robot.turn", "op": "<", "value": -10 }, "answer": "Right" }
+    ],
+    "otherwise": "Straight"
+  },
+  "misconceptions": ["turns-toward-faster-wheel"],
+  "allowedEdits": [
+    { "id": "left-100", "label": "Set the left wheel to 100%", "edit": { "op": "set", "setting": "left", "value": 100 } },
+    { "id": "right-10", "label": "Set the right wheel to 10%", "edit": { "op": "set", "setting": "right", "value": 10 } },
+    { "id": "right-30", "label": "Set the right wheel to 30%", "edit": { "op": "set", "setting": "right", "value": 30 } }
+  ],
+  "theoryId": "differential-drive"
+}

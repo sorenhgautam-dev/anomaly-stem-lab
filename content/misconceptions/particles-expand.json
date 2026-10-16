@@ -1,0 +1,7 @@
+{
+  "id": "particles-expand",
+  "lab": "chemistry",
+  "title": "Hot particles get bigger",
+  "belief": "When air gets hot, each particle swells up. That's why the balloon gets bigger.",
+  "conceptIds": ["particle-model", "gases"]
+}

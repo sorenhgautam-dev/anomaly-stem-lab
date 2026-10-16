@@ -1,0 +1,50 @@
+{
+  "id": "robotics-shortcut",
+  "lab": "robotics",
+  "level": "medium",
+  "grades": "9-10",
+  "order": 3,
+  "title": "The shortcut wire",
+  "goal": "Find out what a wire across bulb B does to bulb A.",
+  "intro": "Two bulbs in a row, and a spare wire that can bridge right across bulb B. What can one little wire change?",
+  "minutes": 3,
+  "stage": "circuit",
+  "parts": ["wire"],
+  "outlines": true,
+  "board": {
+    "slots": [
+      { "id": "batt", "label": "Battery", "x": 170, "y": 340, "orientation": "v", "accepts": [], "fixed": { "kind": "battery", "props": { "volts": 6 } } },
+      { "id": "bulb-a", "label": "Bulb A", "x": 380, "y": 220, "orientation": "h", "accepts": [], "fixed": { "kind": "bulb" } },
+      { "id": "bulb-b", "label": "Bulb B", "x": 620, "y": 220, "orientation": "h", "accepts": [], "fixed": { "kind": "bulb" } },
+      { "id": "shortcut", "label": "Shortcut", "x": 620, "y": 120, "orientation": "h", "accepts": ["wire"] }
+    ],
+    "wires": [
+      { "from": "batt.a", "to": "bulb-a.a", "via": [[170, 220]] },
+      { "from": "bulb-a.b", "to": "bulb-b.a" },
+      { "from": "bulb-b.b", "to": "batt.b", "via": [[830, 220], [830, 460], [170, 460]] },
+      { "from": "shortcut.a", "to": "bulb-b.a" },
+      { "from": "shortcut.b", "to": "bulb-b.b" }
+    ]
+  },
+  "prediction": {
+    "type": "choice",
+    "question": "Add the shortcut wire across bulb B. Bulb A will…",
+    "options": ["Get brighter", "Stay the same", "Get dimmer", "Go out"]
+  },
+  "answer": {
+    "kind": "change",
+    "reading": "bulb-a.brightness",
+    "tolerance": 0.1,
+    "up": "Get brighter",
+    "down": "Get dimmer",
+    "same": "Stay the same",
+    "zero": "Go out"
+  },
+  "goalCondition": { "reading": "shortcut.current", "op": ">", "value": 0.01 },
+  "misconceptions": ["short-harmless"],
+  "allowedEdits": [
+    { "id": "add-shortcut", "label": "Add the shortcut wire", "edit": { "op": "place", "slot": "shortcut", "kind": "wire" } },
+    { "id": "remove-shortcut", "label": "Take the shortcut wire out", "edit": { "op": "remove", "slot": "shortcut" } }
+  ],
+  "theoryId": "short-circuits"
+}

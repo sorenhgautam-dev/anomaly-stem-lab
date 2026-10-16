@@ -1,0 +1,11 @@
+{
+  "id": "dissolving",
+  "title": "Dissolving isn't disappearing",
+  "body": [
+    "When sugar dissolves, water molecules pull sugar molecules away from the crystal, one by one. The sugar molecules spread out between the water molecules until they are far too small and too spread out to see.",
+    "Nothing is destroyed. Every sugar molecule is still in the beaker, so the solution weighs exactly as much as the water and the sugar did before.",
+    "There is a limit, though. At room temperature, water can dissolve about 2 g of sugar for every 1 g of water. Add more than that and the extra stays as crystals at the bottom."
+  ],
+  "equation": "mass of solution = mass of water + mass of sugar",
+  "realWorld": "Seawater looks clear, but every litre hides about 35 g of dissolved salt. Leave it to evaporate in the sun and the salt is left behind, which is how sea salt is made."
+}

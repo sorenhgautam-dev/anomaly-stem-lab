@@ -1,0 +1,56 @@
+{
+  "id": "chemistry-indicator",
+  "lab": "chemistry",
+  "level": "easy",
+  "grades": "6-8",
+  "order": 4,
+  "title": "Indicator colours (acid or base)",
+  "goal": "Use red cabbage indicator to find out whether a household liquid is an acid, a base or neutral.",
+  "intro": "Red cabbage juice changes colour in acids and bases. Pick a liquid from the kitchen and predict its colour before you add the indicator.",
+  "minutes": 3,
+  "stage": "indicator",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "choice",
+      "id": "liquid",
+      "label": "Liquid",
+      "options": [
+        { "value": "lemon", "label": "Lemon juice" },
+        { "value": "vinegar", "label": "Vinegar" },
+        { "value": "water", "label": "Water" },
+        { "value": "baking-soda", "label": "Baking soda solution" },
+        { "value": "soap", "label": "Soapy water" }
+      ],
+      "initial": "soap"
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "The indicator will turn…",
+    "options": ["Pink or red", "Purple", "Green or blue"]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "indicator.category", "op": "==", "value": 0 }, "answer": "Pink or red" },
+      { "when": { "reading": "indicator.category", "op": "==", "value": 2 }, "answer": "Green or blue" }
+    ],
+    "otherwise": "Purple"
+  },
+  "misconceptions": ["harsh-means-acid", "food-cant-be-acid"],
+  "allowedEdits": [
+    { "id": "use-lemon", "label": "Try lemon juice", "edit": { "op": "set", "setting": "liquid", "value": "lemon" } },
+    { "id": "use-vinegar", "label": "Try vinegar", "edit": { "op": "set", "setting": "liquid", "value": "vinegar" } },
+    { "id": "use-water", "label": "Try water", "edit": { "op": "set", "setting": "liquid", "value": "water" } },
+    {
+      "id": "use-baking-soda",
+      "label": "Try baking soda solution",
+      "edit": { "op": "set", "setting": "liquid", "value": "baking-soda" }
+    },
+    { "id": "use-soap", "label": "Try soapy water", "edit": { "op": "set", "setting": "liquid", "value": "soap" } }
+  ],
+  "theoryId": "acids-and-bases",
+  "safety": "Wear goggles and never taste lab liquids: lemon juice, vinegar and soapy water all sting if they get in your eyes."
+}

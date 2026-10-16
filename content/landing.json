@@ -1,0 +1,65 @@
+{
+  "descriptor": "A virtual STEM lab that finds the wrong idea behind every mistake, then builds the experiment that breaks it.",
+  "hero": {
+    "question": "Which falls",
+    "questionAccent": "faster?",
+    "setup": "Two balls, same size. The steel one is three times heavier than the glass one. Make your call, then we drop them.",
+    "options": [
+      {
+        "id": "heavy",
+        "label": "Steel first"
+      },
+      {
+        "id": "light",
+        "label": "Glass first"
+      },
+      {
+        "id": "same",
+        "label": "Same time"
+      }
+    ],
+    "correct": "same",
+    "balls": {
+      "steel": "Steel · 4.1 kg",
+      "glass": "Glass · 1.3 kg"
+    },
+    "ghostLabel": "Your prediction",
+    "retry": "Drop again",
+    "scrollHint": "Scroll to see how Ano works"
+  },
+  "scroll": "Scroll to explore",
+  "chapters": [
+    {
+      "id": "predict",
+      "title": "Predict",
+      "body": "Every experiment starts with your guess. You make the call before you press run, so your idea is on the record."
+    },
+    {
+      "id": "diagnose",
+      "title": "Diagnose",
+      "body": "Guess wrong and Ano replays your build through the mistaken ideas students often hold, until one of them predicts exactly what you did."
+    },
+    {
+      "id": "break",
+      "title": "Break",
+      "body": "Ano picks the one small change where that idea and reality disagree the most. You run it, and the idea cracks."
+    },
+    {
+      "id": "rebuild",
+      "title": "Rebuild",
+      "body": "Fix the build, run it again, keep the idea that survived. Chemistry and robotics, right in the browser."
+    }
+  ],
+  "cta": "Start exploring",
+  "labs": {
+    "title": "Pick an",
+    "titleAccent": "experiment",
+    "body": "Short builds, one prediction each. Get one wrong and Ano finds the idea behind it.",
+    "minutes": "min"
+  },
+  "captions": {
+    "landing": "Two hits, at the same moment",
+    "anomaly": "Glitch sting",
+    "correct": "Bright chime"
+  }
+}

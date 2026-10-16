@@ -1,0 +1,13 @@
+{
+  "id": "short-harmless",
+  "lab": "robotics",
+  "title": "A wire across a part changes nothing",
+  "belief": "A wire across bulb B is just an extra wire. The current still goes through the bulb, so nothing changes.",
+  "conceptIds": [
+    "short-circuits",
+    "current-paths"
+  ],
+  "sources": [
+    "Engelhardt, P. V. & Beichner, R. J. (2004). Students' understanding of direct current resistive electrical circuits. American Journal of Physics 72(1), 98–115. https://doi.org/10.1119/1.1614813"
+  ]
+}

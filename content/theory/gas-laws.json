@@ -1,0 +1,11 @@
+{
+  "id": "gas-laws",
+  "title": "Boyle's law: squeezing a gas",
+  "body": [
+    "Gas particles are always flying around and hitting the walls of their container. Each hit is a tiny push, and billions of them every second add up to the gas's pressure.",
+    "Squeeze the gas into half the space and the particles are packed twice as closely. At the same temperature they move just as fast, so they hit each bit of wall twice as often. Half the volume, double the pressure: that's Boyle's law.",
+    "Boyle's law is one part of the ideal gas law, PV = nRT. Keep the amount of gas (n) and the temperature (T) the same, and pressure times volume stays constant."
+  ],
+  "equation": "P₁V₁ = P₂V₂ (from PV = nRT)",
+  "realWorld": "A bicycle pump squeezes air until its pressure is high enough to push into the tyre. Divers feel Boyle's law too: 10 m underwater the pressure has doubled, so a lungful of air takes up only half the space."
+}

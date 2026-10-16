@@ -1,0 +1,8 @@
+{
+  "misconceptionId": "led-any-direction",
+  "hints": [
+    "Look at the LED in your build. Which of its legs faces the battery's plus side?",
+    "An LED is a diode: current can only flow through it one way, in at the anode (the longer leg) and out at the cathode. Put it in backwards and it blocks the current.",
+    "Flip the LED so its anode faces the plus side, then run it again."
+  ]
+}

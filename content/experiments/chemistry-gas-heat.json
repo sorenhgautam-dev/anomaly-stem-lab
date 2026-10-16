@@ -1,0 +1,51 @@
+{
+  "id": "chemistry-gas-heat",
+  "lab": "chemistry",
+  "level": "medium",
+  "grades": "9-10",
+  "order": 1,
+  "title": "Gas particles and heat",
+  "goal": "Find out what happens to the particles of air in a sealed balloon when you warm it up.",
+  "intro": "This balloon is sealed, so no air gets in or out. Let's warm it up and zoom in on the particles inside.",
+  "minutes": 3,
+  "stage": "heat",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "slider",
+      "id": "temperature",
+      "label": "Warm to",
+      "min": 20,
+      "max": 90,
+      "step": 5,
+      "unit": "°C",
+      "initial": 80
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "When the air warms up, its particles will be…",
+    "options": ["Bigger", "Faster", "More of them", "No different"]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "particles.sizeRatio", "op": ">", "value": 1.001 }, "answer": "Bigger" },
+      { "when": { "reading": "particles.countRatio", "op": ">", "value": 1.001 }, "answer": "More of them" },
+      { "when": { "reading": "particles.speedRatio", "op": ">", "value": 1.001 }, "answer": "Faster" }
+    ],
+    "otherwise": "No different"
+  },
+  "misconceptions": ["particles-expand", "heat-adds-particles"],
+  "allowedEdits": [
+    { "id": "hotter", "label": "Heat it to 90 °C", "edit": { "op": "set", "setting": "temperature", "value": 90 } },
+    {
+      "id": "cool-back",
+      "label": "Cool it back to 20 °C",
+      "edit": { "op": "set", "setting": "temperature", "value": 20 }
+    }
+  ],
+  "theoryId": "particles-and-heat",
+  "safety": "Warm the balloon in a water bath, never over a flame, and take care with hot water."
+}

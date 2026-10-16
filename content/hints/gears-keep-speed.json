@@ -1,0 +1,8 @@
+{
+  "misconceptionId": "gears-keep-speed",
+  "hints": [
+    "Compare the rpm readings for the motor gear and the output gear. Are they equal?",
+    "Teeth pass at the same rate on both gears, so the speed changes with size: output speed = motor speed × motor teeth ÷ output teeth. A big output gear turns slower but with more turning force.",
+    "Use a small 8-tooth output gear and watch it turn faster than the motor gear."
+  ]
+}

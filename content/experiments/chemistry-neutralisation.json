@@ -1,0 +1,46 @@
+{
+  "id": "chemistry-neutralisation",
+  "lab": "chemistry",
+  "level": "medium",
+  "grades": "9-10",
+  "order": 3,
+  "title": "Neutralisation and pH",
+  "goal": "Add sodium hydroxide to hydrochloric acid and predict whether the result is acidic, neutral or basic.",
+  "intro": "This beaker holds 25 mL of dilute hydrochloric acid with a few drops of universal indicator. Choose how much sodium hydroxide to add, then make your call.",
+  "minutes": 3,
+  "stage": "neutralise",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "slider",
+      "id": "base",
+      "label": "Sodium hydroxide",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "mL",
+      "initial": 10
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "After adding the base, the solution will be…",
+    "options": ["Still acidic", "Neutral", "Basic"]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "ph", "op": "<", "value": 6.5 }, "answer": "Still acidic" },
+      { "when": { "reading": "ph", "op": ">", "value": 7.5 }, "answer": "Basic" }
+    ],
+    "otherwise": "Neutral"
+  },
+  "misconceptions": ["any-base-neutralises", "base-only-dilutes"],
+  "allowedEdits": [
+    { "id": "exact", "label": "Add exactly 25 mL", "edit": { "op": "set", "setting": "base", "value": 25 } },
+    { "id": "extra", "label": "Add 35 mL", "edit": { "op": "set", "setting": "base", "value": 35 } }
+  ],
+  "theoryId": "neutralisation",
+  "safety": "Wear goggles: even dilute hydrochloric acid and sodium hydroxide can harm your eyes, so rinse any splash with plenty of water."
+}

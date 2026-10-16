@@ -1,0 +1,48 @@
+{
+  "id": "robotics-led",
+  "lab": "robotics",
+  "level": "medium",
+  "grades": "9-10",
+  "order": 1,
+  "title": "Light the LED",
+  "goal": "Make the LED glow without burning it out.",
+  "intro": "An LED is a tiny light with strict rules about current. Get it glowing without frying it.",
+  "minutes": 3,
+  "stage": "circuit",
+  "parts": ["led", "resistor", "wire"],
+  "outlines": true,
+  "board": {
+    "slots": [
+      { "id": "batt", "label": "Battery", "x": 170, "y": 300, "orientation": "v", "accepts": [], "fixed": { "kind": "battery", "props": { "volts": 3 } } },
+      { "id": "r", "label": "Resistor", "x": 500, "y": 180, "orientation": "h", "accepts": ["resistor", "wire"] },
+      { "id": "led", "label": "LED", "x": 830, "y": 300, "orientation": "v", "accepts": ["led"], "initial": { "kind": "led", "props": { "flipped": true } } }
+    ],
+    "wires": [
+      { "from": "batt.a", "to": "r.a", "via": [[170, 180]] },
+      { "from": "r.b", "to": "led.a", "via": [[830, 180]] },
+      { "from": "led.b", "to": "batt.b", "via": [[830, 420], [170, 420]] }
+    ]
+  },
+  "prediction": { "type": "choice", "question": "When you press Run, the LED will…", "options": ["Glow", "Stay dark", "Burn out"] },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "fault": "burnout:led" }, "answer": "Burn out" },
+      { "when": { "reading": "led.lit", "op": "==", "value": 1 }, "answer": "Glow" }
+    ],
+    "otherwise": "Stay dark"
+  },
+  "goalCondition": {
+    "all": [
+      { "reading": "led.lit", "op": "==", "value": 1 },
+      { "reading": "led.burnt", "op": "==", "value": 0 }
+    ]
+  },
+  "misconceptions": ["led-any-direction", "no-resistor-needed"],
+  "allowedEdits": [
+    { "id": "flip-led", "label": "Flip the LED round", "edit": { "op": "toggle-prop", "slot": "led", "prop": "flipped" } },
+    { "id": "add-resistor", "label": "Put the 100 Ω resistor in", "edit": { "op": "place", "slot": "r", "kind": "resistor", "props": { "ohms": 100 } } },
+    { "id": "use-wire", "label": "Swap the resistor for a plain wire", "edit": { "op": "place", "slot": "r", "kind": "wire" } }
+  ],
+  "theoryId": "led-basics"
+}

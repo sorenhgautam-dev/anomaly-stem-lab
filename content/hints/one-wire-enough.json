@@ -1,0 +1,8 @@
+{
+  "misconceptionId": "one-wire-enough",
+  "hints": [
+    "Follow the path from the battery's plus end through the bulb. Is there a way back to the minus end?",
+    "Current needs a complete loop: out of one end of the battery, through the bulb, and back into the other end. With one wire there's no loop, so no current flows.",
+    "Add the second wire, from the bulb back to the battery's minus end."
+  ]
+}

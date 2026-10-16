@@ -1,0 +1,51 @@
+{
+  "id": "chemistry-gas-laws",
+  "lab": "chemistry",
+  "level": "advanced",
+  "grades": "11-12",
+  "order": 1,
+  "title": "Gas laws (PV = nRT)",
+  "goal": "Squeeze a sealed syringe of air and predict how its pressure changes.",
+  "intro": "This syringe holds 60 mL of air with its tip sealed. Push the plunger in and keep an eye on the pressure gauge.",
+  "minutes": 3,
+  "stage": "gaslaw",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "slider",
+      "id": "volume",
+      "label": "Squeeze to",
+      "min": 15,
+      "max": 60,
+      "step": 5,
+      "unit": "mL",
+      "initial": 30
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "When you squeeze the air into less space, its pressure will…",
+    "options": ["Rise in proportion", "Rise a little", "Stay the same", "Fall in proportion"]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "pressure.ratio", "op": "<", "value": 0.98 }, "answer": "Fall in proportion" },
+      { "when": { "reading": "pressure.ratio", "op": "<=", "value": 1.02 }, "answer": "Stay the same" },
+      { "when": { "reading": "pv.ratio", "op": "<", "value": 0.95 }, "answer": "Rise a little" }
+    ],
+    "otherwise": "Rise in proportion"
+  },
+  "misconceptions": ["pressure-ignores-volume", "pressure-follows-volume"],
+  "allowedEdits": [
+    { "id": "squeeze", "label": "Squeeze it to 20 mL", "edit": { "op": "set", "setting": "volume", "value": 20 } },
+    {
+      "id": "release",
+      "label": "Let it back out to 60 mL",
+      "edit": { "op": "set", "setting": "volume", "value": 60 }
+    }
+  ],
+  "theoryId": "gas-laws",
+  "safety": "Use a capped syringe with no needle, never point it at anyone, and don't force the plunger."
+}

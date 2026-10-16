@@ -1,0 +1,11 @@
+{
+  "id": "acids-and-bases",
+  "title": "Acids, bases and the pH scale",
+  "body": [
+    "Acids give lemon juice and vinegar their sour taste. Bases, like soap and baking soda solution, feel slippery. Some cleaners are acids and many are bases, so whether something cleans or stings doesn't tell you which it is.",
+    "The pH scale usually runs from 0 to 14. Below 7 is acidic, 7 is neutral, and above 7 is basic. Each step is ten times stronger, so pH 2 is a hundred times more acidic than pH 4.",
+    "An indicator is a dye that changes colour with pH. Red cabbage juice turns pink or red in acids, stays purple near neutral, and turns blue and then green in bases."
+  ],
+  "equation": "pH < 7 acidic · pH 7 neutral · pH > 7 basic",
+  "realWorld": "Your stomach uses strong acid to digest food, and antacid tablets are bases that neutralise the extra. Gardeners test soil pH because some plants, like blueberries, only thrive in acidic soil."
+}

@@ -1,0 +1,8 @@
+{
+  "misconceptionId": "turns-toward-faster-wheel",
+  "hints": [
+    "Watch the trail. Which wheel is on the outside of the curve, travelling further?",
+    "The faster wheel covers more ground, so it swings around the slower one. A robot turns toward its slower wheel, away from the faster one.",
+    "Set the left wheel to 100%, predict again, and see which way it turns."
+  ]
+}

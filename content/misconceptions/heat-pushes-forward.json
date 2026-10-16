@@ -1,0 +1,7 @@
+{
+  "id": "heat-pushes-forward",
+  "lab": "chemistry",
+  "title": "Heat always pushes a reaction forward",
+  "belief": "Heating speeds reactions up, so it must push this one forward too and turn more of the brown gas colourless.",
+  "conceptIds": ["equilibrium", "reaction-rates"]
+}

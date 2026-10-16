@@ -1,0 +1,12 @@
+[
+  {
+    "id": "robotics",
+    "title": "Robotics Lab",
+    "line": "Wire up circuits, drive robots, and find out what current really does."
+  },
+  {
+    "id": "chemistry",
+    "title": "Chemistry Lab",
+    "line": "Mix, heat and weigh. Zoom in to watch the particles while it happens."
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "id": "more-resistance-more-heat",
+  "lab": "robotics",
+  "title": "More resistance means more heat",
+  "belief": "A resistor with more ohms fights the current harder, so it must get hotter. A low-value one hardly warms up.",
+  "conceptIds": [
+    "ohms-law",
+    "electric-power"
+  ],
+  "sources": [
+    "Engelhardt, P. V. & Beichner, R. J. (2004). Students' understanding of direct current resistive electrical circuits. American Journal of Physics 72(1), 98–115. https://doi.org/10.1119/1.1614813"
+  ]
+}

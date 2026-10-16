@@ -1,0 +1,16 @@
+{
+  "id": "pwm-motors",
+  "title": "Pulse-width modulation",
+  "body": [
+    "Pulse-width modulation (PWM) controls a motor by switching its power fully on and off very fast, hundreds or thousands of times a second. The duty cycle is the share of the time it's on.",
+    "Those pulses are too quick for the motor to follow. Its coil smooths out the current and its spinning parts smooth out the speed, so it settles at a steady speed set by the average voltage. Switch slowly enough, though, and it really would jerk.",
+    "Average voltage = duty cycle × supply voltage. At 50% duty on 6 V the motor gets 3 V on average and spins at roughly half speed."
+  ],
+  "equation": "average voltage = duty cycle × supply voltage",
+  "realWorld": "Computer fans, drones and dimmable LED lights all use PWM to set their speed or brightness.",
+  "sources": [
+    "Condit, R. AN905 Brushed DC Motor Fundamentals. Microchip Technology, DS00905B. https://ww1.microchip.com/downloads/en/AppNotes/00905B.pdf",
+    "OpenStax College Physics 2e, §23.6 Back Emf. https://openstax.org/books/college-physics-2e/pages/23-6-back-emf",
+    "Arduino language reference, analogWrite() (PWM at 490 Hz, 980 Hz on Uno pins 5 and 6). https://github.com/arduino/reference-en/blob/master/Language/Functions/Analog%20IO/analogWrite.adoc"
+  ]
+}

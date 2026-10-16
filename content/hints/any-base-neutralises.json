@@ -1,0 +1,8 @@
+{
+  "misconceptionId": "any-base-neutralises",
+  "hints": [
+    "After 10 mL of base, what colour is the universal indicator, and what does the pH meter say?",
+    "Base uses up acid bit by bit: each hydroxide ion uses up one hydrogen ion. Here it takes 25 mL of base to use up all the acid, so with less than that the solution is still acidic.",
+    "Set the base to 25 mL, then try 35 mL. Watch the pH jump past 7 once the acid runs out."
+  ]
+}

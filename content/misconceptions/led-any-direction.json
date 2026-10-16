@@ -1,0 +1,13 @@
+{
+  "id": "led-any-direction",
+  "lab": "robotics",
+  "title": "LEDs work either way round",
+  "belief": "An LED is just a tiny bulb. It lights up whichever way round I put it in.",
+  "conceptIds": [
+    "led-polarity",
+    "diodes"
+  ],
+  "sources": [
+    "Peppler, K. & Glosson, D. (2013). Stitching circuits: Learning about circuitry through e-textile materials. Journal of Science Education and Technology. https://doi.org/10.1007/s10956-012-9428-2"
+  ]
+}

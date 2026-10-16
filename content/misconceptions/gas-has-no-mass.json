@@ -1,0 +1,7 @@
+{
+  "id": "gas-has-no-mass",
+  "lab": "chemistry",
+  "title": "Gas has no mass",
+  "belief": "Gas is just air, and air doesn't weigh anything. When stuff turns into gas, its mass is gone.",
+  "conceptIds": ["conservation-of-mass", "gases"]
+}

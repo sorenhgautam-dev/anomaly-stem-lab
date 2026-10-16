@@ -1,0 +1,13 @@
+{
+  "id": "complete-circuits",
+  "title": "Complete circuits",
+  "body": [
+    "Electric current only flows around a complete loop. It leaves one end of the battery, passes through the parts, and comes back into the other end.",
+    "That's why a bulb has two connections. Current goes in one side and out the other. With just one wire there's no way back to the battery, so no current flows and the bulb stays dark.",
+    "The battery doesn't fill the bulb up with electricity. It pushes the charges that are already in the wires around the loop, a bit like a pump pushing water round a closed pipe."
+  ],
+  "realWorld": "A torch works the same way. Its switch closes a gap in the loop, and clicking it off opens the gap again.",
+  "sources": [
+    "OpenStax College Physics 2e, §20.1 Current. https://openstax.org/books/college-physics-2e/pages/20-1-current"
+  ]
+}

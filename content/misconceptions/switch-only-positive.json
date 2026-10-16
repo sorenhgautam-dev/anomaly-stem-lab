@@ -1,0 +1,14 @@
+{
+  "id": "switch-only-positive",
+  "lab": "robotics",
+  "title": "A switch only works before the bulb",
+  "belief": "A switch has to go on the plus side, before the bulb. After the bulb the current has already done its job, so the switch can't stop it.",
+  "conceptIds": [
+    "complete-circuit",
+    "switches"
+  ],
+  "sources": [
+    "Engelhardt, P. V. & Beichner, R. J. (2004). Students' understanding of direct current resistive electrical circuits. American Journal of Physics 72(1), 98–115. https://doi.org/10.1119/1.1614813",
+    "Shipstone, D. (1984). A study of children's understanding of electricity in simple DC circuits. European Journal of Science Education 6(2), 185–198. https://doi.org/10.1080/0140528840060208"
+  ]
+}

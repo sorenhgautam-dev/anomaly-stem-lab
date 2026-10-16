@@ -1,0 +1,7 @@
+{
+  "id": "pressure-follows-volume",
+  "lab": "chemistry",
+  "title": "Less space, less pressure",
+  "belief": "Squeeze a gas into a smaller space and its pressure gets smaller too. Half the volume, half the pressure.",
+  "conceptIds": ["gas-laws", "particle-model"]
+}

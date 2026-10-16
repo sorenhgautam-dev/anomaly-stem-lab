@@ -1,0 +1,20 @@
+[
+  {
+    "id": "easy",
+    "title": "Easy",
+    "grades": "Grades 6–8",
+    "line": "First circuits, melting ice, where the sugar goes. Big ideas, quick builds."
+  },
+  {
+    "id": "medium",
+    "title": "Medium",
+    "grades": "Grades 9–10",
+    "line": "LEDs and resistors, steering a robot, reaction speed and pH."
+  },
+  {
+    "id": "advanced",
+    "title": "Advanced",
+    "grades": "Grades 11–12",
+    "line": "Power budgets, gears and PWM, gas laws, catalysts and equilibrium."
+  }
+]

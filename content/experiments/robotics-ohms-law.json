@@ -1,0 +1,47 @@
+{
+  "id": "robotics-ohms-law",
+  "lab": "robotics",
+  "level": "advanced",
+  "grades": "11-12",
+  "order": 1,
+  "title": "Ohm's law and power budget",
+  "goal": "Pick a resistor that can sit across 9 V without going over its 0.25 W rating.",
+  "intro": "This resistor is rated for a quarter of a watt. Put 9 volts across it and see what that budget really means.",
+  "minutes": 4,
+  "stage": "circuit",
+  "parts": ["resistor"],
+  "outlines": true,
+  "board": {
+    "slots": [
+      { "id": "batt", "label": "Battery", "x": 170, "y": 300, "orientation": "v", "accepts": [], "fixed": { "kind": "battery", "props": { "volts": 9 } } },
+      { "id": "r", "label": "Resistor", "x": 500, "y": 180, "orientation": "h", "accepts": ["resistor"], "initial": { "kind": "resistor", "props": { "ohms": 10 } } }
+    ],
+    "wires": [
+      { "from": "batt.a", "to": "r.a", "via": [[170, 180]] },
+      { "from": "r.b", "to": "batt.b", "via": [[830, 180], [830, 420], [170, 420]] }
+    ]
+  },
+  "prediction": { "type": "choice", "question": "On 9 V, the resistor will…", "options": ["Stay cool", "Get warm", "Overheat"] },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "r.power", "op": ">", "value": 0.25 }, "answer": "Overheat" },
+      { "when": { "reading": "r.power", "op": ">=", "value": 0.1 }, "answer": "Get warm" }
+    ],
+    "otherwise": "Stay cool"
+  },
+  "goalCondition": {
+    "all": [
+      { "reading": "r.current", "op": ">", "value": 0 },
+      { "reading": "r.power", "op": "<=", "value": 0.25 }
+    ]
+  },
+  "misconceptions": ["more-resistance-more-heat"],
+  "allowedEdits": [
+    { "id": "use-10", "label": "Swap in a 10 Ω resistor", "edit": { "op": "place", "slot": "r", "kind": "resistor", "props": { "ohms": 10 } } },
+    { "id": "use-100", "label": "Swap in a 100 Ω resistor", "edit": { "op": "place", "slot": "r", "kind": "resistor", "props": { "ohms": 100 } } },
+    { "id": "use-470", "label": "Swap in a 470 Ω resistor", "edit": { "op": "place", "slot": "r", "kind": "resistor", "props": { "ohms": 470 } } },
+    { "id": "use-1k", "label": "Swap in a 1 kΩ resistor", "edit": { "op": "place", "slot": "r", "kind": "resistor", "props": { "ohms": 1000 } } }
+  ],
+  "theoryId": "ohms-law-power"
+}

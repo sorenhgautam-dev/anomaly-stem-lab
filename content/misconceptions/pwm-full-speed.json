@@ -1,0 +1,7 @@
+{
+  "id": "pwm-full-speed",
+  "lab": "robotics",
+  "title": "On means full speed",
+  "belief": "Whenever the power is on, the motor gets the full 6 volts and runs flat out. How long it stays on doesn't matter.",
+  "conceptIds": ["pwm", "average-voltage"]
+}

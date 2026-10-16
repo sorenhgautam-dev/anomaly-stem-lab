@@ -1,0 +1,43 @@
+{
+  "id": "robotics-parallel",
+  "lab": "robotics",
+  "level": "easy",
+  "grades": "6-8",
+  "order": 4,
+  "title": "Side by side",
+  "goal": "Add bulb B beside bulb A and watch what happens to bulb A.",
+  "intro": "Bulb A has its own path to the battery. Bulb B is about to get a path of its own, right beside it.",
+  "minutes": 3,
+  "stage": "circuit",
+  "parts": ["bulb"],
+  "outlines": true,
+  "board": {
+    "slots": [
+      { "id": "batt", "label": "Battery", "x": 170, "y": 300, "orientation": "v", "accepts": [], "fixed": { "kind": "battery", "props": { "volts": 6 } } },
+      { "id": "bulb-a", "label": "Bulb A", "x": 400, "y": 300, "orientation": "v", "accepts": [], "fixed": { "kind": "bulb" } },
+      { "id": "bulb-b", "label": "Bulb B", "x": 600, "y": 300, "orientation": "v", "accepts": ["bulb"] },
+      { "id": "bulb-c", "label": "Bulb C", "x": 800, "y": 300, "orientation": "v", "accepts": ["bulb"] }
+    ],
+    "wires": [
+      { "from": "batt.a", "to": "bulb-a.a" },
+      { "from": "bulb-a.a", "to": "bulb-b.a" },
+      { "from": "bulb-b.a", "to": "bulb-c.a" },
+      { "from": "batt.b", "to": "bulb-a.b" },
+      { "from": "bulb-a.b", "to": "bulb-b.b" },
+      { "from": "bulb-b.b", "to": "bulb-c.b" }
+    ]
+  },
+  "prediction": {
+    "type": "choice",
+    "question": "When bulb B joins side by side, bulb A will be…",
+    "options": ["Brighter", "The same", "Dimmer"]
+  },
+  "answer": { "kind": "change", "reading": "bulb-a.brightness", "tolerance": 0.1, "up": "Brighter", "down": "Dimmer", "same": "The same" },
+  "goalCondition": { "reading": "bulb-b.lit", "op": "==", "value": 1 },
+  "misconceptions": ["battery-constant-current"],
+  "allowedEdits": [
+    { "id": "add-bulb-b", "label": "Add bulb B", "edit": { "op": "place", "slot": "bulb-b", "kind": "bulb" } },
+    { "id": "add-bulb-c", "label": "Add a third bulb", "edit": { "op": "place", "slot": "bulb-c", "kind": "bulb" } }
+  ],
+  "theoryId": "parallel-circuits"
+}

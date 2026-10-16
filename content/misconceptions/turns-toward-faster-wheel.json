@@ -1,0 +1,7 @@
+{
+  "id": "turns-toward-faster-wheel",
+  "lab": "robotics",
+  "title": "A robot turns toward its faster wheel",
+  "belief": "If the right wheel spins faster, the robot turns right, toward the faster wheel.",
+  "conceptIds": ["differential-drive", "turning"]
+}

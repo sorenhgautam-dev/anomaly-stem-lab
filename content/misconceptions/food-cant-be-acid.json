@@ -1,0 +1,7 @@
+{
+  "id": "food-cant-be-acid",
+  "lab": "chemistry",
+  "title": "Food can't be an acid",
+  "belief": "Acids are dangerous chemicals, so things we eat and drink, like lemon juice and vinegar, can't really be acids.",
+  "conceptIds": ["acids-and-bases"]
+}

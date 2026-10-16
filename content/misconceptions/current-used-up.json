@@ -1,0 +1,14 @@
+{
+  "id": "current-used-up",
+  "lab": "robotics",
+  "title": "Current gets used up",
+  "belief": "The first bulb uses up some of the current, so there's less left for the next bulb and it glows dimmer.",
+  "conceptIds": [
+    "current-conservation",
+    "series-circuits"
+  ],
+  "sources": [
+    "Engelhardt, P. V. & Beichner, R. J. (2004). Students' understanding of direct current resistive electrical circuits. American Journal of Physics 72(1), 98–115. https://doi.org/10.1119/1.1614813",
+    "Shipstone, D. (1984). A study of children's understanding of electricity in simple DC circuits. European Journal of Science Education 6(2), 185–198. https://doi.org/10.1080/0140528840060208"
+  ]
+}

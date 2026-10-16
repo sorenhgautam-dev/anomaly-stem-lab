@@ -1,0 +1,7 @@
+{
+  "id": "base-only-dilutes",
+  "lab": "chemistry",
+  "title": "Base just waters the acid down",
+  "belief": "Adding base just dilutes the acid. It gets weaker, but it's still an acid however much you add.",
+  "conceptIds": ["neutralisation", "acids-and-bases"]
+}

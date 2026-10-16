@@ -1,0 +1,11 @@
+{
+  "id": "neutralisation",
+  "title": "Neutralisation and the equivalence point",
+  "body": [
+    "An acid gives hydrogen ions (H⁺) in water, and a base like sodium hydroxide gives hydroxide ions (OH⁻). When they meet, they join up to make water: H⁺ + OH⁻ → H₂O.",
+    "Neutralisation is a reaction, not just mixing. Each drop of base uses up some of the acid's H⁺ ions, but the solution stays acidic until they have all been used up. For 25 mL of 0.1 M hydrochloric acid, that takes exactly 25 mL of 0.1 M sodium hydroxide.",
+    "Right at that point, the equivalence point, the solution is neutral: pH 7. A few more drops leave spare OH⁻ ions, so the pH shoots up and the solution turns basic. That sudden jump is why chemists add the last few drops so carefully."
+  ],
+  "equation": "HCl + NaOH → NaCl + H₂O",
+  "realWorld": "Farmers spread lime, a base, on soil that has become too acidic, and antacids neutralise extra stomach acid. In both cases the amount matters: too much base overshoots and makes things basic."
+}

@@ -1,0 +1,7 @@
+{
+  "id": "oxygen-only-helps",
+  "lab": "chemistry",
+  "title": "Oxygen only helps things burn",
+  "belief": "Fire needs oxygen, but the oxygen just helps it burn. It doesn't end up in what's left, so the mass stays the same.",
+  "conceptIds": ["combustion", "conservation-of-mass"]
+}

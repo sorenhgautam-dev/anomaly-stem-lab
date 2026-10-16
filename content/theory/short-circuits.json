@@ -1,0 +1,14 @@
+{
+  "id": "short-circuits",
+  "title": "Short circuits",
+  "body": [
+    "When current has more than one path, it splits between them, and more of it goes through the path with less resistance. A bare wire has almost no resistance at all.",
+    "Put a wire across a bulb and nearly all the current takes the wire instead. That bulb goes dark. The whole loop now has less resistance, so more current flows and the other bulb gets brighter.",
+    "Put a wire straight across a battery and there's almost no resistance anywhere. A huge current flows, and the wire and battery heat up fast. That's a short circuit."
+  ],
+  "realWorld": "Fuses and circuit breakers in your home cut the power when a short circuit sends too much current through the wires.",
+  "sources": [
+    "OpenStax College Physics 2e, §20.6 Electric Hazards and the Human Body. https://openstax.org/books/college-physics-2e/pages/20-6-electric-hazards-and-the-human-body",
+    "OpenStax College Physics 2e, §21.1 Resistors in Series and Parallel. https://openstax.org/books/college-physics-2e/pages/21-1-resistors-in-series-and-parallel"
+  ]
+}

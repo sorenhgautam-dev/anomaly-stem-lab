@@ -1,0 +1,8 @@
+{
+  "misconceptionId": "pwm-stutters",
+  "hints": [
+    "Look at the rpm line after the first half second. Does it jump up and down, or stay level?",
+    "The power switches 1000 times a second. The motor's coil and its heavy spinning parts can't follow pulses that fast, so they smooth them out and the motor follows the average voltage.",
+    "Set the duty cycle to 20% and watch the speed settle low and steady."
+  ]
+}

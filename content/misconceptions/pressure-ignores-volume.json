@@ -1,0 +1,7 @@
+{
+  "id": "pressure-ignores-volume",
+  "lab": "chemistry",
+  "title": "Squeezing doesn't change the pressure",
+  "belief": "It's the same air in the syringe, so its pressure stays the same however small you squeeze it.",
+  "conceptIds": ["gas-laws", "particle-model"]
+}

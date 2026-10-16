@@ -1,0 +1,36 @@
+{
+  "id": "robotics-pwm",
+  "lab": "robotics",
+  "level": "advanced",
+  "grades": "11-12",
+  "order": 3,
+  "title": "Motor speed control (PWM)",
+  "goal": "Find out what switching a motor on and off very fast does to its speed.",
+  "intro": "This controller flicks the motor's power on and off a thousand times a second. The duty cycle is the share of each flick that's on.",
+  "minutes": 3,
+  "stage": "pwm",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    { "type": "slider", "id": "duty", "label": "Duty cycle", "min": 5, "max": 100, "step": 5, "unit": "%", "initial": 50 }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "With this duty cycle, the motor will…",
+    "options": ["Spin smoothly at a lower speed", "Spin at full speed", "Stutter on and off"]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "motor.ripple", "op": ">", "value": 0.25 }, "answer": "Stutter on and off" },
+      { "when": { "reading": "motor.speedFraction", "op": ">", "value": 0.97 }, "answer": "Spin at full speed" }
+    ],
+    "otherwise": "Spin smoothly at a lower speed"
+  },
+  "misconceptions": ["pwm-stutters", "pwm-full-speed"],
+  "allowedEdits": [
+    { "id": "duty-100", "label": "Set the duty cycle to 100%", "edit": { "op": "set", "setting": "duty", "value": 100 } },
+    { "id": "duty-20", "label": "Set the duty cycle to 20%", "edit": { "op": "set", "setting": "duty", "value": 20 } }
+  ],
+  "theoryId": "pwm-motors"
+}

@@ -1,0 +1,7 @@
+{
+  "id": "temperature-doesnt-matter",
+  "lab": "chemistry",
+  "title": "Temperature doesn't change reaction speed",
+  "belief": "It's the same tablet and the same reaction, so the water's temperature shouldn't change how fast it fizzes.",
+  "conceptIds": ["reaction-rates"]
+}

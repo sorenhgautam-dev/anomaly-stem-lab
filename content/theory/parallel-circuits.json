@@ -1,0 +1,15 @@
+{
+  "id": "parallel-circuits",
+  "title": "Parallel circuits",
+  "body": [
+    "In a parallel circuit each part has its own path, or branch, to the battery. Every branch gets the full battery voltage.",
+    "A battery gives a steady voltage, not a fixed current. Add a branch and the battery simply supplies more current. The total current is the sum of the branch currents.",
+    "So bulbs side by side each glow about as brightly as one bulb on its own. A real battery has a little resistance inside it, so each extra bulb dims them all slightly, and the battery runs down sooner."
+  ],
+  "equation": "I_total = I_A + I_B",
+  "realWorld": "The sockets in your home are wired in parallel. Switching on a lamp doesn't make the TV dimmer.",
+  "sources": [
+    "OpenStax College Physics 2e, §21.1 Resistors in Series and Parallel. https://openstax.org/books/college-physics-2e/pages/21-1-resistors-in-series-and-parallel",
+    "OpenStax College Physics 2e, §21.2 Electromotive Force: Terminal Voltage. https://openstax.org/books/college-physics-2e/pages/21-2-electromotive-force-terminal-voltage"
+  ]
+}

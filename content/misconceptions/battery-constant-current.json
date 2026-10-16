@@ -1,0 +1,14 @@
+{
+  "id": "battery-constant-current",
+  "lab": "robotics",
+  "title": "A battery always gives the same current",
+  "belief": "A battery pushes out a fixed amount of current. Add another bulb and they have to share it, so both get dimmer.",
+  "conceptIds": [
+    "battery-voltage",
+    "parallel-circuits"
+  ],
+  "sources": [
+    "Cohen, R., Eylon, B. & Ganiel, U. (1983). Potential difference and current in simple electric circuits: A study of students' concepts. American Journal of Physics 51(5), 407–412. https://doi.org/10.1119/1.13226",
+    "Engelhardt, P. V. & Beichner, R. J. (2004). Students' understanding of direct current resistive electrical circuits. American Journal of Physics 72(1), 98–115. https://doi.org/10.1119/1.1614813"
+  ]
+}

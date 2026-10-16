@@ -1,0 +1,11 @@
+{
+  "id": "particles-and-heat",
+  "title": "Hot particles move faster",
+  "body": [
+    "Air is made of tiny particles that are always moving, bouncing off each other and off the walls around them.",
+    "Heating gives the particles more energy, so they move faster. They don't get bigger and no new particles appear. Their typical speed grows with the square root of the temperature in kelvin.",
+    "Faster particles hit the inside of the balloon harder and more often, so the stretchy balloon expands until the push inside matches the push outside. At steady pressure, its volume grows in step with the kelvin temperature: that's Charles's law."
+  ],
+  "equation": "V₁ / T₁ = V₂ / T₂ (T in kelvin)",
+  "realWorld": "Hot-air balloons rise because heated air spreads out and becomes less dense than the cooler air around it. Tyre pressures are checked when the tyres are cold, because driving warms the air inside."
+}

@@ -1,0 +1,14 @@
+{
+  "id": "series-circuits",
+  "title": "Series circuits",
+  "body": [
+    "In a series circuit the parts sit one after another in a single loop. There's only one path, so the same current flows through every part.",
+    "Bulbs don't use up current. They turn electrical energy into light and heat. The current coming out of a bulb is the same as the current going in.",
+    "Each bulb you add in series adds resistance, so less current flows around the whole loop. All the bulbs dim together, and identical bulbs always glow equally."
+  ],
+  "equation": "R_total = R₁ + R₂",
+  "realWorld": "In a string of lights wired in series, one broken bulb opens the loop, so the whole string goes dark.",
+  "sources": [
+    "OpenStax College Physics 2e, §21.1 Resistors in Series and Parallel. https://openstax.org/books/college-physics-2e/pages/21-1-resistors-in-series-and-parallel"
+  ]
+}

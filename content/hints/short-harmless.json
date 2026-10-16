@@ -1,0 +1,8 @@
+{
+  "misconceptionId": "short-harmless",
+  "hints": [
+    "With the shortcut in, look at bulb B's current reading. Where did the current go instead?",
+    "Current splits between the paths it can take, and more of it goes the easier way. A bare wire has almost no resistance, so nearly all the current skips bulb B. The loop now has less resistance, so more current flows through bulb A.",
+    "Run it with the shortcut wire in, then take it out, and compare bulb A both times."
+  ]
+}

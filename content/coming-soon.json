@@ -1,0 +1,8 @@
+[
+  { "lab": "robotics", "level": "medium", "title": "Buttons and sensors" },
+  { "lab": "robotics", "level": "medium", "title": "Program a sequence with blocks" },
+  { "lab": "robotics", "level": "advanced", "title": "Line follower with feedback" },
+  { "lab": "robotics", "level": "advanced", "title": "Obstacle avoidance" },
+  { "lab": "chemistry", "level": "advanced", "title": "Titration curves" },
+  { "lab": "chemistry", "level": "advanced", "title": "Electrolysis" }
+]

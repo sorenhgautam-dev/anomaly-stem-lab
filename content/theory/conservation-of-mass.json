@@ -1,0 +1,12 @@
+{
+  "id": "conservation-of-mass",
+  "title": "Mass is never lost",
+  "body": [
+    "In a chemical reaction, atoms aren't created or destroyed. They swap partners to make new substances, so the total mass after a reaction is the same as before.",
+    "Baking soda and vinegar react to make carbon dioxide gas. That gas is made of real atoms with real mass: about half the mass of the baking soda ends up as gas.",
+    "In a sealed bag the gas is trapped, so the reading stays the same. In an open bag the gas drifts away, and the scale drops by the mass that left.",
+    "One honest catch: as a sealed bag swells, it pushes aside air, and that air buoys it up a little, so a very precise balance shows a small drop (about 1.2 g for every litre the bag grows). The mass inside hasn't changed."
+  ],
+  "equation": "NaHCO₃ + CH₃COOH → CH₃COONa + H₂O + CO₂",
+  "realWorld": "A sealed can of fizzy drink weighs the same before and after you shake it. Open it, and as the gas escapes it slowly gets lighter, and flatter."
+}

@@ -1,0 +1,66 @@
+{
+  "id": "chemistry-reaction-speed",
+  "lab": "chemistry",
+  "level": "medium",
+  "grades": "9-10",
+  "order": 2,
+  "title": "Reaction speed and temperature",
+  "goal": "Race two identical fizzy tablets in cold and hot water and predict which one finishes first.",
+  "intro": "Two identical fizzy tablets go in at the same moment, one in cold water and one in hot. Which one finishes first?",
+  "minutes": 3,
+  "stage": "rate",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "slider",
+      "id": "cold",
+      "label": "Cold water",
+      "min": 5,
+      "max": 40,
+      "step": 5,
+      "unit": "°C",
+      "initial": 10
+    },
+    {
+      "type": "slider",
+      "id": "hot",
+      "label": "Hot water",
+      "min": 40,
+      "max": 90,
+      "step": 5,
+      "unit": "°C",
+      "initial": 60
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "Which tablet finishes fizzing first?",
+    "options": ["Hot water", "Cold water", "Same time"]
+  },
+  "answer": {
+    "kind": "compare",
+    "a": "cold.finish",
+    "b": "hot.finish",
+    "tolerance": 0.05,
+    "aBigger": "Hot water",
+    "bBigger": "Cold water",
+    "same": "Same time"
+  },
+  "misconceptions": ["temperature-doesnt-matter"],
+  "allowedEdits": [
+    { "id": "hotter", "label": "Make the hot water 90 °C", "edit": { "op": "set", "setting": "hot", "value": 90 } },
+    {
+      "id": "cool-hot",
+      "label": "Cool the hot water to 40 °C",
+      "edit": { "op": "set", "setting": "hot", "value": 40 }
+    },
+    {
+      "id": "warm-cold",
+      "label": "Warm the cold water to 40 °C",
+      "edit": { "op": "set", "setting": "cold", "value": 40 }
+    }
+  ],
+  "theoryId": "reaction-rates",
+  "safety": "Hot water scalds: fill beakers carefully, keep them away from the edge of the bench, and wear goggles."
+}

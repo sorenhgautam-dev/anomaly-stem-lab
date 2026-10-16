@@ -1,0 +1,13 @@
+{
+  "id": "big-gear-faster",
+  "lab": "robotics",
+  "title": "A bigger gear turns faster",
+  "belief": "The big gear is bigger and stronger, so it spins faster than the small gear that drives it.",
+  "conceptIds": [
+    "gear-ratio",
+    "rotational-speed"
+  ],
+  "sources": [
+    "Lehrer, R. & Schauble, L. (1998). Reasoning about structure and function: Children's conceptions of gears. Journal of Research in Science Teaching 35(1), 3–25."
+  ]
+}

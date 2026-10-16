@@ -1,0 +1,54 @@
+{
+  "id": "chemistry-melting",
+  "lab": "chemistry",
+  "level": "easy",
+  "grades": "6-8",
+  "order": 1,
+  "title": "Melting and particles",
+  "goal": "Find out what the thermometer does while ice is melting.",
+  "intro": "This beaker of ice starts at −10 °C, with a steady heater underneath. What will the thermometer do while the ice is melting?",
+  "minutes": 3,
+  "stage": "melt",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "slider",
+      "id": "power",
+      "label": "Heater power",
+      "min": 100,
+      "max": 200,
+      "step": 10,
+      "unit": "W",
+      "initial": 150
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "While the ice is melting, the thermometer will…",
+    "options": ["Keep rising", "Stay at 0 °C", "Drop"]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "temp.meltChange", "op": ">", "value": 0.5 }, "answer": "Keep rising" },
+      { "when": { "reading": "temp.meltChange", "op": "<", "value": -0.5 }, "answer": "Drop" }
+    ],
+    "otherwise": "Stay at 0 °C"
+  },
+  "misconceptions": ["melting-temp-rises"],
+  "allowedEdits": [
+    {
+      "id": "more-power",
+      "label": "Turn the heater up to 200 W",
+      "edit": { "op": "set", "setting": "power", "value": 200 }
+    },
+    {
+      "id": "less-power",
+      "label": "Turn the heater down to 100 W",
+      "edit": { "op": "set", "setting": "power", "value": 100 }
+    }
+  ],
+  "theoryId": "changes-of-state",
+  "safety": "Hot plates stay hot after they are switched off, so let them cool before you touch them, and keep cables away from water."
+}

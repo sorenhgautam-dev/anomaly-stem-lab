@@ -1,0 +1,11 @@
+{
+  "id": "catalysts",
+  "title": "Catalysts and activation energy",
+  "body": [
+    "To react, particles must collide with at least a minimum amount of energy: the activation energy. Hydrogen peroxide has a high barrier, so on its own it breaks down so slowly that a bottle keeps for months.",
+    "A catalyst offers a different route with a lower energy barrier. On the surface of manganese dioxide, far more collisions have enough energy, and oxygen fizzes off in seconds.",
+    "The catalyst takes part along the way but is given back unchanged at the end, so it isn't used up. Filter and dry it afterwards and the same mass is still there. A catalyst changes how fast a reaction goes, not how much product it makes."
+  ],
+  "equation": "2H₂O₂ → 2H₂O + O₂ (catalyst: MnO₂)",
+  "realWorld": "Car catalytic converters use metals such as platinum and palladium to turn harmful exhaust gases into safer ones, mile after mile, without being used up. Your cells use a catalyst too: the enzyme catalase breaks down hydrogen peroxide."
+}

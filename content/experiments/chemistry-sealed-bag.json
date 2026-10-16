@@ -1,0 +1,49 @@
+{
+  "id": "chemistry-sealed-bag",
+  "lab": "chemistry",
+  "level": "easy",
+  "grades": "6-8",
+  "order": 3,
+  "title": "Mass in a sealed bag",
+  "goal": "Find out whether the scale reading changes when baking soda and vinegar fizz in an open or a sealed bag.",
+  "intro": "Baking soda, a cup of vinegar and a zip bag, all on one scale. When the fizzing stops, will the scale read more, less or the same?",
+  "minutes": 3,
+  "stage": "fizz",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    { "type": "toggle", "id": "sealed", "label": "Bag", "onLabel": "Sealed", "offLabel": "Open", "initial": false },
+    {
+      "type": "slider",
+      "id": "soda",
+      "label": "Baking soda",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "g",
+      "initial": 5
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "When the fizzing stops, the scale will read…",
+    "options": ["More", "The same", "Less"]
+  },
+  "answer": {
+    "kind": "compare",
+    "a": "scale.end",
+    "b": "scale.start",
+    "tolerance": 0.0005,
+    "aBigger": "More",
+    "bBigger": "Less",
+    "same": "The same"
+  },
+  "misconceptions": ["gas-has-no-mass", "nothing-escapes"],
+  "allowedEdits": [
+    { "id": "seal-bag", "label": "Seal the bag", "edit": { "op": "set", "setting": "sealed", "value": true } },
+    { "id": "open-bag", "label": "Open the bag", "edit": { "op": "set", "setting": "sealed", "value": false } },
+    { "id": "more-soda", "label": "Use 10 g of baking soda", "edit": { "op": "set", "setting": "soda", "value": 10 } }
+  ],
+  "theoryId": "conservation-of-mass",
+  "safety": "Wear goggles, and use a bag that can stretch, never a sealed bottle: the gas builds up pressure and a bottle can burst."
+}

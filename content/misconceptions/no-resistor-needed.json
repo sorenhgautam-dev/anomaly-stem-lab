@@ -1,0 +1,7 @@
+{
+  "id": "no-resistor-needed",
+  "lab": "robotics",
+  "title": "LEDs don't need a resistor",
+  "belief": "More current just makes an LED brighter. It doesn't need anything holding the current back.",
+  "conceptIds": ["current-limiting", "ohms-law"]
+}

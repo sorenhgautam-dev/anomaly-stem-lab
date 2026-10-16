@@ -1,0 +1,42 @@
+{
+  "id": "robotics-light-bulb",
+  "lab": "robotics",
+  "level": "easy",
+  "grades": "6-8",
+  "order": 1,
+  "title": "Light a bulb",
+  "goal": "Make the bulb light up.",
+  "intro": "Here's a battery, a bulb and one wire. Is that enough to light it?",
+  "minutes": 2,
+  "stage": "circuit",
+  "parts": ["wire"],
+  "outlines": true,
+  "board": {
+    "slots": [
+      { "id": "batt", "label": "Battery", "x": 170, "y": 300, "orientation": "v", "accepts": [], "fixed": { "kind": "battery", "props": { "volts": 6 } } },
+      { "id": "wire-1", "label": "Wire 1", "x": 500, "y": 180, "orientation": "h", "accepts": ["wire"], "initial": { "kind": "wire" } },
+      { "id": "bulb", "label": "Bulb", "x": 830, "y": 300, "orientation": "v", "accepts": [], "fixed": { "kind": "bulb" } },
+      { "id": "wire-2", "label": "Wire 2", "x": 500, "y": 420, "orientation": "h", "accepts": ["wire"] }
+    ],
+    "wires": [
+      { "from": "batt.a", "to": "wire-1.a", "via": [[170, 180]] },
+      { "from": "wire-1.b", "to": "bulb.a", "via": [[830, 180]] },
+      { "from": "bulb.b", "to": "wire-2.b", "via": [[830, 420]] },
+      { "from": "wire-2.a", "to": "batt.b", "via": [[170, 420]] }
+    ]
+  },
+  "prediction": { "type": "choice", "question": "Will the bulb light?", "options": ["Yes", "No"] },
+  "answer": {
+    "kind": "cases",
+    "cases": [{ "when": { "reading": "bulb.lit", "op": "==", "value": 1 }, "answer": "Yes" }],
+    "otherwise": "No"
+  },
+  "goalCondition": { "reading": "bulb.lit", "op": "==", "value": 1 },
+  "misconceptions": ["one-wire-enough"],
+  "allowedEdits": [
+    { "id": "add-second-wire", "label": "Add the second wire", "edit": { "op": "place", "slot": "wire-2", "kind": "wire" } },
+    { "id": "remove-second-wire", "label": "Take out the second wire", "edit": { "op": "remove", "slot": "wire-2" } },
+    { "id": "remove-first-wire", "label": "Take out the first wire", "edit": { "op": "remove", "slot": "wire-1" } }
+  ],
+  "theoryId": "complete-circuits"
+}

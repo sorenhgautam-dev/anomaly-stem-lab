@@ -60,6 +60,8 @@ Never copy a reference site's assets (models, textures, images, copy, fonts) eve
 | `3dmol` | 2.5.5 | BSD-3-Clause | Real molecule viewer for the theory view (Advanced chemistry) |
 | `@xyflow/react` | 12.12.0 | MIT | Misconception map |
 | `howler` | 2.2.4 | MIT | Sound effects |
+| `three.quarks` | 0.17.1 | MIT | GPU particle system for VFX: sparks, smoke, steam, bursts |
+| `@elevenlabs/elevenlabs-js` | 2.73.0 | MIT | Ano's voice (server-side only; pre-generate written lines) |
 
 ### App, data and AI
 | Package | Version | Licence | Use |
@@ -68,6 +70,7 @@ Never copy a reference site's assets (models, textures, images, copy, fonts) eve
 | `zod` | 4.6.7 | MIT | Validate experiment and hint JSON |
 | `class-variance-authority` | 0.7.1 | Apache-2.0 | Button and component variants without copied class strings |
 | `@t3-oss/env-nextjs` | 0.13.11 | MIT | Validate API keys and env vars at startup |
+| `@upstash/ratelimit` + `@upstash/redis` | 2.2.0 / 1.39.0 | MIT | Server-side rate limiting and answer cache for Ask Ano (Upstash free tier) |
 | `idb` | 8.0.4 | ISC | Save progress in IndexedDB |
 | `ai` + `@ai-sdk/groq` + `@ai-sdk/google` | 7.0.141 / 4.0.61 / 4.0.96 | Apache-2.0 | Ask Ano (server-side only) |
 | `@react-three/a11y` | 3.0.0 | MIT | Keyboard focus and screen-reader support for 3D buttons |
@@ -246,3 +249,48 @@ All repos and npm packages below were confirmed to exist, with licences read fro
 **Not changing:** we stay on **Next.js**, not Vite. The project is already built on Next.js, and we need its routing and server API routes for Ask Ano.
 
 Add to the "don't use" list: **React Bits** (MIT + Commons Clause, which restricts selling the software, so it's not truly permissive).
+
+---
+
+## 10. Physics, transitions and VFX (researched 15 October 2026)
+
+Versions, licences and last-publish dates checked on npm. "Pick" = use it; "Optional" = add for a specific feature; "Skip" = checked and not recommended.
+
+### Physics
+| Package | Version | Licence | Last release | Decision | Use |
+|---|---|---|---|---|---|
+| `@react-three/rapier` (wraps `@dimforge/rapier3d-compat`) | 2.2.0 / 0.21.0 | MIT / Apache-2.0 | Sept 2026 | **Pick (3D)** | Landing page shapes, 3D lab objects, cursor collisions |
+| `planck` | 1.5.1 | MIT | Oct 2026 | **Pick (2D experiments)** | Box2D port: more accurate and stable than matter-js. Use for falling objects, ramps, friction, robot wheels and joints in the arena |
+| `@dimforge/rapier2d-compat` | 0.21.0 | Apache-2.0 | Sept 2026 | Alternative | Fast, deterministic 2D physics if planck isn't enough |
+| `matter-js` | 0.20.0 | MIT | 2024 | Optional | Quick 2D sandbox prototypes; less accurate for science |
+| `liquidfun-wasm` | 7.0.0 | Zlib | 2021 | Optional, experimental | Particle-based liquid for pouring and mixing; old, test before relying on it |
+| `cannon-es`, `@react-three/cannon` | 0.20.0 / 6.6.0 | MIT | 2022–23 | Skip | Not updated in years; Rapier replaces it |
+| `jolt-physics` | 1.1.0 | MIT | July 2026 | Skip | Powerful but heavy; overkill for us |
+| `p2-es`, `box2d-wasm` | 1.2.3 / 7.0.0 | MIT / Zlib | 2021–23 | Skip | Older; planck covers this |
+
+### Page transitions
+| Package | Version | Licence | Last release | Decision | Use |
+|---|---|---|---|---|---|
+| `motion` (`AnimatePresence`, layout animations) | 14.3.0 | MIT | current | **Pick** | Enter/exit animations for the HTML layer, shared layout morphs |
+| `next-transition-router` | 0.2.11 | MIT | June 2025 | **Pick** | Waits for the exit animation before Next.js changes page, so 3D camera moves and HTML fades stay in sync |
+| `gl-transitions` | 1.76.0 | MIT (check each transition's own licence field) | Oct 2026 | **Pick** | 70+ GLSL transition shaders (dissolve, wipe, morph, ripple). Use for the gradient dissolve wipe between scenes on a full-screen quad |
+| `next-view-transitions` | 0.3.5 | MIT | Dec 2025 | Optional | Browser View Transitions API for App Router: morph an experiment card into the experiment header. Feature-detect; fall back to motion |
+| `@react-spring/web` | 10.1.2 | MIT | June 2026 | Optional | Spring physics for UI elements |
+| `react-transition-group` | 4.4.5 | BSD-3-Clause | 2022 | Skip | Older; motion replaces it |
+
+Also see Next.js docs for its built-in View Transitions support (`experimental.viewTransition`) before adding extra packages.
+
+### VFX
+| Package | Version | Licence | Last release | Decision | Use |
+|---|---|---|---|---|---|
+| `three.quarks` | 0.17.1 | MIT | May 2026 | **Pick** | Main 3D particle system: sparks, smoke, steam, shockwaves, bursts |
+| `wawa-vfx` | 1.2.10 | MIT | Sept 2025 | Optional | Simpler R3F particle effects for quick bursts and trails |
+| `@funtech-inc/use-shader-fx` | 2.0.5 | MIT | Apr 2025 | Optional | Ready-made shader effects as hooks: cursor fluid, ripples, noise, gradients |
+| `webgl-fluid` | 0.4.0 | MIT | May 2026 | Optional | Packaged version of PavelDoGreat's fluid sim for a subtle cursor-reactive background |
+| `@shadergradient/react` | 2.4.20 | MIT | Dec 2025 | Optional | Animated 3D gradient backgrounds in our blue ramps (fits the "more gradients" feedback) |
+| `canvas-confetti` | 1.9.4 | ISC | Oct 2025 | **Pick** | Tiny, fast confetti on the HTML layer for level complete |
+| `@lottiefiles/dotlottie-react` | 0.20.0 | MIT | Oct 2026 | Optional | Lottie animations for UI badges and icons. Each LottieFiles animation has its own licence: check before using |
+| `three-nebula` | 13.3.0 | MIT | Sept 2026 | Skip | Good, but one 3D particle system (three.quarks) is enough |
+| `@tsparticles/react` | 4.4.0 | MIT | Aug 2026 | Skip | 2D DOM particles; three.quarks and canvas-confetti cover this |
+
+**VFX rules:** pool and reuse particle systems, keep particle counts within the performance budget, and turn heavy effects (fluid, gradient backgrounds) off in low-quality mode.

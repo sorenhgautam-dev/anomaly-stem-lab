@@ -77,8 +77,6 @@ function IconButton({
       aria-label={label}
       aria-pressed={pressed}
       title={label}
-      onPointerEnter={() => (live.lensHover = true)}
-      onPointerLeave={() => (live.lensHover = false)}
       className="glass pointer-events-auto grid size-11 place-items-center rounded-full text-pearl/80 transition-colors duration-300 ease-lab hover:bg-pearl hover:text-void"
     >
       {children}
@@ -310,8 +308,6 @@ function BottomRow() {
               type="button"
               tabIndex={pastHero ? 0 : -1}
               onClick={() => live.scrollTo(CHAPTER_STOPS[i])}
-              onPointerEnter={() => (live.lensHover = true)}
-              onPointerLeave={() => (live.lensHover = false)}
               aria-current={i === active ? "step" : undefined}
               style={{ left: `${12.5 + i * 25}%` }}
               className={cn(

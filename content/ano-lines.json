@@ -23,6 +23,10 @@
     "Level complete! Ready for the next one?",
     "That's the level. Onward?"
   ],
+  "headlines": {
+    "correct": ["Nailed it.", "Spot on.", "You called it.", "Exactly right."],
+    "wrong": ["Not quite.", "Plot twist.", "Interesting.", "Reality disagrees."]
+  },
   "hero": {
     "wrong": "Whoa, did you see that? They hit the floor together. Let's find out why.",
     "correct": "Nailed it! Weight doesn't change how fast things fall. Most people guess wrong here.",

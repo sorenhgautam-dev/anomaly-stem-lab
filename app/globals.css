@@ -14,6 +14,40 @@
   --color-anomaly: #ff3b5c;
   --color-resolve: #f2c14e;
 
+  /*
+   * "Bioluminescent lab" ramps (CLAUDE.md §3.3). The lab rooms, the cursor and
+   * the VFX layer use these; the single colours above stay until the rest of
+   * the site moves over.
+   */
+  --color-depth-700: #132654;
+  --color-depth-800: #0c1a3d;
+  --color-depth-900: #071027;
+  --color-depth-950: #030712;
+  --color-ion-50: #eef3ff;
+  --color-ion-100: #dce6ff;
+  --color-ion-200: #b9ccff;
+  --color-ion-300: #93aeff;
+  --color-ion-400: #6c8cff;
+  --color-ion-500: #4a6bf5;
+  --color-ion-600: #3450d6;
+  --color-ion-700: #283faa;
+  --color-ion-800: #1f3180;
+  --color-ion-900: #18265e;
+  --color-glow-200: #a6f8e2;
+  --color-glow-400: #45f0c3;
+  --color-glow-600: #17b892;
+  --color-glow-800: #0b6e58;
+  --color-mist-100: #f1f7f7;
+  --color-mist-200: #dcebea;
+  --color-mist-400: #9fb3bc;
+  --color-mist-600: #62757f;
+  --color-resolve-300: #ffd27a;
+  --color-resolve-400: #ffc24b;
+  --color-resolve-600: #e69a12;
+  --color-anomaly-300: #ff8e83;
+  --color-anomaly-400: #ff5a4e;
+  --color-anomaly-600: #d9342b;
+
   /* Corner radius follows hierarchy: big containers round more than controls. */
   --radius-panel: 1.25rem;
   --radius-card: 0.875rem;
@@ -21,6 +55,61 @@
 
   /* Lab motion: fast and calm, under 400 ms. */
   --ease-lab: cubic-bezier(0.2, 0, 0, 1);
+  /* A spring with a little overshoot, for letters and verdict cards. */
+  --ease-spring: cubic-bezier(0.22, 1.45, 0.36, 1);
+
+  /* A lab panel's new contents ease in when the phase changes. */
+  --animate-hud-in: hud-in 340ms var(--ease-lab) both;
+  /* Kinetic verdict headline: each letter pops in on a spring (staggered inline). */
+  --animate-letter-pop: letter-pop 640ms var(--ease-spring) both;
+  /* ANOMALY headline: letters stutter in with an RGB split. */
+  --animate-letter-glitch: letter-glitch 520ms steps(1, end) both;
+  /* Staggered entrance for the verdict card and buttons. */
+  --animate-rise-in: rise-in 520ms var(--ease-spring) both;
+
+  @keyframes hud-in {
+    from {
+      opacity: 0;
+      transform: translateY(5px);
+      filter: blur(3px);
+    }
+  }
+
+  @keyframes letter-pop {
+    from {
+      opacity: 0;
+      transform: translateY(0.45em) scale(0.6) rotate(-6deg);
+    }
+  }
+
+  @keyframes letter-glitch {
+    0% {
+      opacity: 0;
+      transform: translateX(-0.12em);
+      text-shadow: -4px 0 var(--color-ion-400), 4px 0 var(--color-anomaly-300);
+    }
+    30% {
+      opacity: 1;
+      transform: translateX(0.08em) skewX(-8deg);
+    }
+    60% {
+      opacity: 0.6;
+      transform: translateX(-0.03em);
+      text-shadow: 2px 0 var(--color-ion-400), -2px 0 var(--color-anomaly-300);
+    }
+    100% {
+      opacity: 1;
+      transform: none;
+      text-shadow: none;
+    }
+  }
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+    }
+  }
 }
 
 @theme inline {
@@ -70,6 +159,30 @@
   backdrop-filter: blur(18px) saturate(140%);
 }
 
+/*
+ * Lab HUD glass (CLAUDE.md §3.3): panels float over the 3D lab, so the fill
+ * is a deep navy and the 1px edge is a gradient, ion → transparent → glow.
+ */
+@utility glass-hud {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(
+        color-mix(in oklab, var(--color-depth-950) 62%, transparent),
+        color-mix(in oklab, var(--color-depth-900) 55%, transparent)
+      )
+      padding-box,
+    linear-gradient(
+        140deg,
+        color-mix(in oklab, var(--color-ion-400) 45%, transparent),
+        color-mix(in oklab, var(--color-ion-400) 6%, transparent) 45%,
+        color-mix(in oklab, var(--color-glow-400) 18%, transparent)
+      )
+      border-box;
+  box-shadow: inset 0 1px 0 0 color-mix(in oklab, var(--color-ion-100) 9%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+}
+
 @layer base {
   :root {
     color-scheme: dark;
@@ -89,6 +202,35 @@
     outline: 2px solid var(--color-signal);
     outline-offset: 2px;
   }
+}
+
+/*
+ * The swipe cursor (components/fx/FxLayer.tsx) replaces the system cursor on
+ * mouse devices. Text fields keep the I-beam and modal dialogs, which sit
+ * above every z-index, keep the system cursor.
+ */
+html[data-fx-cursor],
+html[data-fx-cursor] * {
+  cursor: none;
+}
+
+html[data-fx-cursor] :is(input:not([type="range"], [type="checkbox"], [type="radio"], [type="button"], [type="submit"]), textarea, [contenteditable="true"]),
+html[data-fx-cursor] dialog[open],
+html[data-fx-cursor] dialog[open] * {
+  cursor: auto;
+}
+
+/* The VFX layer and the lab room live through page changes: no cross-fade. */
+::view-transition-group(fx-layer),
+::view-transition-new(fx-layer),
+::view-transition-group(lab-room),
+::view-transition-new(lab-room) {
+  animation: none;
+}
+
+::view-transition-old(fx-layer),
+::view-transition-old(lab-room) {
+  display: none;
 }
 
 /* Circuit board: current flowing along a wire. --flow-duration is set per wire. */
@@ -226,37 +368,6 @@
   animation: ano-glitch 0.18s steps(2, end) 5;
 }
 
-/* Correct prediction: a gold ring and sparks burst outward. */
-@keyframes gold-spark {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--x), var(--y)) scale(0.3);
-    opacity: 0;
-  }
-}
-
-.gold-spark {
-  animation: gold-spark 1.1s cubic-bezier(0.1, 0.7, 0.3, 1) forwards;
-}
-
-@keyframes gold-ring {
-  0% {
-    transform: scale(0.2);
-    opacity: 0.9;
-  }
-  100% {
-    transform: scale(3.2);
-    opacity: 0;
-  }
-}
-
-.gold-ring {
-  animation: gold-ring 1s cubic-bezier(0.1, 0.7, 0.3, 1) forwards;
-}
-
 /* Belief map: a broken belief shatters into gold shards that settle. */
 @keyframes shard-fly {
   0% {
@@ -282,6 +393,35 @@
 ::view-transition-new(root) {
   animation-duration: 420ms;
   animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/*
+ * Between screens (CLAUDE.md §3.7): the old one dissolves (fades, blurs and
+ * sinks a touch), the new one resolves into focus. The lab room and the VFX
+ * layer have their own names, so they carry on untouched.
+ */
+::view-transition-old(.screen-dissolve) {
+  animation: screen-out 260ms var(--ease-lab) both;
+}
+
+::view-transition-new(.screen-dissolve) {
+  animation: screen-in 480ms var(--ease-lab) 60ms both;
+}
+
+@keyframes screen-out {
+  to {
+    opacity: 0;
+    filter: blur(10px);
+    transform: scale(0.985);
+  }
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: scale(1.012);
+  }
 }
 
 ::view-transition-group(wordmark) {

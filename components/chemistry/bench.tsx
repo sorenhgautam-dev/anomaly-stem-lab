@@ -20,10 +20,13 @@ function clamp01(v: number) {
   return Math.min(1, Math.max(0, v));
 }
 
-/** The bench surface everything stands on. */
+/**
+ * The bench surface everything stands on. Marked data-bench: the 3D lab room
+ * lines its own bench up with this line, then hides it (components/lab/RoomWindow).
+ */
 export function Bench({ y, x1 = 40, x2 = 960 }: { y: number; x1?: number; x2?: number }) {
   return (
-    <g pointerEvents="none">
+    <g pointerEvents="none" data-bench>
       <line x1={x1} y1={y} x2={x2} y2={y} stroke="rgba(237,235,255,0.18)" strokeWidth={1.5} />
       <rect x={x1} y={y} width={x2 - x1} height={26} fill="url(#bench-fade)" />
       <defs>

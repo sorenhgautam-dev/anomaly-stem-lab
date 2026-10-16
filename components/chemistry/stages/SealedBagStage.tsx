@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
+import { stream } from "@/lib/fx";
 import { TOKENS } from "@/lib/tokens";
 import type { StageProps } from "@/components/lab/stages";
 import { Beaker, Bench, Bubbles, GhostReadout, Scale, ZipBag, ZipSeal, type BagHandle, type BubblesHandle, type LiquidHandle, type ValueHandle } from "../bench";
@@ -25,6 +26,8 @@ export function SealedBagStage({ def, build, outcome, ghost }: StageProps) {
   const particles = useRef<ParticleHandle>(null);
   const made = useRef<SVGTextElement>(null);
   const sealed = build.settings.sealed === true;
+  const surface = useRef<SVGCircleElement>(null);
+  const fizzFx = useMemo(() => stream("fizz"), []);
 
   useStageFrames(def, build, outcome, (t, v) => {
     scale.current?.set(v["scale.grams"] ?? 0);
@@ -32,6 +35,7 @@ export function SealedBagStage({ def, build, outcome, ghost }: StageProps) {
     fizz.current?.set(v.bubbles ?? 0, t);
     escaping.current?.set(sealed ? 0 : Math.min(1, (v.bubbles ?? 0) * 1.4), t);
     cup.current?.level(0.55);
+    if (outcome) fizzFx(surface.current, v.bubbles ?? 0);
     const madeG = v["co2.made"] ?? 0;
     const escapedG = v["co2.escaped"] ?? 0;
     particles.current?.set({
@@ -55,6 +59,8 @@ export function SealedBagStage({ def, build, outcome, ghost }: StageProps) {
           <Bubbles ref={fizz} x={290} y={360} w={80} h={64} />
         </Beaker>
         <path d="M 296 426 Q 330 404 364 426 Z" fill={TOKENS.pearl} fillOpacity={0.85} />
+        {/* Where the fizz droplets jump from (the VFX layer measures it). */}
+        <circle ref={surface} cx={330} cy={382} r={1} opacity={0} />
       </ZipBag>
       <ZipSeal x={330} y={250} w={250} sealed={sealed} />
       <Bubbles ref={escaping} x={290} y={120} w={80} h={120} color="rgba(61,123,255,0.8)" />

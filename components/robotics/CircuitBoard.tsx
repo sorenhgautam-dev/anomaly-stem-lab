@@ -232,6 +232,8 @@ function Slot({
   return (
     <g
       transform={`translate(${slot.x} ${slot.y})`}
+      data-slot={slot.id}
+      data-part={part?.kind}
       role="button"
       tabIndex={0}
       aria-label={label}

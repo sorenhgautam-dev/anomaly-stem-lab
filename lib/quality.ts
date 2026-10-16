@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 /**
- * Render quality (CLAUDE.md §9). "low" turns off the lens cursor, chromatic
+ * Render quality (CLAUDE.md §9). "low" turns off chromatic
  * aberration and the reflective floor, and thins out objects and particles.
  */
 export type Quality = "high" | "low";

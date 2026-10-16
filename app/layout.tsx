@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Host_Grotesk, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { FxLayer } from "@/components/fx/FxLayer";
 import "./globals.css";
 
 // Self-hosted at build time by next/font, so type works offline too.
@@ -43,7 +44,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${hostGrotesk.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        {children}
+        <FxLayer />
+      </body>
     </html>
   );
 }

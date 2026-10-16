@@ -1,6 +1,7 @@
 import { ViewTransition } from "react";
 import { Breadcrumbs } from "@/components/explore/Breadcrumbs";
 import { ProgressHydrator } from "@/components/explore/ProgressHydrator";
+import { LabRoomMount } from "@/components/labroom/LabRoomMount";
 
 // Shared shell for level → lab → map → experiment (CLAUDE.md §1.1).
 export default function ExploreLayout({ children }: LayoutProps<"/">) {
@@ -12,8 +13,13 @@ export default function ExploreLayout({ children }: LayoutProps<"/">) {
       />
       <ProgressHydrator />
       <Breadcrumbs />
-      {/* Route changes cross-fade instead of cutting (CLAUDE.md §3.4: no hard page loads). */}
-      <ViewTransition>
+      {/*
+        The 3D lab room sits outside (and under) the page transition, so it
+        carries on through every route change in a lab while the HUD dissolves.
+      */}
+      <LabRoomMount />
+      {/* Route changes dissolve instead of cutting (CLAUDE.md §3.4, §3.7). */}
+      <ViewTransition default="screen-dissolve">
         <div className="relative flex flex-1 flex-col">{children}</div>
       </ViewTransition>
     </div>

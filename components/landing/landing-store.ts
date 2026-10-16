@@ -39,7 +39,6 @@ interface LandingState extends ScrollFlags {
   sceneReady: boolean;
   /** Preloader finished and removed. */
   introDone: boolean;
-  lensEnabled: boolean;
   soundOn: boolean;
 
   heroPhase: HeroPhase;
@@ -57,7 +56,6 @@ interface LandingState extends ScrollFlags {
   setIntroDone: () => void;
   /** Update the coarse flags; a no-op unless one of them changed. */
   syncScroll: (progress: number) => void;
-  setLensEnabled: (enabled: boolean) => void;
   toggleSound: () => void;
   makeGuess: (guess: Guess) => void;
   land: (result: HeroResult) => void;
@@ -70,7 +68,6 @@ export const useLanding = create<LandingState>()((set, get) => ({
   ...flagsFor(0),
   sceneReady: false,
   introDone: false,
-  lensEnabled: false,
   soundOn: true,
 
   heroPhase: "ask",
@@ -90,7 +87,6 @@ export const useLanding = create<LandingState>()((set, get) => ({
       set(next);
     }
   },
-  setLensEnabled: (lensEnabled) => set({ lensEnabled }),
   toggleSound: () => set((s) => ({ soundOn: !s.soundOn })),
   makeGuess: (guess) => set({ guess, heroPhase: "dropping", heroResult: null }),
   land: (result) =>

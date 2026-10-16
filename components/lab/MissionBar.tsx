@@ -27,7 +27,7 @@ export function MissionBar() {
   const step = phase === "result" ? 3 : phase === "running" ? 2 : prediction ? 1 : 0;
 
   return (
-    <div className="glass flex flex-col gap-3 rounded-[18px] px-5 py-3.5 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+    <div className="glass-hud flex flex-col gap-3 rounded-[18px] px-5 py-3.5 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
       <p className="min-w-0 text-[15px] leading-snug tracking-[-0.01em] text-pearl">
         <span className="type-label mr-3 text-pearl/45">Mission</span>
         {def.goal}

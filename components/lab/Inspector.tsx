@@ -61,7 +61,7 @@ export function Inspector({ className }: { className?: string }) {
   const outcome = phase === "build" ? null : (result?.outcome ?? null);
 
   return (
-    <aside className={cn("glass flex flex-col gap-4 rounded-[20px] p-5", className)} aria-label="Inspector">
+    <aside className={cn("glass-hud flex flex-col gap-4 rounded-[20px] p-5", className)} aria-label="Inspector">
       <p className="type-label text-pearl/45">Inspector</p>
       {def.stage === "circuit" ? (
         <CircuitInspector def={def} selected={selected} outcome={outcome} build={build} edit={edit} />

@@ -61,11 +61,14 @@ export function PredictionPanel({ onRun }: { onRun: () => void }) {
         type="button"
         onClick={onRun}
         disabled={!prediction || phase === "running"}
-        className="group inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-pearl px-6 py-3.5 text-[16px] font-medium text-void transition-[transform,opacity] duration-200 ease-lab active:scale-95 disabled:cursor-not-allowed disabled:opacity-35 lg:self-auto"
+        className={cn(
+          "group inline-flex shrink-0 items-center gap-3 self-start rounded-full bg-linear-to-r from-ion-600 to-ion-400 px-6 py-3.5 text-[16px] font-medium text-mist-100 transition-[transform,opacity,box-shadow,--tw-gradient-to] duration-300 ease-lab hover:to-glow-400 active:scale-95 disabled:cursor-not-allowed disabled:opacity-35 lg:self-auto",
+          prediction && phase !== "running" && "shadow-[0_0_28px_-6px_var(--color-ion-400)]",
+        )}
       >
-        <Play className="size-4 fill-void" strokeWidth={0} />
+        <Play className="size-4 fill-mist-100 transition-transform duration-300 ease-spring group-hover:scale-125" strokeWidth={0} />
         Run
-        {!prediction && <span className="type-label text-void/55">Predict first</span>}
+        {!prediction && <span className="type-label text-mist-100/60">Predict first</span>}
       </button>
     </div>
   );

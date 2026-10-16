@@ -12,8 +12,7 @@ import { createTitleMaterial } from "./title-material";
  * Shared PBR materials, created once and reused by every object so the GPU
  * compiles each shader a single time. Glass uses the built-in physical
  * transmission (one shared transmission pass) rather than drei's
- * MeshTransmissionMaterial, which renders the scene again per material;
- * that one is saved for the lens cursor.
+ * MeshTransmissionMaterial, which renders the scene again per material.
  */
 
 function gloss(color: string, overrides: MeshPhysicalMaterialParameters = {}) {

@@ -100,9 +100,11 @@ export function AnoPanel({ className }: { className?: string }) {
   return (
     <aside className={cn("flex items-start gap-3", className)} aria-live="polite">
       <AnoOrb mood={ano} size={56} />
-      <div className="glass min-w-0 flex-1 rounded-[18px] p-4">
+      <div className="glass-hud min-w-0 flex-1 rounded-[18px] p-4">
         <p className="type-label flex items-center gap-2 text-lilac">Ano</p>
-        <p className="mt-2 text-[15px] leading-[1.45] tracking-[-0.01em] text-pearl">{shownAnswer ?? line}</p>
+        <p key={shownAnswer ?? line} className="mt-2 animate-hud-in text-[15px] leading-[1.45] tracking-[-0.01em] text-pearl">
+          {shownAnswer ?? line}
+        </p>
         {askOpen ? (
           <form onSubmit={ask} className="mt-3 flex items-center gap-2">
             <label className="sr-only" htmlFor="ask-ano">

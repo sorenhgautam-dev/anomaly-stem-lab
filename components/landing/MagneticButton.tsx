@@ -8,7 +8,7 @@ import { live } from "./live";
 
 /*
  * Magnetic pill button (CLAUDE.md §3.1.7): leans toward the cursor on hover,
- * presses down in depth on click, and tells the lens cursor to grow.
+ * and presses down in depth on click.
  */
 
 interface Props {
@@ -49,11 +49,7 @@ export function MagneticButton({
     const dy = e.clientY - (r.top + r.height / 2);
     el.style.transform = `translate3d(${dx * 0.22}px, ${dy * 0.32}px, 0)`;
   };
-  const enter = () => {
-    live.lensHover = true;
-  };
   const leave = () => {
-    live.lensHover = false;
     if (ref.current) ref.current.style.transform = "";
   };
 
@@ -73,7 +69,6 @@ export function MagneticButton({
   );
   const handlers = {
     onPointerMove: move,
-    onPointerEnter: enter,
     onPointerLeave: leave,
     onPointerDown: softClick,
   };

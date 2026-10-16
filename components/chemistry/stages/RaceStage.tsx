@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
+import { stream } from "@/lib/fx";
 import { TOKENS } from "@/lib/tokens";
 import type { StageProps } from "@/components/lab/stages";
 import { sample } from "@/components/lab/playback";
@@ -27,6 +28,9 @@ export function RaceStage({ def, build, outcome, ghost }: StageProps) {
   const fizz = useRef<(BubblesHandle | null)[]>([]);
   const done = useRef<(SVGTextElement | null)[]>([]);
   const clock = useRef<SVGTextElement>(null);
+  const surfaces = useRef<(SVGCircleElement | null)[]>([]);
+  const fizzFx = useMemo(() => SIDES.map(() => stream("fizz")), []);
+  const steamFx = useMemo(() => stream("steam"), []);
   const temps = {
     cold: typeof build.settings.cold === "number" ? build.settings.cold : 10,
     hot: typeof build.settings.hot === "number" ? build.settings.hot : 60,
@@ -44,6 +48,7 @@ export function RaceStage({ def, build, outcome, ghost }: StageProps) {
       tab?.setAttribute("x", String(side.x - size / 2));
       tab?.setAttribute("opacity", left > 0.01 ? "0.95" : "0");
       fizz.current[i]?.set(outcome ? (v[`${side.key}.bubbles`] ?? 0) : 0, t);
+      if (outcome) fizzFx[i](surfaces.current[i], v[`${side.key}.bubbles`] ?? 0);
       const finished = outcome && left <= 0.01;
       if (done.current[i]) done.current[i]!.style.opacity = finished ? "1" : "0";
       const ghostTab = ghosts.current[i];
@@ -57,6 +62,8 @@ export function RaceStage({ def, build, outcome, ghost }: StageProps) {
       }
     });
     if (clock.current) clock.current.textContent = `${Math.round(v.clock ?? 0)} s`;
+    // Steam curls off the hot water while the race runs.
+    if (outcome) steamFx(surfaces.current[1], Math.min(1, Math.max(0, (temps.hot - 40) / 40)));
   });
 
   return (
@@ -100,6 +107,15 @@ export function RaceStage({ def, build, outcome, ghost }: StageProps) {
               style={{ display: "none" }}
             />
           </Beaker>
+          <circle
+            ref={(el) => {
+              surfaces.current[i] = el;
+            }}
+            cx={side.x}
+            cy={336}
+            r={1}
+            opacity={0}
+          />
           <Thermometer
             ref={(el) => {
               thermos.current[i] = el;

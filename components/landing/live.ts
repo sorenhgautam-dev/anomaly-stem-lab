@@ -22,8 +22,6 @@ export const live = {
   /** Ano's world position and whether Ano is out, so objects make room. */
   ano: { x: 0, y: -50, z: 0 } as Vec,
   anoVisible: false,
-  /** Pointer is over a button or link: the lens cursor grows. */
-  lensHover: false,
   /** 0..1 spike for the ANOMALY moment (chromatic aberration, glitch). Decays. */
   pulse: 0,
   reducedMotion: false,

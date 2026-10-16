@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
-import { cn } from "@/lib/cn";
 import { detectInitialQuality, useQuality } from "@/lib/quality";
 import { unlockAudio } from "@/lib/sound";
 import { useLanding } from "./landing-store";
@@ -19,9 +18,6 @@ const TRACK = "h-[600vh]";
 
 export function Landing() {
   const root = useRef<HTMLDivElement>(null);
-  const introDone = useLanding((s) => s.introDone);
-  const lensEnabled = useLanding((s) => s.lensEnabled);
-  const quality = useQuality((s) => s.level);
 
   // Reduced motion and a first guess at quality.
   useEffect(() => {
@@ -35,12 +31,6 @@ export function Landing() {
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, []);
-
-  // The lens cursor needs a mouse, high quality, and motion allowed.
-  useEffect(() => {
-    const fine = window.matchMedia("(pointer: fine)").matches;
-    useLanding.getState().setLensEnabled(fine && quality === "high" && !live.reducedMotion);
-  }, [quality]);
 
   // Audio may only start inside a user gesture.
   useEffect(() => {
@@ -90,7 +80,7 @@ export function Landing() {
   return (
     <div
       ref={root}
-      className={cn("relative w-full", lensEnabled && introDone && "cursor-none [&_*]:cursor-none")}
+      className="relative w-full"
     >
       <div className="fixed inset-0" aria-hidden>
         <Scene eventSource={root} />

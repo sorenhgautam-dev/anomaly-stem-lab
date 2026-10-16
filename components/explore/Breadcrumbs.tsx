@@ -39,7 +39,8 @@ export function Breadcrumbs() {
   const crumbs = crumbsFor(pathname);
   const section = pathname.split("/").filter(Boolean)[0];
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-40 flex items-center gap-10 bg-[linear-gradient(to_bottom,rgba(5,6,10,0.85),rgba(5,6,10,0))] px-5 pb-8 pt-5 sm:px-10 sm:pt-7">
+    // Its own transition group, so the lab room (also its own group) never covers it mid-transition.
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-40 flex items-center gap-10 bg-[linear-gradient(to_bottom,rgba(5,6,10,0.85),rgba(5,6,10,0))] px-5 pb-8 pt-5 [view-transition-name:crumbs] sm:px-10 sm:pt-7">
       <Link href="/" className="pointer-events-auto text-[17px] font-medium tracking-[0.22em]">
         <ViewTransition name="wordmark">
           <span>ANOMALY</span>

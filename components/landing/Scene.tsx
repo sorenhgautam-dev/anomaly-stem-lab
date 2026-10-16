@@ -1,12 +1,14 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState, type RefObject } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Suspense, useState, type RefObject } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { MeshReflectorMaterial, PerformanceMonitor } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 import { useQuality } from "@/lib/quality";
 import { TOKENS } from "@/lib/tokens";
 import { Ano3D } from "@/components/ano/Ano3D";
+import { ShaderWarmup } from "@/components/ui/ShaderWarmup";
+import { debugFlags, StatsProbe } from "@/components/ui/StatsProbe";
 import { CameraRail } from "./CameraRail";
 import { AnoBody, CursorBody } from "./CursorBody";
 import { Dust } from "./Dust";
@@ -16,23 +18,21 @@ import { HeroExperiment } from "./HeroExperiment";
 import { KineticTitle } from "./KineticTitle";
 import { useLanding } from "./landing-store";
 import { FLOOR_Y } from "./layout";
-import { LensCursor } from "./LensCursor";
 import { live } from "./live";
 import { StudioLighting } from "./StudioLighting";
 
 /*
  * The landing page's WebGL world. Loaded with dynamic(..., { ssr: false }).
- * Quality "low" drops the lens cursor, the reflective floor, edge chromatic
+ * Quality "low" drops the reflective floor, edge chromatic
  * aberration and MSAA, and thins out objects and dust (CLAUDE.md §9).
  */
 
 // ?debug=stats exposes draw calls on window.__anomalyStats (CLAUDE.md §9).
-const DEBUG = new Set((new URLSearchParams(window.location.search).get("debug") ?? "").split(","));
+const DEBUG = debugFlags();
 
 export default function Scene({ eventSource }: { eventSource: RefObject<HTMLElement | null> }) {
   const quality = useQuality((s) => s.level);
   const dropToLow = useQuality((s) => s.dropToLow);
-  const lensEnabled = useLanding((s) => s.lensEnabled);
   const high = quality === "high";
 
   // Resolution adapts to the machine: start sharp, step down smoothly if the
@@ -81,8 +81,7 @@ export default function Scene({ eventSource }: { eventSource: RefObject<HTMLElem
         <KineticTitle />
         <Ano3D />
         <Dust count={high ? 7000 : 2500} />
-        {high && lensEnabled && <LensCursor />}
-        <ReadySignal />
+        <ShaderWarmup onReady={() => useLanding.getState().setSceneReady()} />
       </Suspense>
 
       <Effects high={high} />
@@ -116,57 +115,10 @@ function Floor({ high }: { high: boolean }) {
   );
 }
 
-/** Compiles every shader up front, waits two frames, then lifts the preloader. */
-function ReadySignal() {
-  const gl = useThree((s) => s.gl);
-  const scene = useThree((s) => s.scene);
-  const camera = useThree((s) => s.camera);
-  const setSceneReady = useLanding((s) => s.setSceneReady);
-
-  useEffect(() => {
-    let cancelled = false;
-    let raf = 0;
-    gl.compileAsync(scene, camera)
-      .catch(() => undefined)
-      .then(() => {
-        if (cancelled) return;
-        raf = requestAnimationFrame(() => {
-          raf = requestAnimationFrame(() => setSceneReady());
-        });
-      });
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf);
-    };
-  }, [gl, scene, camera, setSceneReady]);
-
-  return null;
-}
-
 /** Lenis runs on the R3F frame loop, before the camera reads the scroll. */
 function LenisDriver() {
   useFrame(() => {
     live.lenis?.raf(performance.now());
   }, -1);
-  return null;
-}
-
-/**
- * ?debug=stats: draw calls and triangles for the whole frame (every pass) and
- * a smoothed frame rate, exposed on window.__anomalyStats for automated checks.
- */
-function StatsProbe() {
-  const fps = useRef(60);
-  useFrame((state, delta) => {
-    const info = state.gl.info;
-    info.autoReset = false;
-    if (delta > 0) fps.current += (1 / delta - fps.current) * 0.05;
-    (window as unknown as { __anomalyStats?: { calls: number; triangles: number; fps: number } }).__anomalyStats = {
-      calls: info.render.calls,
-      triangles: info.render.triangles,
-      fps: Math.round(fps.current),
-    };
-    info.reset();
-  }, 2);
   return null;
 }

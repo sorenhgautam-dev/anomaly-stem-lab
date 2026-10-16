@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
+import { stream } from "@/lib/fx";
 import { TOKENS } from "@/lib/tokens";
 import type { StageProps } from "@/components/lab/stages";
 import { Bench, GLASS, GLASS_FILL, GhostReadout, Scale, type ValueHandle } from "../bench";
@@ -20,6 +21,10 @@ export function BurnStage({ def, build, outcome, ghost }: StageProps) {
   const wool = useRef<SVGPathElement>(null);
   const particles = useRef<ParticleHandle>(null);
   const sealed = build.settings.sealed === true;
+  const flame = useRef<SVGCircleElement>(null);
+  const mouth = useRef<SVGCircleElement>(null);
+  const emberFx = useMemo(() => stream("embers"), []);
+  const smokeFx = useMemo(() => stream("steam"), []);
 
   useStageFrames(def, build, outcome, (_t, v) => {
     scale.current?.set(v["scale.grams"] ?? 0);
@@ -28,6 +33,10 @@ export function BurnStage({ def, build, outcome, ghost }: StageProps) {
     const oxide = v.oxide ?? 0;
     wool.current?.setAttribute("stroke", oxide > 0.05 ? "rgba(140,140,150,0.95)" : "rgba(237,235,255,0.75)");
     particles.current?.set({ mix: Math.min(0.6, oxide * 1.2), spread: 1, speed: 1 + g * 0.8, count: sealed ? 1 : 1.2 });
+    if (outcome) {
+      emberFx(flame.current, g);
+      if (!sealed) smokeFx(mouth.current, g * 0.8);
+    }
   });
 
   const ghostEnd = ghost?.readings["scale.end"];
@@ -49,6 +58,9 @@ export function BurnStage({ def, build, outcome, ghost }: StageProps) {
       )}
       <ellipse ref={glow} cx={330} cy={392} rx={70} ry={40} fill={TOKENS.resolve} opacity={0} style={{ filter: "blur(14px)" }} />
       <path ref={wool} d={tangle} fill="none" stroke="rgba(237,235,255,0.75)" strokeWidth={2.2} strokeLinecap="round" />
+      {/* Where sparks and smoke come from (the VFX layer measures them). */}
+      <circle ref={flame} cx={330} cy={392} r={1} opacity={0} />
+      <circle ref={mouth} cx={330} cy={250} r={1} opacity={0} />
 
       <ParticleView ref={particles} x={760} y={250} r={120} colors={[TOKENS.pearl, TOKENS.signal]} label="Zoomed in: oxygen (white) joining iron (blue)" />
       {ghostEnd !== undefined && <GhostReadout x={330} y={170} text={`your idea: ${ghostEnd.toFixed(2)} g`} />}

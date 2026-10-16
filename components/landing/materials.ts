@@ -6,6 +6,7 @@ import {
   type MeshPhysicalMaterialParameters,
 } from "three";
 import { TOKENS } from "@/lib/tokens";
+import { createTitleMaterial } from "./title-material";
 
 /*
  * Shared PBR materials, created once and reused by every object so the GPU
@@ -83,13 +84,8 @@ function build() {
       emissive: new Color(TOKENS.signal),
       emissiveIntensity: 0.45,
     }),
-    title: gloss(TOKENS.pearl, {
-      metalness: 0.05,
-      roughness: 0.16,
-      clearcoatRoughness: 0.04,
-      iridescence: 0.15,
-      iridescenceIOR: 1.3,
-    }),
+    // Glossy pearl with custom GLSL: rim, sheen, Break cracks, Rebuild seams.
+    title: createTitleMaterial(),
     glowLilac: glow(TOKENS.lilac, 4),
     glowSignal: glow(TOKENS.signal, 3.5),
     glowGold: glow(TOKENS.resolve, 5),

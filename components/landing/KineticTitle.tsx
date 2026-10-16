@@ -8,6 +8,7 @@ import { TITLE_CENTER, TITLE_SCALE } from "./layout";
 import { live } from "./live";
 import { mats } from "./materials";
 import { mulberry32, wrapAngle } from "./random";
+import { titleFx } from "./title-material";
 
 /*
  * Kinetic 3D type (CLAUDE.md §3.1.6). The letters of ANOMALY are separate
@@ -132,6 +133,14 @@ export function KineticTitle() {
       mesh.position.copy(s.pos);
       mesh.rotation.set(s.rot.x, s.rot.y, s.rot.z);
     });
+
+    // Cracks at Break, gold seams at Rebuild (title-material.ts).
+    const fx = titleFx(p);
+    const u = m.title.uniforms;
+    u.uTime.value = t;
+    u.uCrack.value = fx.crack;
+    u.uSeam.value = fx.seam;
+    u.uMotion.value = live.reducedMotion ? 0 : 1;
 
     // The O carries a small glowing nucleus: lilac, gold once rebuilt.
     if (nucleus.current) {

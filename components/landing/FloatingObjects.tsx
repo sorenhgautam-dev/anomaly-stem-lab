@@ -10,111 +10,19 @@ import {
   type CollisionEnterPayload,
   type RapierRigidBody,
 } from "@react-three/rapier";
-import { CatmullRomCurve3, Line3, Quaternion, Vector3 } from "three";
+import { Quaternion, Vector3 } from "three";
 import { glassClink } from "@/lib/sound";
 import { GROUPS } from "./groups";
-import { CAMERA_KEYS, TITLE_CENTER, TITLE_SCALE } from "./layout";
 import { live } from "./live";
-import { mulberry32 } from "./random";
+import { makeLayout } from "./object-layout";
 import { ScienceObject, ScienceParts, type ObjectKind } from "./science-objects";
 
 /*
  * Zero-gravity science objects (CLAUDE.md §3.1.2–3). Each one is a dynamic
  * Rapier body with damping, pulled softly back toward a home position so the
  * composition survives being knocked around by the cursor. Nearby objects
- * slowly turn to face the cursor.
+ * slowly turn to face the cursor. Home positions come from object-layout.ts.
  */
-
-interface Spec {
-  kind: ObjectKind;
-  home: Vector3;
-  rotation: [number, number, number];
-  scale: number;
-  seed: number;
-}
-
-const KINDS: ObjectKind[] = ["atom", "gear", "beaker", "robot", "flask", "bulb"];
-
-const ZONES = [
-  // Around the hero experiment
-  { share: 0.38, x: [-5.2, 5.2], y: [-0.6, 2.8], z: [-3.6, 0.6], hero: true },
-  // The corridor the camera flies down
-  { share: 0.3, x: [-5.5, 6.5], y: [-0.5, 3.6], z: [-7, -3] },
-  // Around the title
-  { share: 0.32, x: [-6.5, 6.5], y: [-0.6, 3.4], z: [-13, -7] },
-] as const;
-
-const HERO_CAM = new Vector3(...CAMERA_KEYS[0].pos);
-const TAN_HALF_FOV = Math.tan((35 / 2) * (Math.PI / 180));
-
-/** True if p would sit over the balls or the hero copy, seen from the hero camera at 16:10. */
-function inHeroShot(p: Vector3): boolean {
-  const depth = HERO_CAM.z - p.z;
-  if (depth <= 0.5) return true;
-  const sx = (p.x - HERO_CAM.x) / (depth * TAN_HALF_FOV * 1.6);
-  const sy = (p.y - CAMERA_KEYS[0].look[1]) / (depth * TAN_HALF_FOV);
-  const overBalls = Math.abs(sx) < 0.5 && sy > -0.8 && sy < 0.85;
-  const overCopy = sx < -0.25 && sy < -0.05;
-  return overBalls || overCopy;
-}
-
-/** Segments from each chapter camera to points along the title. */
-const SIGHTLINES: Line3[] = CAMERA_KEYS.slice(1).flatMap((key) =>
-  [-3, -2, -1, 0, 1, 2, 3].map(
-    (x) =>
-      new Line3(
-        new Vector3(...key.pos),
-        new Vector3(TITLE_CENTER[0] + x * TITLE_SCALE * 1.6, TITLE_CENTER[1], TITLE_CENTER[2]),
-      ),
-  ),
-);
-
-/** True if p would block the camera's view of the title in any chapter. */
-function blocksTitle(p: Vector3): boolean {
-  const closest = new Vector3();
-  return SIGHTLINES.some((line) => line.closestPointToPoint(p, true, closest).distanceTo(p) < 1.1);
-}
-
-function makeLayout(count: number): Spec[] {
-  const rand = mulberry32(7);
-  const between = ([lo, hi]: readonly [number, number]) => lo + rand() * (hi - lo);
-  const rail = new CatmullRomCurve3(
-    CAMERA_KEYS.map((k) => new Vector3(...k.pos)),
-    false,
-    "centripetal",
-  ).getSpacedPoints(90);
-
-  const specs: Spec[] = [];
-  let placed = 0;
-  ZONES.forEach((zone, zi) => {
-    const n = zi === ZONES.length - 1 ? count - placed : Math.round(count * zone.share);
-    let made = 0;
-    for (let tries = 0; made < n && tries < 4000; tries++) {
-      const p = new Vector3(between(zone.x), between(zone.y), between(zone.z));
-      // From the hero camera, keep the middle of the frame (the balls and
-      // where they land) and the bottom-left copy clear: objects frame the
-      // experiment instead of covering it.
-      if (inHeroShot(p)) continue;
-      // Keep clear of the title and the camera's view of it.
-      if (Math.abs(p.x) < 4.3 && p.y > -0.5 && p.y < 1.7 && p.z < -6.6 && p.z > -10.4) continue;
-      if (blocksTitle(p)) continue;
-      // Keep clear of the camera rail and of each other.
-      if (rail.some((r) => r.distanceTo(p) < 1.45)) continue;
-      if (specs.some((s) => s.home.distanceTo(p) < 1.25)) continue;
-      const kind = KINDS[(specs.length + zi) % KINDS.length];
-      specs.push({
-        kind,
-        home: p,
-        rotation: [rand() * Math.PI * 2, rand() * Math.PI * 2, rand() * Math.PI * 2],
-        scale: kind === "atom" ? 0.95 + rand() * 0.3 : 0.75 + rand() * 0.4,
-        seed: rand(),
-      });
-      made++;
-    }
-    placed += made;
-  });
-  return specs;
-}
 
 function Collider({ kind, scale }: { kind: ObjectKind; scale: number }) {
   const props = { collisionGroups: GROUPS.floating, restitution: 0.7, friction: 0.15 };

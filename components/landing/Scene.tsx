@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState, type RefObject } from "react";
+import { Suspense, useEffect, useRef, useState, type RefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { MeshReflectorMaterial, PerformanceMonitor } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
@@ -152,16 +152,19 @@ function LenisDriver() {
 }
 
 /**
- * ?debug=stats: draw calls and triangles for the whole frame (every pass),
- * exposed on window.__anomalyStats for automated checks.
+ * ?debug=stats: draw calls and triangles for the whole frame (every pass) and
+ * a smoothed frame rate, exposed on window.__anomalyStats for automated checks.
  */
 function StatsProbe() {
-  useFrame((state) => {
+  const fps = useRef(60);
+  useFrame((state, delta) => {
     const info = state.gl.info;
     info.autoReset = false;
-    (window as unknown as { __anomalyStats?: { calls: number; triangles: number } }).__anomalyStats = {
+    if (delta > 0) fps.current += (1 / delta - fps.current) * 0.05;
+    (window as unknown as { __anomalyStats?: { calls: number; triangles: number; fps: number } }).__anomalyStats = {
       calls: info.render.calls,
       triangles: info.render.triangles,
+      fps: Math.round(fps.current),
     };
     info.reset();
   }, 2);

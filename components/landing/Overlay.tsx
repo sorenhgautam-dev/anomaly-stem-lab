@@ -27,7 +27,9 @@ function clamp01(x: number) {
  * Masked reveal driven by scroll. d is −1 before the section, 0 on it, +1
  * after. The text sits below its mask before, in place on it, above after.
  * Written straight to element styles from the scroll listener, so scrolling
- * never re-renders React (CLAUDE.md §9).
+ * never re-renders React (CLAUDE.md §9). Start hidden lines with a transform
+ * class, not translate-y-*: Tailwind v4 puts that on the separate `translate`
+ * property, which adds to this transform instead of being replaced by it.
  */
 function applyReveal(d: number, line: HTMLElement | null, body: HTMLElement | null) {
   const c = Math.max(-1, Math.min(1, d));
@@ -85,6 +87,7 @@ function IconButton({
 }
 
 function Header() {
+  const pastHero = useLanding((s) => s.pastHero);
   const soundOn = useLanding((s) => s.soundOn);
   const toggleSound = useLanding((s) => s.toggleSound);
   const quality = useQuality((s) => s.level);
@@ -93,12 +96,19 @@ function Header() {
   useEffect(() => setMuted(!soundOn), [soundOn]);
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-30 flex items-start justify-between gap-8 bg-[linear-gradient(to_bottom,rgba(5,6,10,0.55),rgba(5,6,10,0)_100%)] px-5 pb-10 pt-5 sm:px-10 sm:pt-7">
+    // The gradient dims anything drifting behind the wordmark, so it always reads.
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-30 flex items-start justify-between gap-8 bg-linear-to-b from-void/80 via-void/40 to-transparent px-5 pb-12 pt-5 sm:px-10 sm:pt-7">
       <div className="flex items-start gap-16">
         <ViewTransition name="wordmark">
           <span className="pt-2.5 text-[17px] font-medium tracking-[0.22em]">ANOMALY</span>
         </ViewTransition>
-        <p className="hidden max-w-[22rem] text-[17px] leading-[1.3] tracking-[-0.01em] text-pearl/85 lg:block">
+        {/* An intro line: it bows out once the chapters start, so it never sits over the scene. */}
+        <p
+          className={cn(
+            "hidden max-w-[22rem] text-[17px] leading-[1.3] tracking-[-0.01em] text-pearl/85 transition-opacity duration-500 ease-lab lg:block",
+            pastHero && "opacity-0",
+          )}
+        >
           {landing.descriptor}
         </p>
       </div>
@@ -229,7 +239,7 @@ function Chapters() {
                     ref={(el) => {
                       lines.current[i] = el;
                     }}
-                    className="block translate-y-[130%] will-change-transform"
+                    className="block transform-[translate3d(0,130%,0)] will-change-transform"
                   >
                     {c.title}
                     <sup className="ml-3 align-top font-mono text-[0.14em] tracking-normal text-lilac">0{i + 1}</sup>

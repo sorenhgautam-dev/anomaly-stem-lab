@@ -109,7 +109,7 @@ anomaly
 #FF3B5C	Wrong beliefs, the ANOMALY DETECTED moment only
 resolve	
 #F2C14E	Correct predictions, completed levels, celebrations
-Type: Host Grotesk for everything (headlines big and in a regular weight with tight tracking, Lusion-style), Instrument Serif italic for single accent words, JetBrains Mono only for live instrument readouts (voltmeter, scale, thermometer). All three are OFL and self-hosted by next/font (they work offline). Utilities: `type-headline`, `type-label` (tiny uppercase), `type-accent`. (Changed from Clash Grotesk + General Sans at the team's request: the heavy display face read as clunky.)
+Type: Clash Grotesk (display, from Fontshare) and General Sans (body, from Fontshare), each with a real system fallback stack. JetBrains Mono only for live instrument readouts (voltmeter, scale, thermometer), because those are real instruments.
 Surfaces: frosted glass panels (backdrop-filter: blur), thin bright edge, no heavy drop shadows. Vary corner radius by hierarchy; don't put the same radius on everything.
 Motion: springy and weighted on the landing page; fast and calm (under 400 ms) inside labs.
 Restraint: spend the boldness on the landing page and the ANOMALY moment. Everything else is quiet. Avoid generic tells: no fade-and-slide-up on every section, no ALL-CAPS eyebrow labels above headings, no identical rounded cards with grey shadows, no → appended to every button.
@@ -219,7 +219,7 @@ leva	Live tweaking panel for shader and physics values (dev only)
 r3f-perf	FPS and draw-call monitor for the 3D scene (dev only)
 vitest	Unit tests, especially for the circuit solver and diagnosis engine
 
-Fonts: Host Grotesk, Instrument Serif and JetBrains Mono via next/font/google (self-hosted at build). The 3D title uses Host Grotesk converted to a three.js typeface by scripts/make-typeface.mjs (OFL allows it; licence file next to the JSON).
+Fonts: load Clash Grotesk and General Sans from Fontshare (or self-host the files in public/fonts), JetBrains Mono via next/font/google.
 
 5. Project structure
 app/
@@ -400,17 +400,51 @@ TypeScript strict mode. No any in engine/.
 engine/ is pure TypeScript with no React imports, so it can be tested in isolation.
 Content (experiments, hints, lines, theory) lives in JSON, never hard-coded in components.
 Client components that use WebGL are loaded with dynamic(..., { ssr: false }).
-Never commit .env.local. Ask Ano env vars (all optional, see .env.example): GROQ_API_KEY, GOOGLE_GENERATIVE_AI_API_KEY, plus CEREBRAS_API_KEY, MISTRAL_API_KEY, OPENROUTER_API_KEY + OPENROUTER_MODEL. Without keys Ask Ano falls back to written hints.
+Never commit .env.local. Required env vars: GROQ_API_KEY, GOOGLE_GENERATIVE_AI_API_KEY.
+10.1 Code quality rules (from team code review)
 
-Implementation notes (keep current)
+These came from a review of the first build. Follow them for all new code and when touching old code.
 
-Versions: Node 20 on the dev machine, so AI SDK is v6 (ai@6, @ai-sdk/groq@3, @ai-sdk/google@3, @ai-sdk/openai-compatible@2) and vitest is v4: their newer majors need Node 22. Next.js is 16 (App Router, Cache Components + Partial Prefetching): read node_modules/next/dist/docs before using a Next API. Pages read `params` inside a `<Suspense>` child and every dynamic route has generateStaticParams. If a new @utility in globals.css doesn't appear in dev, restart `npm run dev` (the Tailwind Turbopack loader caches).
-Engine contract: engine/types.ts. An experiment's stage model (engine/<lab>/) turns a Build into a Simulation (readings, faults, flows, path, timeline); its JSON `answer` rule (engine/rules.ts) maps that to the prediction's shape; misconceptions are wrong models registered in each lab's index.ts (engine/registry.ts). runExperiment → diagnose → conflict. Reading names are documented in each stage file's header.
-Content: one JSON per experiment, misconception, hint ladder and theory page; scripts/content-manifest.mjs generates lib/content-manifest.ts (runs before dev/build/test); lib/content.ts validates everything with zod at load. Misconceptions and theory carry `sources` (RESOURCES.md §6).
-Routes: / (landing), /start, /start/[level], /labs/[lab]/[level] (star map), /labs/[lab]/[level]/[id] (experiment), /beliefs (misconception map), /api/ask-ano. Progress: lib/progress.ts (IndexedDB via idb; wait for `hydrated`).
-Lab UI: components/lab/LabExperiment.tsx runs the loop; lib/store.ts holds the session (changes only on actions); components/lab/playback.ts is the single rAF clock — renderers subscribe with playback.onFrame and write to the DOM directly. Circuits: components/robotics/CircuitBoard.tsx. Chemistry benches: components/chemistry/ (bench.tsx parts expose `set…` handles; useStageFrames drives them). Other stages: components/lab/stages.tsx.
-Landing: components/landing/Scene.tsx is the WebGL root; live.ts holds per-frame shared values (onProgress for scroll); landing-store.ts holds only coarse flags. Floating objects are instanced (science-objects.tsx). Lenis is driven from the R3F frame loop. Glass is physical transmission at half resolution (gl.transmissionResolutionScale = 0.5); the lens cursor is not MeshTransmissionMaterial (it halved the frame rate on Retina).
-Visual checks: gstack `browse` uses software WebGL and crashes on high quality; drive real Chrome headless on the GPU instead (`--headless=new --enable-gpu --use-angle=metal --remote-debugging-port=…`) over CDP. React Compiler lint is strict: no setState in effects, no refs read during render, no components created during render, no mutating hook values (use useRef).
+Components (TSX)
+
+Small components with one job each. If a file passes ~150 lines or does two things, split it.
+Typed props, no any. Logic goes in hooks (hooks/ or the feature's use*.ts), components only render.
+Never write the same thing twice. Repeated markup becomes a shared component; repeated logic becomes a hook or a function in lib/.
+
+Files and folders
+
+Organize by feature, not by file type: everything for one feature (component, hook, styles, types, tests) lives in that feature's folder (components/lab/, components/ano/, engine/circuits/ …). Shared pieces go in components/ui/ and lib/.
+One clear home for each thing. Before creating a file, check whether one already exists for that purpose.
+
+Fonts
+
+Load fonts once in app/layout.tsx (next/font), expose them as CSS variables, and map them in the Tailwind theme (font-display, font-body, font-mono). Components only use those classes; never declare font-family in a component.
+
+CSS
+
+All colours, spacing, radii and fonts come from the Tailwind theme tokens (section 3.3). No hard-coded hex values in components.
+app/globals.css holds only base styles, CSS variables and a few global utilities.
+Component variants (button sizes, states) use class-variance-authority + tailwind-merge, not copied class strings.
+No inline style for static values, no !important, no one-off overrides.
+
+Buttons and hit areas
+
+The clickable area must match the visible button exactly. Put padding, size and the click handler on the same element.
+Hover effects (magnetic pull, scale) move only the inner content, never the hit area, and never shrink it.
+Minimum target size 44 × 44 px; if a button looks smaller, make it look that size too rather than adding invisible padding.
+3D clickable objects: raycast against the visible mesh or a collider that matches it closely.
+Add a dev-only ?debugHit mode that outlines every clickable area so mismatches are easy to spot.
+
+AI and API keys (one service, one job)
+
+One AI module, lib/ai/askAno.ts, used by one route, app/api/ask-ano/route.ts. No other file calls an AI provider.
+Provider fallback (Groq → Gemini → written hint) lives only inside that module.
+Keys only come from environment variables, validated at startup with @t3-oss/env-nextjs (or zod) before any request is made. Never hard-code a key, never log one, never commit .env.local. If a key was ever committed, rotate it at the provider.
+"Accuracy" means grounding, not training: send the simulator's facts, a strict system prompt, 3–5 example Q&A pairs, and a fixed answer length. We do not fine-tune models.
+Keep tests/ask-ano.eval.ts: about 20 sample questions with the facts sent and the points a good answer must contain (and must not contradict). Run it with a mock provider in CI and against the real provider before Demo Day, and record the pass rate.
+
+After any refactor: npm run build, npm run test and a manual click-through must all pass before moving on.
+
 11. Definition of done (for Demo Day)
  Landing page loads with the preloader and looks Lusion-level within 3 seconds
  Hero "Which falls faster?" experiment works

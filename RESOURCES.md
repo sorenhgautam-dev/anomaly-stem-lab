@@ -66,6 +66,8 @@ Never copy a reference site's assets (models, textures, images, copy, fonts) eve
 |---|---|---|---|
 | `zustand` | 5.0.15 | MIT | State, including transient per-frame updates without re-renders |
 | `zod` | 4.6.7 | MIT | Validate experiment and hint JSON |
+| `class-variance-authority` | 0.7.1 | Apache-2.0 | Button and component variants without copied class strings |
+| `@t3-oss/env-nextjs` | 0.13.11 | MIT | Validate API keys and env vars at startup |
 | `idb` | 8.0.4 | ISC | Save progress in IndexedDB |
 | `ai` + `@ai-sdk/groq` + `@ai-sdk/google` | 7.0.141 / 4.0.61 / 4.0.96 | Apache-2.0 | Ask Ano (server-side only) |
 | `@react-three/a11y` | 3.0.0 | MIT | Keyboard focus and screen-reader support for 3D buttons |

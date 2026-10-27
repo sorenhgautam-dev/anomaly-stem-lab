@@ -2,6 +2,8 @@
 
 This file tells Claude Code what we are building, how it should look, and the rules to follow. Read it fully before writing code. When something here conflicts with a quick idea, this file wins.
 
+> **Look and process (October 2026).** `DESIGN.md` (the "Bright Lab" redesign) is the source of truth for how ANOMALY looks. It replaces this file's dark "Bioluminescent lab" colours (§3.3), the dark visual details of the landing (§3.1) and the dark-lab look (§3.6) wherever they conflict. Everything else here still applies. `GAUNTLET.md` defines the unattended build-and-test loop (rounds, gates and handoff).
+
 ---
 
 ## 1. What we are building

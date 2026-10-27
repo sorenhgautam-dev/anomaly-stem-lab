@@ -1,33 +1,18 @@
 /**
- * JS copies of the colour tokens in app/globals.css (CLAUDE.md §3.3), for
+ * JS copies of the colour tokens in app/globals.css (DESIGN.md §3), for
  * places CSS can't reach: WebGL materials, canvas drawing. Keep in sync.
  */
-export const TOKENS = {
-  void: "#05060A",
-  pearl: "#EDEBFF",
-  lilac: "#B8A6FF",
-  signal: "#3D7BFF",
-  anomaly: "#FF3B5C",
-  resolve: "#F2C14E",
+export const PALETTE = {
+  white: "#FFFFFF",
+  cream: { 50: "#FFFBF6", 100: "#FEF4E8", 200: "#FBE7D2", 300: "#F6D3B0" },
+  ink: { 900: "#121212", 700: "#3A3631", 500: "#6E665D", 300: "#A79E93" },
+  apricot: { 100: "#FFEBD6", 200: "#FFD9B3", 300: "#FFBE85", 400: "#FF9E4F", 500: "#FF7A1F", 600: "#F05D00", 700: "#C24A00" },
+  flame: { 200: "#FFC9D4", 300: "#FF9DB0", 400: "#FF6B8B", 500: "#FF3D6E" },
+  volt: { 100: "#E4EAFF", 300: "#9DB4FF", 400: "#6B8CFF", 500: "#3D63FF", 600: "#2A47E0" },
+  grape: { 300: "#C3B1FF", 400: "#9B7BFF", 500: "#7A52FF" },
+  verify: { 100: "#DDF8EA", 500: "#16B364", 700: "#0B7A44" },
+  anomaly: { 100: "#FFE3E0", 500: "#F2392C", 700: "#B4231A" },
 } as const;
 
-/** The "bioluminescent lab" ramps (CLAUDE.md §3.3), light → dark. */
-export const RAMP = {
-  depth: { 700: "#132654", 800: "#0C1A3D", 900: "#071027", 950: "#030712" },
-  ion: {
-    50: "#EEF3FF",
-    100: "#DCE6FF",
-    200: "#B9CCFF",
-    300: "#93AEFF",
-    400: "#6C8CFF",
-    500: "#4A6BF5",
-    600: "#3450D6",
-    700: "#283FAA",
-    800: "#1F3180",
-    900: "#18265E",
-  },
-  glow: { 200: "#A6F8E2", 400: "#45F0C3", 600: "#17B892", 800: "#0B6E58" },
-  mist: { 100: "#F1F7F7", 200: "#DCEBEA", 400: "#9FB3BC", 600: "#62757F" },
-  resolve: { 300: "#FFD27A", 400: "#FFC24B", 600: "#E69A12" },
-  anomaly: { 300: "#FF8E83", 400: "#FF5A4E", 600: "#D9342B" },
-} as const;
+/** Confetti and celebration colours (DESIGN.md §8). */
+export const CONFETTI = [PALETTE.apricot[500], PALETTE.flame[400], PALETTE.volt[500], PALETTE.grape[500], PALETTE.verify[500], PALETTE.apricot[300]] as const;

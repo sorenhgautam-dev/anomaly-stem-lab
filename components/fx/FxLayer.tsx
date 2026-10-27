@@ -4,11 +4,11 @@ import { useEffect, useRef } from "react";
 import { bindFx } from "@/lib/fx";
 import { drawWorld } from "@/lib/fx/draw";
 import { Bounds, FxWorld } from "@/lib/fx/world";
-import { SwipeCursor } from "./cursor";
+import { SoftCursor } from "./cursor";
 
 /*
- * One full-screen canvas above everything for the swipe cursor and the lab
- * VFX (CLAUDE.md §3.6.4). It draws in screen pixels, clears only the box it
+ * One full-screen canvas above everything for the soft cursor and the
+ * VFX (DESIGN.md §8, §9.1). It draws in screen pixels, clears only the box it
  * drew last frame, and its frame loop sleeps whenever nothing moves.
  */
 
@@ -27,7 +27,7 @@ export function FxLayer() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const fine = window.matchMedia("(pointer: fine)").matches;
     const world = new FxWorld();
-    const cursor = fine && !reduced ? new SwipeCursor(world) : null;
+    const cursor = fine && !reduced ? new SoftCursor(world) : null;
     const unbind = bindFx(world, reduced);
     const root = document.documentElement;
     if (cursor) root.dataset.fxCursor = "";

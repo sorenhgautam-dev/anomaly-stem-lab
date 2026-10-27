@@ -2,18 +2,20 @@ import { glowSprite, smokeSprite } from "./sprites";
 import type { Arc, Bounds, FxWorld, Particle, Ring } from "./world";
 
 /*
- * Paints an FxWorld onto a 2D canvas. Smoke and confetti blend normally;
- * everything that emits light (sparks, glows, rings, arcs, flashes) adds up
- * with "lighter", so overlapping light gets brighter like real light does.
+ * Paints an FxWorld onto a 2D canvas. Everything blends normally with
+ * saturated colours: additive light vanishes on the cream theme (DESIGN.md
+ * §8), and sparks get a thin dark core so they read on light and dark alike.
  * Every draw grows `bounds`, so the next frame only clears what was drawn.
  */
 
 const easeOut = (t: number) => 1 - (1 - t) ** 3;
 
+/** The dark core inside every spark (ink-900). */
+const SPARK_CORE = "#121212";
+
 export function drawWorld(ctx: CanvasRenderingContext2D, world: FxWorld, bounds: Bounds) {
   ctx.globalCompositeOperation = "source-over";
   for (const p of world.particles) if (p.age >= 0 && (p.kind === "smoke" || p.kind === "confetti")) drawSoft(ctx, p, bounds);
-  ctx.globalCompositeOperation = "lighter";
   for (const f of world.flashes) {
     if (f.age < 0) continue;
     const t = f.age / f.life;
@@ -57,14 +59,19 @@ function drawBright(ctx: CanvasRenderingContext2D, p: Particle, bounds: Bounds) 
     // A streak along the velocity, brightest at the head.
     const sp = Math.hypot(p.vx, p.vy) || 1;
     const len = Math.min(40, sp * 0.03);
-    ctx.globalAlpha = fade;
-    ctx.strokeStyle = p.color;
-    ctx.lineWidth = p.size;
     ctx.lineCap = "round";
-    ctx.beginPath();
-    ctx.moveTo(p.x - (p.vx / sp) * len, p.y - (p.vy / sp) * len);
-    ctx.lineTo(p.x, p.y);
-    ctx.stroke();
+    for (const [color, width, alpha] of [
+      [p.color, p.size * 2.2, fade],
+      [SPARK_CORE, Math.max(0.8, p.size * 0.5), fade * 0.7],
+    ] as const) {
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.beginPath();
+      ctx.moveTo(p.x - (p.vx / sp) * len, p.y - (p.vy / sp) * len);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    }
     const g = p.size * 3.2;
     ctx.globalAlpha = fade * 0.7;
     ctx.drawImage(glowSprite(p.color), p.x - g, p.y - g, g * 2, g * 2);

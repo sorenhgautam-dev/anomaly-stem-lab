@@ -1,29 +1,32 @@
 import type { Metadata, Viewport } from "next";
-import { Host_Grotesk, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { Archivo, Geist, Geist_Mono } from "next/font/google";
 import { FxLayer } from "@/components/fx/FxLayer";
+import { Preloader } from "@/components/loading/Preloader";
+import { SiteCanvasMount } from "@/components/three/SiteCanvasMount";
+import { Toaster } from "@/components/ui/Toast";
 import "./globals.css";
 
-// Self-hosted at build time by next/font, so type works offline too.
+// Fonts (DESIGN.md §4), self-hosted at build time by next/font, so type works
+// offline too. All three are OFL-1.1.
 
-// Everything: headlines, UI, body. Set big and in regular weights.
-const hostGrotesk = Host_Grotesk({
-  variable: "--font-host-grotesk",
+// Giant headlines and headings: Archivo with its width axis, set condensed.
+const archivo = Archivo({
+  variable: "--font-archivo",
+  subsets: ["latin"],
+  axes: ["wdth"],
+  display: "swap",
+});
+
+// Body and UI.
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
   display: "swap",
 });
 
-// Single accent words in headlines ("Which falls faster?").
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-// Only for live instrument readouts (voltmeter, scale, thermometer).
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
+// Instrument readouts and numbers.
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
 });
@@ -35,18 +38,21 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05060A",
+  themeColor: "#FFFBF6",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${hostGrotesk.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${archivo.variable} ${geist.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         {children}
+        <SiteCanvasMount />
+        <Toaster />
         <FxLayer />
+        <Preloader />
       </body>
     </html>
   );

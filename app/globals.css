@@ -1,206 +1,526 @@
 @import "tailwindcss";
 
 /*
- * Design tokens (CLAUDE.md §3.3). The default Tailwind palette is removed on
- * purpose so only these colours exist. Use opacity modifiers (bg-pearl/10)
- * for tints instead of adding new colours.
+ * Design tokens: DESIGN.md §3–§5, the "Bright Lab" redesign. The default
+ * Tailwind palette is removed on purpose so only these colours exist; use
+ * opacity modifiers (bg-ink-900/10) for tints instead of adding colours.
+ * Components only use these as Tailwind classes (CLAUDE.md §10.1).
  */
 @theme {
   --color-*: initial;
-  --color-void: #05060a;
-  --color-pearl: #edebff;
-  --color-lilac: #b8a6ff;
-  --color-signal: #3d7bff;
-  --color-anomaly: #ff3b5c;
-  --color-resolve: #f2c14e;
+  --color-white: #ffffff;
 
-  /*
-   * "Bioluminescent lab" ramps (CLAUDE.md §3.3). The lab rooms, the cursor and
-   * the VFX layer use these; the single colours above stay until the rest of
-   * the site moves over.
-   */
-  --color-depth-700: #132654;
-  --color-depth-800: #0c1a3d;
-  --color-depth-900: #071027;
-  --color-depth-950: #030712;
-  --color-ion-50: #eef3ff;
-  --color-ion-100: #dce6ff;
-  --color-ion-200: #b9ccff;
-  --color-ion-300: #93aeff;
-  --color-ion-400: #6c8cff;
-  --color-ion-500: #4a6bf5;
-  --color-ion-600: #3450d6;
-  --color-ion-700: #283faa;
-  --color-ion-800: #1f3180;
-  --color-ion-900: #18265e;
-  --color-glow-200: #a6f8e2;
-  --color-glow-400: #45f0c3;
-  --color-glow-600: #17b892;
-  --color-glow-800: #0b6e58;
-  --color-mist-100: #f1f7f7;
-  --color-mist-200: #dcebea;
-  --color-mist-400: #9fb3bc;
-  --color-mist-600: #62757f;
-  --color-resolve-300: #ffd27a;
-  --color-resolve-400: #ffc24b;
-  --color-resolve-600: #e69a12;
-  --color-anomaly-300: #ff8e83;
-  --color-anomaly-400: #ff5a4e;
-  --color-anomaly-600: #d9342b;
+  /* Page and stage backgrounds */
+  --color-cream-50: #fffbf6;
+  --color-cream-100: #fef4e8;
+  --color-cream-200: #fbe7d2;
+  --color-cream-300: #f6d3b0;
+  /* Headlines, text, primary buttons, muted text */
+  --color-ink-900: #121212;
+  --color-ink-700: #3a3631;
+  --color-ink-500: #6e665d;
+  --color-ink-300: #a79e93;
+  /* Brand: Ano's accents, brand gradients, chemistry */
+  --color-apricot-100: #ffebd6;
+  --color-apricot-200: #ffd9b3;
+  --color-apricot-300: #ffbe85;
+  --color-apricot-400: #ff9e4f;
+  --color-apricot-500: #ff7a1f;
+  --color-apricot-600: #f05d00;
+  --color-apricot-700: #c24a00;
+  /* Gradient partner to apricot, highlights */
+  --color-flame-200: #ffc9d4;
+  --color-flame-300: #ff9db0;
+  --color-flame-400: #ff6b8b;
+  --color-flame-500: #ff3d6e;
+  /* Robotics, links, cool contrast */
+  --color-volt-100: #e4eaff;
+  --color-volt-300: #9db4ff;
+  --color-volt-400: #6b8cff;
+  --color-volt-500: #3d63ff;
+  --color-volt-600: #2a47e0;
+  /* Gradient partner to volt, Advanced level */
+  --color-grape-300: #c3b1ff;
+  --color-grape-400: #9b7bff;
+  --color-grape-500: #7a52ff;
+  /* Verdicts only: correct predictions and ANOMALY */
+  --color-verify-100: #ddf8ea;
+  --color-verify-500: #16b364;
+  --color-verify-700: #0b7a44;
+  --color-anomaly-100: #ffe3e0;
+  --color-anomaly-500: #f2392c;
+  --color-anomaly-700: #b4231a;
 
-  /* Corner radius follows hierarchy: big containers round more than controls. */
+  /* Corner radius follows hierarchy: the frame rounds most, controls least. */
+  --radius-frame: 2rem;
+  --radius-sheet: 1.75rem;
+  --radius-card: 1.25rem;
   --radius-panel: 1.25rem;
-  --radius-card: 0.875rem;
+  --radius-tile: 0.625rem;
   --radius-control: 0.625rem;
 
-  /* Lab motion: fast and calm, under 400 ms. */
-  --ease-lab: cubic-bezier(0.2, 0, 0, 1);
-  /* A spring with a little overshoot, for letters and verdict cards. */
+  /* Shadows are warm-tinted, never grey (DESIGN.md §3). */
+  --shadow-warm-sm: 0 10px 22px -14px rgb(140 70 20 / 0.3), 0 1px 3px rgb(0 0 0 / 0.04);
+  --shadow-warm: 0 24px 48px -20px rgb(140 70 20 / 0.28), 0 2px 6px rgb(0 0 0 / 0.04);
+  --shadow-warm-lg: 0 40px 80px -32px rgb(140 70 20 / 0.36), 0 4px 12px rgb(0 0 0 / 0.05);
+
+  /* Motion (DESIGN.md §9): springs or this curve, never linear. */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  /* A spring with a little overshoot, for letters, words and verdict cards. */
   --ease-spring: cubic-bezier(0.22, 1.45, 0.36, 1);
 
-  /* A lab panel's new contents ease in when the phase changes. */
-  --animate-hud-in: hud-in 340ms var(--ease-lab) both;
-  /* Kinetic verdict headline: each letter pops in on a spring (staggered inline). */
-  --animate-letter-pop: letter-pop 640ms var(--ease-spring) both;
-  /* ANOMALY headline: letters stutter in with an RGB split. */
-  --animate-letter-glitch: letter-glitch 520ms steps(1, end) both;
-  /* Staggered entrance for the verdict card and buttons. */
-  --animate-rise-in: rise-in 520ms var(--ease-spring) both;
-
-  @keyframes hud-in {
+  /* Glass cards bob gently, each on its own phase (set animation-delay). */
+  --animate-float: float 7s var(--ease-out-soft) infinite alternate;
+  /* Headline words roll up from a mask and settle with a little overshoot. */
+  --animate-roll-up: roll-up 820ms var(--ease-spring) both;
+  /* Sunrise background blobs drift slowly (DESIGN.md §3, 20–30 s). */
+  --animate-drift-a: drift-a 26s ease-in-out infinite alternate;
+  --animate-drift-b: drift-b 22s ease-in-out infinite alternate;
+  --animate-drift-c: drift-c 30s ease-in-out infinite alternate;
+  /* The ribbon (P7) sways. */
+  --animate-ribbon: ribbon 16s ease-in-out infinite alternate;
+  /* The current experiment's node breathes. */
+  --animate-breathe: breathe 2.4s ease-in-out infinite;
+  /* Small UI entrances (cards, toasts, sheets). */
+  --animate-pop-in: pop-in 420ms var(--ease-spring) both;
+  --animate-fade-up: fade-up 520ms var(--ease-out-soft) both;
+  /* Theory sheet: slides in from the right (desktop) or up (mobile), and back. */
+  --animate-sheet-in-right: sheet-in-right 460ms var(--ease-out-soft) both;
+  --animate-sheet-out-right: sheet-in-right 280ms var(--ease-out-soft) reverse both;
+  --animate-sheet-in-up: sheet-in-up 460ms var(--ease-out-soft) both;
+  --animate-sheet-out-up: sheet-in-up 280ms var(--ease-out-soft) reverse both;
+  --animate-overlay-in: overlay-in 300ms var(--ease-out-soft) both;
+  --animate-overlay-out: overlay-in 240ms var(--ease-out-soft) reverse both;
+  /* The first-load screen lifts away like a curtain (DESIGN.md §7.8). */
+  --animate-preloader-out: preloader-out 760ms var(--ease-out-soft) both;
+  /* ANOMALY: the headline jitters with an RGB split, then calms (DESIGN.md §7.5). */
+  --animate-glitch: glitch 680ms steps(1, end) both;
+  /* Tiny looping icon animations (How it works). */
+  --animate-bob: bob 2.4s ease-in-out infinite;
+  --animate-scan: scan 2.8s ease-in-out infinite;
+  --animate-wiggle: wiggle 2.6s ease-in-out infinite;
+  --animate-ping-soft: ping-soft 2.2s var(--ease-out-soft) infinite;
+  /* The verdict word: letters assemble out of depth (correct) or slam in (ANOMALY). */
+  --animate-assemble: assemble 900ms var(--ease-spring) both;
+  --animate-slam: slam 520ms var(--ease-spring) both;
+  --animate-verdict: verdict 2.3s var(--ease-out-soft) both;
+  --animate-scanflash: scanflash 900ms steps(1, end) both;
+  /* Ano's talk bars. */
+  --animate-talk: talk 520ms ease-in-out infinite alternate;
+  @keyframes float {
     from {
-      opacity: 0;
-      transform: translateY(5px);
-      filter: blur(3px);
+      transform: translate3d(0, -6px, 0);
+    }
+    to {
+      transform: translate3d(0, 6px, 0);
     }
   }
 
-  @keyframes letter-pop {
+  @keyframes roll-up {
     from {
-      opacity: 0;
-      transform: translateY(0.45em) scale(0.6) rotate(-6deg);
+      transform: translate3d(0, 105%, 0) rotate(4deg);
     }
   }
 
-  @keyframes letter-glitch {
-    0% {
-      opacity: 0;
-      transform: translateX(-0.12em);
-      text-shadow: -4px 0 var(--color-ion-400), 4px 0 var(--color-anomaly-300);
+  @keyframes roll-out {
+    to {
+      transform: translate3d(0, -105%, 0) rotate(-3deg);
     }
-    30% {
-      opacity: 1;
-      transform: translateX(0.08em) skewX(-8deg);
+  }
+
+  @keyframes drift-a {
+    to {
+      transform: translate3d(8%, -6%, 0) scale(1.12);
     }
-    60% {
-      opacity: 0.6;
-      transform: translateX(-0.03em);
-      text-shadow: 2px 0 var(--color-ion-400), -2px 0 var(--color-anomaly-300);
+  }
+
+  @keyframes drift-b {
+    to {
+      transform: translate3d(-10%, 8%, 0) scale(0.92);
     }
+  }
+
+  @keyframes drift-c {
+    to {
+      transform: translate3d(-6%, -10%, 0) scale(1.08);
+    }
+  }
+
+  @keyframes ribbon {
+    from {
+      transform: translate3d(-4%, 0, 0) scaleY(0.92);
+    }
+    to {
+      transform: translate3d(0, 0, 0) scaleY(1.08);
+    }
+  }
+
+  @keyframes breathe {
+    0%,
     100% {
-      opacity: 1;
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    50% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 12px, 0) scale(0.96);
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 18px, 0);
+    }
+  }
+
+  @keyframes sheet-in-right {
+    from {
+      transform: translate3d(104%, 0, 0);
+    }
+  }
+
+  @keyframes sheet-in-up {
+    from {
+      transform: translate3d(0, 104%, 0);
+    }
+  }
+
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes preloader-out {
+    to {
+      clip-path: inset(0 0 100% 0 round 0 0 48px 48px);
+      transform: translate3d(0, -4%, 0);
+    }
+  }
+
+  @keyframes glitch {
+    0% {
+      transform: translate3d(-6px, 2px, 0) skewX(-8deg);
+      text-shadow: -5px 0 var(--color-volt-500), 5px 0 var(--color-flame-400);
+    }
+    18% {
+      transform: translate3d(7px, -2px, 0) skewX(6deg);
+      text-shadow: 4px 0 var(--color-volt-500), -4px 0 var(--color-flame-400);
+    }
+    36% {
+      transform: translate3d(-3px, 0, 0);
+      text-shadow: -2px 0 var(--color-volt-500), 2px 0 var(--color-flame-400);
+    }
+    54% {
+      transform: translate3d(2px, 1px, 0) skewX(-2deg);
+    }
+    72%,
+    100% {
       transform: none;
       text-shadow: none;
     }
   }
 
-  @keyframes rise-in {
+  @keyframes bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  @keyframes scan {
+    0%,
+    100% {
+      transform: translateX(-3px) rotate(-6deg);
+    }
+    50% {
+      transform: translateX(3px) rotate(6deg);
+    }
+  }
+
+  @keyframes wiggle {
+    0%,
+    70%,
+    100% {
+      transform: rotate(0);
+    }
+    76% {
+      transform: rotate(-12deg) scale(1.08);
+    }
+    84% {
+      transform: rotate(10deg) scale(1.08);
+    }
+    92% {
+      transform: rotate(-4deg);
+    }
+  }
+
+  @keyframes ping-soft {
+    from {
+      transform: scale(0.8);
+      opacity: 0.6;
+    }
+    to {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+
+  @keyframes assemble {
     from {
       opacity: 0;
-      transform: translateY(10px) scale(0.98);
+      transform: translate3d(var(--assemble-x, 0), 40px, -600px) rotateY(var(--assemble-r, 0deg)) rotateX(40deg);
+    }
+  }
+
+  @keyframes slam {
+    from {
+      opacity: 0;
+      transform: scale(1.7);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(0.96);
+    }
+  }
+
+  @keyframes verdict {
+    0%,
+    80% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes scanflash {
+    0% {
+      opacity: 1;
+      background-color: color-mix(in oklab, var(--color-anomaly-500) 16%, transparent);
+    }
+    10% {
+      background-color: transparent;
+    }
+    18% {
+      background-color: color-mix(in oklab, var(--color-anomaly-500) 8%, transparent);
+    }
+    30% {
+      opacity: 0.6;
+      background-color: transparent;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes talk {
+    from {
+      transform: scaleY(0.35);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+
+
+
+}
+
+/* Fonts load once in app/layout.tsx (next/font) and map here (DESIGN.md §4). */
+@theme inline {
+  --font-display: var(--font-archivo), "Arial Narrow", "Roboto Condensed", Impact, ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* ---- Type (DESIGN.md §4) ---- */
+
+/* Giant headlines: Archivo 900, condensed, uppercase, tight. */
+@utility type-hero {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-stretch: 68%;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.85;
+}
+
+/* H2–H4 and card titles: Archivo 700–800, normal width, sentence case. */
+@utility type-heading {
+  font-family: var(--font-display);
+  font-weight: 760;
+  font-stretch: 100%;
+  letter-spacing: -0.01em;
+  line-height: 1.08;
+}
+
+/* Small caps meta ("BELIEF SHIFT"). */
+@utility type-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+/* Instrument readouts and numbers. */
+@utility type-readout {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Signature gradients (DESIGN.md §3) ---- */
+
+@utility bg-ribbon {
+  background-image: linear-gradient(90deg, var(--color-apricot-200), var(--color-apricot-500) 38%, var(--color-flame-400) 68%, var(--color-apricot-300));
+}
+
+@utility bg-chem {
+  background-image: linear-gradient(135deg, var(--color-apricot-400), var(--color-flame-500));
+}
+
+@utility bg-robo {
+  background-image: linear-gradient(135deg, var(--color-volt-400), var(--color-grape-500));
+}
+
+@utility bg-level-easy {
+  background-image: linear-gradient(135deg, var(--color-verify-500), var(--color-volt-400));
+}
+
+@utility bg-level-medium {
+  background-image: linear-gradient(135deg, var(--color-apricot-400), var(--color-flame-400));
+}
+
+@utility bg-level-advanced {
+  background-image: linear-gradient(135deg, var(--color-grape-500), var(--color-volt-600));
+}
+
+@utility bg-win {
+  background-image: linear-gradient(100deg, var(--color-verify-500), var(--color-volt-400));
+}
+
+@utility bg-glitch {
+  background-image: linear-gradient(100deg, var(--color-anomaly-500), var(--color-flame-500));
+}
+
+/* A still Sunrise for small surfaces; the animated one is components/ui/Sunrise. */
+@utility bg-sunrise {
+  background-color: var(--color-cream-50);
+  background-image:
+    radial-gradient(60% 70% at 0% 100%, color-mix(in oklab, var(--color-apricot-300) 85%, transparent), transparent 70%),
+    radial-gradient(50% 60% at 100% 0%, color-mix(in oklab, var(--color-flame-300) 50%, transparent), transparent 70%),
+    radial-gradient(40% 60% at 100% 60%, color-mix(in oklab, var(--color-volt-300) 30%, transparent), transparent 70%);
+}
+
+/* ---- Surfaces (DESIGN.md §5) ---- */
+
+/* White glass card: frosted, thin bright edge, warm shadow. */
+@utility glass-card {
+  background-color: color-mix(in oklab, var(--color-white) 80%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-white) 60%, transparent);
+  box-shadow: var(--shadow-warm);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+}
+
+/* Low quality tier (DESIGN.md §9.2): no backdrop blur, a more solid fill. */
+html[data-quality="low"] .glass-card {
+  background-color: color-mix(in oklab, var(--color-white) 94%, transparent);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/*
+ * Scroll reveal (DESIGN.md §9.1): sections rise, fade and scale in with depth
+ * as they scroll into view, driven by the scroll position itself (CSS
+ * scroll-driven animations, no JavaScript). --reveal-end varies the speed.
+ * Browsers without view timelines, and reduced motion, show content still.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal both var(--ease-out-soft);
+      animation-timeline: view();
+      animation-range: entry 0% entry var(--reveal-end, 90%);
     }
   }
 }
 
-@theme inline {
-  --font-display: var(--font-host-grotesk), ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-sans: var(--font-host-grotesk), ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, "Times New Roman", serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", Menlo,
-    Consolas, monospace;
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 44px, 0) scale(0.96);
+  }
 }
 
 /*
- * Type scale (Lusion-style): big headlines in a regular weight with tight
- * tracking, tiny uppercase labels, an italic serif for single accent words.
+ * ANOMALY (DESIGN.md §8.1 step 5): the 3D scene freezes for a beat and
+ * glitches: the site canvas jumps, skews and shifts colour, then calms.
+ * Set by components/lab3d/scene/VerdictBurst.tsx; off with reduced motion.
  */
-@utility type-headline {
-  font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.04em;
-  line-height: 0.94;
+@media (prefers-reduced-motion: no-preference) {
+  html[data-glitch] [data-site-canvas] {
+    animation: scene-glitch 360ms steps(1, end) both;
+  }
 }
 
-@utility type-label {
-  font-family: var(--font-sans);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.09em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-@utility type-accent {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-}
-
-/* Frosted glass panel: blur, thin bright edge, no heavy drop shadow. */
-@utility glass {
-  background-color: color-mix(in oklab, var(--color-pearl) 6%, transparent);
-  border: 1px solid color-mix(in oklab, var(--color-pearl) 14%, transparent);
-  box-shadow: inset 0 1px 0 0
-    color-mix(in oklab, var(--color-pearl) 22%, transparent);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  backdrop-filter: blur(18px) saturate(140%);
-}
-
-/*
- * Lab HUD glass (CLAUDE.md §3.3): panels float over the 3D lab, so the fill
- * is a deep navy and the 1px edge is a gradient, ion → transparent → glow.
- */
-@utility glass-hud {
-  border: 1px solid transparent;
-  background:
-    linear-gradient(
-        color-mix(in oklab, var(--color-depth-950) 62%, transparent),
-        color-mix(in oklab, var(--color-depth-900) 55%, transparent)
-      )
-      padding-box,
-    linear-gradient(
-        140deg,
-        color-mix(in oklab, var(--color-ion-400) 45%, transparent),
-        color-mix(in oklab, var(--color-ion-400) 6%, transparent) 45%,
-        color-mix(in oklab, var(--color-glow-400) 18%, transparent)
-      )
-      border-box;
-  box-shadow: inset 0 1px 0 0 color-mix(in oklab, var(--color-ion-100) 9%, transparent);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
-  backdrop-filter: blur(16px) saturate(150%);
+@keyframes scene-glitch {
+  0% {
+    transform: translate3d(-10px, 3px, 0) skewX(-3deg);
+    filter: saturate(1.8) hue-rotate(-18deg) contrast(1.15);
+  }
+  22% {
+    transform: translate3d(12px, -2px, 0) skewX(2deg);
+    filter: saturate(1.4) hue-rotate(14deg);
+  }
+  44% {
+    transform: translate3d(-5px, 0, 0);
+    filter: saturate(1.6) contrast(1.1);
+  }
+  66% {
+    transform: translate3d(3px, 1px, 0);
+    filter: none;
+  }
+  100% {
+    transform: none;
+    filter: none;
+  }
 }
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   body {
-    background-color: var(--color-void);
-    color: var(--color-pearl);
+    background-color: var(--color-cream-50);
+    color: var(--color-ink-900);
     font-family: var(--font-sans);
   }
 
   ::selection {
-    background-color: color-mix(in oklab, var(--color-lilac) 40%, transparent);
+    background-color: var(--color-apricot-200);
+    color: var(--color-ink-900);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-signal);
-    outline-offset: 2px;
+    outline: 2px solid var(--color-volt-500);
+    outline-offset: 3px;
   }
 }
 
@@ -220,390 +540,125 @@ html[data-fx-cursor] dialog[open] * {
   cursor: auto;
 }
 
-/* The VFX layer and the lab room live through page changes: no cross-fade. */
+/* The VFX layer and the preloader live through page changes: no cross-fade. */
 ::view-transition-group(fx-layer),
 ::view-transition-new(fx-layer),
-::view-transition-group(lab-room),
-::view-transition-new(lab-room) {
+::view-transition-group(preloader),
+::view-transition-new(preloader) {
   animation: none;
 }
 
 ::view-transition-old(fx-layer),
-::view-transition-old(lab-room) {
+::view-transition-old(preloader) {
   display: none;
 }
 
-/* Circuit board: current flowing along a wire. --flow-duration is set per wire. */
-@keyframes wire-flow {
-  to {
-    stroke-dashoffset: -40;
-  }
-}
-
-.wire-current {
-  stroke-dasharray: 3 17;
-  animation: wire-flow var(--flow-duration, 1s) linear infinite;
-}
-
-.wire-current-reverse {
-  stroke-dasharray: 3 17;
-  animation: wire-flow var(--flow-duration, 1s) linear infinite reverse;
-}
-
-/* Burnt LED smoke, resistor heat, motors, buzzers. */
-@keyframes smoke-rise {
-  0% {
-    transform: translateY(0) scale(0.6);
-    opacity: 0.55;
-  }
-  100% {
-    transform: translateY(-46px) scale(1.6);
-    opacity: 0;
-  }
-}
-
-.smoke-puff {
-  fill: rgba(237, 235, 255, 0.35);
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: smoke-rise 1.6s ease-out infinite;
-}
-
-@keyframes heat-shimmer {
-  0%,
-  100% {
-    transform: scaleY(1);
-  }
-  50% {
-    transform: scaleY(1.12);
-  }
-}
-
-.heat-shimmer {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: heat-shimmer 0.9s ease-in-out infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.motor-spin {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: spin 0.6s linear infinite;
-}
-
-@keyframes buzz {
-  0%,
-  100% {
-    opacity: 0.15;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-.buzz-ring {
-  animation: buzz 0.3s ease-in-out infinite;
-}
-
-@keyframes spark {
-  0% {
-    opacity: 1;
-    transform: scale(0.4);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.6);
-  }
-}
-
-.spark {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: spark 0.45s ease-out infinite;
-}
-
-/* Ano's eye: blink now and then; glitch on a wrong run. */
-@keyframes ano-blink {
-  0%,
-  94%,
-  100% {
-    transform: scaleY(1);
-  }
-  97% {
-    transform: scaleY(0.1);
-  }
-}
-
-.ano-blink {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: ano-blink 4.2s ease-in-out infinite;
-}
-
-@keyframes ano-glitch {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-2px) scaleX(1.2);
-  }
-  50% {
-    transform: translateX(2px) scaleX(0.8);
-  }
-  75% {
-    transform: translateX(-1px);
-  }
-}
-
-.ano-glitch {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: ano-glitch 0.18s steps(2, end) 5;
-}
-
-/* Belief map: a broken belief shatters into gold shards that settle. */
-@keyframes shard-fly {
-  0% {
-    transform: translate(0, 0) rotate(0);
-    opacity: 0.9;
-  }
-  60% {
-    transform: translate(var(--dx), var(--dy)) rotate(var(--rot));
-    opacity: 0.7;
-  }
-  100% {
-    transform: translate(calc(var(--dx) * 0.4), calc(var(--dy) * 0.4)) rotate(calc(var(--rot) * 0.4));
-    opacity: 0.25;
-  }
-}
-
-.shard {
-  animation: shard-fly 1.1s cubic-bezier(0.1, 0.7, 0.3, 1) forwards;
-}
-
-/* Page transitions: a calm cross-fade (React <ViewTransition> + the browser API). */
+/*
+ * Page transitions (DESIGN.md §9, React <ViewTransition> + the browser API).
+ *  - Shared elements morph (share="morph"): a level card grows into the lab
+ *    select page, a lab card into its map, a map node into the experiment's
+ *    mission card. Back plays the morph in reverse by itself.
+ *  - Everything else wipes: the old screen sinks and fades while the new one
+ *    is revealed from below across a Sunrise backdrop (the group's own
+ *    background). Going back (a nav-back link or the browser's back button)
+ *    reveals from the top instead.
+ *  - The VFX layer and the wordmark keep their own names, so they carry on.
+ *  - Reduced motion: a quick fade.
+ */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 420ms;
-  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/*
- * Between screens (CLAUDE.md §3.7): the old one dissolves (fades, blurs and
- * sinks a touch), the new one resolves into focus. The lab room and the VFX
- * layer have their own names, so they carry on untouched.
- */
-::view-transition-old(.screen-dissolve) {
-  animation: screen-out 260ms var(--ease-lab) both;
+::view-transition-group(.sunrise-wipe) {
+  animation-duration: 760ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  background-color: var(--color-cream-50);
+  background-image:
+    radial-gradient(70% 80% at 10% 100%, color-mix(in oklab, var(--color-apricot-400) 90%, transparent), transparent 70%),
+    radial-gradient(60% 70% at 95% 10%, color-mix(in oklab, var(--color-flame-300) 70%, transparent), transparent 70%),
+    radial-gradient(50% 70% at 100% 70%, color-mix(in oklab, var(--color-volt-300) 45%, transparent), transparent 70%);
 }
 
-::view-transition-new(.screen-dissolve) {
-  animation: screen-in 480ms var(--ease-lab) 60ms both;
+::view-transition-old(.sunrise-wipe) {
+  animation: wipe-out 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@keyframes screen-out {
+::view-transition-new(.sunrise-wipe) {
+  animation: wipe-in 760ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+}
+
+html:active-view-transition-type(nav-back)::view-transition-new(.sunrise-wipe),
+html[data-nav-back]::view-transition-new(.sunrise-wipe) {
+  animation-name: wipe-in-back;
+}
+
+@keyframes wipe-out {
   to {
     opacity: 0;
-    filter: blur(10px);
-    transform: scale(0.985);
+    filter: blur(8px);
+    transform: translate3d(0, -2.5%, 0) scale(0.985);
   }
 }
 
-@keyframes screen-in {
+@keyframes wipe-in {
   from {
-    opacity: 0;
-    filter: blur(12px);
-    transform: scale(1.012);
+    clip-path: inset(100% 0 0 0 round 48px 48px 0 0);
+    transform: translate3d(0, 4%, 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 0);
+  }
+}
+
+@keyframes wipe-in-back {
+  from {
+    clip-path: inset(0 0 100% 0 round 0 0 48px 48px);
+    transform: translate3d(0, -4%, 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 0);
+  }
+}
+
+::view-transition-group(.morph) {
+  animation-duration: 680ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-image-pair(.morph) {
+  animation-name: morph-soften;
+}
+
+@keyframes morph-soften {
+  40% {
+    filter: blur(4px);
   }
 }
 
 ::view-transition-group(wordmark) {
   animation-duration: 520ms;
-  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
+  ::view-transition-image-pair(*) {
+    animation: none;
+  }
   ::view-transition-old(*),
   ::view-transition-new(*) {
-    animation: none !important;
+    animation: quick-fade 160ms ease-out both;
+  }
+  ::view-transition-new(*) {
+    animation-direction: reverse;
   }
 }
 
-/* Experiment map: the current star breathes. */
-@keyframes star-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.35);
-  }
-}
-
-/* Landing: scroll cue line */
-@keyframes scroll-cue {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(300%);
-  }
-}
-
-/*
- * ANOMALY DETECTED (CLAUDE.md §3.5): RGB split, scanline flash, then calm.
- * Reduced motion gets a still frame instead (see the media query below).
- */
-.anomaly-flash {
-  animation: anomaly-flash 1.4s var(--ease-lab) forwards;
-}
-
-.anomaly-scanlines {
-  background: repeating-linear-gradient(
-    to bottom,
-    color-mix(in oklab, var(--color-anomaly) 14%, transparent) 0 1px,
-    transparent 1px 4px
-  );
-  animation: scan-flash 1.4s steps(1, end) forwards;
-}
-
-.anomaly-glitch {
-  position: relative;
-  text-shadow:
-    -3px 0 var(--color-signal),
-    3px 0 color-mix(in oklab, var(--color-anomaly) 70%, transparent);
-  animation: glitch-jitter 0.7s steps(1, end) forwards;
-}
-
-.anomaly-glitch::before,
-.anomaly-glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-}
-
-.anomaly-glitch::before {
-  color: var(--color-signal);
-  clip-path: inset(12% 0 58% 0);
-  animation: glitch-slice-a 0.8s steps(1, end) forwards;
-}
-
-.anomaly-glitch::after {
-  color: var(--color-pearl);
-  clip-path: inset(56% 0 18% 0);
-  animation: glitch-slice-b 0.8s steps(1, end) forwards;
-}
-
-@keyframes anomaly-flash {
-  0% {
+@keyframes quick-fade {
+  to {
     opacity: 0;
-  }
-  5% {
-    opacity: 1;
-  }
-  72% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes scan-flash {
-  0% {
-    background-color: color-mix(in oklab, var(--color-anomaly) 18%, transparent);
-  }
-  7% {
-    background-color: transparent;
-  }
-  13% {
-    background-color: color-mix(in oklab, var(--color-anomaly) 9%, transparent);
-  }
-  19% {
-    background-color: transparent;
-    opacity: 0.7;
-  }
-  60% {
-    opacity: 0.35;
-  }
-}
-
-@keyframes glitch-jitter {
-  0% {
-    transform: translate(-4px, 2px) skewX(-6deg);
-  }
-  15% {
-    transform: translate(5px, -1px) skewX(4deg);
-  }
-  30% {
-    transform: translate(-2px, 0) skewX(0deg);
-  }
-  45% {
-    transform: translate(3px, 1px);
-  }
-  60%,
-  100% {
-    transform: none;
-  }
-}
-
-@keyframes glitch-slice-a {
-  0% {
-    clip-path: inset(12% 0 58% 0);
-    transform: translate(-10px, 0);
-  }
-  20% {
-    clip-path: inset(62% 0 8% 0);
-    transform: translate(8px, 0);
-  }
-  40% {
-    clip-path: inset(30% 0 44% 0);
-    transform: translate(-5px, 0);
-  }
-  60%,
-  100% {
-    clip-path: inset(50% 0 50% 0);
-    transform: none;
-  }
-}
-
-@keyframes glitch-slice-b {
-  0% {
-    clip-path: inset(56% 0 18% 0);
-    transform: translate(10px, 0);
-  }
-  25% {
-    clip-path: inset(8% 0 70% 0);
-    transform: translate(-7px, 0);
-  }
-  50% {
-    clip-path: inset(40% 0 35% 0);
-    transform: translate(4px, 0);
-  }
-  65%,
-  100% {
-    clip-path: inset(50% 0 50% 0);
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .anomaly-flash,
-  .anomaly-glitch {
-    animation: none !important;
-  }
-  .anomaly-scanlines,
-  .anomaly-glitch::before,
-  .anomaly-glitch::after {
-    display: none;
   }
 }
 

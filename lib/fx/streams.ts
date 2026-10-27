@@ -1,4 +1,4 @@
-import { RAMP } from "@/lib/tokens";
+import { PALETTE as P } from "@/lib/tokens";
 import { centreOf, fxState, lowQuality, type Point2 } from "./binding";
 
 /*
@@ -12,13 +12,13 @@ export type StreamKind = "fizz" | "steam" | "embers";
 const STREAMS: Record<StreamKind, (at: Point2) => void> = {
   // Tiny droplets jumping off a fizzing surface.
   fizz: (at) =>
-    fxState.world?.burst({ x: at.x, y: at.y, count: 1, kind: "glow", colors: [RAMP.mist[100], RAMP.ion[200]], speed: [30, 95], angle: [-Math.PI / 2 - 0.7, -Math.PI / 2 + 0.7], life: [0.35, 0.75], size: [1.3, 2.6], gravity: 140, drag: 1.5, spread: 16 }),
+    fxState.world?.burst({ x: at.x, y: at.y, count: 1, kind: "glow", colors: [P.white, P.volt[300]], speed: [30, 95], angle: [-Math.PI / 2 - 0.7, -Math.PI / 2 + 0.7], life: [0.35, 0.75], size: [1.3, 2.6], gravity: 140, drag: 1.5, spread: 16 }),
   // Soft wisps rising off something hot.
   steam: (at) =>
     fxState.world?.burst({ x: at.x, y: at.y, count: 1, kind: "smoke", colors: ["#fff"], speed: [14, 34], angle: [-Math.PI / 2 - 0.3, -Math.PI / 2 + 0.3], life: [1.6, 2.6], size: [9, 15], grow: 14, gravity: -8, drag: 0.5, spread: 22, alpha: 0.45 }),
   // White-hot sparks from something burning.
   embers: (at) =>
-    fxState.world?.burst({ x: at.x, y: at.y, count: 1, kind: "spark", colors: [RAMP.mist[100], RAMP.ion[100]], speed: [60, 170], angle: [-Math.PI / 2 - 0.9, -Math.PI / 2 + 0.9], life: [0.35, 0.9], size: [0.9, 1.6], gravity: 160, drag: 1.2, spread: 24 }),
+    fxState.world?.burst({ x: at.x, y: at.y, count: 1, kind: "spark", colors: [P.apricot[400], P.flame[300]], speed: [60, 170], angle: [-Math.PI / 2 - 0.9, -Math.PI / 2 + 0.9], life: [0.35, 0.9], size: [0.9, 1.6], gravity: 160, drag: 1.2, spread: 24 }),
 };
 
 const RATE: Record<StreamKind, number> = { fizz: 42, steam: 7, embers: 34 };

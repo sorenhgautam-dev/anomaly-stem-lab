@@ -79,6 +79,7 @@ Never copy a reference site's assets (models, textures, images, copy, fonts) eve
 | Package | Version | Licence | Use |
 |---|---|---|---|
 | `r3f-perf` | 7.2.3 | MIT | FPS, draw calls and GPU time |
+| `detect-gpu` | 5.0.70 | MIT | Pick High / Medium / Low quality tier at startup (ships in the app, not dev only) |
 | `leva` | 0.10.1 | MIT | Live tweak panel |
 | `@theatre/studio` | 0.7.2 | AGPL-3.0: dev only, never ship it in the production build | Visual keyframe editor |
 | `vitest` | 5.0.5 | MIT | Tests |

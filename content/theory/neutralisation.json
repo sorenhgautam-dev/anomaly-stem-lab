@@ -7,5 +7,9 @@
     "Right at that point, the equivalence point, the solution is neutral: pH 7. A few more drops leave spare OH⁻ ions, so the pH shoots up and the solution turns basic. That sudden jump is why chemists add the last few drops so carefully."
   ],
   "equation": "HCl + NaOH → NaCl + H₂O",
-  "realWorld": "Farmers spread lime, a base, on soil that has become too acidic, and antacids neutralise extra stomach acid. In both cases the amount matters: too much base overshoots and makes things basic."
+  "realWorld": "Farmers spread lime, a base, on soil that has become too acidic, and antacids neutralise extra stomach acid. In both cases the amount matters: too much base overshoots and makes things basic.",
+  "sources": [
+    "OpenStax Chemistry 2e, §14.7 Acid-Base Titrations. https://openstax.org/books/chemistry-2e/pages/14-7-acid-base-titrations",
+    "OpenStax Chemistry 2e, §4.2 Classifying Chemical Reactions. https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions"
+  ]
 }

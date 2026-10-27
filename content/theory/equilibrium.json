@@ -7,5 +7,8 @@
     "Le Chatelier's principle: if you change the conditions, the balance shifts to counteract the change. Pairing up gives out heat, so heating the tube favours splitting apart: more brown NO₂ and a darker colour. Cooling favours pairing up, so the gas turns paler."
   ],
   "equation": "2NO₂ (brown) ⇌ N₂O₄ (colourless), ΔH = −57 kJ/mol",
-  "realWorld": "The Haber process makes ammonia for fertiliser from an equilibrium. Factories choose a temperature and pressure that push the balance towards ammonia while keeping the reaction fast enough to be worth running."
+  "realWorld": "The Haber process makes ammonia for fertiliser from an equilibrium. Factories choose a temperature and pressure that push the balance towards ammonia while keeping the reaction fast enough to be worth running.",
+  "sources": [
+    "OpenStax Chemistry 2e, §13.3 Shifting Equilibria: Le Châtelier’s Principle. https://openstax.org/books/chemistry-2e/pages/13-3-shifting-equilibria-le-chateliers-principle"
+  ]
 }

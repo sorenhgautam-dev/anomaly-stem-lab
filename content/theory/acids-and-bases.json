@@ -7,5 +7,9 @@
     "An indicator is a dye that changes colour with pH. Red cabbage juice turns pink or red in acids, stays purple near neutral, and turns blue and then green in bases."
   ],
   "equation": "pH < 7 acidic · pH 7 neutral · pH > 7 basic",
-  "realWorld": "Your stomach uses strong acid to digest food, and antacid tablets are bases that neutralise the extra. Gardeners test soil pH because some plants, like blueberries, only thrive in acidic soil."
+  "realWorld": "Your stomach uses strong acid to digest food, and antacid tablets are bases that neutralise the extra. Gardeners test soil pH because some plants, like blueberries, only thrive in acidic soil.",
+  "sources": [
+    "OpenStax Chemistry 2e, §14.1 Brønsted-Lowry Acids and Bases. https://openstax.org/books/chemistry-2e/pages/14-1-bronsted-lowry-acids-and-bases",
+    "OpenStax Chemistry 2e, §14.2 pH and pOH. https://openstax.org/books/chemistry-2e/pages/14-2-ph-and-poh"
+  ]
 }

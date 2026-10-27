@@ -8,5 +8,9 @@
     "One honest catch: as a sealed bag swells, it pushes aside air, and that air buoys it up a little, so a very precise balance shows a small drop (about 1.2 g for every litre the bag grows). The mass inside hasn't changed."
   ],
   "equation": "NaHCO₃ + CH₃COOH → CH₃COONa + H₂O + CO₂",
-  "realWorld": "A sealed can of fizzy drink weighs the same before and after you shake it. Open it, and as the gas escapes it slowly gets lighter, and flatter."
+  "realWorld": "A sealed can of fizzy drink weighs the same before and after you shake it. Open it, and as the gas escapes it slowly gets lighter, and flatter.",
+  "sources": [
+    "OpenStax Chemistry 2e, §1.2 Phases and Classification of Matter (law of conservation of matter). https://openstax.org/books/chemistry-2e/pages/1-2-phases-and-classification-of-matter",
+    "OpenStax Chemistry 2e, §4.1 Writing and Balancing Chemical Equations. https://openstax.org/books/chemistry-2e/pages/4-1-writing-and-balancing-chemical-equations"
+  ]
 }

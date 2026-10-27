@@ -7,5 +7,9 @@
     "There is a limit, though. At room temperature, water can dissolve about 2 g of sugar for every 1 g of water. Add more than that and the extra stays as crystals at the bottom."
   ],
   "equation": "mass of solution = mass of water + mass of sugar",
-  "realWorld": "Seawater looks clear, but every litre hides about 35 g of dissolved salt. Leave it to evaporate in the sun and the salt is left behind, which is how sea salt is made."
+  "realWorld": "Seawater looks clear, but every litre hides about 35 g of dissolved salt. Leave it to evaporate in the sun and the salt is left behind, which is how sea salt is made.",
+  "sources": [
+    "OpenStax Chemistry 2e, §11.1 The Dissolution Process. https://openstax.org/books/chemistry-2e/pages/11-1-the-dissolution-process",
+    "OpenStax Chemistry 2e, §1.2 Phases and Classification of Matter. https://openstax.org/books/chemistry-2e/pages/1-2-phases-and-classification-of-matter"
+  ]
 }

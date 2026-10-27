@@ -7,5 +7,9 @@
     "The catalyst takes part along the way but is given back unchanged at the end, so it isn't used up. Filter and dry it afterwards and the same mass is still there. A catalyst changes how fast a reaction goes, not how much product it makes."
   ],
   "equation": "2H₂O₂ → 2H₂O + O₂ (catalyst: MnO₂)",
-  "realWorld": "Car catalytic converters use metals such as platinum and palladium to turn harmful exhaust gases into safer ones, mile after mile, without being used up. Your cells use a catalyst too: the enzyme catalase breaks down hydrogen peroxide."
+  "realWorld": "Car catalytic converters use metals such as platinum and palladium to turn harmful exhaust gases into safer ones, mile after mile, without being used up. Your cells use a catalyst too: the enzyme catalase breaks down hydrogen peroxide.",
+  "sources": [
+    "OpenStax Chemistry 2e, §12.7 Catalysis. https://openstax.org/books/chemistry-2e/pages/12-7-catalysis",
+    "OpenStax Chemistry 2e, §12.5 Collision Theory. https://openstax.org/books/chemistry-2e/pages/12-5-collision-theory"
+  ]
 }

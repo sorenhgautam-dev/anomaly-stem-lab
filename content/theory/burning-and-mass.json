@@ -7,5 +7,9 @@
     "In a sealed jar, the oxygen comes from the air already inside, which was on the scale all along, so the reading doesn't change. Open the lid afterwards and air rushes in to refill the jar."
   ],
   "equation": "3Fe + 2O₂ → Fe₃O₄",
-  "realWorld": "Wood and candles seem to lose mass when they burn because their products, carbon dioxide and water vapour, are gases that float away. Catch those gases, and the products weigh more than the fuel did, just like the steel wool."
+  "realWorld": "Wood and candles seem to lose mass when they burn because their products, carbon dioxide and water vapour, are gases that float away. Catch those gases, and the products weigh more than the fuel did, just like the steel wool.",
+  "sources": [
+    "OpenStax Chemistry 2e, §4.2 Classifying Chemical Reactions (combustion). https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
+    "OpenStax Chemistry 2e, §1.2 Phases and Classification of Matter (law of conservation of matter). https://openstax.org/books/chemistry-2e/pages/1-2-phases-and-classification-of-matter"
+  ]
 }

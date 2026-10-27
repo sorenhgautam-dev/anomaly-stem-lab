@@ -7,5 +7,8 @@
     "That hidden energy is called the latent heat of fusion. Melting 1 g of ice takes about 334 J, enough to warm 1 g of liquid water by about 80 °C. A stronger heater melts the ice sooner, but the mix still sits at 0 °C while it melts."
   ],
   "equation": "Energy to melt = mass × 334 J/g (for ice)",
-  "realWorld": "Ice keeps a drink near 0 °C until it has all melted, which is why a cool box full of ice works so well. Boiling water does the same at 100 °C: turning the stove up makes it boil faster, not hotter."
+  "realWorld": "Ice keeps a drink near 0 °C until it has all melted, which is why a cool box full of ice works so well. Boiling water does the same at 100 °C: turning the stove up makes it boil faster, not hotter.",
+  "sources": [
+    "OpenStax Chemistry 2e, §10.3 Phase Transitions. https://openstax.org/books/chemistry-2e/pages/10-3-phase-transitions"
+  ]
 }

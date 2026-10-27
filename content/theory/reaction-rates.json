@@ -7,5 +7,9 @@
     "A handy rule of thumb: for many reactions near room temperature, every 10 °C rise roughly doubles the rate. That's why a fizzy tablet in hot water is finished long before one in cold water."
   ],
   "equation": "k = A·e^(−Ea/RT) (the Arrhenius equation)",
-  "realWorld": "Fridges keep food fresh by slowing down the reactions that make it go off. Cooking does the opposite: heat speeds up the reactions that change raw food."
+  "realWorld": "Fridges keep food fresh by slowing down the reactions that make it go off. Cooking does the opposite: heat speeds up the reactions that change raw food.",
+  "sources": [
+    "OpenStax Chemistry 2e, §12.2 Factors Affecting Reaction Rates. https://openstax.org/books/chemistry-2e/pages/12-2-factors-affecting-reaction-rates",
+    "OpenStax Chemistry 2e, §12.5 Collision Theory. https://openstax.org/books/chemistry-2e/pages/12-5-collision-theory"
+  ]
 }

@@ -1,80 +1,72 @@
 "use client";
 
-import { useEffect, useReducer, useRef } from "react";
-import { FastForward, Pause, Play, RotateCcw } from "lucide-react";
-import { cn } from "@/lib/cn";
+import { useEffect, useRef, useState } from "react";
+import { Pause, Play, RotateCcw } from "lucide-react";
+import { IconButton } from "@/components/ui/IconButton";
+import { SegmentedToggle } from "@/components/ui/Toggle";
 import { playback } from "./playback";
 
 /*
- * Time scrubber (CLAUDE.md §3.5): pause, slow motion, rewind and scrub
- * through a run. The slider and clock are written from the playback loop
- * directly; React only re-renders when play / pause / speed change.
+ * The time scrubber (CLAUDE.md §3.5, DESIGN.md §8.1 "Run"): pause, slow
+ * motion, rewind and scrub through the run. The thumb moves by writing to
+ * the input directly each frame, never through React state.
  */
 
-function formatTime(t: number, scale: number): string {
-  const seconds = t * scale;
-  return seconds >= 60 ? `${Math.floor(seconds / 60)}:${String(Math.round(seconds % 60)).padStart(2, "0")}` : `${seconds.toFixed(1)} s`;
-}
+const SPEEDS = [
+  { value: "0.25", label: "¼×" },
+  { value: "0.5", label: "½×" },
+  { value: "1", label: "1×" },
+];
 
 export function TimeScrubber({ timeScale = 1 }: { timeScale?: number }) {
-  const [, rerender] = useReducer((n: number) => n + 1, 0);
-  const range = useRef<HTMLInputElement>(null);
-  const clock = useRef<HTMLSpanElement>(null);
+  const input = useRef<HTMLInputElement>(null);
+  const clock = useRef<HTMLOutputElement>(null);
+  const [playing, setPlaying] = useState(playback.playing);
+  const [speed, setSpeed] = useState(String(playback.speed));
 
-  useEffect(() => playback.onState(rerender), []);
-  useEffect(
-    () =>
-      playback.onFrame((t) => {
-        if (range.current) range.current.value = String(t / playback.duration);
-        if (clock.current) clock.current.textContent = formatTime(t, timeScale);
-      }),
-    [timeScale],
-  );
+  useEffect(() => {
+    const offFrame = playback.onFrame((t) => {
+      if (input.current) input.current.value = String(t / playback.duration);
+      if (clock.current) clock.current.textContent = `${(t * timeScale).toFixed(1)} s`;
+    });
+    const offState = playback.onState(() => {
+      setPlaying(playback.playing);
+      setSpeed(String(playback.speed));
+    });
+    return () => {
+      offFrame();
+      offState();
+    };
+  }, [timeScale]);
 
-  const button =
-    "grid size-10 place-items-center rounded-full text-pearl/80 transition-colors duration-200 ease-lab hover:bg-pearl/10 hover:text-pearl";
   return (
-    <div className="flex items-center gap-2" role="group" aria-label="Playback">
-      <button type="button" className={button} onClick={() => playback.restart()} aria-label="Rewind and replay">
-        <RotateCcw className="size-4" strokeWidth={1.8} />
-      </button>
-      <button
-        type="button"
-        className={button}
-        onClick={() => playback.toggle()}
-        aria-label={playback.playing ? "Pause" : "Play"}
-      >
-        {playback.playing ? <Pause className="size-4" strokeWidth={1.8} /> : <Play className="size-4" strokeWidth={1.8} />}
-      </button>
-      <button
-        type="button"
-        className={cn(button, "w-auto px-3 font-mono text-xs", playback.speed < 1 && "bg-pearl/10 text-pearl")}
-        onClick={() => playback.setSpeed(playback.speed < 1 ? 1 : 0.25)}
-        aria-label={playback.speed < 1 ? "Normal speed" : "Slow motion"}
-        aria-pressed={playback.speed < 1}
-      >
-        {playback.speed < 1 ? "¼×" : "1×"}
-      </button>
-      <input
-        ref={range}
-        type="range"
-        min={0}
-        max={1}
-        step={0.001}
-        defaultValue={0}
-        aria-label="Scrub through the run"
-        onInput={(e) => {
-          playback.pause();
-          playback.seek(Number(e.currentTarget.value) * playback.duration);
-        }}
-        className="mx-2 h-1 min-w-24 flex-1 cursor-pointer appearance-none rounded-full bg-pearl/15 accent-lilac"
-      />
-      <span ref={clock} className="w-16 text-right font-mono text-xs tabular-nums text-pearl/70">
-        0.0 s
-      </span>
-      <button type="button" className={button} onClick={() => playback.skip()} aria-label="Skip to the end">
-        <FastForward className="size-4" strokeWidth={1.8} />
-      </button>
+    <div className="flex flex-wrap items-center gap-3">
+      <IconButton label={playing ? "Pause" : "Play"} onClick={() => playback.toggle()}>
+        {playing ? <Pause /> : <Play />}
+      </IconButton>
+      <IconButton label="Rewind and play again" onClick={() => playback.restart()}>
+        <RotateCcw />
+      </IconButton>
+      <label className="flex min-w-48 flex-1 items-center gap-3">
+        <span className="sr-only">Time in the run</span>
+        <input
+          ref={input}
+          type="range"
+          min={0}
+          max={1}
+          step={0.001}
+          defaultValue={0}
+          onChange={(e) => {
+            playback.pause();
+            playback.seek(Number(e.target.value) * playback.duration);
+          }}
+          className="h-11 w-full cursor-pointer accent-ink-900"
+        />
+        <output ref={clock} className="type-readout w-16 text-right text-sm text-ink-700">
+          0.0 s
+        </output>
+      </label>
+      <SegmentedToggle label="Playback speed" value={speed} onChange={(v) => playback.setSpeed(Number(v))} options={SPEEDS} />
     </div>
   );
 }

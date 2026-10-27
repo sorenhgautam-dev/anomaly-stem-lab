@@ -1,31 +1,34 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { CircuitPartKind } from "@/engine/types";
+import { useCallback, useEffect, useState } from "react";
 import { getExperiment, theoryFor } from "@/lib/content";
 import { useProgress } from "@/lib/progress";
 import { useLab } from "@/lib/store";
-import { AnoPanel } from "./AnoPanel";
-import { Controls } from "./Controls";
+import { ExploreBar } from "@/components/explore/ExploreBar";
+import { LabStage } from "@/components/lab3d/LabStage";
+import { useLabUi } from "@/components/lab3d/lab-ui";
+import { stage3d } from "@/components/lab3d/stages/registry";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { TheorySheet } from "@/components/ui/TheorySheet";
+import { toast } from "@/components/ui/Toast";
+import { AnoDock } from "./AnoDock";
+import { BuildControls } from "./BuildControls";
 import { Inspector } from "./Inspector";
-import { AnomalyMoment, LabCaption } from "./LabMoments";
-import { MissionBar } from "./MissionBar";
-import { PartsTray, type DropFn } from "./PartsTray";
+import { MissionCard } from "./MissionCard";
 import { playback } from "./playback";
-import { PredictionPanel } from "./PredictionPanel";
-import { ResultPanel } from "./ResultPanel";
-import { RoomWindow } from "./RoomWindow";
-import { StageView } from "./StageView";
-import { TheoryView } from "./TheoryView";
+import { PredictDock } from "./PredictDock";
+import { ResultDock } from "./ResultDock";
 import { TimeScrubber } from "./TimeScrubber";
 import { useRun } from "./useRun";
+import { VerdictMoment } from "./VerdictMoment";
 
 /*
- * One experiment, start to finish (CLAUDE.md §6.1): Ano introduces it, the
- * student builds and predicts, Run plays the simulator's result on the
- * playback clock, and the verdict lands when it finishes: ANOMALY + ghost +
- * hints on a wrong prediction, gold + Next experiment on a correct one. The
- * HUD floats over the 3D lab; the stage is a window into it.
+ * One experiment, start to finish, in one continuous 3D space (CLAUDE.md
+ * §6.1, DESIGN.md §7.5, §8.1). The lab fills the screen; glass HUD panels
+ * float over it: mission (top left), inspector (top right), Ano and his
+ * bubble (bottom left) and the dock (bottom centre: build, predict and Run;
+ * the scrubber; the result). On small screens the lab is a tall box and the panels
+ * follow it.
  */
 
 export function LabExperiment({ id, nextHref, mapHref }: { id: string; nextHref: string | null; mapHref: string }) {
@@ -34,73 +37,71 @@ export function LabExperiment({ id, nextHref, mapHref }: { id: string; nextHref:
   const start = useLab((s) => s.start);
   const phase = useLab((s) => s.phase);
   const result = useLab((s) => s.result);
+  const prediction = useLab((s) => s.prediction);
   const runId = useLab((s) => s.runId);
-  const [armed, setArmed] = useState<CircuitPartKind | null>(null);
   const [theoryOpen, setTheoryOpen] = useState(false);
-  const [caption, setCaption] = useState<{ id: number; text: string } | null>(null);
-  const drop = useRef<DropFn | null>(null);
-  const main = useRef<HTMLElement>(null);
+  const entry = stage3d(def);
+  const particles = !!entry.shots(def).particles;
+  const zoom = particles ? (entry.zoom ?? { label: "Zoom to particles", caption: "Zoomed in: each dot is a particle." }) : null;
 
-  // Start the experiment. Saved evidence seeds the diagnosis once progress
-  // has loaded from IndexedDB.
+  // Saved evidence seeds the diagnosis once progress has loaded from IndexedDB.
   const hydrated = useProgress((s) => s.hydrated);
   useEffect(() => {
     start(def, useProgress.getState().evidence);
+    useLabUi.getState().setParticles(false);
     return () => playback.stop();
   }, [def, start, hydrated]);
 
-  const say = useCallback((text: string) => setCaption((c) => ({ id: (c?.id ?? 0) + 1, text })), []);
-  const { run: runExperiment, flashId } = useRun(def, main, say);
-  const run = useCallback(() => {
-    setArmed(null);
-    runExperiment();
-  }, [runExperiment]);
-
+  const say = useCallback((text: string) => toast(`[${text}]`, 2400), []);
+  const { run, moment } = useRun(def, say);
   const timeScale = result?.outcome.readings.timeScale ?? 1;
+  // The theory opens beside the lab, which dives in to show the idea (particles, current).
+  const openTheory = (open: boolean) => {
+    setTheoryOpen(open);
+    if (particles) useLabUi.getState().setParticles(open);
+  };
+  const whatHappened =
+    result && prediction
+      ? `You predicted "${prediction.type === "choice" ? prediction.value : prediction.value}". The simulator showed "${result.outcome.result.type === "choice" ? result.outcome.result.value : Math.round(result.outcome.result.value * 100) / 100}".`
+      : undefined;
 
   return (
-    <main ref={main} className="flex flex-1 flex-col gap-4 px-4 pb-4 pt-24 sm:px-8 sm:pt-28">
-      <MissionBar />
-
-      <div className="grid flex-1 gap-4 lg:grid-cols-[minmax(0,1fr)_19rem]">
-        <RoomWindow>
-          <StageView armed={armed} onPlaced={() => setArmed(null)} registerDrop={(fn) => (drop.current = fn)} />
-        </RoomWindow>
-        <div className="flex flex-col gap-4">
-          <AnoPanel />
-          <Inspector className="flex-1 lg:max-h-[calc(100dvh-24rem)] lg:overflow-y-auto" />
+    <>
+      <ExploreBar className="lg:fixed lg:inset-x-0 lg:top-0" />
+      <main data-phase={phase} data-verdict={phase === "result" ? result?.verdict : undefined} className="relative flex flex-1 flex-col">
+        <LabStage title={def.title} className="h-[58vh] min-h-80 lg:fixed lg:inset-0 lg:h-auto" />
+        <div className="pointer-events-none relative z-20 flex flex-1 flex-col gap-4 p-4 lg:min-h-dvh lg:justify-between lg:px-8 lg:pb-6 lg:pt-24">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <MissionCard def={def} className="pointer-events-auto lg:w-[22rem]" />
+            <Inspector zoom={zoom} className="pointer-events-auto lg:w-[21rem]" />
+          </div>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
+            <AnoDock className="pointer-events-auto lg:w-[16rem] lg:shrink-0 xl:w-[19rem]" />
+            <GlassCard className="pointer-events-auto rounded-sheet p-4 sm:p-5 lg:min-w-0 lg:flex-1 xl:mx-auto xl:max-w-[58rem]">
+              <div key={phase === "result" ? `result-${runId}` : phase} className="flex animate-fade-up flex-col gap-5 motion-reduce:animate-none">
+                {phase === "build" && (
+                  <>
+                    <BuildControls />
+                    <PredictDock onRun={run} />
+                  </>
+                )}
+                {phase === "running" && (
+                  <div className="flex flex-col gap-3">
+                    <p className="text-[15px] font-semibold" aria-live="polite">
+                      Running the simulator…
+                    </p>
+                    <TimeScrubber timeScale={timeScale} />
+                  </div>
+                )}
+                {phase === "result" && <ResultDock nextHref={nextHref} mapHref={mapHref} onTheory={() => openTheory(true)} timeScale={timeScale} />}
+              </div>
+            </GlassCard>
+          </div>
         </div>
-      </div>
-
-      {/* A steady height, so the window (and the room's camera) doesn't jump between phases. */}
-      <div className="glass-hud rounded-[22px] p-5 lg:min-h-52">
-        {/* Each phase's controls ease in instead of snapping (CLAUDE.md §3.7). */}
-        <div key={phase === "result" ? `result-${runId}` : phase} className="flex animate-hud-in flex-col gap-5">
-          {phase === "build" && (
-            <>
-              {def.stage === "circuit" ? (
-                <PartsTray parts={def.parts} armed={armed} onArm={setArmed} drop={() => drop.current} />
-              ) : (
-                <Controls />
-              )}
-              <PredictionPanel onRun={run} />
-            </>
-          )}
-          {phase === "running" && (
-            <div className="flex flex-col gap-3">
-              <p className="text-[15px] text-pearl/70">Running the simulator…</p>
-              <TimeScrubber timeScale={timeScale} />
-            </div>
-          )}
-          {phase === "result" && (
-            <ResultPanel nextHref={nextHref} mapHref={mapHref} onTheory={() => setTheoryOpen(true)} timeScale={timeScale} />
-          )}
-        </div>
-      </div>
-
-      <TheoryView theory={theory} open={theoryOpen} onClose={() => setTheoryOpen(false)} />
-      <AnomalyMoment id={flashId} />
-      <LabCaption caption={caption} />
-    </main>
+        <VerdictMoment moment={moment} />
+        <TheorySheet theory={theory} open={theoryOpen} onOpenChange={openTheory} whatHappened={whatHappened} overlay="clear" />
+        {!prediction && phase === "build" && <span className="sr-only">Make a prediction, then press Run.</span>}
+      </main>
+    </>
   );
 }

@@ -1,18 +1,28 @@
 "use client";
 
+import { Atom, Maximize } from "lucide-react";
 import { partInSlot } from "@/engine/edits";
-import type { CircuitPartKind, ExperimentDef, Outcome, PropValue } from "@/engine/types";
+import type { Build, CircuitPartKind, ExperimentDef, Outcome, PropValue } from "@/engine/types";
 import { cn } from "@/lib/cn";
 import { useLab } from "@/lib/store";
-import { formatOhms, PART_NAMES } from "@/components/robotics/parts";
+import { labView } from "@/components/lab3d/lab-state";
+import { useLabUi } from "@/components/lab3d/lab-ui";
+import { Button } from "@/components/ui/Button";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { Switch } from "@/components/ui/Toggle";
+import { PART_NAMES } from "./BuildControls";
 import { readingLabel } from "./readings";
+import { CountUp } from "@/components/ui/CountUp";
 
 /*
- * Right panel (CLAUDE.md §3.5): the selected part's live values. Before a
- * run it shows the part's ratings only, so it never gives the answer away.
+ * The inspector (DESIGN.md §7.5 right, CLAUDE.md §3.5): the selected part's
+ * ratings and, once a run plays, its live values in Geist Mono; for chemistry
+ * and robots, the readings when the run ends (never during it, so nothing
+ * gives the answer away). Also the view tools: zoom to particles, reset view.
  */
 
 const RESISTOR_PRESETS = [10, 100, 220, 470, 1000];
+const formatOhms = (ohms: number) => (ohms >= 1000 ? `${ohms / 1000} kΩ` : `${ohms} Ω`);
 
 function fmt(value: number, unit: string): string {
   const abs = Math.abs(value);
@@ -27,21 +37,11 @@ function ratings(kind: CircuitPartKind, props: Record<string, PropValue>): [stri
     case "battery":
       return [["Voltage", `${props.volts ?? 6} V`]];
     case "resistor":
-      return [
-        ["Resistance", formatOhms(typeof props.ohms === "number" ? props.ohms : 220)],
-        ["Power rating", "0.25 W"],
-      ];
+      return [["Resistance", formatOhms(typeof props.ohms === "number" ? props.ohms : 220)], ["Power rating", "0.25 W"]];
     case "bulb":
-      return [
-        ["Resistance", `${props.ohms ?? 12} Ω`],
-        ["Rated for", "6 V"],
-      ];
+      return [["Resistance", `${props.ohms ?? 12} Ω`], ["Rated for", "6 V"]];
     case "led":
-      return [
-        ["Turns on above", "≈ 2 V"],
-        ["Safe current", "20 mA"],
-        ["Pointing", props.flipped ? "Backwards" : "+ to −"],
-      ];
+      return [["Turns on above", "≈ 2 V"], ["Safe current", "20 mA"], ["Pointing", props.flipped ? "Backwards" : "+ to −"]];
     case "switch":
       return [["State", props.closed === false ? "Off (open)" : "On (closed)"]];
     default:
@@ -49,151 +49,104 @@ function ratings(kind: CircuitPartKind, props: Record<string, PropValue>): [stri
   }
 }
 
-export function Inspector({ className }: { className?: string }) {
-  const def = useLab((s) => s.def);
-  const build = useLab((s) => s.build);
-  const selected = useLab((s) => s.selected);
-  const result = useLab((s) => s.result);
-  const phase = useLab((s) => s.phase);
-  const edit = useLab((s) => s.edit);
-  if (!def || !build) return null;
-
-  const outcome = phase === "build" ? null : (result?.outcome ?? null);
-
+function Rows({ rows }: { rows: [string, string][] }) {
   return (
-    <aside className={cn("glass-hud flex flex-col gap-4 rounded-[20px] p-5", className)} aria-label="Inspector">
-      <p className="type-label text-pearl/45">Inspector</p>
-      {def.stage === "circuit" ? (
-        <CircuitInspector def={def} selected={selected} outcome={outcome} build={build} edit={edit} />
-      ) : (
-        // Final readings only once the verdict is in: during the run they'd
-        // give the answer away before the student sees it happen.
-        <ReadingsTable outcome={phase === "result" ? outcome : null} running={phase === "running"} />
-      )}
-    </aside>
+    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[13px]">
+      {rows.map(([k, v]) => (
+        <div key={k} className="contents">
+          <dt className="text-ink-500">{k}</dt>
+          <dd className="type-readout text-right text-ink-900">
+            <CountUp text={v} />
+          </dd>
+        </div>
+      ))}
+    </dl>
   );
 }
 
-function CircuitInspector({
-  def,
-  selected,
-  outcome,
-  build,
-  edit,
-}: {
-  def: ExperimentDef;
-  selected: string | null;
-  outcome: Outcome | null;
-  build: NonNullable<ReturnType<typeof useLab.getState>["build"]>;
-  edit: ReturnType<typeof useLab.getState>["edit"];
-}) {
+function CircuitPanel({ def, build, outcome }: { def: ExperimentDef; build: Build; outcome: Outcome | null }) {
+  const selected = useLab((s) => s.selected);
+  const phase = useLab((s) => s.phase);
+  const edit = useLab((s) => s.edit);
   const slot = selected ? def.board?.slots.find((s) => s.id === selected) : undefined;
   const part = slot ? partInSlot(build, slot.id) : undefined;
-  if (!slot) {
-    return <p className="text-[14px] leading-relaxed text-pearl/60">Select a part on the board to see its values.</p>;
-  }
-  if (!part) {
-    return (
-      <div className="flex flex-col gap-2">
-        <p className="text-[17px] text-pearl">{slot.label}</p>
-        <p className="text-[14px] leading-relaxed text-pearl/60">Empty. Pick a part in the tray, then click this outline to snap it in.</p>
-      </div>
-    );
-  }
+  if (!slot) return <p className="text-[14px] leading-relaxed text-ink-500">Click a part on the board to see its values.</p>;
+  if (!part) return <p className="text-[14px] leading-relaxed text-ink-500">{slot.label}: empty. Pick a part up from the tray, then click this outline.</p>;
   const r = outcome?.readings ?? {};
   const live: [string, string][] = outcome
     ? [
         ["Current", fmt(r[`${slot.id}.current`] ?? 0, "A")],
         ["Voltage across", fmt(r[`${slot.id}.voltage`] ?? 0, "V")],
         ["Power", fmt(r[`${slot.id}.power`] ?? 0, "W")],
-        ...(part.kind === "bulb" || part.kind === "led"
-          ? ([["Brightness", fmt(r[`${slot.id}.brightness`] ?? 0, "%")]] as [string, string][])
-          : []),
-        ...(r[`${slot.id}.temperature`] !== undefined
-          ? ([["Temperature", `${Math.round(r[`${slot.id}.temperature`])} °C`]] as [string, string][])
-          : []),
+        ...(part.kind === "bulb" || part.kind === "led" ? ([["Brightness", fmt(r[`${slot.id}.brightness`] ?? 0, "%")]] as [string, string][]) : []),
       ]
     : [];
-
-  const action = "rounded-full px-3 py-2 text-[13px] transition-colors duration-200 ease-lab";
+  const editable = !slot.fixed && phase === "build";
   return (
-    <div className="flex flex-col gap-4">
-      <p className="text-[17px] text-pearl">
-        {PART_NAMES[part.kind]} <span className="text-pearl/45">· {slot.label}</span>
+    <div className="flex flex-col gap-3">
+      <p className="type-heading text-lg">
+        {PART_NAMES[part.kind]} <span className="text-[15px] font-medium text-ink-500">· {slot.label}</span>
       </p>
-      <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-[13px]">
-        {ratings(part.kind, part.props).map(([k, v]) => (
-          <div key={k} className="contents">
-            <dt className="text-pearl/50">{k}</dt>
-            <dd className="text-right font-mono text-pearl">{v}</dd>
-          </div>
-        ))}
-      </dl>
+      <Rows rows={ratings(part.kind, part.props)} />
       {live.length > 0 && (
         <div>
-          <p className="type-label mb-2 text-signal">Live</p>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-[13px]">
-            {live.map(([k, v]) => (
-              <div key={k} className="contents">
-                <dt className="text-pearl/50">{k}</dt>
-                <dd className="text-right font-mono text-pearl">{v}</dd>
-              </div>
-            ))}
-          </dl>
+          <p className="type-eyebrow mb-1.5 text-volt-600">Live</p>
+          <Rows rows={live} />
         </div>
       )}
-      {!slot.fixed && (
+      {editable && (
         <div className="flex flex-wrap gap-2">
-          {part.kind === "led" && (
-            <button type="button" className={cn(action, "glass text-pearl hover:bg-pearl/15")} onClick={() => edit({ op: "toggle-prop", slot: slot.id, prop: "flipped" })}>
-              Flip it round
-            </button>
-          )}
-          {part.kind === "switch" && (
-            <button type="button" className={cn(action, "glass text-pearl hover:bg-pearl/15")} onClick={() => edit({ op: "toggle-prop", slot: slot.id, prop: "closed" })}>
-              Switch {part.props.closed === false ? "on" : "off"}
-            </button>
-          )}
+          {part.kind === "led" && <Button variant="secondary" onClick={() => edit({ op: "toggle-prop", slot: slot.id, prop: "flipped" })}>Flip it round</Button>}
+          {part.kind === "switch" && <Button variant="secondary" onClick={() => edit({ op: "toggle-prop", slot: slot.id, prop: "closed" })}>Switch {part.props.closed === false ? "on" : "off"}</Button>}
           {part.kind === "resistor" &&
             RESISTOR_PRESETS.map((ohms) => (
-              <button
-                key={ohms}
-                type="button"
-                aria-pressed={part.props.ohms === ohms}
-                className={cn(action, part.props.ohms === ohms ? "bg-pearl text-void" : "glass text-pearl hover:bg-pearl/15")}
-                onClick={() => edit({ op: "place", slot: slot.id, kind: "resistor", props: { ...part.props, ohms } })}
-              >
+              <Button key={ohms} variant={part.props.ohms === ohms ? "primary" : "secondary"} aria-pressed={part.props.ohms === ohms} onClick={() => edit({ op: "place", slot: slot.id, kind: "resistor", props: { ...part.props, ohms } })}>
                 {formatOhms(ohms)}
-              </button>
+              </Button>
             ))}
-          <button type="button" className={cn(action, "text-pearl/60 hover:bg-pearl/10 hover:text-pearl")} onClick={() => edit({ op: "remove", slot: slot.id })}>
+          <Button variant="ghost" onClick={() => edit({ op: "remove", slot: slot.id })}>
             Remove
-          </button>
+          </Button>
         </div>
       )}
     </div>
   );
 }
 
-function ReadingsTable({ outcome, running }: { outcome: Outcome | null; running: boolean }) {
-  if (!outcome) {
-    return (
-      <p className="text-[14px] leading-relaxed text-pearl/60">
-        {running ? "Watch the instruments on the bench. The full readings appear here when the run ends." : "Readings appear here when you run the experiment."}
-      </p>
-    );
-  }
-  const rows = Object.entries(outcome.readings)
-    .map(([key, value]) => ({ key, ...readingLabel(key, value) }))
-    .filter((r) => r.label !== null);
+export function Inspector({ className, zoom }: { className?: string; zoom: { label: string; caption: string } | null }) {
+  const def = useLab((s) => s.def);
+  const build = useLab((s) => s.build);
+  const result = useLab((s) => s.result);
+  const phase = useLab((s) => s.phase);
+  const zoomed = useLabUi((s) => s.particles);
+  const setZoomed = useLabUi((s) => s.setParticles);
+  if (!def || !build) return null;
+  const outcome = phase === "build" ? null : (result?.outcome ?? null);
+  const final = phase === "result" ? outcome : null;
+  const rows = final ? Object.entries(final.readings).map(([key, value]) => ({ key, ...readingLabel(key, value) })).filter((r) => r.label !== null).map((r) => [r.label!, r.text] as [string, string]) : [];
   return (
-    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-[13px]">
-      {rows.map((r) => (
-        <div key={r.key} className="contents">
-          <dt className="text-pearl/50">{r.label}</dt>
-          <dd className="text-right font-mono text-pearl">{r.text}</dd>
-        </div>
-      ))}
-    </dl>
+    <GlassCard className={cn("flex flex-col gap-4 p-4 sm:p-5", className)} aria-label="Inspector" role="complementary">
+      <p className="type-eyebrow text-ink-500">Inspector</p>
+      {def.stage === "circuit" ? (
+        <CircuitPanel def={def} build={build} outcome={outcome} />
+      ) : rows.length ? (
+        <Rows rows={rows} />
+      ) : (
+        <p className="text-[14px] leading-relaxed text-ink-500">{phase === "running" ? "Watch the instruments on the bench. The full readings appear here when the run ends." : "Readings appear here when you run the experiment."}</p>
+      )}
+      <div className="flex flex-wrap gap-2 border-t border-ink-900/[0.07] pt-3">
+        {zoom && <Switch label={zoom.label} checked={zoomed} onChange={setZoomed} />}
+        <Button variant="ghost" onClick={() => labView.el?.dispatchEvent(new MouseEvent("dblclick"))}>
+          <Maximize aria-hidden className="size-4" />
+          Reset view
+        </Button>
+      </div>
+      {zoom && zoomed && (
+        <p className="flex items-center gap-2 text-[13px] text-ink-500">
+          <Atom aria-hidden className="size-4 shrink-0" />
+          {zoom.caption}
+        </p>
+      )}
+    </GlassCard>
   );
 }

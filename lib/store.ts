@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { conflict, type ConflictEdit } from "@/engine/conflict";
 import { applyEdit, initialBuild } from "@/engine/edits";
 import { runExperiment } from "@/engine/run";
-import type { Build, EditDef, Evidence, ExperimentDef, Prediction, RunResult } from "@/engine/types";
+import type { Build, CircuitPartKind, EditDef, Evidence, ExperimentDef, Prediction, RunResult } from "@/engine/types";
 
 /*
  * State for one experiment session (CLAUDE.md §4: current experiment,
@@ -35,6 +35,8 @@ interface LabState {
   ano: AnoState;
   /** Selected slot or instrument, shown in the inspector. */
   selected: string | null;
+  /** The tray part picked up, waiting for a slot (circuits). Shared by the HUD tray and the 3D bench. */
+  armed: CircuitPartKind | null;
   /** Bumps on every run, so animations restart. */
   runId: number;
   /** Diagnosis evidence carried across runs (seeded from saved progress). */
@@ -47,6 +49,9 @@ interface LabState {
   setPrediction: (prediction: Prediction) => void;
   setConfidence: (confidence: Confidence) => void;
   select: (id: string | null) => void;
+  arm: (kind: CircuitPartKind | null) => void;
+  /** Put the armed (or given) part into a slot, with the slot's starting settings. */
+  place: (slot: string, kind?: CircuitPartKind) => void;
   /** Run the simulator. The verdict shows when playback ends (reveal()). */
   run: () => RunResult | null;
   reveal: () => void;
@@ -67,6 +72,7 @@ export const useLab = create<LabState>()((set, get) => ({
   hintStep: 0,
   ano: "greet",
   selected: null,
+  armed: null,
   runId: 0,
   evidence: {},
 
@@ -81,6 +87,7 @@ export const useLab = create<LabState>()((set, get) => ({
       hintStep: 0,
       ano: "greet",
       selected: null,
+      armed: null,
       evidence,
     }),
 
@@ -102,6 +109,15 @@ export const useLab = create<LabState>()((set, get) => ({
   setPrediction: (prediction) => set({ prediction, ano: "building" }),
   setConfidence: (confidence) => set({ confidence }),
   select: (selected) => set({ selected }),
+  arm: (armed) => set({ armed }),
+  place: (slot, kind) => {
+    const { def, armed } = get();
+    const part = kind ?? armed;
+    if (!def || !part) return;
+    const template = def.board?.slots.find((s) => s.id === slot)?.initial;
+    get().edit({ op: "place", slot, kind: part, props: template?.kind === part ? { ...template.props } : undefined });
+    set({ selected: slot, armed: null });
+  },
 
   run: () => {
     const { def, build, prediction, evidence } = get();
@@ -113,6 +129,7 @@ export const useLab = create<LabState>()((set, get) => ({
     set((s) => ({
       result,
       selected: s.selected ?? lamp,
+      armed: null,
       phase: "running",
       runId: s.runId + 1,
       hintStep: 0,

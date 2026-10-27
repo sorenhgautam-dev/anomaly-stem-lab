@@ -1,28 +1,27 @@
-import { AnoLine } from "@/components/explore/AnoLine";
-import { MisconceptionMap, type MapBelief } from "@/components/map/MisconceptionMap";
-import { allMisconceptions, EXPERIMENTS } from "@/lib/content";
+import { AnoView } from "@/components/ano/AnoView";
+import { BeliefGrid } from "@/components/explore/BeliefGrid";
+import { ExploreBar } from "@/components/explore/ExploreBar";
+import { Frame } from "@/components/ui/Frame";
+import { SplitHeadline } from "@/components/ui/SplitHeadline";
+import { beliefItems } from "@/lib/beliefs";
 
-export const metadata = { title: "Your belief map · ANOMALY" };
+export const metadata = { title: "My beliefs · ANOMALY" };
 
-// The misconception map (CLAUDE.md §11): spotted beliefs glow, broken ones shatter.
+/*
+ * My beliefs (DESIGN.md §7.6): every idea Ano can spot. A correct run after a
+ * diagnosed wrong one breaks the belief.
+ */
 export default function BeliefsPage() {
-  const beliefs: MapBelief[] = allMisconceptions().map((m) => ({
-    ...m,
-    tests: EXPERIMENTS.filter((e) => e.misconceptions.includes(m.id)).map((e) => ({
-      title: e.title,
-      href: `/labs/${e.lab}/${e.level}/${e.id}`,
-    })),
-  }));
   return (
-    <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-5 pb-10 pt-28 sm:px-10 sm:pt-36">
-      <h1 className="type-headline text-[clamp(3rem,7vw,6.5rem)]">
-        Your belief <span className="type-accent">map</span>
-      </h1>
-      <AnoLine
-        className="mb-8 mt-5"
-        text="Every idea I can spot is here. The ones I've seen in your runs glow. Break one with a correct run and it shatters."
-      />
-      <MisconceptionMap beliefs={beliefs} />
-    </main>
+    <Frame>
+      <ExploreBar />
+      <main className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 pb-40 pt-10 sm:px-8 md:pt-14">
+        <div className="relative">
+          <SplitHeadline left="Your" right="beliefs." gap={<span className="block w-[14vw]" />} sizeClassName="text-[clamp(4rem,19vw,6.5rem)] md:text-[clamp(4rem,10vw,9.5rem)]" />
+          <AnoView className="relative mx-auto mt-2 h-56 w-44 md:absolute md:left-1/2 md:top-1/2 md:mt-0 md:h-72 md:w-56 md:-translate-x-1/2 md:-translate-y-[55%]" expression="thinking" label="Ano, thinking" />
+        </div>
+        <BeliefGrid items={beliefItems()} />
+      </main>
+    </Frame>
   );
 }

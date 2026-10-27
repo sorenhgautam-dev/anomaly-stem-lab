@@ -1,64 +1,105 @@
 {
   "descriptor": "A virtual STEM lab that finds the wrong idea behind every mistake, then builds the experiment that breaks it.",
-  "hero": {
-    "question": "Which falls",
-    "questionAccent": "faster?",
-    "setup": "Two balls, same size. The steel one is three times heavier than the glass one. Make your call, then we drop them.",
-    "options": [
-      {
-        "id": "heavy",
-        "label": "Steel first"
-      },
-      {
-        "id": "light",
-        "label": "Glass first"
-      },
-      {
-        "id": "same",
-        "label": "Same time"
-      }
-    ],
-    "correct": "same",
-    "balls": {
-      "steel": "Steel · 4.1 kg",
-      "glass": "Glass · 1.3 kg"
-    },
-    "ghostLabel": "Your prediction",
-    "retry": "Drop again",
-    "scrollHint": "Scroll to see how Ano works"
-  },
-  "scroll": "Scroll to explore",
-  "chapters": [
+  "slides": [
     {
-      "id": "predict",
-      "title": "Predict",
-      "body": "Every experiment starts with your guess. You make the call before you press run, so your idea is on the record."
+      "id": "gravity",
+      "left": "Predict",
+      "right": "Test it.",
+      "ano": { "expression": "happy", "move": "wave" },
+      "result": { "title": "Gravity in vacuum", "confidence": "High", "prediction": "Equal speed", "reality": "Verified", "status": "verified" },
+      "belief": { "title": "Why heavier objects fall together", "detail": "Ano spotted the air resistance bias", "tone": "verified", "status": "Verified" },
+      "href": null
     },
     {
-      "id": "diagnose",
-      "title": "Diagnose",
-      "body": "Guess wrong and Ano replays your build through the mistaken ideas students often hold, until one of them predicts exactly what you did."
+      "id": "led",
+      "left": "Guess",
+      "right": "Break it.",
+      "ano": { "expression": "surprised", "move": "hop" },
+      "result": { "title": "Backwards LED", "confidence": "Medium", "prediction": "Lights up", "reality": "Anomaly", "status": "anomaly" },
+      "belief": { "title": "LEDs only work one way", "detail": "Current can only flow forward", "tone": "anomaly", "status": "Anomaly spotted" },
+      "href": "/labs/robotics/medium/robotics-led"
     },
     {
-      "id": "break",
-      "title": "Break",
-      "body": "Ano picks the one small change where that idea and reality disagree the most. You run it, and the idea cracks."
-    },
-    {
-      "id": "rebuild",
-      "title": "Rebuild",
-      "body": "Fix the build, run it again, keep the idea that survived. Chemistry and robotics, right in the browser."
+      "id": "bag",
+      "left": "Think",
+      "right": "Prove it.",
+      "ano": { "expression": "thinking", "move": "nod" },
+      "result": { "title": "Sealed bag", "confidence": "High", "prediction": "Gets lighter", "reality": "Anomaly", "status": "anomaly" },
+      "belief": { "title": "Mass doesn't vanish", "detail": "Gas can't escape a sealed bag", "tone": "broken", "status": "Belief updated" },
+      "href": "/labs/chemistry/easy/chemistry-sealed-bag"
     }
   ],
-  "cta": "Start exploring",
+  "tryIt": "Try it",
+  "lowerBand": {
+    "heading": "Learn why your intuition tripped.",
+    "body": "Guess what will happen. Run it. Ano shows you exactly where your thinking broke.",
+    "chip": { "title": "How it works", "subtitle": "Predict, run, see where it broke" },
+    "meta": ["Interactive intuition lab", "Powered by Ano"],
+    "explore": "Explore {count} experiments in chemistry and robotics"
+  },
+  "hero": {
+    "left": "Which falls",
+    "right": "faster?",
+    "setup": "Two balls, same size. The steel one is three times heavier than the glass one. Make your call, then drop them.",
+    "options": [
+      { "id": "heavy", "label": "Steel first" },
+      { "id": "light", "label": "Glass first" },
+      { "id": "same", "label": "Same time" }
+    ],
+    "correct": "same",
+    "drop": "Drop them",
+    "retry": "Drop again",
+    "back": "Back to the featured anomalies",
+    "balls": { "steel": "Steel · 4.1 kg", "glass": "Glass · 1.3 kg" },
+    "result": { "title": "Which falls faster?", "reality": "Same time" },
+    "wrong": "Whoa, did you see that? They hit the floor together. Weight doesn't change how fast things fall, when air barely matters.",
+    "correctLine": "Nailed it! Weight doesn't change how fast things fall. Most people guess wrong here.",
+    "next": "Want more? Pick your level."
+  },
+  "how": {
+    "title": "How it works",
+    "steps": [
+      { "id": "predict", "title": "Predict", "body": "Every experiment starts with your guess. You make the call before you press Run, so your idea is on the record." },
+      { "id": "diagnose", "title": "Diagnose", "body": "Guess wrong and Ano replays your build through the mistaken ideas students often hold, until one of them predicts exactly what you did." },
+      { "id": "break", "title": "Break", "body": "Ano picks the one small change where that idea and reality disagree the most. You run it, and the idea cracks." },
+      { "id": "rebuild", "title": "Rebuild", "body": "Fix the build, run it again, keep the idea that survived." }
+    ]
+  },
   "labs": {
-    "title": "Pick an",
-    "titleAccent": "experiment",
-    "body": "Short builds, one prediction each. Get one wrong and Ano finds the idea behind it.",
-    "minutes": "min"
+    "title": "Two labs, one rule",
+    "body": "Your prediction goes on the record first. The simulator is the judge.",
+    "cta": "Pick a level first"
+  },
+  "meetAno": {
+    "title": "Meet Ano",
+    "body": "Your lab partner. Ano never says you were silly, only that reality had other plans. Then it finds the idea behind your guess.",
+    "voice": "Ano's voice",
+    "lines": {
+      "happy": "Hey, I'm Ano. Want to break some science?",
+      "curious": "Nice. What do you think will happen?",
+      "thinking": "Hmm. Let's look at the one part that matters.",
+      "surprised": "Whoa, did you see that? Let's figure out why.",
+      "celebrating": "Nailed it! That's exactly how a scientist thinks."
+    }
+  },
+  "beliefs": {
+    "title": "The belief wall",
+    "body": "Ideas students bring to the lab. Each one has an experiment built to test it."
+  },
+  "levels": {
+    "title": "Pick your level"
+  },
+  "cta": {
+    "left": "Your",
+    "right": "turn.",
+    "button": "Start experimenting"
+  },
+  "footer": {
+    "line": "A virtual STEM lab for curious students. Progress stays on this device.",
+    "credits": "Credits"
   },
   "captions": {
-    "landing": "Two hits, at the same moment",
+    "landing": "Two thuds, at the same moment",
     "anomaly": "Glitch sting",
     "correct": "Bright chime"
   }

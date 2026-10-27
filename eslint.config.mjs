@@ -25,6 +25,10 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    // The gauntlet's second dev server (next.config.ts distDir) and test output.
+    ".next-gauntlet/**",
+    "tests/.results/**",
+    "playwright-report/**",
     "out/**",
     "build/**",
     "next-env.d.ts",

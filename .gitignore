@@ -194,3 +194,14 @@ next-env.d.ts
 
 # Keep the example env file
 !.env.example
+
+# Playwright gauntlet output (screenshots are reviewed locally, not committed)
+/tests/.results/
+/tests/screenshots/
+/playwright-report/
+
+# Copied from node_modules/detect-gpu at predev/prebuild (scripts/gpu-benchmarks.mjs)
+/public/gpu-benchmarks/
+
+# A second dev server for the gauntlet (next.config.ts distDir)
+/.next-gauntlet/

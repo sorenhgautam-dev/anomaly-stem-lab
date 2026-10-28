@@ -3,7 +3,10 @@ import { createHash } from "node:crypto";
 import { createGroq } from "@ai-sdk/groq";
 import { generateText, type LanguageModel } from "ai";
 import { env } from "@/lib/env";
+import { citationsFor } from "@/lib/citations";
+import { getExperiment } from "@/lib/content";
 import { writtenHint } from "./hints";
+import { healthRedirect, isPersonalHealthQuestion } from "./safety";
 import { ASK_BUDGETS, limits, type LimitStore } from "./limits";
 import { buildPrompt, cleanAnswer, contradictsVerdict, SYSTEM_PROMPT, type AskFacts } from "./prompt";
 
@@ -23,7 +26,7 @@ export interface AskInput extends AskFacts {
   hintStep: number;
 }
 
-export type AskSource = "ai" | "cache" | "hint";
+export type AskSource = "ai" | "cache" | "hint" | "redirect";
 
 export interface AskReply {
   answer: string;
@@ -53,7 +56,8 @@ export function normaliseQuestion(question: string): string {
 }
 
 function cacheKey(input: AskInput): string {
-  const id = `${input.experimentId}|${input.faultCode ?? ""}|${input.verdict ?? ""}|${normaliseQuestion(input.question)}`;
+  const asked = input.explain ? `simpler:${normaliseQuestion(input.explain)}` : normaliseQuestion(input.question);
+  const id = `${input.experimentId}|${input.faultCode ?? ""}|${input.verdict ?? ""}|${asked}`;
   return `ask:${createHash("sha256").update(id).digest("hex")}`;
 }
 
@@ -86,6 +90,13 @@ export async function askAno(
   const { store, model } = deps;
   const hint = (remaining: number): AskReply => ({ answer: writtenHint(input.focus, input.hintStep), source: "hint", remaining });
 
+  // A question about someone's own health gets the warm redirect, first and always:
+  // no model call, no medical information, and it doesn't use up a question.
+  if (isPersonalHealthQuestion(input.question)) {
+    const left = await store.remaining(ASK_BUDGETS.session, who.sid);
+    return { answer: healthRedirect(input.question.length), source: "redirect", remaining: left };
+  }
+
   const left = await store.remaining(ASK_BUDGETS.session, who.sid);
   if (left <= 0) return hint(0);
 
@@ -109,6 +120,9 @@ export async function askAno(
     verdict: input.verdict,
     readings: input.readings,
     question: input.question,
+    explain: input.explain,
+    // The experiment's cited claims: the only facts Ano may state (CLAUDE.md Part 2 C).
+    claims: citationsFor(getExperiment(input.experimentId)?.citationIds ?? []).map((c) => c.claim),
   };
   const answer = await generateAnswer(model, facts);
   if (!answer) return hint(left);

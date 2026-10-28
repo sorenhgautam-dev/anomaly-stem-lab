@@ -7,7 +7,9 @@ import { askerFor, withSession } from "@/lib/ai/asker";
  * Ask Ano's route (CLAUDE.md §7.3, §7.5). It only validates the small request
  * body and hands it to lib/ai/askAno.ts, the one module for this job. Every
  * reply is 200 with something Ano can say: an answer, a cached answer, or the
- * next written hint (over a limit, no key, or a failed call).
+ * next written hint (over a limit, no key, or a failed call). A body that
+ * doesn't fit (an empty or too-long question) is a 400 the client turns into
+ * a written hint too.
  */
 
 const body = z.object({
@@ -22,6 +24,9 @@ const body = z.object({
     .record(z.string().regex(/^[a-zA-Z0-9.-]{1,40}$/), z.number().finite())
     .refine((r) => Object.keys(r).length <= 16, "too many readings"),
   question: z.string().trim().min(2).max(300),
+  /** "simpler": re-explain `explain` (written content the student is reading) in easier words. */
+  mode: z.enum(["ask", "simpler"]).default("ask"),
+  explain: z.string().trim().min(2).max(700).optional(),
 });
 
 export async function POST(request: NextRequest) {

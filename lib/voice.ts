@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { isMuted } from "@/lib/sound";
 
 /*
  * Ano's voice in the browser (CLAUDE.md §7.4). Off by default. Ask Ano
@@ -56,6 +57,8 @@ function browserSpeak(text: string): void {
 /** Speak one of Ano's lines. `fromAi` lines try the server voice first. */
 export async function speak(text: string, { fromAi = false }: { fromAi?: boolean } = {}): Promise<void> {
   stopSpeaking();
+  // Mute silences everything, Ano's voice too; the words stay on screen as the caption.
+  if (isMuted()) return;
   useVoice.setState({ speaking: text });
   if (fromAi) {
     try {

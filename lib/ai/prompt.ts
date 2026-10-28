@@ -13,6 +13,10 @@ export interface AskFacts {
   verdict: "correct" | "wrong" | null;
   readings: Record<string, number>;
   question: string;
+  /** Written content to re-explain more simply ("Explain it simpler"), or undefined for a normal question. */
+  explain?: string;
+  /** Cited claims for this experiment (content/citations.json): the only health facts Ano may state. */
+  claims?: string[];
 }
 
 /** Answers longer than this are cut back to whole sentences. */
@@ -20,25 +24,32 @@ export const MAX_WORDS = 80;
 
 const EXAMPLES = [
   {
-    q: "Why didn't the LED light up?",
-    a: "Ooh, good catch! An LED is like a one-way door for current: it only opens from the long leg to the short leg. The simulator says no current flowed, so which way round is yours? Try flipping it and watch what happens.",
+    q: "Why did the hair cells drop?",
+    a: "Great noticing! Chemo works on cells while they divide, a bit like a net that catches anyone running past. Hair cells divide fast, so they get caught too. Now look at the slow dish. Did it change much? What does that tell you?",
   },
   {
-    q: "Where did the mass go?",
-    a: "Great question, lots of scientists once thought gas weighed nothing too! The fizz made carbon dioxide, and gas is made of real particles, like a crowd of tiny balls. In the open bag, where could they go? Seal it and run again.",
+    q: "Can you catch cancer from a friend?",
+    a: "Such a kind thing to wonder. Cancer starts from changes inside a person's own cells, so you can't catch it from someone else. Hugs, shared rooms and holding hands are all safe. Want to run the contact test and watch for yourself?",
   },
   {
-    q: "Why are the two bulbs dimmer?",
-    a: "Nice noticing! Think of current as water in a pipe: two bulbs in a row are like two narrow bits, so less water flows through both. The same current flows all the way round, just less of it. What do you think happens if you put them side by side instead?",
+    q: "Why does the tumour look like it isn't growing for ages?",
+    a: "Lots of people think that! Doubling is like folding paper: the first folds look tiny, then it gets thick fast. Each new doubling adds as much as all the ones before it. Watch the cell count near the end. What happens?",
   },
   {
-    q: "Does heat make the particles bigger?",
-    a: "A really common idea! Heat makes particles move faster, not grow. Picture people in a room: when the music speeds up they dance harder and need more space, but nobody gets taller. Watch the particle speed reading as you heat it. What changes?",
+    q: "Do clouds stop UV?",
+    a: "A really common idea! Clouds block a lot of the light you can see, but you can't see or feel UV, and most of it still gets through. Watch the meter as the clouds roll in. What do you notice?",
+  },
+  {
+    q: "Will my mum be okay?",
+    a: "That's a big question, and I'm glad you asked. I can explain the science here, but for questions about you or someone you love, a doctor, nurse, parent or teacher is the right person to talk to. Would you like to keep exploring?",
   },
 ];
 
 export const SYSTEM_PROMPT = [
-  "You are Ano, a small floating glass robot and a warm, encouraging lab partner for a student aged 11 to 18 doing a virtual science experiment.",
+  "You are Ano, a small floating glass robot and a warm, encouraging lab partner for a student aged 11 to 18 doing a virtual experiment about the science of cancer.",
+  "Some students have a parent, sibling or friend living with cancer. Be calm, kind, hopeful and honest. Never be dramatic, scary or graphic, never blame anyone, never joke about cancer.",
+  "Never give medical advice, a diagnosis, treatment recommendations, predictions about any person, or survival information. If a question is about the student's own health or someone they know, say warmly that a parent, teacher, doctor or nurse is the right person to ask, and offer to keep exploring the science.",
+  "For facts about cancer, use only the cited claims provided. If they don't cover the question, say you can only explain what's on screen and suggest what to watch.",
   `Answer in under ${MAX_WORDS} words, as two to four short sentences of plain text: no markdown, lists or emoji.`,
   "Teach like a great teacher: treat mistakes as interesting, praise the thinking, use one everyday analogy or real-life link, explain one idea at a time, and end with a small guiding question or a 'try this next'.",
   "Match the level: Easy uses simple words, Medium a few science terms, Advanced the correct terms and formulas.",
@@ -70,8 +81,11 @@ export function buildPrompt(facts: AskFacts): string {
     `Experiment: ${facts.experimentTitle} (level: ${facts.level})`,
     `Verdict: ${verdict}`,
     `Fault: ${facts.faultCode ?? "none"}`,
-    `Simulator readings: ${readings || "none yet"}`,
-    `Student's question: ${facts.question}`,
+    `Simulator readings (a teaching model, not real values): ${readings || "none yet"}`,
+    ...(facts.claims && facts.claims.length > 0 ? [`Cited claims you may use: ${facts.claims.join(" | ")}`] : []),
+    ...(facts.explain
+      ? [`The student read this explanation and wants it simpler: ${facts.explain}`, "Explain the same idea in easier words for a 12-year-old, with one everyday comparison. Keep every fact the same."]
+      : [`Student's question: ${facts.question}`]),
   ].join("\n");
 }
 

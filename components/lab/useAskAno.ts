@@ -1,58 +1,90 @@
 "use client";
 
 import { useState } from "react";
-import { useLab } from "@/lib/store";
+import { create } from "zustand";
+import { useLab, verdictShown } from "@/lib/store";
 
 /*
  * Ask Ano from the lab (CLAUDE.md §7.3): sends only the allowed facts to
  * /api/ask-ano. The server enforces the real limits; the count here is for
- * the button label. Anything but an AI answer becomes the next written hint.
+ * the button labels, shared by "Ask Ano" and "Explain it simpler" (both use
+ * the same five questions). Anything but an AI answer becomes the next
+ * written hint, so the student never sees an error.
  */
+
+/** Questions left this session, as the server last reported. */
+export const useAskLeft = create<{ left: number }>()(() => ({ left: 5 }));
+
+export type AskMode = "ask" | "simpler";
+
+export interface AskReply {
+  text: string;
+  /** "ai" or "cache": Ano's own words; "hint": the written fallback. */
+  source: "ai" | "cache" | "hint";
+}
+
+/** One request to Ask Ano. Null when it couldn't be sent at all (offline, server down). */
+export async function askAnoRequest(question: string, mode: AskMode, explain?: string): Promise<AskReply | null> {
+  const s = useLab.getState();
+  const { def, result, hintStep } = s;
+  if (!def) return null;
+  const readings = Object.fromEntries(
+    Object.entries(result?.outcome.readings ?? {})
+      .filter(([, v]) => Number.isFinite(v))
+      .slice(0, 16)
+      .map(([k, v]) => [k, Math.round(v * 1000) / 1000]),
+  );
+  try {
+    const res = await fetch("/api/ask-ano", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        experimentId: def.id,
+        experimentTitle: def.title,
+        level: def.level,
+        faultCode: result?.outcome.faults[0] ?? null,
+        verdict: verdictShown(s),
+        focus: result?.diagnosis?.focus ?? def.misconceptions[0] ?? null,
+        // "Explain it simpler" falls back to the "why it happened" rung, which explains rather than nudges.
+        hintStep: mode === "simpler" ? 1 : Math.min(hintStep, 2),
+        readings,
+        question: question.trim(),
+        mode,
+        ...(explain ? { explain: explain.slice(0, 700) } : {}),
+      }),
+    });
+    const data = (await res.json()) as { answer?: string; source?: AskReply["source"]; remaining?: number };
+    if (typeof data.remaining === "number") useAskLeft.setState({ left: data.remaining });
+    if (!data.answer) return null;
+    return { text: data.answer, source: data.source ?? "hint" };
+  } catch {
+    return null;
+  }
+}
 
 export function useAskAno() {
   const [answer, setAnswer] = useState<{ runId: number; text: string } | null>(null);
-  const [left, setLeft] = useState(5);
+  const left = useAskLeft((s) => s.left);
   const [pending, setPending] = useState(false);
 
-  const ask = async (question: string): Promise<void> => {
-    const s = useLab.getState();
-    const { def, result, phase, runId, hintStep } = s;
-    if (!def || pending || question.trim().length < 2) return;
+  /** False when there was nothing to send (an empty question), so the form can say so. */
+  const ask = async (question: string): Promise<boolean> => {
+    if (pending || question.trim().length < 2) return false;
+    const lab = useLab.getState();
+    // After a wrong guess the hint ladder is on screen: a written fallback opens its next rung there.
+    const ladder = verdictShown(lab) === "wrong" && lab.hintStep < 3;
     setPending(true);
     try {
-      const readings = Object.fromEntries(
-        Object.entries(result?.outcome.readings ?? {})
-          .filter(([, v]) => Number.isFinite(v))
-          .slice(0, 16)
-          .map(([k, v]) => [k, Math.round(v * 1000) / 1000]),
-      );
-      const res = await fetch("/api/ask-ano", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          experimentId: def.id,
-          experimentTitle: def.title,
-          level: def.level,
-          faultCode: result?.outcome.faults[0] ?? null,
-          verdict: phase === "result" && result ? result.verdict : null,
-          focus: result?.diagnosis?.focus ?? def.misconceptions[0] ?? null,
-          hintStep: Math.min(hintStep, 2),
-          readings,
-          question: question.trim(),
-        }),
-      });
-      const data = (await res.json()) as { answer?: string; source?: string; remaining?: number };
-      if (typeof data.remaining === "number") setLeft(data.remaining);
-      if (data.answer && data.source !== "hint") setAnswer({ runId, text: data.answer });
+      const reply = await askAnoRequest(question, "ask");
+      if (reply && (reply.source !== "hint" || !ladder)) setAnswer({ runId: lab.runId, text: reply.text });
       else {
-        s.nextHint();
+        lab.nextHint();
         setAnswer(null);
       }
-    } catch {
-      s.nextHint();
     } finally {
       setPending(false);
     }
+    return true;
   };
 
   return { answer, left, pending, ask };

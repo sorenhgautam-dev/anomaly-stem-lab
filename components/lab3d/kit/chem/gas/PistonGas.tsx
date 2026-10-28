@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Object3D, SphereGeometry, type InstancedMesh, type Sprite, type SpriteMaterial } from "three";
 import { useQuality } from "@/lib/quality";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB } from "@/lib/tokens";
 import { glowMaterial, kitMaterial } from "../../materials";
 import { vfx } from "../../vfx";
 import type { Getter } from "../glass";
@@ -14,7 +14,7 @@ import type { Getter } from "../glass";
  * containers"): a fixed number of molecules flying at one speed (the
  * temperature stays the same) inside the barrel, between the sealed end and
  * the plunger. Squeeze them into less space and each one reaches the plunger
- * more often, so the hits (small apricot flashes, and a glow on the
+ * more often, so the hits (small sand-gold flashes, and a glow on the
  * plunger's face that follows how often it is hit) come faster: that is the
  * pressure rising. Positions are in the group's space, the barrel along x.
  */
@@ -55,7 +55,7 @@ class Gas {
         hits++;
         if (flashes < 3) {
           flashes++;
-          vfx.burst({ at: [o.at[0] + x - o.size, o.at[1] + p[k + 1], o.at[2] + p[k + 2]], kind: "glow", count: 1, colors: [P.apricot[500]], speed: [0, 0.02], life: [0.25, 0.35], size: [0.07, 0.09], drag: 4 });
+          vfx.burst({ at: [o.at[0] + x - o.size, o.at[1] + p[k + 1], o.at[2] + p[k + 2]], kind: "glow", count: 1, colors: [LAB.chemistry.gold], speed: [0, 0.02], life: [0.25, 0.35], size: [0.07, 0.09], drag: 4 });
         }
       } else if (x > o.end - o.size) {
         x = o.end - o.size;
@@ -96,14 +96,14 @@ export function PistonGas({ plunger, end, radius, zoomed, at }: { plunger: Gette
   const [gas] = useState(() => new Gas(tier === "low" ? 22 : 40));
   const mesh = useRef<InstancedMesh>(null);
   const face = useRef<Sprite>(null);
-  const glow = useMemo(() => glowMaterial(P.apricot[400]), []);
+  const glow = useMemo(() => glowMaterial(LAB.chemistry.gold), []);
   useEffect(() => () => glow.dispose(), [glow]);
   useFrame((_, delta) => {
     if (mesh.current && face.current) gas.step(mesh.current, face.current, { plunger: plunger(), end, r: radius, size: zoomed ? 0.024 : 0.018, speed: zoomed ? 0.45 : 0.7, dt: Math.min(delta, 1 / 30), at });
   });
   return (
     <group position={at}>
-      <instancedMesh ref={mesh} args={[DOT, kitMaterial("volt", tier), gas.n]} frustumCulled={false} />
+      <instancedMesh ref={mesh} args={[DOT, kitMaterial("sand", tier), gas.n]} frustumCulled={false} />
       <sprite ref={face} material={glow} />
     </group>
   );

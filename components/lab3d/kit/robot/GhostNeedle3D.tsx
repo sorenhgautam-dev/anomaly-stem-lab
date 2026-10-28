@@ -9,7 +9,7 @@ import { ghostMarkMaterial } from "./looks";
 
 /*
  * The ghost of a believed spin (DESIGN.md §8.1 ghost beside reality): a
- * dashed volt needle on the same axle as the real part, turning at the
+ * dashed teal needle on the same axle as the real part, turning at the
  * speed the student's belief predicts, so the two speeds race side by side.
  * Dashes and a triangular tip, so it reads by shape as well as colour.
  * `angle` is in radians, + = counter-clockwise seen from the front (+Z).

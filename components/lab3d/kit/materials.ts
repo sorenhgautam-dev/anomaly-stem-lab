@@ -1,6 +1,6 @@
 import { CanvasTexture, Color, DoubleSide, MeshPhysicalMaterial, MeshStandardMaterial, SpriteMaterial, type Material, type Texture } from "three";
 import type { Quality } from "@/lib/quality";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB, PALETTE as P } from "@/lib/tokens";
 
 /*
  * Shared materials for the 3D apparatus kit (DESIGN.md §8): glossy white
@@ -9,7 +9,27 @@ import { PALETTE as P } from "@/lib/tokens";
  * once per tier; Low swaps physical materials for standard ones.
  */
 
-type Kind = "plastic" | "clay" | "ink" | "metal" | "copper" | "glass" | "rubber" | "orange" | "volt" | "board";
+type Kind =
+  | "plastic"
+  | "clay"
+  | "ink"
+  | "metal"
+  | "steel"
+  | "copper"
+  | "glass"
+  | "film"
+  | "rubber"
+  | "orange"
+  | "volt"
+  | "board"
+  | "black"
+  | "insulation"
+  | "gold"
+  | "sand"
+  | "sage"
+  | "teal"
+  | "satin"
+  | "matte";
 
 function make(kind: Kind, tier: Quality, tint = "#ffffff"): Material {
   const low = tier === "low";
@@ -23,7 +43,7 @@ function make(kind: Kind, tier: Quality, tint = "#ffffff"): Material {
     case "plastic":
       return phys({ color: P.white, roughness: 0.22, clearcoat: 0.8, clearcoatRoughness: 0.15 });
     case "clay":
-      return phys({ color: tint, roughness: 0.75, clearcoat: 0.15, sheen: 0.4, sheenColor: P.apricot[100] });
+      return phys({ color: tint, roughness: 0.75, clearcoat: 0.15, sheen: 0.4, sheenColor: tint });
     case "board":
       return phys({ color: P.cream[50], roughness: 0.5, clearcoat: 0.4 });
     case "ink":
@@ -39,7 +59,34 @@ function make(kind: Kind, tier: Quality, tint = "#ffffff"): Material {
     case "volt":
       return phys({ color: P.volt[500], roughness: 0.35, clearcoat: 0.5 });
     case "glass":
-      return phys({ color: P.white, transparent: true, opacity: low ? 0.3 : 0.22, roughness: 0.04, clearcoat: 1, iridescence: 0.4, side: DoubleSide, depthWrite: false });
+      // Faked glass (real transmission is kept for one object, CLAUDE.md §9): thin, glossy, bright at its walls.
+      return phys({ color: P.white, transparent: true, opacity: low ? 0.3 : 0.2, roughness: 0.02, clearcoat: 1, clearcoatRoughness: 0.02, ior: 1.5, specularIntensity: 1, envMapIntensity: 1.6, side: DoubleSide, depthWrite: false });
+    case "film":
+      // Zip-bag film: soft, milky plastic, not glass: more opaque and rougher, with a satin sheen on its crinkles and no mirror coat.
+      return phys({ color: P.white, transparent: true, opacity: low ? 0.42 : 0.36, roughness: 0.38, clearcoat: 0.15, clearcoatRoughness: 0.5, sheen: 0.8, sheenColor: P.white, specularIntensity: 0.6, envMapIntensity: 0.9, side: DoubleSide, depthWrite: false });
+    case "steel":
+      // Brushed stainless: the scale's pan, terminals and contacts.
+      return phys({ color: "#cfd2d6", metalness: 1, roughness: 0.34 });
+    case "black":
+      // Matte black ABS: battery holders, bezels, robotics trim.
+      return phys({ color: LAB.robotics.trim, roughness: 0.55, clearcoat: 0.25, clearcoatRoughness: 0.4 });
+    case "insulation":
+      // Wire insulation: soft graphite with a satin sheen.
+      return phys({ color: "#2b2c31", roughness: 0.42, clearcoat: 0.55, clearcoatRoughness: 0.25 });
+    case "gold":
+      return phys({ color: LAB.robotics.gold, roughness: 0.32, metalness: 0.25, clearcoat: 0.7 });
+    case "sand":
+      return phys({ color: LAB.chemistry.gold, roughness: 0.4, clearcoat: 0.5 });
+    case "sage":
+      return phys({ color: LAB.chemistry.sage, roughness: 0.55, clearcoat: 0.3 });
+    case "teal":
+      return phys({ color: LAB.robotics.teal, roughness: 0.35, clearcoat: 0.6 });
+    case "satin":
+      // Lab casework in a tint: a satin lacquer with a soft clearcoat (Chemistry's bench and hood).
+      return phys({ color: tint, roughness: 0.48, clearcoat: 0.35, clearcoatRoughness: 0.35 });
+    case "matte":
+      // Lab casework in a tint, matte (Robotics' white worktop and black trim).
+      return phys({ color: tint, roughness: 0.62, clearcoat: 0.12, clearcoatRoughness: 0.5 });
   }
 }
 
@@ -88,8 +135,11 @@ export function glowTexture(): Texture {
   c.width = c.height = 128;
   const ctx = c.getContext("2d")!;
   const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+  // A soft falloff with no visible rim: most of the light in the middle, a long tail to nothing.
   g.addColorStop(0, "rgba(255,255,255,1)");
-  g.addColorStop(0.25, "rgba(255,255,255,0.75)");
+  g.addColorStop(0.18, "rgba(255,255,255,0.62)");
+  g.addColorStop(0.45, "rgba(255,255,255,0.18)");
+  g.addColorStop(0.75, "rgba(255,255,255,0.04)");
   g.addColorStop(1, "rgba(255,255,255,0)");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, 128, 128);

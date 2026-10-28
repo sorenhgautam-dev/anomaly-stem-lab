@@ -1,15 +1,16 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Object3D, SphereGeometry, type InstancedMesh } from "three";
 import { useQuality } from "@/lib/quality";
-import { kitMaterial } from "../../materials";
+import { LAB } from "@/lib/tokens";
+import { kitMaterial, ownMaterial } from "../../materials";
 import type { Getter } from "../glass";
 
 /*
  * "Zoom to particles" for dissolving (DESIGN.md §8.1 step 6): water
- * molecules (volt) jiggle through the beaker, and sugar molecules (white)
+ * molecules (deep teal, Chemistry's wall colour) jiggle through the beaker, and sugar molecules (white)
  * leave their heap on the bottom one by one as the sugar dissolves, then
  * spread out among the water. Every sugar molecule stays in the beaker, which
  * is why the scale doesn't change. Two instanced meshes, stepped in a class.
@@ -116,12 +117,14 @@ export function DissolvingMolecules({ on, radius, depth, sugar, dissolved, sprea
   const [mix] = useState(() => new Mix(tier === "low" ? 60 : 150, 64));
   const water = useRef<InstancedMesh>(null);
   const sugarMesh = useRef<InstancedMesh>(null);
+  const waterMaterial = useMemo(() => ownMaterial(LAB.chemistry.wall, tier), [tier]);
+  useEffect(() => () => waterMaterial.dispose(), [waterMaterial]);
   useFrame((_, delta) => {
     if (water.current && sugarMesh.current) mix.step(water.current, sugarMesh.current, { on, radius, depth: depth(), sugar: sugar(), dissolved: dissolved(), spread: spread(), dt: Math.min(delta, 1 / 30) });
   });
   return (
     <group position={position}>
-      <instancedMesh ref={water} args={[DOT, kitMaterial("volt", tier), mix.nWater]} frustumCulled={false} />
+      <instancedMesh ref={water} args={[DOT, waterMaterial, mix.nWater]} frustumCulled={false} />
       <instancedMesh ref={sugarMesh} args={[DOT, kitMaterial("plastic", tier), mix.nSugar]} frustumCulled={false} />
     </group>
   );

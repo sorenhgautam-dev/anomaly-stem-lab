@@ -25,10 +25,10 @@ export function partState(outcome: Outcome | null, slot: string): PartState {
 
 const num = (v: PropValue | undefined, fallback: number) => (typeof v === "number" ? v : fallback);
 
-export function PartModel({ kind, props, half, state, ghost, powered }: { kind: CircuitPartKind; props: Record<string, PropValue>; half: number; state: PartState; ghost: PartState | null; powered: boolean }) {
+export function PartModel({ kind, props, half, state, ghost, ghostLabel = true, powered }: { kind: CircuitPartKind; props: Record<string, PropValue>; half: number; state: PartState; ghost: PartState | null; ghostLabel?: boolean; powered: boolean }) {
   switch (kind) {
     case "battery":
-      return <Battery3D half={half} volts={num(props.volts, 6)} />;
+      return <Battery3D half={half} volts={num(props.volts, 6)} flipped={props.flipped === true} />;
     case "resistor":
       return <Resistor3D half={half} ohms={num(props.ohms, 220)} />;
     case "wire":
@@ -36,9 +36,9 @@ export function PartModel({ kind, props, half, state, ghost, powered }: { kind: 
     case "switch":
       return <Switch3D half={half} props={props} />;
     case "led":
-      return <Led3D half={half} flipped={props.flipped === true} state={state} ghost={ghost} powered={powered} />;
+      return <Led3D half={half} flipped={props.flipped === true} state={state} ghost={ghost} ghostLabel={ghostLabel} powered={powered} />;
     case "bulb":
-      return <Bulb3D half={half} state={state} ghost={ghost} powered={powered} />;
+      return <Bulb3D half={half} state={state} ghost={ghost} ghostLabel={ghostLabel} powered={powered} />;
     case "motor":
       return <Motor3D half={half} current={state.current} powered={powered} />;
     case "buzzer":

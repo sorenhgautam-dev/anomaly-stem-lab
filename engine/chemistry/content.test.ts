@@ -205,11 +205,11 @@ describe("chemistry experiments", () => {
     ["chemistry-melting", {}, "Stay at 0 °C"],
     ["chemistry-melting", { power: 200 }, "Stay at 0 °C"],
     ["chemistry-melting", { power: 100 }, "Stay at 0 °C"],
-    ["chemistry-dissolving", {}, "The same"],
-    ["chemistry-dissolving", { sugar: 50 }, "The same"],
-    ["chemistry-sealed-bag", {}, "Less"], // open bag: the gas leaves
-    ["chemistry-sealed-bag", { sealed: true }, "The same"],
-    ["chemistry-sealed-bag", { soda: 2 }, "Less"], // about 1 g of escaping gas still shows
+    ["chemistry-dissolving", {}, "Stays the same"],
+    ["chemistry-dissolving", { sugar: 50 }, "Stays the same"],
+    ["chemistry-sealed-bag", {}, "Gets lighter"], // open bag: the gas leaves
+    ["chemistry-sealed-bag", { sealed: true }, "Stays the same"],
+    ["chemistry-sealed-bag", { soda: 2 }, "Gets lighter"], // about 1 g of escaping gas still shows
     ["chemistry-indicator", {}, "Green or blue"], // soapy water is a base
     ["chemistry-indicator", { liquid: "lemon" }, "Pink or red"],
     ["chemistry-indicator", { liquid: "vinegar" }, "Pink or red"],
@@ -226,9 +226,9 @@ describe("chemistry experiments", () => {
     ["chemistry-neutralisation", { base: 25 }, "Neutral"],
     ["chemistry-neutralisation", { base: 26 }, "Basic"],
     ["chemistry-neutralisation", { base: 35 }, "Basic"],
-    ["chemistry-burning", {}, "More"], // open jar: oxygen joins the iron
-    ["chemistry-burning", { sealed: true }, "The same"],
-    ["chemistry-burning", { wool: 1 }, "More"],
+    ["chemistry-burning", {}, "Gets heavier"], // open jar: oxygen joins the iron
+    ["chemistry-burning", { sealed: true }, "Stays the same"],
+    ["chemistry-burning", { wool: 1 }, "Gets heavier"],
     ["chemistry-gas-laws", {}, "Rise in proportion"], // half the volume, double the pressure
     ["chemistry-gas-laws", { volume: 20 }, "Rise in proportion"],
     ["chemistry-gas-laws", { volume: 60 }, "Stay the same"],
@@ -245,9 +245,9 @@ describe("chemistry experiments", () => {
   it.each([
     // [experiment, misconception, settings changed from the start, what the belief answers]
     ["chemistry-melting", "melting-temp-rises", {}, "Keep rising"],
-    ["chemistry-dissolving", "dissolved-means-gone", {}, "Less"],
-    ["chemistry-sealed-bag", "gas-has-no-mass", { sealed: true }, "Less"],
-    ["chemistry-sealed-bag", "nothing-escapes", {}, "The same"],
+    ["chemistry-dissolving", "dissolved-means-gone", {}, "Gets lighter"],
+    ["chemistry-sealed-bag", "gas-has-no-mass", { sealed: true }, "Gets lighter"],
+    ["chemistry-sealed-bag", "nothing-escapes", {}, "Stays the same"],
     ["chemistry-indicator", "harsh-means-acid", {}, "Pink or red"],
     ["chemistry-indicator", "food-cant-be-acid", { liquid: "lemon" }, "Purple"],
     ["chemistry-gas-heat", "particles-expand", {}, "Bigger"],
@@ -255,8 +255,8 @@ describe("chemistry experiments", () => {
     ["chemistry-reaction-speed", "temperature-doesnt-matter", {}, "Same time"],
     ["chemistry-neutralisation", "any-base-neutralises", {}, "Neutral"],
     ["chemistry-neutralisation", "base-only-dilutes", { base: 35 }, "Still acidic"],
-    ["chemistry-burning", "burning-destroys-matter", {}, "Less"],
-    ["chemistry-burning", "oxygen-only-helps", {}, "The same"],
+    ["chemistry-burning", "burning-destroys-matter", {}, "Gets lighter"],
+    ["chemistry-burning", "oxygen-only-helps", {}, "Stays the same"],
     ["chemistry-gas-laws", "pressure-ignores-volume", {}, "Stay the same"],
     ["chemistry-gas-laws", "pressure-follows-volume", {}, "Fall in proportion"],
     ["chemistry-catalyst", "catalyst-used-up", {}, "Some of it"],

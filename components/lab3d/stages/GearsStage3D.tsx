@@ -8,6 +8,7 @@ import { MOTOR_RPM } from "@/engine/robotics/gears";
 import { numberSetting } from "@/engine/robotics/settings";
 import { useLab } from "@/lib/store";
 import { useQuality } from "@/lib/quality";
+import { LAB } from "@/lib/tokens";
 import { labView, setAnchor } from "../lab-state";
 import { Readout } from "../kit/chem/instruments";
 import { kitMaterial } from "../kit/materials";
@@ -23,12 +24,12 @@ import { useStageValues } from "../useStageValues";
 
 /*
  * Gears: speed vs strength, in 3D (stage "gears", engine/robotics/gears.ts;
- * DESIGN.md §7.5, §8.1): a motor on a white mount turns an orange motor gear
+ * DESIGN.md §7.5, §8.1): a motor on a black mount turns a gold motor gear
  * meshed with a white output gear, each with as many teeth as its slider
  * (one tooth size, so they always mesh). Run: both turn from the timeline's
  * driverAngle and drivenAngle; glass labels show teeth, rpm (the output's is
  * a "?" until the run), the turning force and a live count of turns. After a
- * wrong run a dashed volt needle on the output axle spins at the believed
+ * wrong run a dashed teal needle on the output axle spins at the believed
  * speed beside the real stripe, with a dashed "Your idea" label that counts
  * the believed turns too.
  */
@@ -102,15 +103,15 @@ export function GearsStage3D() {
   };
   return (
     <group>
-      <RoundedBox args={[width + 1.2, BASE, 0.7]} radius={0.025} smoothness={3} position={[-0.25, BASE / 2, -0.12]} material={kitMaterial("plastic", tier)} />
+      <RoundedBox args={[width + 1.2, BASE, 0.7]} radius={0.025} smoothness={3} position={[-0.25, BASE / 2, -0.12]} material={kitMaterial("matte", tier, LAB.robotics.trim)} />
       <BatteryPack3D cells={2} position={[x1 - R1 - 0.42, BASE, -0.05]} rotation={[0, 0.25, 0]} />
       <Cable3D points={[[x1 - R1 - 0.22, BASE + 0.05, -0.08], [x1 - 0.3, BASE + 0.03, -0.3], [x1 - 0.06, AXLE - 0.02, -0.5], [x1, AXLE + 0.03, -0.45]]} flow={() => (turning() ? 0.5 : 0)} />
       {/* Motor gear: on the motor's shaft. */}
       <MotorCan3D position={[x1, AXLE, -0.08]} shaft={0.08} mount={AXLE - BASE} />
-      <Gear3D teeth={n1} color="orange" stripe="plastic" angle={() => (sv.now().driverAngle ?? 0) * RAD} position={[x1, AXLE, 0]} />
-      {/* Output gear: on an axle in a white post. */}
-      <RoundedBox args={[0.12, AXLE - BASE + 0.06, 0.1]} radius={0.03} smoothness={2} position={[x2, BASE + (AXLE - BASE + 0.06) / 2, -0.11]} material={kitMaterial("plastic", tier)} />
-      <mesh position={[x2, AXLE, -0.04]} rotation={[Math.PI / 2, 0, 0]} material={kitMaterial("metal", tier)}>
+      <Gear3D teeth={n1} color="gold" stripe="black" angle={() => (sv.now().driverAngle ?? 0) * RAD} position={[x1, AXLE, 0]} />
+      {/* Output gear: on an axle in a black post. */}
+      <RoundedBox args={[0.12, AXLE - BASE + 0.06, 0.1]} radius={0.03} smoothness={2} position={[x2, BASE + (AXLE - BASE + 0.06) / 2, -0.11]} material={kitMaterial("matte", tier, LAB.robotics.trim)} />
+      <mesh position={[x2, AXLE, -0.04]} rotation={[Math.PI / 2, 0, 0]} material={kitMaterial("steel", tier)}>
         <cylinderGeometry args={[0.018, 0.018, 0.16, 12]} />
       </mesh>
       <Gear3D teeth={n2} angle={() => (sv.now().drivenAngle ?? 0) * RAD} phase={phase2} position={[x2, AXLE, 0]} />

@@ -11,6 +11,7 @@ import { Beaker3D } from "../glass";
 import { HotPlate3D, Readout, Thermometer3D } from "../instruments";
 import { IceCubes, type Cube } from "./IceCubes";
 import { bubble, Emitter, steam, waterTint } from "./tick";
+import { TONE } from "./tones";
 import type { Snapshot } from "./useSnapshot";
 
 /*
@@ -18,8 +19,8 @@ import type { Snapshot } from "./useSnapshot";
  * hot plate (off for the cold one, which has ice floating in it), a
  * thermometer, and a white tablet on the bottom that shrinks as it reacts
  * while bubbles rise at the simulator's fizz strength. A glass label says
- * when it is done. After a wrong run a wire volt tablet shows where the
- * student's idea says the tablet would be.
+ * when it is done. After a wrong run a wire tablet in the lab's teal shows
+ * where the student's idea says the tablet would be.
  */
 
 const R = 0.23;
@@ -46,7 +47,7 @@ export function RaceBeaker({ side, label, celsius, x, sv, snap }: { side: "cold"
   const ghostTablet = useRef<Mesh>(null);
   const [fizz] = useState(() => new Emitter());
   const [puffs] = useState(() => new Emitter());
-  const wire = useMemo(() => new MeshBasicMaterial({ color: P.volt[500], wireframe: true, transparent: true, opacity: 0.7, depthWrite: false }), []);
+  const wire = useMemo(() => new MeshBasicMaterial({ color: TONE.ghost, wireframe: true, transparent: true, opacity: 0.7, depthWrite: false }), []);
   useEffect(() => () => wire.dispose(), [wire]);
   const hot = side === "hot";
   const remaining = `${side}.remaining`;

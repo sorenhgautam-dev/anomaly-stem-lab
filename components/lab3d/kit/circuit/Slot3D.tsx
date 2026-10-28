@@ -6,7 +6,7 @@ import { Line } from "@react-three/drei";
 import { MeshBasicMaterial, Vector3, type Group } from "three";
 import type { BoardSlot } from "@/engine/types";
 import { softClick } from "@/lib/sound";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB } from "@/lib/tokens";
 import { Spring } from "@/components/ano/spring";
 import { hoverCursor, setAnchor } from "../../lab-state";
 import { TextBoard } from "../TextBoard";
@@ -79,7 +79,7 @@ function PartMount({ from, children }: { from: Vector3; children: ReactNode }) {
   return <group ref={g}>{children}</group>;
 }
 
-export function Slot3D({ slot, occupied, accepts, selected, showOutline, partKey, flyIn, inspect, onActivate, children }: { slot: BoardSlot; occupied: boolean; accepts: boolean; selected: boolean; showOutline: boolean; partKey: string | null; flyIn: boolean; inspect: string | null; onActivate: () => void; children: ReactNode }) {
+export function Slot3D({ slot, occupied, accepts, selected, showOutline, partKey, flyIn, inspect, idea = null, onActivate, children }: { slot: BoardSlot; occupied: boolean; accepts: boolean; selected: boolean; showOutline: boolean; partKey: string | null; flyIn: boolean; inspect: string | null; idea?: string | null; onActivate: () => void; children: ReactNode }) {
   const frame = useMemo(() => slotFrame(slot), [slot]);
   const pts = useMemo(() => outline(frame.half * 2 + 0.12, 0.26, 0.08), [frame.half]);
   const label = useMemo(() => new TextBoard("glass", 0.13, 24), []);
@@ -96,7 +96,7 @@ export function Slot3D({ slot, occupied, accepts, selected, showOutline, partKey
 
   const click = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
-    if (accepts) vfx.ring({ at: [frame.centre.x, BOARD_TOP + 0.01, frame.centre.z], color: P.volt[400], from: 0.05, to: 0.32, life: 0.45 });
+    if (accepts) vfx.ring({ at: [frame.centre.x, BOARD_TOP + 0.01, frame.centre.z], color: LAB.robotics.gold, from: 0.05, to: 0.32, life: 0.45 });
     onActivate();
   };
 
@@ -114,23 +114,25 @@ export function Slot3D({ slot, occupied, accepts, selected, showOutline, partKey
       >
         <boxGeometry args={[frame.half * 2 + 0.16, 0.26, 0.32]} />
       </mesh>
-      {(selected || accepts) && (
+      {/* Selected: a gold ring round the slot (a filled plane read as a glow on the board). */}
+      {selected && occupied && !accepts && <Line points={pts} position={[0, 0.006, 0]} color={LAB.robotics.gold} lineWidth={2.5} />}
+      {accepts && (
         <mesh position={[0, 0.004, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[frame.half * 2 + 0.12, 0.26]} />
-          <meshBasicMaterial color={accepts ? P.volt[300] : P.apricot[300]} transparent opacity={0.35} depthWrite={false} />
+          <meshBasicMaterial color={LAB.robotics.gold} transparent opacity={0.35} depthWrite={false} />
         </mesh>
       )}
       {!occupied && (showOutline || accepts) && (
         <group ref={pulse} position={[0, 0.006, 0]}>
           <mesh position={[0, -0.002, 0]} rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry args={[frame.half * 2 + 0.12, 0.26]} />
-            <meshBasicMaterial color={accepts ? P.volt[300] : P.apricot[200]} transparent opacity={accepts ? 0.45 : 0.3} depthWrite={false} />
+            <meshBasicMaterial color={accepts ? LAB.robotics.gold : LAB.robotics.trim} transparent opacity={accepts ? 0.4 : 0.06} depthWrite={false} />
           </mesh>
-          <Line points={pts} color={accepts ? P.volt[500] : P.apricot[500]} lineWidth={accepts ? 3 : 2.2} dashed dashSize={0.045} gapSize={0.03} />
+          <Line points={pts} color={accepts ? LAB.robotics.gold : LAB.robotics.trim} lineWidth={accepts ? 3 : 2} dashed dashSize={0.045} gapSize={0.03} />
           <primitive object={label.sprite} position={[0, 0.16, 0]} />
         </group>
       )}
-      {selected && occupied && inspect && <InspectLabel slot={slot.id} title={inspect} />}
+      {selected && occupied && inspect && <InspectLabel slot={slot.id} title={inspect} idea={idea} />}
       {occupied && partKey && (flyIn ? <PartMount key={partKey} from={from}>{children}</PartMount> : <group key={partKey}>{children}</group>)}
     </group>
   );

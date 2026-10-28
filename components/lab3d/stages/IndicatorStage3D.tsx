@@ -6,7 +6,7 @@ import { RoundedBox } from "@react-three/drei";
 import { Color, Vector3, type Group, type Mesh, type MeshStandardMaterial } from "three";
 import { useLab } from "@/lib/store";
 import { useQuality } from "@/lib/quality";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB, PALETTE as P } from "@/lib/tokens";
 import { labView, setAnchor } from "../lab-state";
 import { Beaker3D } from "../kit/chem/glass";
 import { Readout } from "../kit/chem/instruments";
@@ -16,6 +16,7 @@ import { drip, Spawner } from "../kit/chem/liquid/drip";
 import { Dropper3D } from "../kit/chem/liquid/Dropper";
 import { GhostLabel } from "../kit/chem/liquid/ghost";
 import { kitMaterial, ownMaterial } from "../kit/materials";
+import { IndicatorBottle3D } from "../kit/chem/liquid/Bottle";
 import { orbit, type StageShots } from "../shots";
 import { useStageValues } from "../useStageValues";
 
@@ -41,16 +42,18 @@ const GHOST_AT: [number, number, number] = [0.4, 0.78, 0];
 // The picked option floats here before the run; it's wide, so it sits nearer the middle.
 const IDEA_AT: [number, number, number] = [0.15, 0.8, 0];
 
-/** The liquid's own look before the indicator goes in. */
-const TINT: Record<string, string> = { lemon: P.apricot[100], vinegar: P.cream[100], water: P.volt[100], "baking-soda": P.cream[50], soap: P.white };
+/** The liquid's own look before the indicator goes in: pale lemon, faintly tinted water, clear or milky white. */
+const tinted = (c: string, k: number) => `#${new Color(P.white).lerp(new Color(c), k).getHexString()}`;
+const TINT: Record<string, string> = { lemon: tinted(LAB.chemistry.gold, 0.55), vinegar: tinted(LAB.chemistry.gold, 0.18), water: tinted(LAB.chemistry.sage, 0.4), "baking-soda": P.white, soap: P.white };
 
+// The chart's chips are red cabbage's real colours: data, so they keep them in Chemistry's palette.
 const ROWS: ChartRow[] = [
   { colours: [P.flame[500], P.flame[300]], label: "acid" },
   { colours: [P.grape[500]], label: "neutral" },
   { colours: [P.volt[500], P.verify[500]], label: "base" },
 ];
 
-/** Text centred in a fixed width (Geist Mono), so a label's board keeps one size as it changes. */
+/** Text centred in a fixed width (Martian Mono), so a label's board keeps one size as it changes. */
 const fit = (text: string, width: number) => {
   const pad = Math.max(0, width - text.length);
   return " ".repeat(Math.floor(pad / 2)) + text + " ".repeat(Math.ceil(pad / 2));
@@ -141,10 +144,7 @@ export function IndicatorStage3D() {
       </Beaker3D>
       <Readout text={label} height={0.085} position={[BX, 0.1, R + 0.16]} />
       {/* The indicator: a little bottle of red cabbage juice, and its dropper. */}
-      <Beaker3D radius={0.09} height={0.24} level={() => 0.72} color={() => P.grape[500]} position={BOTTLE} />
-      <mesh position={[BOTTLE[0], 0.245, BOTTLE[2]]} rotation={[Math.PI / 2, 0, 0]} material={kitMaterial("orange", tier)}>
-        <torusGeometry args={[0.07, 0.016, 10, 28]} />
-      </mesh>
+      <IndicatorBottle3D color={P.grape[500]} position={BOTTLE} />
       <group ref={dropper} position={[BOTTLE[0], 0.08, BOTTLE[2]]}>
         <Dropper3D color={P.grape[500]} squeeze={() => {
           const t = sv.t() - 0.1;

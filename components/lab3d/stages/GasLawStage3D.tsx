@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { RoundedBox } from "@react-three/drei";
+import { useEffect, useMemo } from "react";
 import { Vector3 } from "three";
+import { LAB } from "@/lib/tokens";
 import { useLab } from "@/lib/store";
 import { useQuality } from "@/lib/quality";
 import { useLabUi } from "../lab-ui";
@@ -10,17 +10,20 @@ import { labView, setAnchor } from "../lab-state";
 import { PistonGas } from "../kit/chem/gas/PistonGas";
 import { PressureGauge3D } from "../kit/chem/gas/PressureGauge";
 import { ML, Syringe3D } from "../kit/chem/gas/Syringe";
+import { postGeometry, saddleGeometry, sleeveGeometry } from "../kit/chem/gas/stand";
+import { TONE } from "../kit/chem/heat/tones";
 import { Readout } from "../kit/chem/instruments";
 import { GhostLabel } from "../kit/chem/liquid/ghost";
-import { kitMaterial } from "../kit/materials";
+import { kitMaterial, liquidMaterial } from "../kit/materials";
 import { orbit, type StageShots } from "../shots";
 import { useStageValues } from "../useStageValues";
 
 /*
  * Gas laws, in 3D (stage "gaslaw", engine/chemistry/gaslaw.ts; DESIGN.md
  * §7.5, §8.1 "gas as particles bouncing inside containers"): a sealed
- * syringe of air on two cradles, piped into a round pressure gauge. An
- * orange ring marks how far it will be squeezed. Run: the plunger pushes in
+ * syringe of air on two sage saddles, its nozzle sleeved into the side port
+ * of a round pressure gauge on a stand. A sand-gold ring marks how far it
+ * will be squeezed. Run: the plunger pushes in
  * to the simulator's volume, the needle and the screen follow its kPa, and
  * the same air molecules, crowded into less space, hit the plunger more
  * often. After a wrong run a ghost needle and a dashed label show the
@@ -63,26 +66,32 @@ export function GasLawStage3D() {
   }, []);
 
   const volume = () => sv.now().volume ?? 60;
+  const rig = useMemo(
+    () => ({
+      saddles: saddleGeometry(Y, R, [TIP[0] - 0.14, TIP[0] - 0.62], GAUGE[0]),
+      post: postGeometry(GAUGE[0], Y),
+      // From the nozzle's end over the gauge's nipple (gauge radius 0.24, nipple out to 0.066 beyond it).
+      sleeve: sleeveGeometry(TIP[0] + 0.06, GAUGE[0] - 0.24 - 0.03, Y),
+    }),
+    [],
+  );
+  useEffect(() => () => Object.values(rig).forEach((g) => g.dispose()), [rig]);
 
   return (
     <group>
       <group position={TIP}>
         <Syringe3D volume={volume} radius={R} />
         {/* How far the plunger will go: the "Squeeze to" setting. */}
-        <mesh position={[-target * ML, 0, 0]} rotation={[0, Math.PI / 2, 0]} material={kitMaterial("orange", tier)}>
-          <torusGeometry args={[R + 0.006, 0.006, 8, 40]} />
+        <mesh position={[-target * ML, 0, 0]} rotation={[0, Math.PI / 2, 0]} material={kitMaterial("sand", tier)}>
+          <torusGeometry args={[R + 0.006, 0.006, 10, 48]} />
         </mesh>
         {zoomed && <Readout text={() => `wall hits ×${(sv.now().hits ?? 1).toFixed(1)}`} height={0.07} position={[-0.1, 0.38, 0]} />}
       </group>
       <PistonGas plunger={() => -volume() * ML} end={-0.02} radius={R * 0.92} zoomed={zoomed} at={TIP} />
-      {/* Two cradles under the barrel, and the pipe from the sealed tip into the gauge. */}
-      {[TIP[0] - 0.14, TIP[0] - 0.62].map((x) => (
-        <RoundedBox key={x} args={[0.1, Y - R + 0.03, 0.26]} radius={0.02} smoothness={3} position={[x, (Y - R + 0.03) / 2, 0]} material={kitMaterial("plastic", tier)} />
-      ))}
-      <mesh position={[(TIP[0] + 0.06 + GAUGE[0] - 0.22) / 2, Y, 0]} rotation={[0, 0, Math.PI / 2]} material={kitMaterial("metal", tier)}>
-        <cylinderGeometry args={[0.018, 0.018, GAUGE[0] - 0.22 - TIP[0] - 0.06 + 0.02, 12]} />
-      </mesh>
-      <RoundedBox args={[0.3, Y - 0.2, 0.16]} radius={0.02} smoothness={3} position={[GAUGE[0], (Y - 0.2) / 2, -0.02]} material={kitMaterial("plastic", tier)} />
+      {/* Two saddles under the barrel and the gauge's base, its post, and the sleeve from the nozzle into the gauge. */}
+      <mesh geometry={rig.saddles} material={kitMaterial("satin", tier, LAB.chemistry.sage)} />
+      <mesh geometry={rig.post} material={kitMaterial("steel", tier)} />
+      <mesh geometry={rig.sleeve} material={liquidMaterial(TONE.paleSage, tier, 0.7)} />
       <PressureGauge3D kpa={() => sv.now().pressure ?? 101.325} ghost={ghostKpa} position={GAUGE} />
       <GhostLabel text={ghostText} position={GHOST_AT} />
     </group>

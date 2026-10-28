@@ -5,7 +5,7 @@ import { TextBoard } from "../../TextBoard";
 
 /*
  * The student's belief after a wrong run (DESIGN.md §8.1 step 5): a dashed
- * volt "Your idea: …" label placed beside the reading it disagrees with.
+ * teal "Your idea: …" label placed beside the reading it disagrees with.
  * Hidden while `text` is null. A new text gets a fresh board, so its canvas
  * never changes size after the texture is uploaded.
  */

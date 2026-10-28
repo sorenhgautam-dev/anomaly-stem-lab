@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from "react";
 import { useThree } from "@react-three/fiber";
 import { useLab } from "@/lib/store";
-import { useStudioEnvironment } from "@/components/three/studio-env";
+import { useLabEnvironment } from "./lab-light";
 import { benchShots, fitShots } from "../shots";
 import { labView } from "../lab-state";
 import { Vfx } from "../kit/VfxPool";
@@ -12,17 +12,18 @@ import { CameraDirector } from "./CameraDirector";
 import { LabAno } from "./LabAno";
 import { PredictionGhost } from "./PredictionGhost";
 import { Studio } from "./Studio";
+import { StudioLife } from "./StudioLife";
 import { VerdictBurst } from "./VerdictBurst";
 
 /*
- * The experiment's one continuous 3D space (DESIGN.md §8.1): the studio, the
- * camera director, the stage's apparatus from the kit, Ano, the pooled VFX
- * and the verdict burst. Drawn by the site canvas into the lab view.
+ * The experiment's one continuous 3D space (DESIGN.md §8.1): the studio and
+ * its ambient life, the camera director, the stage's apparatus from the kit,
+ * Ano, the pooled VFX and the verdict burst. Drawn by the site canvas into the lab view.
  */
 
 export function LabScene({ track }: { track: React.RefObject<HTMLElement | null> }) {
-  useStudioEnvironment(1.12);
   const def = useLab((s) => s.def);
+  useLabEnvironment(def?.lab ?? "chemistry");
   const build = useLab((s) => s.build);
   const entry = def ? stage3d(def) : undefined;
   // Memoised per experiment: new shots every render would make the camera
@@ -46,6 +47,7 @@ export function LabScene({ track }: { track: React.RefObject<HTMLElement | null>
     <>
       <CameraDirector shots={shots} />
       <Studio lab={def.lab} shadowKey={`${def.id}-${build?.parts.length ?? 0}-${JSON.stringify(build?.settings ?? {})}`} />
+      <StudioLife lab={def.lab} />
       {Stage && <Stage />}
       <PredictionGhost />
       <LabAno track={track} shots={shots} />

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { CameraControls, PerspectiveCamera } from "@react-three/drei";
+import type { PerspectiveCamera as PerspectiveCamera3 } from "three";
 import CameraControlsImpl from "camera-controls";
 import { prefersReducedMotion } from "@/lib/motion";
 import { labView } from "../lab-state";
@@ -14,8 +15,15 @@ import { useShotName } from "./useShotName";
  * §8.1): it glides in on arrival, settles on the bench to build, moves closer
  * once a prediction is chosen, takes the run's best angle, and pulls back for
  * the reveal. Students can orbit (drag), zoom (scroll or pinch) and
- * double-click to reset. Reduced motion: every move is a cut.
+ * double-click to reset. On wide screens the picture zooms out a little to stay clear
+ * of the dock as it grows. Reduced motion: every move is a cut.
  */
+
+/** The fixed top bar's height on wide screens (ExploreBar), in CSS pixels. */
+const TOP_BAR = 96;
+/** The share of the screen's height each shot is framed for (between the top bar and a short dock), and how far the picture may zoom out to fit a taller dock. */
+const FREE_SHARE = 0.6;
+const MAX_ZOOM_OUT = 1.4;
 
 function lookAt(c: CameraControlsImpl | null, shot: Shot | undefined, smooth: boolean) {
   if (c && shot) void c.setLookAt(...shot.position, ...shot.target, smooth && !prefersReducedMotion());
@@ -48,6 +56,32 @@ export function CameraDirector({ shots }: { shots: StageShots }) {
     }
     lookAt(c, shotsRef.current.arrive, false);
     lookAt(c, shotsRef.current[nameRef.current], true);
+  });
+
+  // Wide screens: the view fills the screen under the HUD, and the dock at the bottom grows with the result.
+  // Fit the picture into the clear space between the top bar and the dock's top edge: when that space is
+  // short, zoom out a little (eased), so the dock never covers the apparatus and its labels never slide
+  // under the top bar. labView.frame shares the target with Ano's placement.
+  const fit = useRef({ s: 1, cy: Number.NaN });
+  useFrame(({ camera, size }) => {
+    const cam = camera as PerspectiveCamera3;
+    const { width: W, height: H } = size;
+    const dock = W >= 1024 ? document.querySelector("[data-lab-dock]")?.getBoundingClientRect() : undefined;
+    const bottom = dock ? Math.min(dock.top, H) : H;
+    // Zoom out only as much as the space above the dock needs, about the top edge (pinned under the top
+    // bar, where each shot already leaves room): nothing slides under the bar, and a short dock changes nothing.
+    const s = dock ? Math.min(MAX_ZOOM_OUT, Math.max(1, (FREE_SHARE * H) / Math.max(1, bottom - TOP_BAR))) : 1;
+    const cy = TOP_BAR + (H / 2 - TOP_BAR) / s;
+    labView.frame = { s, ox: W / (2 * s) - W / 2, oy: H / (2 * s) - cy };
+    const k = prefersReducedMotion() ? 1 : 0.08;
+    const f = fit.current;
+    f.s += (s - f.s) * k;
+    f.cy = Number.isNaN(f.cy) ? cy : f.cy + (cy - f.cy) * k;
+    if (Math.abs(f.s - 1) < 0.002 && Math.abs(f.cy - H / 2) < 0.5) {
+      if (cam.view?.enabled) cam.clearViewOffset();
+      return;
+    }
+    cam.setViewOffset(W / f.s, H / f.s, W / (2 * f.s) - W / 2, H / (2 * f.s) - f.cy, W, H);
   });
 
   // Double-click resets the view to the current shot. ?debug=camera exposes the controls.

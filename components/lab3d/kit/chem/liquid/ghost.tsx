@@ -5,7 +5,7 @@ import { TextBoard } from "../../TextBoard";
 
 /*
  * The student's wrong idea beside reality (DESIGN.md §8.1 step 5): a dashed
- * volt "Your idea: …" label beside the reading it disagrees with, shown only
+ * teal "Your idea: …" label beside the reading it disagrees with, shown only
  * after a wrong run (before that the scene's PredictionGhost floats the
  * picked option at the stage's "ghost" anchor). The dashed border carries
  * the meaning, not only colour (CLAUDE.md §9).

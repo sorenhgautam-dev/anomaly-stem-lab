@@ -17,7 +17,7 @@ import { useStageValues } from "../useStageValues";
  * (DESIGN.md §7.5, §8.1 "bubbling and fizzing"). Run: each tablet shrinks
  * and bubbles at the simulator's rate, a stopwatch counts real seconds (the
  * run is a time-lapse) and each lane says when its tablet is done. After a
- * wrong run wire volt tablets show where the student's idea says each
+ * wrong run wire teal tablets show where the student's idea says each
  * tablet would be, and a dashed label gives the finish it expected.
  */
 
@@ -59,7 +59,7 @@ export function RateStage3D() {
     <group>
       <RaceBeaker side="cold" label="Cold water" celsius={cold} x={COLD_X} sv={sv} snap={snap} />
       <RaceBeaker side="hot" label="Hot water" celsius={hot} x={HOT_X} sv={sv} snap={snap} />
-      <Readout text={() => `${Math.round(snap.now.clock ?? 0)} s\nreal time`} style="screen" height={0.075} position={[0, 0.98, 0]} />
+      <Readout text={() => `${Math.round(snap.now.clock ?? 0)} s\nin a real lab`} style="screen" height={0.075} position={[0, 0.98, 0]} />
       {idea && <Readout text={() => idea} style="ghost" height={0.09} position={GHOST_AT} />}
     </group>
   );

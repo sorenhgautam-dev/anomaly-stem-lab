@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
+import type { ExperimentDef, Prediction } from "@/engine/types";
 import { useLab } from "@/lib/store";
 import { prefersReducedMotion } from "@/lib/motion";
 import { labView } from "../lab-state";
@@ -32,6 +33,14 @@ class Hover {
   }
 }
 
+/** The student's prediction as words, with its unit for a slider. */
+export function predictionWords(def: ExperimentDef | null, prediction: Prediction | null): string {
+  if (!prediction) return "";
+  if (prediction.type === "choice") return prediction.value;
+  const unit = def?.prediction.type === "slider" ? (def.prediction.unit ?? "") : "";
+  return `${Math.round(prediction.value * 100) / 100}${unit ? ` ${unit}` : ""}`;
+}
+
 export function PredictionGhost() {
   const def = useLab((s) => s.def);
   const prediction = useLab((s) => s.prediction);
@@ -39,11 +48,10 @@ export function PredictionGhost() {
   const correct = useLab((s) => s.phase === "result" && s.result?.verdict === "correct");
   // Hidden inside the particle dive, where it would fill the view.
   const zoomed = useLabUi((s) => s.particles);
-  const board = useMemo(() => new TextBoard("ghost", 0.15, 24), []);
+  const board = useMemo(() => new TextBoard("ghost", 0.12, 24), []);
   const [hover] = useState(() => new Hover());
   const group = useRef<Group>(null);
-  const unit = def?.prediction.type === "slider" ? (def.prediction.unit ?? "") : "";
-  const value = !prediction ? "" : prediction.type === "choice" ? prediction.value : `${Math.round(prediction.value * 100) / 100}${unit ? ` ${unit}` : ""}`;
+  const value = predictionWords(def, prediction);
   // Long answers wrap onto a second line so the label stays clear of the HUD.
   const text = !prediction ? "" : value.length > 16 ? `Your idea:\n${value}` : `Your idea: ${value}`;
   const show = !!prediction && !correct && !stageGhost && !zoomed;
@@ -54,7 +62,8 @@ export function PredictionGhost() {
   useEffect(() => () => board.dispose(), [board]);
 
   useFrame(({ clock }, delta) => {
-    if (group.current) hover.step(group.current, board, show, Math.min(delta, 1 / 30), clock.elapsedTime, prefersReducedMotion());
+    // A selected part's inspect label may be carrying the idea already (labView.idea).
+    if (group.current) hover.step(group.current, board, show && !labView.idea, Math.min(delta, 1 / 30), clock.elapsedTime, prefersReducedMotion());
   });
 
   return (

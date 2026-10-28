@@ -1,6 +1,6 @@
 "use client";
 
-import { Atom, Maximize } from "lucide-react";
+import { IconCube, IconMolecule } from "@/components/icons/icons";
 import { partInSlot } from "@/engine/edits";
 import type { Build, CircuitPartKind, ExperimentDef, Outcome, PropValue } from "@/engine/types";
 import { cn } from "@/lib/cn";
@@ -8,15 +8,15 @@ import { useLab } from "@/lib/store";
 import { labView } from "@/components/lab3d/lab-state";
 import { useLabUi } from "@/components/lab3d/lab-ui";
 import { Button } from "@/components/ui/Button";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { PaperCard } from "@/components/ui/PaperCard";
 import { Switch } from "@/components/ui/Toggle";
 import { PART_NAMES } from "./BuildControls";
 import { readingLabel } from "./readings";
 import { CountUp } from "@/components/ui/CountUp";
 
 /*
- * The inspector (DESIGN.md §7.5 right, CLAUDE.md §3.5): the selected part's
- * ratings and, once a run plays, its live values in Geist Mono; for chemistry
+ * "What's happening" (the inspector, DESIGN.md §7.5 right, CLAUDE.md §3.5): the selected part's
+ * ratings and, once a run plays, its live values in Martian Mono; for chemistry
  * and robots, the readings when the run ends (never during it, so nothing
  * gives the answer away). Also the view tools: zoom to particles, reset view.
  */
@@ -37,13 +37,13 @@ function ratings(kind: CircuitPartKind, props: Record<string, PropValue>): [stri
     case "battery":
       return [["Voltage", `${props.volts ?? 6} V`]];
     case "resistor":
-      return [["Resistance", formatOhms(typeof props.ohms === "number" ? props.ohms : 220)], ["Power rating", "0.25 W"]];
+      return [["Resistance", formatOhms(typeof props.ohms === "number" ? props.ohms : 220)], ["Can handle", "0.25 W"]];
     case "bulb":
-      return [["Resistance", `${props.ohms ?? 12} Ω`], ["Rated for", "6 V"]];
+      return [["Resistance", `${props.ohms ?? 12} Ω`], ["Made for", "6 V"]];
     case "led":
-      return [["Turns on above", "≈ 2 V"], ["Safe current", "20 mA"], ["Pointing", props.flipped ? "Backwards" : "+ to −"]];
+      return [["Needs at least", "≈ 2 V"], ["Safe up to", "20 mA"], ["Pointing", props.flipped ? "Backwards" : "The right way"]];
     case "switch":
-      return [["State", props.closed === false ? "Off (open)" : "On (closed)"]];
+      return [["Switch", props.closed === false ? "Off (a gap)" : "On (joined up)"]];
     default:
       return [];
   }
@@ -70,14 +70,20 @@ function CircuitPanel({ def, build, outcome }: { def: ExperimentDef; build: Buil
   const edit = useLab((s) => s.edit);
   const slot = selected ? def.board?.slots.find((s) => s.id === selected) : undefined;
   const part = slot ? partInSlot(build, slot.id) : undefined;
-  if (!slot) return <p className="text-[14px] leading-relaxed text-ink-500">Click a part on the board to see its values.</p>;
-  if (!part) return <p className="text-[14px] leading-relaxed text-ink-500">{slot.label}: empty. Pick a part up from the tray, then click this outline.</p>;
+  if (!slot) return <p className="text-[14px] leading-relaxed text-ink-500">Click a part to see what it’s doing.</p>;
+  if (!part) return <p className="text-[14px] leading-relaxed text-ink-500">{slot.label}: empty. Pick a part from the tray. Then click this outline.</p>;
   const r = outcome?.readings ?? {};
+  // Easy (grades 6–8) sees just how much flows and how bright it is; voltage and power wait for Medium.
+  const easy = def.level === "easy";
   const live: [string, string][] = outcome
     ? [
-        ["Current", fmt(r[`${slot.id}.current`] ?? 0, "A")],
-        ["Voltage across", fmt(r[`${slot.id}.voltage`] ?? 0, "V")],
-        ["Power", fmt(r[`${slot.id}.power`] ?? 0, "W")],
+        [easy ? "Flow (current)" : "Current", fmt(r[`${slot.id}.current`] ?? 0, "A")],
+        ...(easy
+          ? []
+          : ([
+              ["Voltage", fmt(r[`${slot.id}.voltage`] ?? 0, "V")],
+              ["Power", fmt(r[`${slot.id}.power`] ?? 0, "W")],
+            ] as [string, string][])),
         ...(part.kind === "bulb" || part.kind === "led" ? ([["Brightness", fmt(r[`${slot.id}.brightness`] ?? 0, "%")]] as [string, string][]) : []),
       ]
     : [];
@@ -85,12 +91,14 @@ function CircuitPanel({ def, build, outcome }: { def: ExperimentDef; build: Buil
   return (
     <div className="flex flex-col gap-3">
       <p className="type-heading text-lg">
-        {PART_NAMES[part.kind]} <span className="text-[15px] font-medium text-ink-500">· {slot.label}</span>
+        {PART_NAMES[part.kind]}
+        {/* The slot's name only when it says more than the part's (no "LED · LED"). */}
+        {slot.label.toLowerCase() !== PART_NAMES[part.kind].toLowerCase() && <span className="text-[15px] font-medium text-ink-500"> · {slot.label}</span>}
       </p>
       <Rows rows={ratings(part.kind, part.props)} />
       {live.length > 0 && (
         <div>
-          <p className="type-eyebrow mb-1.5 text-volt-600">Live</p>
+          <p className="type-label mb-1.5 text-chem-wall">Right now</p>
           <Rows rows={live} />
         </div>
       )}
@@ -125,28 +133,28 @@ export function Inspector({ className, zoom }: { className?: string; zoom: { lab
   const final = phase === "result" ? outcome : null;
   const rows = final ? Object.entries(final.readings).map(([key, value]) => ({ key, ...readingLabel(key, value) })).filter((r) => r.label !== null).map((r) => [r.label!, r.text] as [string, string]) : [];
   return (
-    <GlassCard className={cn("flex flex-col gap-4 p-4 sm:p-5", className)} aria-label="Inspector" role="complementary">
-      <p className="type-eyebrow text-ink-500">Inspector</p>
+    <PaperCard className={cn("flex flex-col gap-4 p-4 sm:p-5", className)} aria-label="What’s happening" role="complementary">
+      <p className="type-label text-ink-500">What’s happening</p>
       {def.stage === "circuit" ? (
         <CircuitPanel def={def} build={build} outcome={outcome} />
       ) : rows.length ? (
         <Rows rows={rows} />
       ) : (
-        <p className="text-[14px] leading-relaxed text-ink-500">{phase === "running" ? "Watch the instruments on the bench. The full readings appear here when the run ends." : "Readings appear here when you run the experiment."}</p>
+        <p className="text-[14px] leading-relaxed text-ink-500">{phase === "running" ? "Watch the bench. The numbers show up here when it ends." : "Press Run. The numbers show up here."}</p>
       )}
       <div className="flex flex-wrap gap-2 border-t border-ink-900/[0.07] pt-3">
         {zoom && <Switch label={zoom.label} checked={zoomed} onChange={setZoomed} />}
         <Button variant="ghost" onClick={() => labView.el?.dispatchEvent(new MouseEvent("dblclick"))}>
-          <Maximize aria-hidden className="size-4" />
+          <IconCube aria-hidden className="size-4" />
           Reset view
         </Button>
       </div>
       {zoom && zoomed && (
         <p className="flex items-center gap-2 text-[13px] text-ink-500">
-          <Atom aria-hidden className="size-4 shrink-0" />
+          <IconMolecule aria-hidden className="size-4 shrink-0" />
           {zoom.caption}
         </p>
       )}
-    </GlassCard>
+    </PaperCard>
   );
 }

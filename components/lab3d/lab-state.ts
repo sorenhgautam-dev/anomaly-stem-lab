@@ -8,8 +8,15 @@ import { Vector3 } from "three";
  *               run hook can fire VFX at a part and Ano can fly to it
  *  - anoScreen: where Ano is on screen, so the speech bubble can sit by him
  *  - focus:     the anchor Ano should point at (set on ANOMALY), or null
+ *  - frame:     how the camera fits the picture into the space above the
+ *               dock on wide screens (CameraDirector): zoomed out by s and
+ *               offset by (ox, oy) px; Ano's home allows for it
+ *  - idea:      a part's inspect label is carrying the student's idea, so
+ *               the floating "Your idea" label steps aside (never two labels
+ *               stacked on one part)
  * Stages set the "focus" anchor (what shows the result) and may set "ghost"
- * (where the prediction's ghost label floats).
+ * (where the prediction's ghost label floats) and "ano" (where Ano floats to
+ * point the result out, when beside the part there's no room).
  */
 
 export const labView = {
@@ -17,6 +24,8 @@ export const labView = {
   anchors: new Map<string, Vector3>(),
   anoScreen: { x: 0, y: 0, visible: false },
   focus: null as string | null,
+  frame: { s: 1, ox: 0, oy: 0 },
+  idea: false,
 };
 
 /** The soft cursor grows over 3D things you can click (DESIGN.md §9.1). */

@@ -2,17 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { RoundedBox } from "@react-three/drei";
 import { Vector3, type Group } from "three";
 import { useLab } from "@/lib/store";
-import { useQuality } from "@/lib/quality";
 import { useLabUi } from "../lab-ui";
 import { labView, setAnchor } from "../lab-state";
 import { Readout, Thermometer3D } from "../kit/chem/instruments";
 import { BATH, WaterBath3D } from "../kit/chem/react/bath";
 import { SealedTube3D, TUBE } from "../kit/chem/react/gas-tube";
 import { GhostLabel } from "../kit/chem/react/GhostLabel";
-import { kitMaterial } from "../kit/materials";
+import { RetortStand3D, type StandClamp } from "../kit/chem/liquid/stand";
+import { TubeRack3D } from "../kit/chem/react/rack";
 import { orbit, type StageShots } from "../shots";
 import { useStageValues } from "../useStageValues";
 
@@ -23,7 +22,7 @@ import { useStageValues } from "../useStageValues";
  * (right) for comparison; the other hangs from a clamp over a water bath (hot plate
  * and steam when hot, ice when cold, a thermometer in it). Run: the tube
  * dips in and its gas turns darker or paler as the model's `color` changes.
- * After a wrong run a ghost tube in a volt wireframe cage shows the guess
+ * After a wrong run a ghost tube in a teal wireframe cage shows the guess
  * beside it. "Zoom to particles" shows the molecules inside the tube.
  */
 
@@ -38,6 +37,10 @@ const STAND_Z = BATH_AT[2] - 0.56;
 /** The clamp holds the tube near its top, out of the particle view. */
 const CLAMP_Y = IN_BATH_Y + TUBE.length - 0.09;
 const GHOST_AT: [number, number, number] = [GHOST_TUBE_AT[0] + 0.02, IN_BATH_Y + TUBE.length + 0.17, GHOST_TUBE_AT[2]];
+/** The retort stand behind the bath: its rod, and the clamp that rides down it with the tube. */
+const ROD: [number, number] = [TUBE_AT[0], STAND_Z];
+const STAND_TOP = CLAMP_Y + LIFT + 0.08;
+const CLAMPS: StandClamp[] = [{ y: CLAMP_Y, to: [TUBE_AT[0], TUBE_AT[2]], grip: TUBE.radius }];
 
 /** The tube dips into the bath in the run's first 0.3 s (the model warms it from t = 0). */
 const dip = (t: number) => 1 - (1 - Math.min(1, Math.max(0, t / 0.3))) ** 3;
@@ -66,7 +69,6 @@ export function EquilibriumStage3D() {
     const v = s.build?.settings.temperature;
     return typeof v === "number" ? v : 70;
   });
-  const tier = useQuality((s) => s.level);
   const zoomed = useLabUi((s) => s.particles);
   const sv = useStageValues();
   const tube = useRef<Group>(null);
@@ -98,22 +100,16 @@ export function EquilibriumStage3D() {
       {/* The test tube on its clamp; the arm slides down the stand's rod with it. */}
       <group ref={tube}>
         <SealedTube3D share={() => sv.now().color ?? 0} zoomed={zoomed} position={TUBE_AT} />
-        <mesh position={[TUBE_AT[0], CLAMP_Y, (TUBE_AT[2] + STAND_Z) / 2]} rotation={[Math.PI / 2, 0, 0]} material={kitMaterial("metal", tier)}>
-          <cylinderGeometry args={[0.012, 0.012, TUBE_AT[2] - STAND_Z, 10]} />
-        </mesh>
-        <RoundedBox args={[0.17, 0.045, 0.05]} radius={0.016} position={[TUBE_AT[0], CLAMP_Y, TUBE_AT[2] - 0.05]} material={kitMaterial("orange", tier)} />
+        <RetortStand3D rod={ROD} floor={0} top={STAND_TOP} clamps={CLAMPS} parts="clamps" />
       </group>
       {sv.ghost && (
         <group ref={ghostTube}>
           <SealedTube3D share={() => sv.ghostNow()?.color ?? 0} ghost position={GHOST_TUBE_AT} />
         </group>
       )}
-      <RoundedBox args={[0.3, 0.03, 0.22]} radius={0.012} position={[TUBE_AT[0], 0.015, STAND_Z]} material={kitMaterial("plastic", tier)} />
-      <mesh position={[TUBE_AT[0], 0.56, STAND_Z]} material={kitMaterial("metal", tier)}>
-        <cylinderGeometry args={[0.016, 0.016, 1.12, 12]} />
-      </mesh>
+      <RetortStand3D rod={ROD} floor={0} top={STAND_TOP} clamps={CLAMPS} parts="stand" />
       {/* The comparison tube in its rack, at room temperature. */}
-      <RoundedBox args={[0.26, 0.12, 0.2]} radius={0.03} smoothness={3} position={[REF_AT[0], 0.06, REF_AT[2]]} material={kitMaterial("plastic", tier)} />
+      <TubeRack3D position={[REF_AT[0], 0, REF_AT[2]]} />
       <SealedTube3D share={room} position={REF_AT} />
       <Readout text={() => "20 °C (room)"} height={0.09} position={[REF_AT[0], REF_AT[1] + TUBE.length + 0.12, REF_AT[2]]} />
       <GhostLabel text={ghostText} position={GHOST_AT} />

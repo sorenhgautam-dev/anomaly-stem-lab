@@ -1,6 +1,6 @@
 "use client";
 
-import { Play } from "lucide-react";
+import { IconPlay } from "@/components/icons/icons";
 import { useLab } from "@/lib/store";
 import { Button } from "@/components/ui/Button";
 import { PredictionChoices } from "@/components/ui/PredictionChoices";
@@ -28,12 +28,12 @@ export function PredictDock({ onRun }: { onRun: () => void }) {
           <PredictionChoices question={spec.question} options={spec.options} value={prediction?.type === "choice" ? prediction.value : null} onChange={(value) => setPrediction({ type: "choice", value })} lab={def.lab} />
         ) : (
           <div data-prediction>
-            <Slider label="Your prediction" value={prediction?.type === "slider" ? prediction.value : (spec.min + spec.max) / 2} min={spec.min} max={spec.max} step={spec.step} unit={spec.unit} tint={def.lab === "chemistry" ? "chem" : "robo"} onChange={(value) => setPrediction({ type: "slider", value })} />
+            <Slider label="Your guess" value={prediction?.type === "slider" ? prediction.value : (spec.min + spec.max) / 2} min={spec.min} max={spec.max} step={spec.step} unit={spec.unit} tint={def.lab === "chemistry" ? "chem" : "robo"} onChange={(value) => setPrediction({ type: "slider", value })} />
           </div>
         )}
       </div>
-      <Button size="xl" onClick={onRun} disabled={!prediction} icon={<Play aria-hidden className="size-4 fill-white" strokeWidth={0} />} className="self-start lg:self-end xl:self-auto">
-        {prediction ? "Run" : "Run · predict first"}
+      <Button size="xl" onClick={onRun} disabled={!prediction} icon={<IconPlay aria-hidden className="size-4" />} className="self-start lg:self-end xl:self-auto">
+        {prediction ? "Run" : "Run (guess first)"}
       </Button>
     </div>
   );

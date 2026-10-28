@@ -1,29 +1,29 @@
 import { MeshBasicMaterial, MeshStandardMaterial } from "three";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB } from "@/lib/tokens";
 
 /*
  * Shared looks for the robot kit (DESIGN.md §8, §8.1): the ghost of the
- * student's belief is a translucent volt copy (told apart by shape and
- * opacity too, never colour alone), and trails and lane lines glow like
- * neon tape on the arena mat. One material per look, shared by every part.
+ * student's belief is a translucent teal copy (told apart by shape and
+ * opacity too, never colour alone), and trails and current glow like neon
+ * tape. One material per look, shared by every part.
  */
 
 let ghost: MeshBasicMaterial | null = null;
-/** The ghost (the student's belief): translucent volt, no depth write. */
+/** The ghost (the student's belief): translucent teal, no depth write. */
 export function ghostMaterial(): MeshBasicMaterial {
-  ghost ??= new MeshBasicMaterial({ color: P.volt[400], transparent: true, opacity: 0.34, depthWrite: false });
+  ghost ??= new MeshBasicMaterial({ color: LAB.robotics.teal, transparent: true, opacity: 0.34, depthWrite: false });
   return ghost;
 }
 
 let ghostSolid: MeshBasicMaterial | null = null;
-/** Ghost marks that must read on their own (dashes, needles): stronger volt. */
+/** Ghost marks that must read on their own (dashes, needles): stronger teal. */
 export function ghostMarkMaterial(): MeshBasicMaterial {
-  ghostSolid ??= new MeshBasicMaterial({ color: P.volt[500], transparent: true, opacity: 0.72, depthWrite: false });
+  ghostSolid ??= new MeshBasicMaterial({ color: LAB.robotics.teal, transparent: true, opacity: 0.72, depthWrite: false });
   return ghostSolid;
 }
 
 const neon = new Map<string, MeshStandardMaterial>();
-/** A glowing tape colour (trails, LEDs that stay lit): emissive, so it reads on cream. */
+/** A glowing tape colour (trails, current dots): emissive, so it reads on white and graphite alike. */
 export function neonMaterial(color: string): MeshStandardMaterial {
   let m = neon.get(color);
   if (!m) {

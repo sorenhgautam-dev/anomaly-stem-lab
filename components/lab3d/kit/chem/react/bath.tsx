@@ -2,17 +2,19 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { CylinderGeometry, MeshStandardMaterial, Object3D, type InstancedMesh } from "three";
+import { MeshStandardMaterial, Object3D, type InstancedMesh } from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { useQuality } from "@/lib/quality";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB, PALETTE as P } from "@/lib/tokens";
+import { corner, latheGeometry, shellGeometry } from "../../detail";
 import { kitMaterial } from "../../materials";
 import { HotPlate3D } from "../instruments";
 import { vfx } from "../../vfx";
 
 /*
  * A water bath on a hot plate (DESIGN.md §7.5 kit, §8.1 "heat as colour
- * shimmer"): a wide glass beaker of water at `celsius`. The plate glows
+ * shimmer", §8.2): a wide glass vessel (real wall thickness, a rounded heel
+ * and a beaded rim) of faintly sage-tinted water at `celsius`. The plate glows
  * when the bath is hot and steam drifts off the surface; a cold bath gets
  * floating ice. The water is drawn after the glass and gas inside it
  * (renderOrder, no depth write), so a tube dipped in it stays visible.
@@ -20,9 +22,9 @@ import { vfx } from "../../vfx";
 
 export const BATH = { radius: 0.36, height: 0.44, plate: 0.13, water: 0.32 };
 
-const WALL = new CylinderGeometry(BATH.radius, BATH.radius * 0.97, BATH.height, 44, 1, true).translate(0, BATH.height / 2, 0);
-const BASE = new CylinderGeometry(BATH.radius * 0.97, BATH.radius * 0.97, 0.02, 44).translate(0, 0.01, 0);
-const WATER = new CylinderGeometry(BATH.radius * 0.95, BATH.radius * 0.94, BATH.water, 40).translate(0, BATH.water / 2 + 0.02, 0);
+const BR = BATH.radius;
+const VESSEL = shellGeometry([[0, 0], [BR - 0.03, 0], ...corner(BR - 0.03, 0.03, 0.03, -Math.PI / 2, 0).slice(1), [BR, BATH.height - 0.012], [BR + 0.007, BATH.height]], 0.008, 0.014, 72);
+const WATER = latheGeometry([[0.001, 0.016], [BR - 0.04, 0.016], [BR - 0.017, 0.028], [BR - 0.0095, 0.05], [BR - 0.0095, BATH.water + 0.02], [0.001, BATH.water + 0.02]], 56);
 const ICE = new RoundedBoxGeometry(0.09, 0.08, 0.09, 2, 0.022);
 const ICE_AT: [number, number][] = [
   [-0.25, -0.06],
@@ -38,7 +40,7 @@ export function WaterBath3D({ celsius, position }: { celsius: number; position: 
   const tier = useQuality((s) => s.level);
   const ice = useRef<InstancedMesh>(null);
   const steam = useRef(0);
-  const water = useMemo(() => new MeshStandardMaterial({ color: P.volt[100], transparent: true, opacity: 0.24, roughness: 0.1, depthWrite: false }), []);
+  const water = useMemo(() => new MeshStandardMaterial({ color: LAB.chemistry.sage, transparent: true, opacity: 0.24, roughness: 0.08, depthWrite: false }), []);
   const frost = useMemo(() => new MeshStandardMaterial({ color: P.white, transparent: true, opacity: 0.78, roughness: 0.12 }), []);
   useEffect(
     () => () => {
@@ -66,14 +68,13 @@ export function WaterBath3D({ celsius, position }: { celsius: number; position: 
     steam.current += Math.max(0, (celsius - 45) / 35) * 3 * dt;
     while (steam.current >= 1) {
       steam.current -= 1;
-      vfx.burst({ at: [position[0], surface + 0.02, position[2]], kind: "smoke", count: 1, colors: [P.volt[100], P.grape[300]], speed: [0.14, 0.3], dir: [0, 1, 0], cone: 0.85, life: [1.2, 2], size: [0.06, 0.1], spread: BATH.radius * 0.7, grow: 0.08, drag: 0.7 });
+      vfx.burst({ at: [position[0], surface + 0.02, position[2]], kind: "smoke", count: 1, colors: [P.white, LAB.chemistry.sage], speed: [0.14, 0.3], dir: [0, 1, 0], cone: 0.85, life: [1.2, 2], size: [0.06, 0.1], spread: BATH.radius * 0.7, grow: 0.08, drag: 0.7 });
     }
   });
 
   return (
     <HotPlate3D power={() => Math.max(0, (celsius - 22) / 60)} size={0.92} position={position}>
-      <mesh geometry={WALL} material={kitMaterial("glass", tier)} renderOrder={2} />
-      <mesh geometry={BASE} material={kitMaterial("glass", tier)} />
+      <mesh geometry={VESSEL} material={kitMaterial("glass", tier)} renderOrder={2} />
       <mesh geometry={WATER} material={water} renderOrder={3} />
       {cold && <instancedMesh ref={ice} args={[ICE, frost, ICE_AT.length]} renderOrder={3} frustumCulled={false} />}
     </HotPlate3D>

@@ -31,14 +31,14 @@ export interface Stage3D {
 }
 
 const STAGES: Record<StageId, Stage3D> = {
-  circuit: { Stage: CircuitStage3D, shots: circuitShots, zoom: { label: "Zoom in on the current", caption: "Zoomed in: the dots are charge flowing round the circuit. They move faster when more current flows." } },
-  fizz: { Stage: FizzStage3D, shots: fizzShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: each dot is a carbon dioxide molecule." } },
+  circuit: { Stage: CircuitStage3D, shots: circuitShots, zoom: { label: "Zoom in on the flow", caption: "Zoomed in: the dots are electricity flowing round the loop. They move faster when more flows." } },
+  fizz: { Stage: FizzStage3D, shots: fizzShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: each dot is a tiny bit of the gas (carbon dioxide)." } },
   robot: { Stage: RobotStage3D, shots: robotShots },
   gears: { Stage: GearsStage3D, shots: gearsShots },
   pwm: { Stage: PwmStage3D, shots: pwmShots },
-  melt: { Stage: MeltStage3D, shots: meltShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: each dot is a water molecule. Heat makes them jiggle harder until they break free of the ice." } },
-  dissolve: { Stage: DissolveStage3D, shots: dissolveShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: blue dots are water molecules, white ones are sugar. Every sugar molecule is still in the beaker." } },
-  heat: { Stage: GasHeatStage3D, shots: gasHeatShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: each dot is an air molecule. Warm air moves faster; the molecules themselves don't grow." } },
+  melt: { Stage: MeltStage3D, shots: meltShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: each dot is a tiny bit of water. Heat makes them jiggle harder until they break free of the ice." } },
+  dissolve: { Stage: DissolveStage3D, shots: dissolveShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: blue dots are tiny bits of water, white ones are sugar. Every bit of sugar is still in the beaker." } },
+  heat: { Stage: GasHeatStage3D, shots: gasHeatShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: each dot is a tiny bit of air. Warm air moves faster. The bits themselves don’t grow." } },
   rate: { Stage: RateStage3D, shots: rateShots },
   indicator: { Stage: IndicatorStage3D, shots: indicatorShots },
   neutralise: { Stage: NeutraliseStage3D, shots: neutraliseShots },

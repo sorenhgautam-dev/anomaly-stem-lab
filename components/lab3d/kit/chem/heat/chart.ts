@@ -1,15 +1,19 @@
 import { CanvasTexture, LinearFilter, SRGBColorSpace, Sprite, SpriteMaterial } from "three";
 import type { TimelineFrame } from "@/engine/types";
 import { sample } from "@/components/lab/playback";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB, PALETTE as P } from "@/lib/tokens";
 
 /*
  * A live graph floating above the bench (DESIGN.md §8.1 "live 3D graphs
  * floating above the bench"): a white glass card drawn on a canvas and shown
  * as a camera-facing sprite. The real curve draws itself as the run plays;
- * a shaded band marks where `bandKey` is between 0 and 1 (ice melting), and
- * after a wrong run the student's belief is a dashed volt line beside it.
- * It redraws only when the time or the curves change.
+ * a shaded sage band marks where `bandKey` is between 0 and 1 (ice melting),
+ * and after a wrong run the student's guess is a dashed line in the lab's
+ * teal beside it. The real curve is ink, its moving end a sand-gold dot.
+ * The y-axis fits the run's data (both curves, with a little padding) so the
+ * gap between the guess and what really happened is easy to see; before a
+ * run it shows the spec's range. It redraws only when the time or the curves
+ * change.
  */
 
 const W = 640;
@@ -18,11 +22,12 @@ const L = 86;
 const R = 30;
 const T = 66;
 const B = 62;
-const FONT = '"Geist Mono", ui-monospace, monospace';
+const FONT = '"Martian Mono", ui-monospace, monospace';
 
 export interface ChartSpec {
   title: string;
   yKey: string;
+  /** The range and ticks before a run; once there's data the axis fits it. */
   yMin: number;
   yMax: number;
   yTicks: number[];
@@ -36,6 +41,31 @@ export interface ChartSpec {
   ghostLabel: string;
 }
 
+/** A tidy tick step (1, 2 or 5 times a power of ten) giving about four to six ticks over `span`. */
+function niceStep(span: number): number {
+  const rough = span / 5;
+  const pow = 10 ** Math.floor(Math.log10(rough));
+  const m = rough / pow;
+  return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * pow;
+}
+
+/** The y range for a run: both curves' full extent, padded by a tenth, snapped out to tidy ticks. */
+function fitRange(spec: ChartSpec, real: TimelineFrame[] | null, ghost: TimelineFrame[] | null) {
+  const values = [real, ghost].flatMap((s) => (s ?? []).map((f) => f.values[spec.yKey]).filter((v): v is number => typeof v === "number"));
+  if (values.length === 0) return { min: spec.yMin, max: spec.yMax, ticks: spec.yTicks };
+  let lo = Math.min(...values);
+  let hi = Math.max(...values);
+  const pad = Math.max((hi - lo) * 0.1, 0.5);
+  lo -= pad;
+  hi += pad;
+  const step = niceStep(hi - lo);
+  const min = Math.floor(lo / step) * step;
+  const max = Math.ceil(hi / step) * step;
+  const ticks: number[] = [];
+  for (let v = min; v <= max + step / 2; v += step) ticks.push(Math.round(v * 1e6) / 1e6);
+  return { min, max, ticks };
+}
+
 export class ChartBoard {
   readonly sprite: Sprite;
   private canvas = document.createElement("canvas");
@@ -45,6 +75,8 @@ export class ChartBoard {
   private ghost: TimelineFrame[] | null = null;
   private t = -1;
   private now = NaN;
+  /** The y range in use: the spec's before a run, fitted to the curves after. */
+  private range = { min: 0, max: 1, ticks: [] as number[] };
 
   constructor(
     private spec: ChartSpec,
@@ -58,12 +90,14 @@ export class ChartBoard {
     this.sprite = new Sprite(new SpriteMaterial({ map: this.texture, transparent: true, depthWrite: false, toneMapped: false }));
     this.sprite.renderOrder = 9;
     this.sprite.scale.set((height * W) / H, height, 1);
-    void document.fonts?.load(`500 24px "Geist Mono"`).then(() => this.draw());
+    this.range = { min: spec.yMin, max: spec.yMax, ticks: spec.yTicks };
+    void document.fonts?.load(`500 24px "Martian Mono"`).then(() => this.draw());
   }
 
   /** Call each frame; redraws only when something visible changed. */
   update(real: TimelineFrame[] | null, ghost: TimelineFrame[] | null, t: number, now: number): void {
     if (real === this.real && ghost === this.ghost && Math.abs(t - this.t) < 1 / 30 && Math.abs(now - this.now) < 0.05) return;
+    if (real !== this.real || ghost !== this.ghost) this.range = fitRange(this.spec, real, ghost);
     this.real = real;
     this.ghost = ghost;
     this.t = t;
@@ -76,7 +110,7 @@ export class ChartBoard {
   }
 
   private y(v: number) {
-    const { yMin, yMax } = this.spec;
+    const { min: yMin, max: yMax } = this.range;
     return H - B - ((Math.max(yMin, Math.min(yMax, v)) - yMin) / (yMax - yMin)) * (H - T - B);
   }
 
@@ -113,14 +147,14 @@ export class ChartBoard {
     ctx.lineWidth = 3;
     ctx.stroke();
     ctx.fillStyle = P.ink[900];
-    ctx.font = `500 26px ${FONT}`;
+    ctx.font = `500 semi-condensed 26px ${FONT}`;
     ctx.textBaseline = "middle";
     ctx.textAlign = "left";
     ctx.fillText(s.title, 30, 38);
     // Grid and y ticks; the marked line (0 °C) is stronger.
-    ctx.font = `500 20px ${FONT}`;
+    ctx.font = `500 semi-condensed 20px ${FONT}`;
     ctx.textAlign = "right";
-    for (const v of s.yTicks) {
+    for (const v of this.range.ticks) {
       const y = this.y(v);
       ctx.strokeStyle = v === s.mark ? "rgba(18,18,18,0.32)" : "rgba(18,18,18,0.08)";
       ctx.lineWidth = v === s.mark ? 3 : 2;
@@ -139,7 +173,7 @@ export class ChartBoard {
     if (clockMax > 0) for (let c = 0; c <= clockMax + 1e-6; c += s.clockStep) ctx.fillText(`${c} s`, this.x((c / clockMax) * 10), H - B + 28);
     if (!real) {
       ctx.fillText("time →", (L + W - R) / 2, H - B + 28);
-      this.dot(0, this.now, P.flame[500]);
+      this.dot(0, this.now, LAB.chemistry.gold);
       return;
     }
     // The band where the ice is melting, revealed as time reaches it.
@@ -148,21 +182,21 @@ export class ChartBoard {
       const endAt = real.find((f) => (f.values[s.bandKey] ?? 1) <= 0.001)?.t ?? 10;
       const x0 = this.x(startAt);
       const x1 = this.x(Math.min(this.t, endAt));
-      ctx.fillStyle = `${P.volt[100]}cc`;
+      ctx.fillStyle = `${LAB.chemistry.sage}66`;
       ctx.fillRect(x0, T, x1 - x0, H - T - B);
       if (x1 - x0 > 120) {
-        ctx.fillStyle = P.volt[600];
+        ctx.fillStyle = P.ink[700];
         ctx.fillText(s.bandLabel, (x0 + x1) / 2, T + 18);
       }
     }
     if (this.ghost) {
-      const g = this.line(this.ghost, P.volt[500], 5, true);
-      ctx.fillStyle = P.volt[600];
+      const g = this.line(this.ghost, LAB.chemistry.wall, 5, true);
+      ctx.fillStyle = LAB.chemistry.wall;
       ctx.textAlign = "right";
       ctx.fillText(s.ghostLabel, Math.max(L + 150, this.x(this.t) - 14), this.y(g) - 22);
     }
-    const end = this.line(real, P.apricot[600], 7, false);
-    this.dot(this.t, end, P.flame[500]);
+    const end = this.line(real, P.ink[900], 7, false);
+    this.dot(this.t, end, LAB.chemistry.gold);
   }
 
   private dot(t: number, v: number, color: string) {
@@ -171,7 +205,7 @@ export class ChartBoard {
     ctx.arc(this.x(t), this.y(v), 10, 0, Math.PI * 2);
     ctx.fillStyle = color;
     ctx.fill();
-    ctx.strokeStyle = P.white;
+    ctx.strokeStyle = P.ink[900];
     ctx.lineWidth = 4;
     ctx.stroke();
     this.texture.needsUpdate = true;

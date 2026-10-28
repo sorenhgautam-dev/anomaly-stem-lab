@@ -7,8 +7,8 @@
 const KNOWN: Record<string, { label: string; unit: string; digits?: number }> = {
   "scale.start": { label: "Scale before", unit: "g", digits: 2 },
   "scale.end": { label: "Scale after", unit: "g", digits: 2 },
-  "co2.made": { label: "CO₂ made", unit: "g", digits: 2 },
-  "co2.escaped": { label: "CO₂ escaped", unit: "g", digits: 2 },
+  "co2.made": { label: "Gas made", unit: "g", digits: 2 },
+  "co2.escaped": { label: "Gas that got out", unit: "g", digits: 2 },
   "bag.volume": { label: "Gas in the bag", unit: "mL", digits: 0 },
   "sugar.grams": { label: "Sugar", unit: "g", digits: 1 },
   "sugar.dissolved": { label: "Dissolved", unit: "%", digits: 0 },
@@ -25,7 +25,7 @@ const KNOWN: Record<string, { label: string; unit: string; digits?: number }> = 
   ph: { label: "pH", unit: "", digits: 2 },
   "base.ml": { label: "Base added", unit: "mL", digits: 1 },
   "equivalence.ml": { label: "Neutral point", unit: "mL", digits: 1 },
-  "oxygen.used": { label: "Oxygen joined", unit: "g", digits: 2 },
+  "oxygen.used": { label: "Oxygen used up", unit: "g", digits: 2 },
   "volume.start": { label: "Volume before", unit: "mL", digits: 0 },
   "volume.end": { label: "Volume after", unit: "mL", digits: 0 },
   "pressure.start": { label: "Pressure before", unit: "kPa", digits: 0 },
@@ -34,9 +34,9 @@ const KNOWN: Record<string, { label: string; unit: string; digits?: number }> = 
   "catalyst.start": { label: "Catalyst before", unit: "g", digits: 2 },
   "catalyst.end": { label: "Catalyst after", unit: "g", digits: 2 },
   "o2.ml": { label: "Oxygen made", unit: "mL", digits: 0 },
-  "no2.fraction": { label: "Brown NO₂ share", unit: "%", digits: 0 },
-  "color.start": { label: "Colour before", unit: "%", digits: 0 },
-  "color.end": { label: "Colour after", unit: "%", digits: 0 },
+  "no2.fraction": { label: "How brown (NO₂)", unit: "%", digits: 0 },
+  "color.start": { label: "Brownness before", unit: "%", digits: 0 },
+  "color.end": { label: "Brownness after", unit: "%", digits: 0 },
   "robot.turn": { label: "Turned", unit: "°", digits: 0 },
   "robot.distance": { label: "Distance", unit: "cm", digits: 0 },
   "driver.torque": { label: "Motor turning force", unit: "×", digits: 2 },
@@ -49,7 +49,7 @@ const KNOWN: Record<string, { label: string; unit: string; digits?: number }> = 
   "motor.rpm": { label: "Motor speed", unit: "rpm", digits: 0 },
   "motor.speedFraction": { label: "Of full speed", unit: "%", digits: 0 },
   "motor.ripple": { label: "Speed wobble", unit: "%", digits: 0 },
-  "pwm.frequency": { label: "Switching", unit: "Hz", digits: 0 },
+  "pwm.frequency": { label: "Switches per second", unit: "Hz", digits: 0 },
 };
 
 const PERCENT_FROM_FRACTION = new Set([

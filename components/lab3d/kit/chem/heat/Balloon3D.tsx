@@ -4,16 +4,18 @@ import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import { useFrame } from "@react-three/fiber";
 import { LatheGeometry, MeshBasicMaterial, Vector2, type Group, type Mesh, type MeshStandardMaterial } from "three";
 import { useQuality } from "@/lib/quality";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB } from "@/lib/tokens";
 import { kitMaterial, ownMaterial } from "../../materials";
 import type { Getter } from "../glass";
+import { TONE } from "./tones";
 
 /*
  * A stretchy balloon (DESIGN.md §7.5 kit): a translucent teardrop skin that
  * swells with `swell` (its linear scale), standing on its neck at the group's
  * origin. Children ride at the balloon's centre without being scaled, so the
- * particles inside keep their own size. `ghost` draws the student's belief:
- * a pale volt skin with a wire outline (shape and opacity, not only colour).
+ * particles inside keep their own size. The skin is sage rubber, rolled into
+ * a lip round the flask's neck. `ghost` draws the student's belief: a pale
+ * teal skin with a wire outline (shape and opacity, not only colour).
  */
 
 const NECK_Y = 0.015;
@@ -37,8 +39,8 @@ export function Balloon3D({ radius, swell, ghost = false, fade, position, childr
   const core = useRef<Group>(null);
   const geometry = useMemo(() => skin(radius), [radius]);
   const base = ghost ? 0.16 : 0.34;
-  const material = useMemo(() => ownMaterial(ghost ? P.volt[300] : P.apricot[300], tier, { transparent: true, opacity: base }), [tier, ghost, base]);
-  const wire = useMemo(() => new MeshBasicMaterial({ color: P.volt[500], wireframe: true, transparent: true, opacity: 0.28, depthWrite: false }), []);
+  const material = useMemo(() => ownMaterial(ghost ? TONE.ghost : LAB.chemistry.sage, tier, { transparent: true, opacity: base }), [tier, ghost, base]);
+  const wire = useMemo(() => new MeshBasicMaterial({ color: TONE.ghost, wireframe: true, transparent: true, opacity: 0.3, depthWrite: false }), []);
   useEffect(() => () => wire.dispose(), [wire]);
   useEffect(() => () => geometry.dispose(), [geometry]);
 
@@ -59,8 +61,8 @@ export function Balloon3D({ radius, swell, ghost = false, fade, position, childr
           {ghost && <mesh geometry={geometry} material={wire} renderOrder={3} />}
         </group>
         {!ghost && (
-          <mesh position={[0, -0.03, 0]} rotation={[Math.PI / 2, 0, 0]} material={kitMaterial("orange", tier)}>
-            <torusGeometry args={[0.05, 0.016, 10, 24]} />
+          <mesh position={[0, -0.03, 0]} rotation={[Math.PI / 2, 0, 0]} material={kitMaterial("sage", tier)}>
+            <torusGeometry args={[0.05, 0.016, 12, 32]} />
           </mesh>
         )}
         <group ref={core}>{children}</group>

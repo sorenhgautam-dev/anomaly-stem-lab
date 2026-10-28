@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useFrame } from "@react-three/fiber";
+import { RoundedBox } from "@react-three/drei";
 import { Color, Vector3 } from "three";
 import { useLab } from "@/lib/store";
+import { useQuality } from "@/lib/quality";
 import { PALETTE as P } from "@/lib/tokens";
 import { labView, setAnchor } from "../lab-state";
 import { Flask3D } from "../kit/chem/glass";
@@ -14,6 +16,7 @@ import { universalAtPh, universalColour, universalName } from "../kit/chem/liqui
 import { drip, Spawner } from "../kit/chem/liquid/drip";
 import { GhostLabel } from "../kit/chem/liquid/ghost";
 import { PhMeter3D } from "../kit/chem/liquid/PhMeter";
+import { kitMaterial } from "../kit/materials";
 import { orbit, type StageShots } from "../shots";
 import { useStageValues } from "../useStageValues";
 
@@ -63,6 +66,7 @@ export function neutraliseShots(): StageShots {
 
 export function NeutraliseStage3D() {
   const base = useLab((s) => (typeof s.build?.settings.base === "number" ? s.build.settings.base : 10));
+  const tier = useQuality((s) => s.level);
   const sv = useStageValues();
   const [drops] = useState(() => new Spawner());
   const ghostPh = sv.ghost?.readings.ph ?? null;
@@ -85,7 +89,7 @@ export function NeutraliseStage3D() {
     if (n > 0) {
       const surface = FLASK * (0.015 + 0.36 * 1.1 * flaskLevel(added));
       const splash = colour();
-      for (let i = 0; i < n; i++) drip([TIP[0], TIP[1] - 0.005, TIP[2]], TIP[1] - surface, P.volt[100], splash, 0.016);
+      for (let i = 0; i < n; i++) drip([TIP[0], TIP[1] - 0.005, TIP[2]], TIP[1] - surface, P.white, splash, 0.016);
     }
   });
 
@@ -101,6 +105,8 @@ export function NeutraliseStage3D() {
       <Readout text={() => `${Math.round(sv.now().base ?? 0).toString().padStart(2)} mL NaOH`} height={0.075} position={[FX + 0.25, TIP[1] + 0.36, 0]} />
       <Readout text={() => `Flask: ${universalName(sv.now().hue ?? 0).padEnd(6)}`} height={0.075} position={[FX, 0.06, 0.34]} />
       <PhMeter3D ph={() => sv.now().ph ?? 1} position={METER} probe={[FX + 0.045 - METER[0], 0.66, -METER[2]]} depth={0.52} />
+      {/* The chart stands in a foot on the bench, like the indicator's. */}
+      <RoundedBox args={[0.58, 0.05, 0.16]} radius={0.02} smoothness={3} position={[CHART[0], 0.025, CHART[2]]} material={kitMaterial("plastic", tier)} />
       <ColourChart rows={ROWS} rowHeight={0.042} chipWidth={0.14} labelWidth={0.3} side={-1} at={() => (sv.now().ph ?? 1) - 1} ghostAt={ghostPh !== null ? ghostPh - 1 : null} position={CHART} />
       <GhostLabel text={ghostText} position={GHOST_AT} />
     </group>

@@ -3,20 +3,22 @@
 import { useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
-import { CanvasTexture, CylinderGeometry, SRGBColorSpace } from "three";
-import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import { BoxGeometry, CanvasTexture, CylinderGeometry, SRGBColorSpace, type BufferGeometry } from "three";
 import { useQuality } from "@/lib/quality";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB, PALETTE as P } from "@/lib/tokens";
+import { canvasTexture, decalMaterial, latheGeometry, mergeParts, MONO } from "../detail";
 import { kitMaterial } from "../materials";
 import type { Getter } from "../chem/glass";
 
 /*
- * A toy oscilloscope (DESIGN.md §7.5, §8.1 "live 3D graphs floating above
- * the bench"): a white body with a dark screen that draws the supply's pulse
- * train in Geist Mono and apricot. The real switching is far too fast to
- * see, so the trace runs slowed down and says so. Before a run it previews
- * the duty cycle; during a run it scrolls with the clock and, once the motor
- * runs, a dashed line marks the average voltage.
+ * An oscilloscope (DESIGN.md §7.5, §8.1 "live 3D graphs floating above the
+ * bench", §8.2): a white body on rubber feet, a black bezel round a dark
+ * screen that draws the supply's pulse train as a teal trace in Martian Mono,
+ * two black knobs with gold pointers beside a printed panel, and a steel
+ * probe socket. The real switching is far too fast to see, so the trace runs
+ * slowed down and says so. Before a run it previews the duty cycle; during a
+ * run it scrolls with the clock and, once the motor runs, a dashed gold line
+ * marks the average voltage.
  */
 
 const W = 640;
@@ -24,8 +26,41 @@ const H = 360;
 const PLOT = { x0: 40, x1: 600, yOn: 112, yOff: 268 };
 /** Seconds of (slowed) signal across the screen. */
 const WINDOW = 1.5;
-/** Two knobs beside the screen, merged into one mesh. */
-const KNOBS = mergeGeometries([0.44, 0.22].map((y) => new CylinderGeometry(0.035, 0.035, 0.04, 18).rotateX(Math.PI / 2).translate(0.41, y, 0.18)));
+/** The knobs' heights beside the screen. */
+const KNOB_Y = [0.47, 0.3];
+
+let parts: { knobs: BufferGeometry; marks: BufferGeometry; socket: BufferGeometry; feet: BufferGeometry } | null = null;
+/** Knobs (lathed, facing +Z), their gold pointer marks, the probe socket and four feet, one merged mesh each. */
+function scopeShapes() {
+  if (parts) return parts;
+  const knob = (y: number) => latheGeometry([[0.001, 0], [0.04, 0], [0.042, 0.006], [0.042, 0.03], [0.036, 0.04], [0.001, 0.04]], 32).rotateX(Math.PI / 2).translate(0.41, y, 0.17);
+  const mark = (y: number) => new BoxGeometry(0.006, 0.026, 0.004).translate(0.41, y + 0.02, 0.212);
+  const socket = latheGeometry([[0.001, 0.008], [0.014, 0.008], [0.014, 0], [0.026, 0], [0.026, 0.012], [0.02, 0.03], [0.014, 0.03], [0.014, 0.024], [0.001, 0.024]], 24).rotateX(Math.PI / 2).translate(0.41, 0.12, 0.17);
+  const foot = (x: number, z: number) => new CylinderGeometry(0.035, 0.04, 0.02, 16).translate(x, 0.01, z);
+  parts = {
+    knobs: mergeParts(KNOB_Y.map(knob)),
+    marks: mergeParts(KNOB_Y.map(mark)),
+    socket,
+    feet: mergeParts([foot(-0.4, 0.11), foot(0.4, 0.11), foot(-0.4, -0.11), foot(0.4, -0.11)]),
+  };
+  return parts;
+}
+
+/** The panel's printing beside the knobs: what each one does, and the probe input. */
+function panelPrint() {
+  return canvasTexture("scope-panel", 128, 512, (ctx, w) => {
+    ctx.fillStyle = LAB.robotics.trim;
+    ctx.font = `600 18px ${MONO}`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    // The print covers y 0.04–0.6 of the body at 0.0011 units per pixel; labels sit under each knob.
+    const py = (y: number) => (0.6 - y) / (0.56 / 512);
+    ctx.fillText("TIME", w / 2, py(KNOB_Y[0] - 0.065));
+    ctx.fillText("VOLTS", w / 2, py(KNOB_Y[1] - 0.065));
+    ctx.fillStyle = LAB.robotics.gold;
+    ctx.fillText("CH1", w / 2, py(0.12 - 0.055));
+  });
+}
 
 class ScopeScreen {
   readonly texture: CanvasTexture;
@@ -40,7 +75,7 @@ class ScopeScreen {
     this.canvas.height = H;
     this.texture = new CanvasTexture(this.canvas);
     this.texture.colorSpace = SRGBColorSpace;
-    void document.fonts?.load('500 26px "Geist Mono"').then(() => (this.last = ""));
+    void document.fonts?.load('500 26px "Martian Mono"').then(() => (this.last = ""));
   }
 
   /** `duty` 0–1, `t` seconds into the run (0 before it), `average` volts to mark (or null). */
@@ -61,7 +96,7 @@ class ScopeScreen {
     const x = (tau: number) => (t > 0 ? PLOT.x1 - ((t - tau) / WINDOW) * (PLOT.x1 - PLOT.x0) : PLOT.x0 + (tau / WINDOW) * (PLOT.x1 - PLOT.x0));
     const level = (tau: number) => (duty >= 1 ? 1 : duty <= 0 ? 0 : (tau * this.displayHz) % 1 < duty ? 1 : 0);
     const y = (on: number) => (on ? PLOT.yOn : PLOT.yOff);
-    ctx.strokeStyle = P.apricot[300];
+    ctx.strokeStyle = LAB.robotics.teal;
     ctx.lineWidth = 5;
     ctx.lineJoin = "round";
     ctx.beginPath();
@@ -76,9 +111,9 @@ class ScopeScreen {
     }
     ctx.lineTo(x(to), y(level(to)));
     ctx.stroke();
-    ctx.font = '500 26px "Geist Mono", ui-monospace, monospace';
+    ctx.font = '500 semi-condensed 26px "Martian Mono", ui-monospace, monospace';
     ctx.textBaseline = "middle";
-    ctx.fillStyle = P.cream[100];
+    ctx.fillStyle = LAB.robotics.bench;
     ctx.textAlign = "left";
     ctx.fillText(`PWM ${this.hz >= 1000 ? `${this.hz / 1000} kHz` : `${this.hz} Hz`} · duty ${Math.round(duty * 100)} %`, PLOT.x0, 36);
     ctx.fillStyle = P.ink[300];
@@ -88,12 +123,12 @@ class ScopeScreen {
     ctx.fillText(`${this.supply} V`, PLOT.x0, 332);
     if (average !== null) {
       const ya = PLOT.yOff - (average / this.supply) * (PLOT.yOff - PLOT.yOn);
-      ctx.strokeStyle = P.cream[100];
+      ctx.strokeStyle = LAB.robotics.gold;
       ctx.lineWidth = 3;
       ctx.setLineDash([14, 10]);
       line(ctx, PLOT.x0, ya, PLOT.x1, ya);
       ctx.setLineDash([]);
-      ctx.fillStyle = P.cream[100];
+      ctx.fillStyle = LAB.robotics.gold;
       ctx.textAlign = "right";
       ctx.fillText(`avg ${average.toFixed(1)} V`, PLOT.x1 - 6, ya - 18);
     }
@@ -113,15 +148,22 @@ export function Scope3D({ duty, t, average, hz, displayHz, supply, position, rot
   const screen = useMemo(() => new ScopeScreen(hz, displayHz, supply), [hz, displayHz, supply]);
   useEffect(() => () => screen.texture.dispose(), [screen]);
   useFrame(() => screen.draw(duty, t(), average()));
+  const g = scopeShapes();
   return (
     <group position={position} rotation={rotation}>
-      <RoundedBox args={[1.0, 0.62, 0.34]} radius={0.06} smoothness={3} position={[0, 0.31, 0]} material={kitMaterial("plastic", tier)} />
-      <RoundedBox args={[0.78, 0.47, 0.03]} radius={0.03} smoothness={2} position={[-0.07, 0.33, 0.165]} material={kitMaterial("ink", tier)} />
-      <mesh position={[-0.07, 0.33, 0.182]}>
+      <RoundedBox args={[1.0, 0.6, 0.34]} radius={0.06} smoothness={4} position={[0, 0.32, 0]} material={kitMaterial("plastic", tier)} />
+      <mesh geometry={g.feet} material={kitMaterial("rubber", tier)} />
+      <RoundedBox args={[0.78, 0.47, 0.03]} radius={0.012} smoothness={3} position={[-0.07, 0.34, 0.165]} material={kitMaterial("black", tier)} />
+      <mesh position={[-0.07, 0.34, 0.1815]}>
         <planeGeometry args={[0.72, 0.405]} />
         <meshBasicMaterial map={screen.texture} toneMapped={false} />
       </mesh>
-      <mesh geometry={KNOBS} material={kitMaterial("orange", tier)} />
+      <mesh position={[0.41, 0.32, 0.1705]} material={decalMaterial("scope-panel", panelPrint())}>
+        <planeGeometry args={[0.14, 0.56]} />
+      </mesh>
+      <mesh geometry={g.knobs} material={kitMaterial("black", tier)} />
+      <mesh geometry={g.marks} material={kitMaterial("gold", tier)} />
+      <mesh geometry={g.socket} material={kitMaterial("steel", tier)} />
     </group>
   );
 }

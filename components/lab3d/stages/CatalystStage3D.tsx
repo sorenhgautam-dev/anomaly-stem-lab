@@ -4,13 +4,14 @@ import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { CatmullRomCurve3, TubeGeometry, Vector3 } from "three";
 import { useQuality } from "@/lib/quality";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB, PALETTE as P } from "@/lib/tokens";
 import { labView, setAnchor } from "../lab-state";
 import { Flask3D } from "../kit/chem/glass";
 import { Readout } from "../kit/chem/instruments";
 import { GhostLabel } from "../kit/chem/react/GhostLabel";
 import { ClearFlaskLiquid, heapRadius, PowderHeap3D, Vial3D } from "../kit/chem/react/powder";
 import { GasSyringe3D } from "../kit/chem/react/syringe";
+import { latheGeometry } from "../kit/detail";
 import { kitMaterial } from "../kit/materials";
 import { vfx } from "../kit/vfx";
 import { orbit, type StageShots } from "../shots";
@@ -23,7 +24,7 @@ import { useStageValues } from "../useStageValues";
  * in it, and a gas syringe on a stand. Run: the vial tips over, the powder
  * heaps on the bottom and the peroxide fizzes at the model's rate while the
  * syringe's plunger slides out with the oxygen. The heap and its label show
- * the catalyst left; after a wrong run a volt wireframe heap and a dashed
+ * the catalyst left; after a wrong run a teal wireframe heap and a dashed
  * label show the guess beside it.
  */
 
@@ -52,6 +53,9 @@ const TUBE = new CatmullRomCurve3(
     [SYRINGE_AT[0] - 0.08, SYRINGE_AT[1], SYRINGE_AT[2]],
   ] as [number, number, number][]).map((p) => new Vector3(...p)),
 );
+
+// A tapered rubber stopper with a rounded top edge, bored through the middle for the tube.
+const STOPPER = latheGeometry([[0.0005, -0.05], [0.102, -0.05], [0.106, -0.045], [0.127, 0.042], [0.122, 0.05], [0.026, 0.05], [0.021, 0.03], [0.0005, 0.03]], 40);
 
 /** How far the powder has poured out of the vial, 0..1, at run time t. */
 const poured = (t: number) => Math.max(0, Math.min(1, (t - 0.12) / 0.3));
@@ -94,11 +98,11 @@ export function CatalystStage3D() {
     const r = heapRadius(v.catalyst ?? 0);
     while (s.bubbles >= 1) {
       s.bubbles -= 1;
-      vfx.burst({ at: [HEAP_AT[0], FLOOR + r * 0.4, HEAP_AT[2]], kind: "bubble", count: 1, colors: [P.white, P.volt[100], P.cream[50]], speed: [0.15, 0.35], dir: [0, 1, 0], cone: 0.85, life: [0.45, 0.75], size: [0.014, 0.03], spread: Math.max(0.03, r * 0.8), drag: 1.5 });
+      vfx.burst({ at: [HEAP_AT[0], FLOOR + r * 0.4, HEAP_AT[2]], kind: "bubble", count: 1, colors: [P.white, LAB.chemistry.sage, P.white], speed: [0.15, 0.35], dir: [0, 1, 0], cone: 0.85, life: [0.45, 0.75], size: [0.014, 0.03], spread: Math.max(0.03, r * 0.8), drag: 1.5 });
     }
     while (s.foam >= 1) {
       s.foam -= 1;
-      vfx.burst({ at: [FLASK_AT[0], SURFACE_Y, FLASK_AT[2]], kind: "bubble", count: 1, colors: [P.white, P.cream[50]], speed: [0.02, 0.08], dir: [0, 1, 0], cone: 0.5, life: [0.6, 1.1], size: [0.016, 0.032], spread: 0.18, drag: 3 });
+      vfx.burst({ at: [FLASK_AT[0], SURFACE_Y, FLASK_AT[2]], kind: "bubble", count: 1, colors: [P.white, LAB.chemistry.bench], speed: [0.02, 0.08], dir: [0, 1, 0], cone: 0.5, life: [0.6, 1.1], size: [0.016, 0.032], spread: 0.18, drag: 3 });
     }
   });
 
@@ -108,16 +112,14 @@ export function CatalystStage3D() {
   return (
     <group>
       {/* Flask3D's own liquid stays empty: a clearer one shows the powder on the bottom. */}
-      <Flask3D position={FLASK_AT} scale={FLASK_SCALE} level={() => 0} color={() => P.volt[300]}>
-        <ClearFlaskLiquid level={0.48} color={P.volt[300]} />
+      <Flask3D position={FLASK_AT} scale={FLASK_SCALE} level={() => 0} color={() => LAB.chemistry.sage}>
+        <ClearFlaskLiquid level={0.48} color={LAB.chemistry.sage} />
       </Flask3D>
       <Vial3D position={VIAL_AT} tip={() => sv.t() / 0.4} grams={() => sv.now().catalyst ?? 0} />
       <PowderHeap3D position={HEAP_AT} grams={grams} />
       {ghostEnd !== null && <PowderHeap3D position={GHOST_HEAP_AT} grams={ghostGrams} ghost />}
       {/* The stopper and the rubber tube to the syringe. */}
-      <mesh position={[FLASK_AT[0], NECK_Y - 0.005, FLASK_AT[2]]} material={kitMaterial("rubber", tier)}>
-        <cylinderGeometry args={[0.13, 0.105, 0.1, 24]} />
-      </mesh>
+      <mesh geometry={STOPPER} position={[FLASK_AT[0], NECK_Y - 0.005, FLASK_AT[2]]} material={kitMaterial("rubber", tier)} />
       <mesh geometry={tube} material={kitMaterial("rubber", tier)} />
       <GasSyringe3D position={SYRINGE_AT} ml={() => sv.now().o2 ?? 0} />
       <Readout text={() => `MnO₂ ${(sv.now().catalyst ?? 0).toFixed(2)} g`} height={0.1} position={LABEL_AT} />

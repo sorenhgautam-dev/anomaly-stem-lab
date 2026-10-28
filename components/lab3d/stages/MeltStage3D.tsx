@@ -16,6 +16,7 @@ import { IceCubes, type Cube } from "../kit/chem/heat/IceCubes";
 import { ParticleSwarm } from "../kit/chem/heat/ParticleSwarm";
 import { amp, lattice } from "../kit/chem/heat/swarm";
 import { Ease, Emitter, steam } from "../kit/chem/heat/tick";
+import { TONE } from "../kit/chem/heat/tones";
 import { useSnapshot } from "../kit/chem/heat/useSnapshot";
 import { ownMaterial } from "../kit/materials";
 import { orbit, type StageShots } from "../shots";
@@ -27,7 +28,7 @@ import { useStageValues } from "../useStageValues";
  * curve drawing itself on a live graph beside it (DESIGN.md §7.5, §8.1).
  * Run: the plate glows, the thermometer climbs to 0 °C and holds there while
  * the cubes shrink and the water rises (the shaded band), then climbs again.
- * After a wrong run the belief is a dashed volt line on the graph. "Zoom to
+ * After a wrong run the belief is a dashed teal line on the graph. "Zoom to
  * particles" dives into the beaker: the lattice breaks up from the outside
  * in while the ice melts, and the free particles jostle faster as it warms.
  */
@@ -73,7 +74,7 @@ export function MeltStage3D() {
   const snap = useSnapshot(sv);
   const water = useRef<Mesh>(null);
   const boards = useRef<Group>(null);
-  const waterMat = useMemo(() => ownMaterial(P.volt[300], tier, { transparent: true, opacity: 0.5 }), [tier]);
+  const waterMat = useMemo(() => ownMaterial(TONE.water, tier, { transparent: true, opacity: 0.5 }), [tier]);
   const [zoom] = useState(() => new Ease());
   const [puffs] = useState(() => new Emitter());
 
@@ -105,7 +106,7 @@ export function MeltStage3D() {
 
   return (
     <group>
-      <HotPlate3D power={() => (sv.t() > 0 ? power / 220 : 0)} size={0.78} position={[PLATE_X, 0, 0]}>
+      <HotPlate3D power={() => (sv.t() > 0 ? power / 220 : 0)} display={() => `heater ${power} W`} size={0.78} position={[PLATE_X, 0, 0]}>
         <Beaker3D radius={R} height={0.52} level={() => 0} color={() => P.white}>
           <mesh ref={water} geometry={WATER} material={waterMat} position={[0, 0.012, 0]} />
           <IceCubes cubes={CUBES} left={() => snap.now.solid ?? 1} top={() => 0.012 + depth()} fade={() => 1 - 0.85 * zoom.value} />
@@ -114,7 +115,7 @@ export function MeltStage3D() {
             homes={HOMES}
             seed={7}
             wander={2.5}
-            color={P.volt[500]}
+            color={TONE.coldParticle}
             count={() => 64}
             speed={() => 0.12 * amp(snap.now.speed ?? 1)}
             size={() => 0.034}
@@ -130,7 +131,6 @@ export function MeltStage3D() {
         </Beaker3D>
       </HotPlate3D>
       <group ref={boards}>
-        <Readout text={() => `heater ${power} W`} style="screen" height={0.075} position={[PLATE_X, 0.06, 0.43]} />
         <HeatChart spec={CHART} real={sv.outcome?.timeline ?? null} ghost={sv.ghost?.timeline ?? null} t={() => sv.t()} now={() => snap.now.temperature ?? -10} position={CHART_AT} height={0.7} />
         {sv.ghost && <Readout text={() => "Your idea: it keeps rising"} style="ghost" height={0.1} position={GHOST_AT} />}
       </group>

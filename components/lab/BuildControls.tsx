@@ -1,6 +1,6 @@
 "use client";
 
-import { Hand } from "lucide-react";
+import { IconBlocks } from "@/components/icons/icons";
 import { partInSlot } from "@/engine/edits";
 import type { CircuitPartKind } from "@/engine/types";
 import { cn } from "@/lib/cn";
@@ -29,7 +29,7 @@ function Tray() {
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Parts tray">
         <span className="mr-1 inline-flex items-center gap-1.5 text-[13px] font-semibold text-ink-700">
-          <Hand aria-hidden className="size-4" />
+          <IconBlocks aria-hidden className="size-4" />
           Parts
         </span>
         {def.parts.map((kind) => (

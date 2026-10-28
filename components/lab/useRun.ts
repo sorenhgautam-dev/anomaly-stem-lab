@@ -5,12 +5,13 @@ import type { ExperimentDef, TimelineFrame } from "@/engine/types";
 import { experimentsFor } from "@/lib/content";
 import { fx } from "@/lib/fx";
 import { useProgress } from "@/lib/progress";
-import { anomalySting, glassClink, resolveChime, softClick, unlockAudio } from "@/lib/sound";
+import { glassClink, glitchStutter, resolveChime, softClick, spinUp, resumeAudio } from "@/lib/sound";
 import { useLab } from "@/lib/store";
 import { PALETTE as P } from "@/lib/tokens";
 import { anchor, labView } from "@/components/lab3d/lab-state";
 import { vfx } from "@/components/lab3d/kit/vfx";
 import { playback } from "./playback";
+import { SLAM_LAND_MS } from "./VerdictMoment";
 
 /*
  * Run → watch → verdict (CLAUDE.md §6.1, DESIGN.md §8.1). Starts the
@@ -38,7 +39,7 @@ function faultMoment(def: ExperimentDef, faults: string[], say: (text: string) =
   if (faults.includes("short-circuit")) {
     const battery = def.board?.slots.find((s) => s.fixed?.kind === "battery");
     const at = anchor(battery?.id);
-    vfx.burst({ at: [at.x, at.y, at.z], kind: "spark", count: 60, colors: [P.apricot[300], P.white, P.flame[400]], speed: [1.6, 3.4], dir: [0, 1, 0], cone: 0.4, life: [0.35, 0.8], size: [0.012, 0.022], gravity: 6, drag: 0.8 });
+    vfx.burst({ at: [at.x, at.y, at.z], kind: "spark", count: 60, colors: [P.apricot[300], P.white, P.apricot[500]], speed: [1.6, 3.4], dir: [0, 1, 0], cone: 0.4, life: [0.35, 0.8], size: [0.012, 0.022], gravity: 6, drag: 0.8 });
     vfx.burst({ at: [at.x, at.y + 0.1, at.z], kind: "smoke", count: 10, colors: ["#c9c2d6", "#b8b0c8"], speed: [0.1, 0.3], dir: [0, 1, 0], cone: 0.8, life: [1.6, 2.6], size: [0.18, 0.3], grow: 0.25, spread: 0.12, delay: 0.2 });
     glassClink(1, 0.45);
     say("Spark and pop");
@@ -46,7 +47,7 @@ function faultMoment(def: ExperimentDef, faults: string[], say: (text: string) =
   for (const f of faults) {
     if (!f.startsWith("burnout:")) continue;
     const at = anchor(f.slice("burnout:".length));
-    vfx.burst({ at: [at.x, at.y, at.z], kind: "glow", count: 6, colors: [P.white, P.flame[300]], speed: [0.2, 0.6], life: [0.2, 0.4], size: [0.2, 0.35], drag: 4 });
+    vfx.burst({ at: [at.x, at.y, at.z], kind: "glow", count: 6, colors: [P.white, P.apricot[300]], speed: [0.2, 0.6], life: [0.2, 0.4], size: [0.2, 0.35], drag: 4 });
     vfx.burst({ at: [at.x, at.y, at.z], kind: "spark", count: 22, colors: [P.apricot[300], P.white], speed: [1, 2.4], dir: [0, 1, 0], cone: 0.5, life: [0.3, 0.7], size: [0.01, 0.018], gravity: 5 });
     vfx.burst({ at: [at.x, at.y + 0.05, at.z], kind: "smoke", count: 8, colors: ["#c9c2d6"], speed: [0.08, 0.22], dir: [0, 1, 0], cone: 0.85, life: [1.8, 2.8], size: [0.12, 0.2], grow: 0.2, delay: 0.1 });
     glassClink(0.8, 0.5);
@@ -60,9 +61,10 @@ export function useRun(def: ExperimentDef, say: (text: string) => void) {
   useEffect(() => () => offFault.current?.(), []);
 
   const run = useCallback(() => {
-    unlockAudio();
+    resumeAudio();
     softClick();
     const started = useLab.getState().run();
+    if (started) spinUp();
     if (!started) return;
     offFault.current?.();
     offFault.current = null;
@@ -82,7 +84,8 @@ export function useRun(def: ExperimentDef, say: (text: string) => void) {
       const levelUp = r.verdict === "correct" && !wasDone && levelDone(def);
       setMoment((m) => ({ id: (m?.id ?? 0) + 1, verdict: r.verdict, levelUp }));
       if (r.verdict === "wrong") {
-        anomalySting();
+        // Stutters through the freeze, then slams as the word lands.
+        glitchStutter(SLAM_LAND_MS / 1000);
         say("Glitch sting");
         return;
       }

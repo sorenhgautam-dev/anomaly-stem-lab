@@ -29,7 +29,7 @@ import { useStageValues } from "../useStageValues";
  * shows the pulse train (slowed down so it can be seen) and a multimeter
  * reads the motor's average voltage. Run: the driver's light and the cable's
  * current dots pulse with the timeline's `signal`, the wheel turns from
- * `angle` and its label follows `rpm`. After a wrong run a dashed volt
+ * `angle` and its label follows `rpm`. After a wrong run a dashed teal
  * needle on the wheel's axle turns as the belief says (flat out, or stop and
  * start), with a dashed "Your idea" label.
  */
@@ -64,7 +64,7 @@ export function PwmStage3D() {
   const ghostRpm = sv.ghost?.readings["motor.rpm"] ?? null;
   const stutters = (sv.ghost?.readings["motor.ripple"] ?? 0) > 0.25;
   const label = useMemo(() => {
-    const board = new TextBoard("ghost", 0.085, 24);
+    const board = new TextBoard("ghost", 0.085, 24, "robotics");
     if (ghostRpm !== null) board.set(stutters ? "Your idea: stop, start, stop" : `Your idea: ${Math.round(ghostRpm)} rpm`);
     return board;
   }, [ghostRpm, stutters]);
@@ -100,7 +100,9 @@ export function PwmStage3D() {
       {ghostRpm !== null && <primitive object={label.sprite} position={[MOTOR[0], AXLE + WHEEL_R + 0.3, WHEEL_Z]} />}
       <Scope3D duty={duty} t={() => sv.t()} average={() => (average !== null && sv.t() > 0.25 ? average : null)} hz={PWM_HZ} displayHz={DISPLAY_HZ} supply={SUPPLY_VOLTS} position={[-0.32, 0, -0.52]} rotation={[0, 0.1, 0]} />
       <Multimeter3D reading={() => (average === null || sv.t() <= 0 ? 0 : average * smooth(sv.t() / 0.3)).toFixed(2)} unit="V" position={[0.9, 0, 0.26]} rotation={[0, -0.4, 0]} />
-      <Cable3D points={[[0.84, 0.1, 0.33], [0.72, 0.03, 0.12], [0.5, 0.05, -0.2], [MOTOR[0] + 0.04, AXLE + 0.03, MOTOR[2] - 0.38]]} color="orange" radius={0.009} />
+      {/* Probe leads from the meter's ports (V gold, COM graphite) to the motor's terminals. */}
+      <Cable3D points={[[0.959, 0.159, 0.3], [0.94, 0.19, 0.36], [0.86, 0.035, 0.4], [0.7, 0.03, 0.14], [0.5, 0.05, -0.2], [MOTOR[0] + 0.04, AXLE + 0.03, MOTOR[2] - 0.38]]} color="gold" radius={0.009} />
+      <Cable3D points={[[0.83, 0.159, 0.246], [0.81, 0.19, 0.31], [0.74, 0.035, 0.33], [0.6, 0.03, 0.08], [0.44, 0.05, -0.24], [MOTOR[0] - 0.04, AXLE + 0.03, MOTOR[2] - 0.38]]} radius={0.009} />
     </group>
   );
 }

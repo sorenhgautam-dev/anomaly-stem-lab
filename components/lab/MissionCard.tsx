@@ -1,12 +1,12 @@
 "use client";
 
 import { ViewTransition } from "react";
-import { ShieldAlert } from "lucide-react";
+import { IconShield } from "@/components/icons/icons";
 import type { ExperimentDef } from "@/engine/types";
 import { labInfo, levelInfo } from "@/lib/content";
 import { cn } from "@/lib/cn";
 import { useLab, type Confidence } from "@/lib/store";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { PaperCard } from "@/components/ui/PaperCard";
 import { SegmentedToggle } from "@/components/ui/Toggle";
 
 /*
@@ -28,8 +28,8 @@ export function MissionCard({ def, className }: { def: ExperimentDef; className?
   const setConfidence = useLab((s) => s.setConfidence);
   return (
     <ViewTransition name={`exp-${def.id}`} share="morph" default="none">
-      <GlassCard data-lab-mission className={cn("flex flex-col gap-3 p-4 sm:p-5", className)}>
-        <p className="type-eyebrow text-ink-500">
+      <PaperCard data-lab-mission className={cn("flex flex-col gap-3 p-4 sm:p-5", className)}>
+        <p className="type-label text-ink-500">
           Mission · {labInfo(def.lab).title.replace(" Lab", "")} · {levelInfo(def.level).title} · {def.minutes} min
         </p>
         <div>
@@ -38,7 +38,7 @@ export function MissionCard({ def, className }: { def: ExperimentDef; className?
         </div>
         {def.safety && (
           <p className="flex gap-2 rounded-tile bg-apricot-100/70 p-2.5 text-[13px] leading-snug text-ink-700">
-            <ShieldAlert aria-hidden className="mt-0.5 size-4 shrink-0 text-apricot-700" />
+            <IconShield aria-hidden className="mt-0.5 size-4 shrink-0 text-apricot-700" />
             {def.safety}
           </p>
         )}
@@ -46,7 +46,7 @@ export function MissionCard({ def, className }: { def: ExperimentDef; className?
           <span className="text-[13px] font-semibold text-ink-700">How sure are you?</span>
           <SegmentedToggle label="How sure are you?" value={confidence} onChange={setConfidence} options={CONFIDENCE} />
         </div>
-      </GlassCard>
+      </PaperCard>
     </ViewTransition>
   );
 }

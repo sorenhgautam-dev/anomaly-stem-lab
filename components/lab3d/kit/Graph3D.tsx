@@ -4,14 +4,14 @@ import { useEffect, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { CanvasTexture, LinearFilter, SRGBColorSpace, Sprite, SpriteMaterial } from "three";
 import type { TimelineFrame } from "@/engine/types";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB, PALETTE as P } from "@/lib/tokens";
 import { useStageValues } from "../useStageValues";
 
 /*
  * A live graph floating above the bench (DESIGN.md §8.1 "Visualization
- * tools"): one reading over time on a small glass card in Geist Mono. The
+ * tools"): one reading over time on a small glass card in Martian Mono. The
  * real line draws itself as the run plays; after a wrong run the ghost's line
- * (the student's idea) shows dashed in volt beside it. Redraws only when the
+ * (the student's idea) shows dashed in teal beside it. Redraws only when the
  * playback time or the ghost changes.
  */
 
@@ -40,7 +40,7 @@ class GraphCard {
     this.sprite = new Sprite(new SpriteMaterial({ map: this.texture, transparent: true, depthWrite: false, toneMapped: false }));
     this.sprite.scale.set(width, (width * H) / W, 1);
     this.sprite.renderOrder = 9;
-    void document.fonts?.load('500 24px "Geist Mono"').then(() => (this.lastT = -1));
+    void document.fonts?.load('500 24px "Martian Mono"').then(() => (this.lastT = -1));
   }
 
   update(key: string, real: TimelineFrame[] | undefined, ghost: TimelineFrame[] | null, t: number, start: number) {
@@ -69,7 +69,7 @@ class GraphCard {
     const y = (v: number) => H - PAD.b - ((v - lo) / (hi - lo)) * (H - PAD.t - PAD.b);
     // Title and the value right now.
     const now = real && real.length > 1 ? sampleAt(real, key, t) : start;
-    ctx.font = '500 24px "Geist Mono", ui-monospace, monospace';
+    ctx.font = '500 semi-condensed 24px "Martian Mono", ui-monospace, monospace';
     ctx.fillStyle = P.ink[500];
     ctx.textBaseline = "middle";
     ctx.fillText(this.label, PAD.l - 30, 36);
@@ -86,14 +86,14 @@ class GraphCard {
     ctx.lineTo(W - PAD.r, H - PAD.b);
     ctx.stroke();
     ctx.fillStyle = P.ink[300];
-    ctx.font = '500 18px "Geist Mono", ui-monospace, monospace';
+    ctx.font = '500 semi-condensed 18px "Martian Mono", ui-monospace, monospace';
     ctx.fillText("time", W - PAD.r - 46, H - PAD.b + 22);
-    // The ghost: the student's idea, dashed volt.
-    if (ghost && ghost.length > 1) line(ctx, ghost, key, x, y, end, P.volt[500], [12, 10], 5);
+    // The ghost: the student's idea, dashed in the lab's teal.
+    if (ghost && ghost.length > 1) line(ctx, ghost, key, x, y, end, LAB.chemistry.wall, [12, 10], 5);
     // Reality, drawn up to now; before a run, the starting value as a dot.
     if (real && real.length > 1) {
-      line(ctx, real, key, x, y, t, P.apricot[600], [], 6);
-      dot(ctx, x(t), y(now), P.apricot[600]);
+      line(ctx, real, key, x, y, t, P.ink[900], [], 6);
+      dot(ctx, x(t), y(now), P.ink[900]);
     } else dot(ctx, x(0), y(start), P.ink[300]);
     this.texture.needsUpdate = true;
   }

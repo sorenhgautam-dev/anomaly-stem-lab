@@ -13,6 +13,7 @@ import { Balloon3D } from "../kit/chem/heat/Balloon3D";
 import { ParticleSwarm } from "../kit/chem/heat/ParticleSwarm";
 import { amp } from "../kit/chem/heat/swarm";
 import { Ease, Emitter, steam, waterTint } from "../kit/chem/heat/tick";
+import { TONE } from "../kit/chem/heat/tones";
 import { useSnapshot } from "../kit/chem/heat/useSnapshot";
 import { orbit, type StageShots } from "../shots";
 import { useStageValues } from "../useStageValues";
@@ -23,7 +24,7 @@ import { useStageValues } from "../useStageValues";
  * the air particles bouncing inside the see-through balloon (DESIGN.md §7.5,
  * §8.1 "gas as particles bouncing inside containers"). Run: the bath warms,
  * the balloon swells and the particles speed up (trails show their speed);
- * they never grow or multiply. After a wrong run a ghost balloon (pale volt,
+ * they never grow or multiply. After a wrong run a ghost balloon (pale teal,
  * wire outline) floats beside it with the student's idea: bigger particles,
  * or more of them. "Zoom to particles" moves in close.
  */
@@ -106,7 +107,7 @@ export function GasHeatStage3D() {
           max={60}
           trail={2}
           seed={11}
-          color={P.apricot[600]}
+          color={TONE.warmParticle}
           count={() => BASE_COUNT * amp(snap.now.count ?? 1)}
           speed={() => 0.45 * amp(snap.now.speed ?? 1)}
           size={() => 0.022 * amp(snap.now.size ?? 1)}
@@ -124,7 +125,7 @@ export function GasHeatStage3D() {
             trail={2}
             seed={23}
             ghost
-            color={P.volt[500]}
+            color={TONE.ghost}
             count={() => BASE_COUNT * amp(g("count", 1))}
             speed={() => 0.45 * amp(g("speed", 1))}
             size={() => 0.022 * amp(g("size", 1))}

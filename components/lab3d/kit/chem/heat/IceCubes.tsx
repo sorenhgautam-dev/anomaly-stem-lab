@@ -5,13 +5,13 @@ import { useFrame } from "@react-three/fiber";
 import { Object3D, type InstancedMesh, type MeshStandardMaterial } from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { useQuality } from "@/lib/quality";
-import { PALETTE as P } from "@/lib/tokens";
 import { ownMaterial } from "../../materials";
 import type { Getter } from "../glass";
+import { TONE } from "./tones";
 
 /*
  * Ice cubes (DESIGN.md §7.5 kit, faked glassy ice): one instanced mesh of
- * rounded, pale translucent cubes. Each shrinks with `left` (the share of ice
+ * rounded, pale translucent cubes (white with a breath of sage). Each shrinks with `left` (the share of ice
  * still solid, by volume) and floats once the water surface `top` reaches
  * it. `fade` (0..1) thins them out for the particle view.
  */
@@ -25,7 +25,7 @@ export type Cube = [number, number, number, number, number];
 export function IceCubes({ cubes, left, top, fade, position }: { cubes: readonly Cube[]; left: Getter<number>; top: Getter<number>; fade?: Getter<number>; position?: [number, number, number] }) {
   const tier = useQuality((s) => s.level);
   const mesh = useRef<InstancedMesh>(null);
-  const material = useMemo(() => ownMaterial(P.volt[100], tier, { transparent: true, opacity: 0.78 }), [tier]);
+  const material = useMemo(() => ownMaterial(TONE.ice, tier, { transparent: true, opacity: 0.78 }), [tier]);
   useFrame(({ clock }) => {
     const m = mesh.current;
     if (!m) return;

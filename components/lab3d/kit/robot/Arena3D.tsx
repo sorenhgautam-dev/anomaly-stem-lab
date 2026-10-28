@@ -4,19 +4,24 @@ import { useEffect, useMemo } from "react";
 import { RoundedBox } from "@react-three/drei";
 import { CanvasTexture, SRGBColorSpace } from "three";
 import { useQuality } from "@/lib/quality";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB } from "@/lib/tokens";
 import { kitMaterial } from "../materials";
 import { MAT, MAT_TOP, matFrame } from "./space";
 
 /*
  * The robot arena (CLAUDE.md §3.6 "a robot arena floor with neon lane
- * lines", in the light theme of DESIGN.md §8): a white tray on the bench and
- * a dark cutting mat printed with a 10 cm grid, range rings round the start
- * cross, cream and grape lane tape and a scale bar in Geist Mono. It's symmetric left to
- * right, so nothing on it hints which way the robot will turn.
+ * lines", DESIGN.md §8 Robotics): a black tray on the white bench and a
+ * graphite cutting mat printed with a 10 cm grid, range rings round the
+ * start cross, white lane tape (a solid border, a fainter inner lane) and a
+ * scale bar in Martian Mono. Gold is left for the robot's trail and teal for
+ * the ghost, so the mat itself stays white on graphite. It's symmetric left
+ * to right, so nothing on it hints which way the robot will turn.
  */
 
 const PX_PER_CM = 9;
+/** Grid lines and the start axes: lighter shades of the mat's graphite. */
+const GRID = `${LAB.robotics.bench}26`;
+const AXIS = `${LAB.robotics.bench}73`;
 
 function matTexture(): CanvasTexture {
   const w = (MAT.maxX - MAT.minX) * PX_PER_CM;
@@ -31,19 +36,19 @@ function matTexture(): CanvasTexture {
   texture.colorSpace = SRGBColorSpace;
   texture.anisotropy = 8;
   const draw = () => {
-    ctx.fillStyle = P.ink[700];
+    ctx.fillStyle = LAB.robotics.wall;
     ctx.fillRect(0, 0, w, h);
     // 10 cm grid, a little stronger on the start axes.
     for (let x = Math.ceil(MAT.minX / 10) * 10; x <= MAT.maxX; x += 10) {
-      ctx.fillStyle = x === 0 ? P.ink[300] : `${P.ink[500]}cc`;
+      ctx.fillStyle = x === 0 ? AXIS : GRID;
       ctx.fillRect(px(x) - (x === 0 ? 1.5 : 1), 0, x === 0 ? 3 : 2, h);
     }
     for (let y = Math.ceil(MAT.minY / 10) * 10; y <= MAT.maxY; y += 10) {
-      ctx.fillStyle = y === 0 ? P.ink[300] : `${P.ink[500]}cc`;
+      ctx.fillStyle = y === 0 ? AXIS : GRID;
       ctx.fillRect(0, py(y) - (y === 0 ? 1.5 : 1), w, y === 0 ? 3 : 2);
     }
     // Range rings round the start, every 20 cm.
-    ctx.strokeStyle = P.ink[300];
+    ctx.strokeStyle = AXIS;
     ctx.lineWidth = 2;
     ctx.setLineDash([10, 12]);
     for (let r = 20; r <= 60; r += 20) {
@@ -52,20 +57,20 @@ function matTexture(): CanvasTexture {
       ctx.stroke();
     }
     ctx.setLineDash([]);
-    // Lane tape: a cream outer border and a grape inner lane (volt is kept for the ghost, apricot for the trail).
+    // Lane tape: a white outer border and a fainter inner lane.
     const inset = 3 * PX_PER_CM;
-    ctx.strokeStyle = P.cream[100];
+    ctx.strokeStyle = LAB.robotics.bench;
     ctx.lineWidth = 12;
     ctx.beginPath();
     ctx.roundRect(inset, inset, w - inset * 2, h - inset * 2, 6 * PX_PER_CM);
     ctx.stroke();
-    ctx.strokeStyle = P.grape[400];
+    ctx.strokeStyle = `${LAB.robotics.bench}66`;
     ctx.lineWidth = 6;
     ctx.beginPath();
     ctx.roundRect(inset + 22, inset + 22, w - inset * 2 - 44, h - inset * 2 - 44, 5 * PX_PER_CM);
     ctx.stroke();
     // The start cross.
-    ctx.strokeStyle = P.cream[100];
+    ctx.strokeStyle = LAB.robotics.bench;
     ctx.lineWidth = 6;
     ctx.lineCap = "round";
     ctx.beginPath();
@@ -77,17 +82,17 @@ function matTexture(): CanvasTexture {
     // Scale bar: 10 cm.
     const bx = px(MAT.minX + 8);
     const by = py(MAT.minY + 7);
-    ctx.fillStyle = P.cream[100];
+    ctx.fillStyle = LAB.robotics.bench;
     ctx.fillRect(bx, by, 10 * PX_PER_CM, 5);
     ctx.fillRect(bx, by - 8, 4, 18);
     ctx.fillRect(bx + 10 * PX_PER_CM - 4, by - 8, 4, 18);
-    ctx.font = '500 26px "Geist Mono", ui-monospace, monospace';
+    ctx.font = '500 semi-condensed 26px "Martian Mono", ui-monospace, monospace';
     ctx.textBaseline = "bottom";
     ctx.fillText("10 cm", bx + 10 * PX_PER_CM + 14, by + 14);
     texture.needsUpdate = true;
   };
   draw();
-  void document.fonts?.load('500 26px "Geist Mono"').then(draw);
+  void document.fonts?.load('500 26px "Martian Mono"').then(draw);
   return texture;
 }
 
@@ -98,7 +103,7 @@ export function Arena3D() {
   const { width, depth, cx, cz } = matFrame();
   return (
     <group position={[cx, 0, cz]}>
-      <RoundedBox args={[width + 0.1, MAT_TOP - 0.002, depth + 0.1]} radius={0.025} smoothness={3} position={[0, (MAT_TOP - 0.002) / 2, 0]} material={kitMaterial("plastic", tier)} />
+      <RoundedBox args={[width + 0.1, MAT_TOP - 0.002, depth + 0.1]} radius={0.025} smoothness={3} position={[0, (MAT_TOP - 0.002) / 2, 0]} material={kitMaterial("matte", tier, LAB.robotics.trim)} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, MAT_TOP, 0]}>
         <planeGeometry args={[width, depth]} />
         <meshStandardMaterial map={texture} roughness={0.62} />

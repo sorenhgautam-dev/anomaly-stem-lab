@@ -4,15 +4,15 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { BoxGeometry, CatmullRomCurve3, Object3D, TubeGeometry, Vector3, type InstancedMesh, type Mesh } from "three";
 import type { Point } from "@/engine/types";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB } from "@/lib/tokens";
 import type { Getter } from "../chem/glass";
 import { ghostMarkMaterial, neonMaterial } from "./looks";
 import { arenaToWorld } from "./space";
 
 /*
  * Robot trails on the arena mat (CLAUDE.md §6.4 "show it as a ghost trail
- * beside the real trail"): reality is a glowing apricot tape, the ghost of
- * the believed path is a row of volt dashes (shape and opacity, not only
+ * beside the real trail"): reality is a glowing gold tape, the ghost of
+ * the believed path is a row of teal dashes (shape and opacity, not only
  * colour). Both are built once per path and revealed with the clock
  * (`reveal`, 0–1): the tape by draw range, the dashes by instance count.
  */
@@ -48,10 +48,10 @@ export function Trail3D({ points, reveal }: { points: Point[] | null; reveal: Ge
     m.visible = k > 0.001;
   });
   if (!tube) return null;
-  return <mesh ref={mesh} geometry={tube.geometry} material={neonMaterial(P.apricot[500])} frustumCulled={false} />;
+  return <mesh ref={mesh} geometry={tube.geometry} material={neonMaterial(LAB.robotics.gold)} frustumCulled={false} />;
 }
 
-/** The ghost trail: volt dashes along the believed path, appearing up to `reveal`. */
+/** The ghost trail: teal dashes along the believed path, appearing up to `reveal`. */
 export function GhostTrail3D({ points, reveal }: { points: Point[] | null; reveal: Getter<number> }) {
   const mesh = useRef<InstancedMesh>(null);
   const curve = useMemo(() => curveOf(points, 0.008), [points]);

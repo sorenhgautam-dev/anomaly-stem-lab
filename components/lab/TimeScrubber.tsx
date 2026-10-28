@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Pause, Play, RotateCcw } from "lucide-react";
+import { IconPause, IconPlay, IconRestart } from "@/components/icons/icons";
 import { IconButton } from "@/components/ui/IconButton";
 import { SegmentedToggle } from "@/components/ui/Toggle";
 import { playback } from "./playback";
@@ -42,10 +42,10 @@ export function TimeScrubber({ timeScale = 1 }: { timeScale?: number }) {
   return (
     <div className="flex flex-wrap items-center gap-3">
       <IconButton label={playing ? "Pause" : "Play"} onClick={() => playback.toggle()}>
-        {playing ? <Pause /> : <Play />}
+        {playing ? <IconPause /> : <IconPlay />}
       </IconButton>
       <IconButton label="Rewind and play again" onClick={() => playback.restart()}>
-        <RotateCcw />
+        <IconRestart />
       </IconButton>
       <label className="flex min-w-48 flex-1 items-center gap-3">
         <span className="sr-only">Time in the run</span>

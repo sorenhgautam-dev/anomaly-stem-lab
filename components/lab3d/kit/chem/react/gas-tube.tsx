@@ -2,62 +2,67 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Color, CylinderGeometry, LatheGeometry, MeshBasicMaterial, MeshStandardMaterial, SphereGeometry, SRGBColorSpace, Vector2, type Mesh } from "three";
+import { Color, CylinderGeometry, MeshBasicMaterial, MeshStandardMaterial, SphereGeometry, SRGBColorSpace, type Mesh } from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { useQuality } from "@/lib/quality";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB, PALETTE as P } from "@/lib/tokens";
+import { corner, latheGeometry } from "../../detail";
 import { kitMaterial } from "../../materials";
 import type { Getter } from "../glass";
 import { MoleculeCloud, N2O4_SHAPE, NO2_SHAPE } from "./molecules";
 
 /*
  * A sealed glass tube of nitrogen dioxide (DESIGN.md §7.5 kit, §8 faked
- * glass). `share` (a getter read every frame) is the share of the tube's
- * nitrogen held as brown NO₂, as engine/chemistry/equilibrium.ts's `color`:
- * the gas goes from almost clear to deep brown with it. Zoomed to particles,
- * brown NO₂ and colourless N₂O₄ molecules tumble inside in that balance. The
- * ghost version (the student's belief) wears a volt wireframe cage.
+ * glass, §8.2): one lathe from the round bottom to the melted tip. `share`
+ * (a getter read every frame) is the share of the tube's nitrogen held as
+ * brown NO₂, as engine/chemistry/equilibrium.ts's `color`: the gas goes from
+ * nearly clear to a deep reddish brown with it. NO₂'s brown is data, like an
+ * indicator's colours, so it keeps its real colour in Chemistry's palette.
+ * Zoomed to particles, brown NO₂ and colourless N₂O₄ molecules tumble inside
+ * in that balance. The ghost version (the student's belief) wears a teal
+ * wireframe cage.
  */
 
 export const TUBE = { radius: 0.07, length: 0.7 };
 const R = TUBE.radius;
 const SHOULDER = TUBE.length - 0.075;
 
-const WALL = new CylinderGeometry(R, R, SHOULDER - R, 28, 1, true).translate(0, R + (SHOULDER - R) / 2, 0);
-const BOTTOM = new SphereGeometry(R, 28, 8, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2).translate(0, R, 0);
-// The sealed top: the glass narrows to a melted tip.
-const SEAL = new LatheGeometry(
+// Round bottom, straight wall, then the glass narrows to the melted tip that seals it.
+const GLASS = latheGeometry(
   [
-    [R, 0],
-    [R * 0.8, 0.035],
-    [0.022, 0.06],
-    [0.012, 0.075],
-    [0.001, 0.078],
-  ].map(([r, y]) => new Vector2(r, y)),
-  28,
-).translate(0, SHOULDER, 0);
+    ...corner(0, R, R, -Math.PI / 2, 0, 10),
+    [R, SHOULDER],
+    [R * 0.8, SHOULDER + 0.035],
+    [0.022, SHOULDER + 0.06],
+    [0.012, SHOULDER + 0.075],
+    [0.0005, SHOULDER + 0.078],
+  ],
+  36,
+);
 const GAS = mergeGeometries([new CylinderGeometry(R * 0.88, R * 0.88, SHOULDER - R, 20, 1, true).translate(0, R + (SHOULDER - R) / 2, 0), new SphereGeometry(R * 0.88, 20, 6, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2).translate(0, R, 0), new SphereGeometry(R * 0.88, 20, 4, 0, Math.PI * 2, 0, Math.PI / 2).scale(1, 0.5, 1).translate(0, SHOULDER, 0)]);
-const CAGE = new CylinderGeometry(R * 1.12, R * 1.12, TUBE.length, 8, 5, true).translate(0, TUBE.length / 2, 0);
+const CAGE = new CylinderGeometry(R * 1.12, R * 1.12, TUBE.length, 12, 6, true).translate(0, TUBE.length / 2, 0);
 
-// Mixed in sRGB (as paint would), so the brown deepens evenly instead of staying pale.
-const CLEAR = new Color(P.cream[100]).getRGB(new Color(), SRGBColorSpace);
-const BROWN = new Color(P.apricot[700]).lerp(new Color(P.ink[900]), 0.28).getRGB(new Color(), SRGBColorSpace);
+/** Nitrogen dioxide's real reddish brown (data, not decoration): amber when thin, deep when dense. */
+const NO2 = "#6b2a0e";
+// The gas is always brown; more NO₂ absorbs more light, so it grows deeper and denser (mixed in sRGB, as paint would).
+const THIN = new Color("#8f5a2e").getRGB(new Color(), SRGBColorSpace);
+const DENSE = new Color(NO2).getRGB(new Color(), SRGBColorSpace);
 const NITROGENS = 36;
 
-/** How brown the gas looks for an NO₂ share: about 0.15 in ice water (0.07), 0.33 at 20 °C (0.16), 0.94 at 70 °C (0.57). */
+/** How brown the gas looks for an NO₂ share: about 0.33 in ice water (0.07), 0.56 at 20 °C (0.16), full at 70 °C (0.57). */
 export function brownness(share: number): number {
-  return Math.max(0, Math.min(1, (share - 0.02) / 0.6)) ** 0.75;
+  return Math.max(0, Math.min(1, (share - 0.02) / 0.45)) ** 0.5;
 }
 
 export function SealedTube3D({ share, ghost = false, zoomed = false, position }: { share: Getter<number>; ghost?: boolean; zoomed?: boolean; position?: [number, number, number] }) {
   const tier = useQuality((s) => s.level);
   const gas = useRef<Mesh>(null);
   // Unlit and not tone mapped: a gas has no gloss, and reflections or tone mapping would wash its brown out.
-  const material = useMemo(() => new MeshBasicMaterial({ color: P.cream[100], transparent: true, opacity: 0.2, depthWrite: false, toneMapped: false }), []);
-  const no2 = useMemo(() => new MeshStandardMaterial({ color: P.apricot[700], roughness: 0.35 }), []);
+  const material = useMemo(() => new MeshBasicMaterial({ color: P.white, transparent: true, opacity: 0.1, depthWrite: false, toneMapped: false }), []);
+  const no2 = useMemo(() => new MeshStandardMaterial({ color: NO2, roughness: 0.35 }), []);
   // Colourless N₂O₄ in a soft grey, so it reads against the pale glass.
   const n2o4 = useMemo(() => new MeshStandardMaterial({ color: P.ink[300], roughness: 0.4 }), []);
-  const cage = useMemo(() => (ghost ? new MeshBasicMaterial({ color: P.volt[500], wireframe: true, transparent: true, opacity: 0.75, depthWrite: false }) : null), [ghost]);
+  const cage = useMemo(() => (ghost ? new MeshBasicMaterial({ color: LAB.chemistry.wall, wireframe: true, transparent: true, opacity: 0.8, depthWrite: false }) : null), [ghost]);
   useEffect(
     () => () => {
       material.dispose();
@@ -71,17 +76,15 @@ export function SealedTube3D({ share, ghost = false, zoomed = false, position }:
     const m = gas.current?.material as MeshBasicMaterial | undefined;
     if (!m) return;
     const k = brownness(share());
-    m.color.setRGB(CLEAR.r + (BROWN.r - CLEAR.r) * k, CLEAR.g + (BROWN.g - CLEAR.g) * k, CLEAR.b + (BROWN.b - CLEAR.b) * k, SRGBColorSpace);
-    m.opacity = (0.12 + 0.82 * k) * (ghost ? 0.7 : 1) * (zoomed ? 0.35 : 1);
+    m.color.setRGB(THIN.r + (DENSE.r - THIN.r) * k, THIN.g + (DENSE.g - THIN.g) * k, THIN.b + (DENSE.b - THIN.b) * k, SRGBColorSpace);
+    m.opacity = (0.06 + 0.84 * k) * (ghost ? 0.7 : 1) * (zoomed ? 0.35 : 1);
   });
   // Molecules split the tube's nitrogen: each NO₂ holds one, each N₂O₄ two.
   const no2Share = () => Math.max(0, Math.min(1, share()));
   return (
     <group position={position}>
       <mesh ref={gas} geometry={GAS} material={material} renderOrder={1} />
-      <mesh geometry={WALL} material={kitMaterial("glass", tier)} renderOrder={2} />
-      <mesh geometry={BOTTOM} material={kitMaterial("glass", tier)} renderOrder={2} />
-      <mesh geometry={SEAL} material={kitMaterial("glass", tier)} renderOrder={2} />
+      <mesh geometry={GLASS} material={kitMaterial("glass", tier)} renderOrder={2} />
       {cage && <mesh geometry={CAGE} material={cage} renderOrder={4} />}
       {!ghost && (
         <group position={[0, 0.02, 0]}>

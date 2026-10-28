@@ -7,7 +7,7 @@ import { DRIVE_SECONDS, MAX_WHEEL_SPEED, WHEELBASE } from "@/engine/robotics/kin
 import { numberSetting } from "@/engine/robotics/settings";
 import type { Outcome } from "@/engine/types";
 import { useLab } from "@/lib/store";
-import { PALETTE as P } from "@/lib/tokens";
+import { LAB, PALETTE as P } from "@/lib/tokens";
 import { labView, setAnchor } from "../lab-state";
 import { Readout } from "../kit/chem/instruments";
 import { TextBoard } from "../kit/TextBoard";
@@ -24,7 +24,7 @@ import { useStageValues } from "../useStageValues";
  * §7.5, §8.1): a toy two-wheeled robot on a raised arena mat. Arrows at its
  * wheels show each wheel's speed. Run: it drives the simulator's timeline
  * (x, y, heading), each wheel rolling at its own speed, and lays a glowing
- * trail along the outcome's path. After a wrong run a translucent volt ghost
+ * trail along the outcome's path. After a wrong run a translucent teal ghost
  * robot drives the believed path in step, leaving dashes, with a dashed
  * "Your idea" label where it stops.
  */
@@ -74,14 +74,14 @@ class RunFx {
         this.dust = 0;
         for (const side of SIDES) {
           robot.localToWorld(at.set((side * TRACK) / 2, 0.01, 0.02));
-          vfx.burst({ at: [at.x, at.y, at.z], kind: "smoke", count: 1, colors: [P.cream[300], P.ink[300]], speed: [0.02, 0.08], dir: [0, 1, 0], cone: 0.6, life: [0.5, 0.9], size: [0.025, 0.04], grow: 0.06, drag: 2 });
+          vfx.burst({ at: [at.x, at.y, at.z], kind: "smoke", count: 1, colors: [LAB.robotics.bench, P.ink[300]], speed: [0.02, 0.08], dir: [0, 1, 0], cone: 0.6, life: [0.5, 0.9], size: [0.025, 0.04], grow: 0.06, drag: 2 });
         }
       }
     }
     if (t >= total - 1e-3 && !this.ringed) {
       this.ringed = true;
       robot.getWorldPosition(at);
-      vfx.ring({ at: [at.x, at.y + 0.004, at.z], color: P.apricot[500], from: 0.05, to: 0.5, life: 0.8 });
+      vfx.ring({ at: [at.x, at.y + 0.004, at.z], color: LAB.robotics.gold, from: 0.05, to: 0.5, life: 0.8 });
     }
   }
 }
@@ -103,7 +103,7 @@ export function RobotStage3D() {
   const idea = sv.ghost ? answerOf(sv.ghost) : null;
   // A new board per text: a label's canvas must not change size once uploaded.
   const label = useMemo(() => {
-    const board = new TextBoard("ghost", 0.12, 24);
+    const board = new TextBoard("ghost", 0.12, 24, "robotics");
     if (idea) board.set(`Your idea: ${idea}`);
     return board;
   }, [idea]);

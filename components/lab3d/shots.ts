@@ -31,8 +31,9 @@ export function orbit(target: Vec3, distance: number, elevation: number, azimuth
  * point sits a little in front of the apparatus, which frames it high and in
  * the clear middle of the screen.
  */
-export function benchShots(cx: number, cz: number, size: number, focus?: Vec3): StageShots {
-  const dist = 0.8 + size * 1.7;
+export function benchShots(cx: number, cz: number, size: number, focus?: Vec3, revealAzimuth = 6): StageShots {
+  // Close enough that the apparatus, not the bench, fills the space the HUD leaves.
+  const dist = 0.72 + size * 1.5;
   const aim: Vec3 = [cx, -0.1, cz + size * 0.14];
   return {
     arrive: orbit(aim, dist * 1.7, 48, 32),
@@ -40,7 +41,9 @@ export function benchShots(cx: number, cz: number, size: number, focus?: Vec3): 
     predict: orbit([aim[0], aim[1], aim[2] - size * 0.04], dist * 0.95, 35, 4),
     // The run's best angle: closer, from the left, onto the part that shows the result.
     run: focus ? orbit([focus[0], focus[1] - 0.1, focus[2] + 0.12], 0.6 + size * 0.85, 30, -20) : orbit(aim, dist * 0.72, 30, -14),
-    reveal: orbit(aim, dist * 1.08, 42),
+    // The reveal leans a little toward the part that shows the result (the rest of the apparatus, like the battery a hint names, stays in frame); `revealAzimuth` turns it to see that part side-on.
+    // Aimed a little behind the middle, so the back of the apparatus drops clear of the mission card.
+    reveal: focus ? orbit([aim[0] + (focus[0] - aim[0]) * 0.2, aim[1], aim[2] + (focus[2] - aim[2]) * 0.2 - size * 0.12], dist * 1.1, 38, revealAzimuth) : orbit(aim, dist * 1.08, 42),
   };
 }
 

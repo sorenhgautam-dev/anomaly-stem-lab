@@ -6,8 +6,8 @@ import { RoundedBox } from "@react-three/drei";
 import type { Group } from "three";
 import type { CircuitPartKind } from "@/engine/types";
 import { useQuality } from "@/lib/quality";
-import { PALETTE as P } from "@/lib/tokens";
-import { softClick, unlockAudio } from "@/lib/sound";
+import { LAB } from "@/lib/tokens";
+import { softClick, resumeAudio } from "@/lib/sound";
 import { hoverCursor } from "../../lab-state";
 import { kitMaterial } from "../materials";
 import { IDLE, PartModel } from "./PartModel";
@@ -38,7 +38,7 @@ function TrayItem({ kind, x, armed, disabled, onArm }: { kind: CircuitPartKind; 
       {armed && (
         <mesh position={[0, 0.005, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <circleGeometry args={[0.22, 32]} />
-          <meshBasicMaterial color={P.volt[300]} transparent opacity={0.4} depthWrite={false} />
+          <meshBasicMaterial color={LAB.robotics.gold} transparent opacity={0.45} depthWrite={false} />
         </mesh>
       )}
       <mesh
@@ -46,7 +46,7 @@ function TrayItem({ kind, x, armed, disabled, onArm }: { kind: CircuitPartKind; 
         onClick={(e) => {
           e.stopPropagation();
           if (disabled) return;
-          unlockAudio();
+          resumeAudio();
           softClick();
           onArm();
         }}
@@ -68,7 +68,7 @@ export function Tray3D({ parts, armed, disabled, onArm }: { parts: CircuitPartKi
   const width = Math.max(0.9, parts.length * 0.5 + 0.2);
   return (
     <group position={[TRAY_AT.x, 0, TRAY_AT.z]}>
-      <RoundedBox args={[width, 0.07, 0.5]} radius={0.03} position={[0, 0.035, 0]} material={kitMaterial("clay", tier, P.cream[200])} />
+      <RoundedBox args={[width, 0.07, 0.5]} radius={0.03} position={[0, 0.035, 0]} material={kitMaterial("matte", tier, LAB.robotics.trim)} />
       {parts.map((kind, i) => (
         <TrayItem key={kind} kind={kind} x={(i - (parts.length - 1) / 2) * 0.5} armed={armed === kind} disabled={disabled} onArm={() => onArm(armed === kind ? null : kind)} />
       ))}

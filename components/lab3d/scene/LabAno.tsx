@@ -36,6 +36,9 @@ const v = new Vector3();
 // origin about 15% of that below his visual middle (measured on screen).
 const ANO_HEIGHT = 1.95;
 const ORIGIN_DROP = 0.15;
+/** How far beside and below a part Ano floats when he flies to it, in screen units (2 = the view's width or height). */
+const BESIDE = 0.12;
+const BELOW = 0.25;
 
 function hudGap(height: number): { x: number; centre: number; size: number } {
   const mission = document.querySelector("[data-lab-mission]")?.getBoundingClientRect();
@@ -58,11 +61,16 @@ function homeFor(shot: Shot, width: number, height: number): { home: Vector3; en
   const perPx = (2 * h) / height; // world units per screen pixel at this depth
   // Screen spot in normalised coordinates and Ano's height in pixels.
   const wide = width >= 1024;
-  const gap = wide ? hudGap(height) : { x: width * 0.81, centre: height * 0.75, size: Math.min(170, height * 0.3) };
-  const x = (2 * gap.x) / width - 1;
-  const y = 1 - (2 * (gap.centre + gap.size * ORIGIN_DROP)) / height;
+  // Narrow views (the HUD is below the stage): top left, over the wall, clear of the readouts each stage puts low and in front and of the lamp at the board's right end.
+  const gap = wide ? hudGap(height) : { x: width * 0.13, centre: height * 0.18, size: Math.min(110, height * 0.22) };
+  // The camera fits the picture above the dock (labView.frame: zoom s, offset ox, oy): place Ano where, after that, he lands in his gap at his size.
+  const { s, ox, oy } = labView.frame;
+  const gx = s * (gap.x + ox);
+  const gy = s * (gap.centre + gap.size * ORIGIN_DROP + oy);
+  const x = (2 * gx) / width - 1;
+  const y = 1 - (2 * gy) / height;
   const home = pos.addScaledVector(fwd, depth).addScaledVector(right, x * h * aspect).addScaledVector(up, y * h);
-  return { home, entry: home.clone().addScaledVector(right, -h * 0.8).addScaledVector(up, h * 1.1), scale: (gap.size * perPx) / ANO_HEIGHT };
+  return { home, entry: home.clone().addScaledVector(right, -h * 0.8).addScaledVector(up, h * 1.1), scale: (gap.size * s * perPx) / ANO_HEIGHT };
 }
 
 /** Where Ano is flying and when to come home: one object, stepped each frame. */
@@ -73,6 +81,7 @@ class Flight {
   scale = 0.38;
   until = 0;
   private placed = false;
+  private away = false;
   private screen = new Vector3();
 
   setHome(home: Vector3, entry: Vector3, scale: number) {
@@ -84,6 +93,12 @@ class Flight {
   }
 
   step(group: Group, dt: number, now: number, el: HTMLElement | null, camera: Camera) {
+    // While he's away pointing something out, his bubble (in the dock) drops its tail: it would point at empty space.
+    const away = now <= this.until;
+    if (away !== this.away) {
+      this.away = away;
+      document.querySelector("[data-lab-ano-dock]")?.toggleAttribute("data-away", away);
+    }
     if (now > this.until) this.target.copy(this.home);
     this.pos.lerp(this.target, 1 - Math.exp(-dt * 2.2));
     group.position.copy(this.pos);
@@ -95,21 +110,31 @@ class Flight {
     labView.anoScreen = { x: r.left + ((this.screen.x + 1) / 2) * r.width, y: r.top + ((1 - this.screen.y) / 2) * r.height, visible: this.screen.z < 1 };
   }
 
-  /**
-   * Float most of the way from home to a part, a little above it: close
-   * enough to point it out, on the near side so he never crosses the
-   * apparatus or hides behind the inspector.
-   */
   /** Come straight home (e.g. the camera is diving in where he was hovering). */
   cancel() {
     this.until = 0;
   }
 
-  flyTo(at: Vector3, seconds: number, now: number, camera: Camera) {
-    const d = camera.position.distanceTo(at);
-    this.target.copy(this.home).lerp(at, 0.68);
-    v.setFromMatrixColumn(camera.matrixWorld, 1);
-    this.target.addScaledVector(v, d * 0.05);
+  /**
+   * Float to just below a part on screen and off to its outer side (away
+   * from the middle of the shot, where the rest of the apparatus is), nearer
+   * the camera: the part's label is above it and its ghost to its left, so
+   * this corner is the one left free. Kept inside the clear middle
+   * (`middle`, in screen units from the centre; the HUD cards cover the
+   * edges).
+   */
+  flyTo(at: Vector3, seconds: number, now: number, camera: Camera, middle: number, spot: Vector3 | null) {
+    // A stage may name the spot itself ("ano" anchor), where its layout leaves room.
+    if (spot) {
+      this.target.copy(spot);
+      this.until = now + seconds;
+      return;
+    }
+    const p = this.screen.copy(at).project(camera);
+    const side = p.x >= 0 ? 1 : -1;
+    const x = Math.max(-middle, Math.min(middle, p.x + side * BESIDE));
+    const depth = v.copy(at).lerp(camera.position, 0.18).project(camera).z;
+    this.target.set(x, p.y - BELOW, depth).unproject(camera);
     this.until = now + seconds;
   }
 }
@@ -129,11 +154,21 @@ export function LabAno({ track, shots }: { track: React.RefObject<HTMLElement | 
   const width = useThree((s) => s.size.width);
   const height = useThree((s) => s.size.height);
 
-  // Re-homed when the shot or the view's size changes; Ano glides there.
+  // Re-homed when the shot, the view's size or the camera's lift changes; Ano glides there.
+  const homedFrame = useRef(labView.frame);
   useEffect(() => {
+    homedFrame.current = labView.frame;
     const { home, entry, scale } = homeFor(shot, width, height);
     flight.setHome(home, entry, scale);
   }, [shot, width, height, flight]);
+  useFrame(() => {
+    const f = labView.frame;
+    const was = homedFrame.current;
+    if (Math.abs(f.s - was.s) < 0.01 && Math.abs(f.oy - was.oy) < 4) return;
+    homedFrame.current = f;
+    const { home, entry, scale } = homeFor(shot, width, height);
+    flight.setHome(home, entry, scale);
+  });
 
   const expression: AnoExpression = phase === "running" ? "thinking" : verdict === "correct" ? "celebrating" : verdict === "wrong" ? "surprised" : ano === "stuck" ? "thinking" : ano === "greet" ? "happy" : "curious";
   const move: AnoMove | null = phase === "result" ? (verdict === "correct" ? "nod" : "hop") : phase === "build" && ano === "greet" ? "wave" : null;
@@ -145,7 +180,10 @@ export function LabAno({ track, shots }: { track: React.RefObject<HTMLElement | 
     // On an ANOMALY, once per run, fly to the part the diagnosis points at.
     if (verdict === "wrong" && flown.current !== runId) {
       flown.current = runId;
-      flight.flyTo(anchor(labView.focus), 3.4, now, camera);
+      // He flies only where the stage names a spot clear of its apparatus ("ano" anchor, e.g. the circuits);
+      // elsewhere, and on narrow views, he points the result out from his corner rather than cover it.
+      const spot = labView.anchors.get("ano");
+      if (width >= 1024 && spot) flight.flyTo(anchor(labView.focus), 3.4, now, camera, 0.34, spot);
     }
     if (name === "particles") flight.cancel();
     flight.step(g, Math.min(delta, 1 / 30), now, labView.el, camera);
@@ -153,7 +191,7 @@ export function LabAno({ track, shots }: { track: React.RefObject<HTMLElement | 
 
   return (
     <group ref={group}>
-      <Ano track={track} expression={expression} action={move ? { move, key: runId * 10 + (move === "wave" ? 0 : 1) } : null} speaking={speaking} look="cursor" />
+      <Ano track={track} expression={expression} action={move ? { move, key: runId * 10 + (move === "wave" ? 0 : 1) } : null} speaking={speaking} look="cursor" shadow={false} />
     </group>
   );
 }

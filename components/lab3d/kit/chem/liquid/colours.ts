@@ -7,6 +7,8 @@ import { PALETTE as P } from "@/lib/tokens";
  * (engine/chemistry/indicator.ts, neutralise.ts); these map it onto the
  * nearest palette tokens, blending between neighbours so the change is
  * smooth. They write into a Color you pass, so useFrame never allocates.
+ * These colours are data (what the indicator really shows), so they keep
+ * their true hues inside Chemistry's teal, beige, sand and sage lab (§8).
  */
 
 type Stops = [number, Color][];

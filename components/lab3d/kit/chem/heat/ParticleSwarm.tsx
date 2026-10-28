@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { SphereGeometry, type InstancedMesh } from "three";
 import { useQuality } from "@/lib/quality";
 import { PALETTE as P } from "@/lib/tokens";
+import { TONE } from "./tones";
 import { kitMaterial, liquidMaterial } from "../../materials";
 import type { Getter } from "../glass";
 import { Swarm } from "./swarm";
@@ -42,7 +43,7 @@ export function ParticleSwarm({ max, trail = 0, homes = null, seed, wander = 0, 
   const material = ghost ? liquidMaterial(P.white, tier, 0.7) : kitMaterial("plastic", tier);
 
   useEffect(() => {
-    if (mesh.current) swarm.paint(mesh.current, color, ghost ? P.volt[100] : P.cream[50]);
+    if (mesh.current) swarm.paint(mesh.current, color, ghost ? TONE.ghostPale : P.white);
   }, [swarm, color, ghost]);
 
   useFrame(({ clock }, delta) => {

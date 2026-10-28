@@ -1,8 +1,8 @@
 {
   "misconceptionId": "one-wire-enough",
   "hints": [
-    "Follow the path from the battery's plus end through the bulb. Is there a way back to the minus end?",
-    "Current needs a complete loop: out of one end of the battery, through the bulb, and back into the other end. With one wire there's no loop, so no current flows.",
-    "Add the second wire, from the bulb back to the battery's minus end."
+    "Follow the wire from the battery's plus end to the bulb. Can you find a way back to the minus end?",
+    "Electricity needs a full loop to flow, like cars on a race track. It leaves the battery, goes through the bulb and comes back to the other end. One wire leaves a gap in the track, so nothing flows.",
+    "Add the second wire, from the bulb back to the battery's minus end. Then press Run and watch the bulb."
   ]
 }

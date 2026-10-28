@@ -4,9 +4,9 @@
   "level": "medium",
   "grades": "9-10",
   "order": 4,
-  "title": "Burning in open vs sealed containers",
-  "goal": "Burn steel wool on a scale and predict whether the mass goes up, goes down or stays the same.",
-  "intro": "Steel wool burns with a bright orange glow. Will what's left on the scale weigh more, less or the same?",
+  "title": "Burning in an open or sealed jar",
+  "goal": "Burn steel wool in a jar on a scale. Predict whether the reading goes up, goes down or stays the same.",
+  "intro": "Steel wool is a fluffy pad of very thin steel threads. It burns with a bright orange glow. Will everything on the scale get heavier, stay the same or get lighter?",
   "minutes": 3,
   "stage": "burn",
   "parts": [],
@@ -26,17 +26,17 @@
   ],
   "prediction": {
     "type": "choice",
-    "question": "When the steel wool stops glowing, the scale will read…",
-    "options": ["More", "The same", "Less"]
+    "question": "When the glow fades, everything on the scale…",
+    "options": ["Gets heavier", "Stays the same", "Gets lighter"]
   },
   "answer": {
     "kind": "compare",
     "a": "scale.end",
     "b": "scale.start",
     "tolerance": 0.0001,
-    "aBigger": "More",
-    "bBigger": "Less",
-    "same": "The same"
+    "aBigger": "Gets heavier",
+    "bBigger": "Gets lighter",
+    "same": "Stays the same"
   },
   "misconceptions": ["burning-destroys-matter", "oxygen-only-helps"],
   "allowedEdits": [
@@ -45,5 +45,5 @@
     { "id": "more-wool", "label": "Use 4 g of steel wool", "edit": { "op": "set", "setting": "wool", "value": 4 } }
   ],
   "theoryId": "burning-and-mass",
-  "safety": "Burn steel wool only on a heat-proof mat, with goggles on and nothing flammable nearby; it stays hot after the glow fades."
+  "safety": "Burn steel wool only on a heat-proof mat. Wear goggles and keep anything that can catch fire away. The wool stays hot after the glow fades."
 }

@@ -2,9 +2,9 @@
   "id": "differential-drive",
   "title": "How a two-wheeled robot steers",
   "body": [
-    "Many robots have no steering wheel. Each side has its own motor, and the robot steers by spinning its wheels at different speeds. This is called differential drive.",
-    "The faster wheel covers more ground, so it swings around the slower one. The robot turns toward the slower wheel, away from the faster one.",
-    "Equal speeds drive straight. The bigger the difference between the wheels, the tighter the turn. One wheel forward and one backward spins the robot on the spot."
+    "Many robots have no steering wheel. Each wheel has its own motor. The robot steers by spinning its wheels at different speeds. This is called differential drive.",
+    "The faster wheel covers more ground, so it swings round the slower one. Think of a marching band turning a corner: the outside row takes bigger steps. So the robot turns toward its slower wheel.",
+    "Equal speeds drive straight. The bigger the gap between the two speeds, the tighter the turn. One wheel forward and one backward spins the robot on the spot."
   ],
   "equation": "turn rate = (right speed − left speed) ÷ wheel spacing",
   "realWorld": "Many classroom robots and robot vacuum cleaners steer this way, with no steering wheel at all.",

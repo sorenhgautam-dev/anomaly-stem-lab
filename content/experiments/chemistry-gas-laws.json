@@ -5,8 +5,8 @@
   "grades": "11-12",
   "order": 1,
   "title": "Gas laws (PV = nRT)",
-  "goal": "Squeeze a sealed syringe of air and predict how its pressure changes.",
-  "intro": "This syringe holds 60 mL of air with its tip sealed. Push the plunger in and keep an eye on the pressure gauge.",
+  "goal": "Squeeze a sealed syringe of air. Predict how its pressure, the push of the gas on the walls, changes.",
+  "intro": "This syringe holds 60 mL of air, and its tip is sealed. Push the plunger in and keep an eye on the pressure gauge.",
   "minutes": 3,
   "stage": "gaslaw",
   "parts": [],
@@ -47,5 +47,5 @@
     }
   ],
   "theoryId": "gas-laws",
-  "safety": "Use a capped syringe with no needle, never point it at anyone, and don't force the plunger."
+  "safety": "Use a capped syringe with no needle. Never point it at anyone, and don't force the plunger."
 }

@@ -2,12 +2,12 @@
   "id": "particles-and-heat",
   "title": "Hot particles move faster",
   "body": [
-    "Air is made of tiny particles that are always moving, bouncing off each other and off the walls around them.",
-    "Heating gives the particles more energy, so they move faster. They don't get bigger and no new particles appear. Their typical speed grows with the square root of the temperature in kelvin.",
-    "Faster particles hit the inside of the balloon harder and more often, so the stretchy balloon expands until the push inside matches the push outside. At steady pressure, its volume grows in step with the kelvin temperature: that's Charles's law."
+    "Air is made of tiny particles that keep moving all the time. They bounce off each other and the walls, like people rushing round a crowded room.",
+    "Heating gives the particles more energy, so they move faster. They don't get bigger, and no new particles appear. Warming them from 20 °C to 80 °C makes them about 10% faster.",
+    "Faster particles hit the inside of the balloon harder and more often. So the stretchy balloon grows until the push inside matches the push outside. Measure the temperature in kelvin (°C + 273). Double the kelvin temperature and the volume doubles too. That's Charles's law."
   ],
   "equation": "V₁ / T₁ = V₂ / T₂ (T in kelvin)",
-  "realWorld": "Hot-air balloons rise because heated air spreads out and becomes less dense than the cooler air around it. Tyre pressures are checked when the tyres are cold, because driving warms the air inside.",
+  "realWorld": "Hot-air balloons rise because heated air spreads out. That makes it lighter for its size than the cool air around it. People check tyre pressure when the tyres are cold, because driving warms the air inside.",
   "sources": [
     "OpenStax Chemistry 2e, §9.5 The Kinetic-Molecular Theory. https://openstax.org/books/chemistry-2e/pages/9-5-the-kinetic-molecular-theory",
     "OpenStax Chemistry 2e, §9.2 Relating Pressure, Volume, Amount, and Temperature: The Ideal Gas Law. https://openstax.org/books/chemistry-2e/pages/9-2-relating-pressure-volume-amount-and-temperature-the-ideal-gas-law"

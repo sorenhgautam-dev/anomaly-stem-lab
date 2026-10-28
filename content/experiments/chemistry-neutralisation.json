@@ -5,8 +5,8 @@
   "grades": "9-10",
   "order": 3,
   "title": "Neutralisation and pH",
-  "goal": "Add sodium hydroxide to hydrochloric acid and predict whether the result is acidic, neutral or basic.",
-  "intro": "This beaker holds 25 mL of dilute hydrochloric acid with a few drops of universal indicator. Choose how much sodium hydroxide to add, then make your call.",
+  "goal": "Add a base to an acid. Predict whether the mix ends up acidic, neutral or basic.",
+  "intro": "This flask holds 25 mL of watered-down hydrochloric acid. A few drops of universal indicator change colour to show the pH. Choose how much sodium hydroxide, a base, to add. Then make your guess.",
   "minutes": 3,
   "stage": "neutralise",
   "parts": [],
@@ -25,7 +25,7 @@
   ],
   "prediction": {
     "type": "choice",
-    "question": "After adding the base, the solution will be…",
+    "question": "After you add the base, the liquid in the flask will be…",
     "options": ["Still acidic", "Neutral", "Basic"]
   },
   "answer": {
@@ -42,5 +42,5 @@
     { "id": "extra", "label": "Add 35 mL", "edit": { "op": "set", "setting": "base", "value": 35 } }
   ],
   "theoryId": "neutralisation",
-  "safety": "Wear goggles: even dilute hydrochloric acid and sodium hydroxide can harm your eyes, so rinse any splash with plenty of water."
+  "safety": "Wear goggles. Even watered-down acid and sodium hydroxide can hurt your eyes. Rinse any splash with lots of water."
 }

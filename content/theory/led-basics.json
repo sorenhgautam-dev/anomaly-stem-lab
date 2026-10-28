@@ -2,12 +2,12 @@
   "id": "led-basics",
   "title": "How an LED works",
   "body": [
-    "LED stands for light-emitting diode. A diode lets current through in one direction only: in at the anode (the longer leg) and out at the cathode. Put it in backwards and it won't light.",
-    "A red LED needs about 2 volts across it before much current flows. It's designed for a small current, typically 10 to 20 milliamps, with a maximum of about 30 mA.",
-    "Above about 2 V, the current climbs steeply with every extra bit of voltage. Connect an LED straight to a battery and the current shoots past its limit until it burns out. A resistor in series holds the current at a safe level."
+    "LED stands for light-emitting diode. A diode is a one-way door for current. Current goes in at the long leg (the anode) and out at the short leg (the cathode). Put it in backwards and it won't light.",
+    "A red LED needs a push of about 2 volts before much current flows. It's made for a small current, about 10 to 20 milliamps (mA). Its top limit is about 30 mA.",
+    "Above about 2 V, each extra bit of voltage makes the current shoot up. Wire an LED straight to a battery and the current rushes past its limit. Then the LED burns out. A resistor works like a narrow bit of pipe. It holds the current down to a safe level."
   ],
-  "equation": "R = (V_battery − V_LED) ÷ I",
-  "realWorld": "LED lamps, phone screens and bike lights all include a resistor or a driver chip that keeps the LEDs' current in check.",
+  "equation": "resistance = (battery voltage − LED voltage) ÷ current",
+  "realWorld": "LED lamps, phone screens and bike lights all have a resistor or a small driver chip. It keeps the current through the LEDs safe.",
   "sources": [
     "OpenStax University Physics Volume 3, §9.7 Semiconductor Devices. https://openstax.org/books/university-physics-volume-3/pages/9-7-semiconductor-devices",
     "Kingbright WP7113ID 5 mm red LED datasheet. https://www.kingbrightusa.com/images/catalog/SPEC/WP7113ID.pdf"

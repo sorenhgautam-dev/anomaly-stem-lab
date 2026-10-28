@@ -1,8 +1,8 @@
 {
   "misconceptionId": "battery-constant-current",
   "hints": [
-    "Look at the battery's current before and after bulb B joined. Did it stay the same?",
-    "A battery gives a steady voltage, not a fixed current. Each bulb side by side gets the full voltage, so the battery simply sends out more current when you add one.",
-    "Add a third bulb side by side and check bulb A's brightness again."
+    "Watch bulb A when bulb B joins. Did it really get dimmer, or did it stay as bright?",
+    "Each bulb has its own path straight to the battery. The battery gives every path the same push. Add a path and the battery simply sends out more electricity. Think of a water tank with two taps. Open the second tap, and the first still flows as before.",
+    "Add a third bulb beside the other two and run it again. Keep your eye on bulb A."
   ]
 }

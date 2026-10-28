@@ -2,12 +2,12 @@
   "id": "catalysts",
   "title": "Catalysts and activation energy",
   "body": [
-    "To react, particles must collide with at least a minimum amount of energy: the activation energy. Hydrogen peroxide has a high barrier, so on its own it breaks down so slowly that a bottle keeps for months.",
-    "A catalyst offers a different route with a lower energy barrier. On the surface of manganese dioxide, far more collisions have enough energy, and oxygen fizzes off in seconds.",
-    "The catalyst takes part along the way but is given back unchanged at the end, so it isn't used up. Filter and dry it afterwards and the same mass is still there. A catalyst changes how fast a reaction goes, not how much product it makes."
+    "To react, particles must collide with at least a minimum energy, called the activation energy. Think of it as a hill the particles must climb. Hydrogen peroxide has a high hill, so on its own it breaks down very slowly. A bottle keeps for months.",
+    "A catalyst offers a different route with a lower hill, like a tunnel through it. On the surface of manganese dioxide, far more collisions have enough energy. Oxygen fizzes off in seconds.",
+    "The catalyst takes part along the way, but it comes back unchanged at the end. So it doesn't get used up. Filter and dry it afterwards, and the same mass is still there. A catalyst changes how fast a reaction goes. It doesn't change how much product (the new substance) it makes."
   ],
   "equation": "2H₂O₂ → 2H₂O + O₂ (catalyst: MnO₂)",
-  "realWorld": "Car catalytic converters use metals such as platinum and palladium to turn harmful exhaust gases into safer ones, mile after mile, without being used up. Your cells use a catalyst too: the enzyme catalase breaks down hydrogen peroxide.",
+  "realWorld": "Cars have catalytic converters. Metals like platinum and palladium inside turn harmful exhaust gases into safer ones. They work mile after mile without being used up. Your cells use one too. An enzyme called catalase breaks down hydrogen peroxide. Enzymes are catalysts made by living things.",
   "sources": [
     "OpenStax Chemistry 2e, §12.7 Catalysis. https://openstax.org/books/chemistry-2e/pages/12-7-catalysis",
     "OpenStax Chemistry 2e, §12.5 Collision Theory. https://openstax.org/books/chemistry-2e/pages/12-5-collision-theory"

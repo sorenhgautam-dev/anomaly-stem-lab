@@ -1,8 +1,8 @@
 {
   "id": "current-used-up",
   "lab": "robotics",
-  "title": "Current gets used up",
-  "belief": "The first bulb uses up some of the current, so there's less left for the next bulb and it glows dimmer.",
+  "title": "The first bulb uses some up",
+  "belief": "The first bulb uses up some of the electricity. There's less left for the second bulb, so it glows dimmer.",
   "conceptIds": [
     "current-conservation",
     "series-circuits"

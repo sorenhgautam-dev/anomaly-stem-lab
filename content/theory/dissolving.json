@@ -1,13 +1,13 @@
 {
   "id": "dissolving",
-  "title": "Dissolving isn't disappearing",
+  "title": "The sugar is still there",
   "body": [
-    "When sugar dissolves, water molecules pull sugar molecules away from the crystal, one by one. The sugar molecules spread out between the water molecules until they are far too small and too spread out to see.",
-    "Nothing is destroyed. Every sugar molecule is still in the beaker, so the solution weighs exactly as much as the water and the sugar did before.",
-    "There is a limit, though. At room temperature, water can dissolve about 2 g of sugar for every 1 g of water. Add more than that and the extra stays as crystals at the bottom."
+    "Sugar is made of particles, tiny bits far too small to see. Stir it into water, and the water pulls those bits off one by one. They spread out between the bits of water. Soon they are too small and too spread out to see.",
+    "Nothing gets destroyed. Every bit of sugar is still in the beaker. It's like a friend walking into a huge crowd. You can't spot them, but they're still there. So the sugar water weighs exactly as much as the water and sugar did before.",
+    "Water can only take so much, though. At room temperature, 1 g of water can dissolve about 2 g of sugar. Add more than that, and the extra stays as grains at the bottom."
   ],
-  "equation": "mass of solution = mass of water + mass of sugar",
-  "realWorld": "Seawater looks clear, but every litre hides about 35 g of dissolved salt. Leave it to evaporate in the sun and the salt is left behind, which is how sea salt is made.",
+  "equation": "sugar water on the scale = water + sugar",
+  "realWorld": "Seawater looks clear, but every litre hides about 35 g of salt. Leave it out in the sun and the water dries up. The salt stays behind, and that's how sea salt is made.",
   "sources": [
     "OpenStax Chemistry 2e, §11.1 The Dissolution Process. https://openstax.org/books/chemistry-2e/pages/11-1-the-dissolution-process",
     "OpenStax Chemistry 2e, §1.2 Phases and Classification of Matter. https://openstax.org/books/chemistry-2e/pages/1-2-phases-and-classification-of-matter"

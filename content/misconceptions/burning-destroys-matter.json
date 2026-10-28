@@ -1,7 +1,7 @@
 {
   "id": "burning-destroys-matter",
   "lab": "chemistry",
-  "title": "Burning destroys matter",
-  "belief": "When something burns, part of it gets used up and disappears, so what's left must weigh less.",
+  "title": "Burning makes things lighter",
+  "belief": "When something burns, part of it gets used up and disappears. So what's left must weigh less.",
   "conceptIds": ["combustion", "conservation-of-mass"]
 }

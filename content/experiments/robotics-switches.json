@@ -6,7 +6,7 @@
   "order": 2,
   "title": "Where the switch goes",
   "goal": "Find out if a switch after the bulb can still turn it on and off.",
-  "intro": "This switch sits after the bulb, on the battery's minus side. Can it still control the bulb?",
+  "intro": "This switch sits after the bulb, near the battery's minus end. Can it still turn the bulb on and off?",
   "minutes": 2,
   "stage": "circuit",
   "parts": ["switch"],

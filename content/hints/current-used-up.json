@@ -1,8 +1,8 @@
 {
   "misconceptionId": "current-used-up",
   "hints": [
-    "Compare the current readings for bulb A and bulb B. Are they different?",
-    "In a single loop, the same current flows through every part. A bulb turns electrical energy into light and heat, but the current coming out of it is the same as the current going in.",
-    "Flip the battery so the current reaches bulb B first, and see whether bulb B gets any brighter."
+    "Click bulb A, then bulb B. Check each one's current, the amount of electricity flowing through it. Are the numbers different?",
+    "Lots of people think that! Picture water flowing round a loop of pipe. A water wheel in the pipe spins, but no water disappears. A bulb is like that wheel: the same flow comes out as goes in.",
+    "Flip the battery round so the electricity reaches bulb B first. Does bulb B get any brighter?"
   ]
 }

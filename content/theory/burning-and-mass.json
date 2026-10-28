@@ -2,12 +2,12 @@
   "id": "burning-and-mass",
   "title": "Burning adds oxygen",
   "body": [
-    "Burning is a chemical reaction with oxygen. When steel wool burns, its iron atoms join with oxygen atoms from the air to make iron oxide.",
-    "So the solid left behind weighs more than the steel wool did. The extra mass is the oxygen it took from the air. Nothing is destroyed; the atoms are just rearranged.",
-    "In a sealed jar, the oxygen comes from the air already inside, which was on the scale all along, so the reading doesn't change. Open the lid afterwards and air rushes in to refill the jar."
+    "Burning is a reaction with oxygen. When steel wool burns, its iron atoms join with oxygen atoms from the air. Together they make iron oxide, a new solid.",
+    "So the solid left behind weighs more than the steel wool did. It's like a sponge soaking up water: it ends up heavier. The extra mass is the oxygen it took from the air. Nothing is destroyed, because the atoms only swap partners.",
+    "In a sealed jar, the oxygen comes from the air already inside. That air was on the scale all along, so the reading doesn't change. Open the lid afterwards and fresh air rushes in to refill the jar."
   ],
-  "equation": "3Fe + 2O₂ → Fe₃O₄",
-  "realWorld": "Wood and candles seem to lose mass when they burn because their products, carbon dioxide and water vapour, are gases that float away. Catch those gases, and the products weigh more than the fuel did, just like the steel wool.",
+  "equation": "3Fe + 2O₂ → Fe₃O₄ (iron + oxygen → iron oxide)",
+  "realWorld": "Wood and candles seem to get lighter when they burn. That's because they turn into gases, carbon dioxide and water vapour, that drift away. Catch those gases, and they weigh more than the fuel did, just like the steel wool.",
   "sources": [
     "OpenStax Chemistry 2e, §4.2 Classifying Chemical Reactions (combustion). https://openstax.org/books/chemistry-2e/pages/4-2-classifying-chemical-reactions",
     "OpenStax Chemistry 2e, §1.2 Phases and Classification of Matter (law of conservation of matter). https://openstax.org/books/chemistry-2e/pages/1-2-phases-and-classification-of-matter"

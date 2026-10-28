@@ -2,7 +2,7 @@
   "id": "big-gear-faster",
   "lab": "robotics",
   "title": "A bigger gear turns faster",
-  "belief": "The big gear is bigger and stronger, so it spins faster than the small gear that drives it.",
+  "belief": "The big gear is bigger and stronger. So it spins faster than the small gear driving it.",
   "conceptIds": [
     "gear-ratio",
     "rotational-speed"

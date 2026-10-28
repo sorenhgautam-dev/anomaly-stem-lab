@@ -2,12 +2,12 @@
   "id": "equilibrium",
   "title": "Dynamic equilibrium and Le Chatelier",
   "body": [
-    "Some reactions run both ways at once. In this tube, brown nitrogen dioxide (NO₂) molecules pair up to make colourless dinitrogen tetroxide (N₂O₄), while other N₂O₄ molecules split back apart.",
-    "At equilibrium both reactions run at the same rate, so the colour stays steady. But nothing has stopped: molecules keep pairing up and splitting, in balance. It's a dynamic equilibrium.",
-    "Le Chatelier's principle: if you change the conditions, the balance shifts to counteract the change. Pairing up gives out heat, so heating the tube favours splitting apart: more brown NO₂ and a darker colour. Cooling favours pairing up, so the gas turns paler."
+    "Some reactions run both ways at once. In this tube, brown nitrogen dioxide (NO₂) molecules pair up to make colourless dinitrogen tetroxide (N₂O₄). At the same time, other N₂O₄ molecules split back apart.",
+    "At equilibrium, both reactions run at the same rate, so the colour stays steady. But nothing has stopped. Molecules keep pairing up and splitting, in balance. Picture walking up a down escalator at exactly its speed. You stay in one place, yet you keep moving. That's a dynamic equilibrium.",
+    "Le Chatelier's principle: change the conditions, and the balance shifts to fight the change. Pairing up gives out heat. So heating the tube favours splitting apart: more brown NO₂ and a darker colour. Cooling favours pairing up, so the gas turns paler."
   ],
-  "equation": "2NO₂ (brown) ⇌ N₂O₄ (colourless), ΔH = −57 kJ/mol",
-  "realWorld": "The Haber process makes ammonia for fertiliser from an equilibrium. Factories choose a temperature and pressure that push the balance towards ammonia while keeping the reaction fast enough to be worth running.",
+  "equation": "2NO₂ (brown) ⇌ N₂O₄ (colourless), ΔH = −57 kJ/mol (pairing up gives out heat)",
+  "realWorld": "The Haber process makes ammonia for fertiliser, and it's an equilibrium too. Factories pick a temperature and pressure that push the balance towards ammonia. They also keep the reaction fast enough to be worth running.",
   "sources": [
     "OpenStax Chemistry 2e, §13.3 Shifting Equilibria: Le Châtelier’s Principle. https://openstax.org/books/chemistry-2e/pages/13-3-shifting-equilibria-le-chateliers-principle"
   ]

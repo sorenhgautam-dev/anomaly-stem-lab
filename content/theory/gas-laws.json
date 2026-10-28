@@ -2,12 +2,12 @@
   "id": "gas-laws",
   "title": "Boyle's law: squeezing a gas",
   "body": [
-    "Gas particles are always flying around and hitting the walls of their container. Each hit is a tiny push, and billions of them every second add up to the gas's pressure.",
-    "Squeeze the gas into half the space and the particles are packed twice as closely. At the same temperature they move just as fast, so they hit each bit of wall twice as often. Half the volume, double the pressure: that's Boyle's law.",
-    "Boyle's law is one part of the ideal gas law, PV = nRT. Keep the amount of gas (n) and the temperature (T) the same, and pressure times volume stays constant."
+    "Gas particles fly around and hit the walls of their container. Each hit is a tiny push. Billions of hits every second add up to the gas's pressure.",
+    "Squeeze the gas into half the space, and the particles are packed twice as close. At the same temperature they move just as fast. So they hit each bit of wall twice as often, like a crowd in half the hall. Half the volume means double the pressure: that's Boyle's law.",
+    "Boyle's law is one part of the ideal gas law, PV = nRT. P is pressure and V is volume. Here n is the amount of gas, T is the temperature, and R is a fixed number. Keep n and T the same, and P times V stays constant."
   ],
   "equation": "P₁V₁ = P₂V₂ (from PV = nRT)",
-  "realWorld": "A bicycle pump squeezes air until its pressure is high enough to push into the tyre. Divers feel Boyle's law too: 10 m underwater the pressure has doubled, so a lungful of air takes up only half the space.",
+  "realWorld": "A bike pump squeezes air until its pressure is high enough to push into the tyre. Divers feel Boyle's law too. At 10 m underwater the pressure has doubled. So a lungful of air takes up half the space.",
   "sources": [
     "OpenStax Chemistry 2e, §9.2 Relating Pressure, Volume, Amount, and Temperature: The Ideal Gas Law. https://openstax.org/books/chemistry-2e/pages/9-2-relating-pressure-volume-amount-and-temperature-the-ideal-gas-law",
     "OpenStax Chemistry 2e, §9.5 The Kinetic-Molecular Theory. https://openstax.org/books/chemistry-2e/pages/9-5-the-kinetic-molecular-theory"

@@ -2,7 +2,7 @@
   "misconceptionId": "heat-adds-particles",
   "hints": [
     "The balloon is sealed. Could any new air get in while it warmed up?",
-    "A sealed balloon keeps the same number of particles. Heating makes them move faster and push harder, so the same particles take up more room.",
-    "Heat it to 90 °C and count the particles. The balloon grows, but the count stays the same."
+    "Heat can't make new particles. It makes the same particles move faster. Fast particles hit the balloon's wall harder and more often, so it stretches. It's like a crowd that starts dancing: same people, but they need more room.",
+    "Heat it to 90 °C and check the particle count. Is it any higher than at the start?"
   ]
 }

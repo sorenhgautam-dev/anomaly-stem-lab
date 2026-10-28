@@ -1,8 +1,8 @@
 {
   "misconceptionId": "melting-temp-rises",
   "hints": [
-    "Watch the thermometer while there is still ice in the beaker. Does the number move?",
-    "While ice melts, the heat goes into breaking particles out of the solid pattern, not into making them move faster. Temperature tracks how fast the particles move, so it stays at 0 °C until the ice is gone.",
-    "Turn the heater up to 200 W and run it again. The ice melts sooner, but the thermometer still waits at 0 °C."
+    "Watch the thermometer while there's still ice in the beaker. Does the number move?",
+    "Melting ice takes lots of heat. While any ice is left, the heater's heat goes into melting it. It's like paying off a debt before you can start saving. So the thermometer waits at 0 °C until the ice is gone.",
+    "Turn the heater up to 200 W and run it again. The ice melts sooner, but what does the thermometer do while it melts?"
   ]
 }

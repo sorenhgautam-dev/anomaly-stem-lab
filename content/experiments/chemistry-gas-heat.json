@@ -5,8 +5,8 @@
   "grades": "9-10",
   "order": 1,
   "title": "Gas particles and heat",
-  "goal": "Find out what happens to the particles of air in a sealed balloon when you warm it up.",
-  "intro": "This balloon is sealed, so no air gets in or out. Let's warm it up and zoom in on the particles inside.",
+  "goal": "Warm a sealed balloon of air. Find out what happens to the air particles inside.",
+  "intro": "This balloon is sealed, so no air gets in or out. Warm it up, then zoom in on the particles inside.",
   "minutes": 3,
   "stage": "heat",
   "parts": [],
@@ -47,5 +47,5 @@
     }
   ],
   "theoryId": "particles-and-heat",
-  "safety": "Warm the balloon in a water bath, never over a flame, and take care with hot water."
+  "safety": "Warm the balloon in a bowl of hot water, never over a flame. Take care, because hot water can scald."
 }

@@ -6,7 +6,7 @@
   "order": 2,
   "title": "Gears: speed vs strength",
   "goal": "Find out how the size of the output gear changes its speed and turning force.",
-  "intro": "A small motor gear drives a big output gear. Which one spins faster, and what do you get in return?",
+  "intro": "A small gear on the motor turns a big output gear. Which one spins faster? Which one turns with more force?",
   "minutes": 3,
   "stage": "gears",
   "parts": [],

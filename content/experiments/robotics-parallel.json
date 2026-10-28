@@ -6,7 +6,7 @@
   "order": 4,
   "title": "Side by side",
   "goal": "Add bulb B beside bulb A and watch what happens to bulb A.",
-  "intro": "Bulb A has its own path to the battery. Bulb B is about to get a path of its own, right beside it.",
+  "intro": "Bulb A has its own path to the battery. Bulb B is about to get its own path too, right next to it.",
   "minutes": 3,
   "stage": "circuit",
   "parts": ["bulb"],
@@ -29,7 +29,7 @@
   },
   "prediction": {
     "type": "choice",
-    "question": "When bulb B joins side by side, bulb A will be…",
+    "question": "Add bulb B beside bulb A. Bulb A will be…",
     "options": ["Brighter", "The same", "Dimmer"]
   },
   "answer": { "kind": "change", "reading": "bulb-a.brightness", "tolerance": 0.1, "up": "Brighter", "down": "Dimmer", "same": "The same" },

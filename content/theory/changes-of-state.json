@@ -2,12 +2,12 @@
   "id": "changes-of-state",
   "title": "Why melting ice stays at 0 °C",
   "body": [
-    "In ice, water particles are locked in a regular pattern and can only jiggle in place. In liquid water they still touch, but they slide past each other in a jumble.",
-    "Heating usually makes particles move faster, and that's what a thermometer measures. While ice melts, though, the energy goes into breaking particles free of the pattern instead. They don't speed up, so the temperature stays at 0 °C until all the ice has gone.",
-    "That hidden energy is called the latent heat of fusion. Melting 1 g of ice takes about 334 J, enough to warm 1 g of liquid water by about 80 °C. A stronger heater melts the ice sooner, but the mix still sits at 0 °C while it melts."
+    "Ice is made of particles, tiny bits far too small to see. In ice, they hold on to each other in neat rows. They can only wiggle on the spot. In water, they slide past each other in a jumble.",
+    "Think of the heater's heat as money coming in. Melting has a debt to pay first: pulling those neat rows apart. Until that debt is paid off, nothing goes into savings. Here, savings means a higher temperature. So the thermometer stays at 0 °C until all the ice has melted.",
+    "It's a big debt. Melting ice takes as much heat as warming the same amount of water by about 80 °C. Once the last bit of ice melts, the heat goes into savings again. Then the reading climbs. A stronger heater pays the debt faster. Even so, the reading sits at 0 °C while the ice melts."
   ],
-  "equation": "Energy to melt = mass × 334 J/g (for ice)",
-  "realWorld": "Ice keeps a drink near 0 °C until it has all melted, which is why a cool box full of ice works so well. Boiling water does the same at 100 °C: turning the stove up makes it boil faster, not hotter.",
+  "equation": "Heat to melt ice = 334 J (joules, a unit of energy) for every 1 g",
+  "realWorld": "Ice keeps a drink near 0 °C until the last bit melts. That's why a cool box full of ice works so well. Boiling water does the same at 100 °C. Turn the stove up and it boils faster, but it gets no hotter.",
   "sources": [
     "OpenStax Chemistry 2e, §10.3 Phase Transitions. https://openstax.org/books/chemistry-2e/pages/10-3-phase-transitions"
   ]

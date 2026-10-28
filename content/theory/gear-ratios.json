@@ -2,9 +2,9 @@
   "id": "gear-ratios",
   "title": "Gear ratios",
   "body": [
-    "When two gears mesh, their teeth pass each other at the same rate. So a gear with more teeth turns more slowly than a gear with fewer teeth, and the two turn in opposite directions.",
-    "The gear ratio is the output gear's teeth divided by the motor gear's teeth. A 12-tooth motor gear driving a 36-tooth output gear has a ratio of 3, so the output turns 3 times slower.",
-    "You don't get something for nothing. Slowing the output down multiplies its turning force (torque) by about the same ratio; friction takes a little. That's how a small motor can lift a heavy load."
+    "When two gears mesh, their teeth pass the meeting point at the same rate. Picture two runners at the same pace: the one on the bigger track takes longer per lap. So a gear with more teeth turns more slowly. Meshed gears also turn in opposite directions.",
+    "The gear ratio is the output gear's teeth divided by the motor gear's teeth. A 12-tooth motor gear driving a 36-tooth output gear gives a ratio of 3. So the output turns 3 times slower.",
+    "There's a trade, though. Slowing the output down multiplies its torque, its turning force, by about the same ratio. Friction takes a little. That's how a small motor can lift a heavy load."
   ],
   "equation": "output speed = motor speed × motor teeth ÷ output teeth",
   "realWorld": "Bikes use the same trade. A low gear makes hills easier to climb, but you pedal faster for the same road speed.",

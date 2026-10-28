@@ -6,7 +6,7 @@
   "order": 2,
   "title": "Turning robot",
   "goal": "Work out which way a robot turns when one wheel spins faster than the other.",
-  "intro": "This robot has two wheels, each with its own motor. Set the speeds, then call the turn.",
+  "intro": "This robot has two wheels, and each one has its own motor. Set the two speeds, then guess which way it turns.",
   "minutes": 2,
   "stage": "robot",
   "parts": [],

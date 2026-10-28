@@ -1,7 +1,7 @@
 {
   "id": "nothing-escapes",
   "lab": "chemistry",
-  "title": "The gas stays put",
-  "belief": "The gas from the fizz stays in the bag, so the mass can't change, even with the bag open.",
+  "title": "The gas stays in the bag",
+  "belief": "The gas from the fizz stays in the bag. So the scale won't change, even with the bag open.",
   "conceptIds": ["conservation-of-mass", "gases"]
 }

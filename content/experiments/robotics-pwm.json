@@ -6,7 +6,7 @@
   "order": 3,
   "title": "Motor speed control (PWM)",
   "goal": "Find out what switching a motor on and off very fast does to its speed.",
-  "intro": "This controller flicks the motor's power on and off a thousand times a second. The duty cycle is the share of each flick that's on.",
+  "intro": "PWM means switching the power on and off very fast. This controller does it a thousand times a second. The duty cycle is the share of the time the power is on.",
   "minutes": 3,
   "stage": "pwm",
   "parts": [],

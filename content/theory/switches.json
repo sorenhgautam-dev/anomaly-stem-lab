@@ -1,12 +1,12 @@
 {
   "id": "switches",
-  "title": "Switches and complete loops",
+  "title": "Where a switch can go",
   "body": [
-    "A switch is a gap you can open and close. Closed, it's just part of the wire. Open, it breaks the loop.",
-    "In a single loop the same current flows everywhere. Break the loop at any point and the current stops everywhere at once, before the bulb and after it.",
-    "So a switch works on either side of a bulb. It doesn't matter whether it sits near the battery's plus end or its minus end."
+    "A switch is a gap you can open and close. When it's closed, it's just part of the wire. When it's open, it breaks the loop.",
+    "In one loop, the electricity moves like a bike chain: it all moves together. Break the loop anywhere and the whole flow stops at once. That's true before the bulb and after it.",
+    "So a switch works on either side of the bulb. Near the battery's plus end or its minus end, it does the same job."
   ],
-  "realWorld": "Every light switch at home works this way. Flick it off and it opens a gap, so no current can flow around the loop.",
+  "realWorld": "Every light switch at home works like this. Flick it off and it opens a gap. Then the flow stops all the way round the loop.",
   "sources": [
     "OpenStax College Physics 2e, §21.1 Resistors in Series and Parallel. https://openstax.org/books/college-physics-2e/pages/21-1-resistors-in-series-and-parallel"
   ]

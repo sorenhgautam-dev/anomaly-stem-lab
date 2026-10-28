@@ -1,8 +1,8 @@
 [
   { "lab": "robotics", "level": "medium", "title": "Buttons and sensors" },
-  { "lab": "robotics", "level": "medium", "title": "Program a sequence with blocks" },
-  { "lab": "robotics", "level": "advanced", "title": "Line follower with feedback" },
-  { "lab": "robotics", "level": "advanced", "title": "Obstacle avoidance" },
-  { "lab": "chemistry", "level": "advanced", "title": "Titration curves" },
-  { "lab": "chemistry", "level": "advanced", "title": "Electrolysis" }
+  { "lab": "robotics", "level": "medium", "title": "Program a robot with blocks" },
+  { "lab": "robotics", "level": "advanced", "title": "A robot that follows a line" },
+  { "lab": "robotics", "level": "advanced", "title": "A robot that dodges walls" },
+  { "lab": "chemistry", "level": "advanced", "title": "Titration: neutralise drop by drop" },
+  { "lab": "chemistry", "level": "advanced", "title": "Electrolysis: splitting compounds with electricity" }
 ]

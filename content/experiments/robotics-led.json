@@ -6,7 +6,7 @@
   "order": 1,
   "title": "Light the LED",
   "goal": "Make the LED glow without burning it out.",
-  "intro": "An LED is a tiny light with strict rules about current. Get it glowing without frying it.",
+  "intro": "An LED is a tiny light, and it's fussy about current. Can you get it glowing without burning it out?",
   "minutes": 3,
   "stage": "circuit",
   "parts": ["led", "resistor", "wire"],

@@ -1,8 +1,8 @@
 {
   "misconceptionId": "pressure-follows-volume",
   "hints": [
-    "You squeezed the air into less space. Did the gauge go down, or up?",
-    "Squeezing doesn't remove any air, it just gives the particles less room. Packed closer, they hit the walls more often, so the pressure goes up as the volume goes down.",
+    "You squeezed the air into less space. Did the pressure gauge go down, or up?",
+    "Squeezing removes no air. It gives the same particles less room. Packed closer, they hit the walls more often, like a crowd pushed into a smaller room. Pressure is that push on the walls, so it goes up as the volume goes down.",
     "Squeeze it to 20 mL and compare the gauge with the 101 kPa you started at."
   ]
 }

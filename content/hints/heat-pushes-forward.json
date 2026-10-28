@@ -1,8 +1,8 @@
 {
   "misconceptionId": "heat-pushes-forward",
   "hints": [
-    "When the tube got hot, did the brown get stronger or weaker?",
-    "Heating favours the direction that takes in heat. Pairing NO₂ up into N₂O₄ gives out heat, so heating pushes the balance back towards brown NO₂.",
-    "Try the ice bath at 0 °C. Cooling favours the direction that gives out heat, so the gas should turn paler."
+    "When the tube changed temperature, did the brown get stronger or weaker?",
+    "Le Chatelier's principle: a balanced reaction shifts to push back against a change. Add heat, and it shifts the way that soaks heat up, like a sponge. Splitting colourless N₂O₄ into brown NO₂ takes in heat. So heating makes the gas browner.",
+    "Try the ice bath at 0 °C. Cooling favours the direction that gives out heat. Will the gas get darker or paler?"
   ]
 }

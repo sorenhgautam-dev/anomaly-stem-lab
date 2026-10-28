@@ -1,7 +1,7 @@
 {
   "id": "melting-temp-rises",
   "lab": "chemistry",
-  "title": "Temperature keeps rising while ice melts",
-  "belief": "If the heater is on, the temperature has to keep going up, even while the ice is melting.",
+  "title": "Heating always makes it hotter",
+  "belief": "The heater is on. So the thermometer has to keep going up, even while the ice melts.",
   "conceptIds": ["changes-of-state", "particle-model"]
 }

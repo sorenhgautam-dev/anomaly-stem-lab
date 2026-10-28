@@ -1,7 +1,7 @@
 {
   "id": "short-harmless",
   "lab": "robotics",
-  "title": "A wire across a part changes nothing",
+  "title": "An extra wire changes nothing",
   "belief": "A wire across bulb B is just an extra wire. The current still goes through the bulb, so nothing changes.",
   "conceptIds": [
     "short-circuits",

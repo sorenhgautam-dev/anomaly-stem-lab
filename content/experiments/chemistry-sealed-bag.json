@@ -5,8 +5,8 @@
   "grades": "6-8",
   "order": 3,
   "title": "Mass in a sealed bag",
-  "goal": "Find out whether the scale reading changes when baking soda and vinegar fizz in an open or a sealed bag.",
-  "intro": "Baking soda, a cup of vinegar and a zip bag, all on one scale. When the fizzing stops, will the scale read more, less or the same?",
+  "goal": "Mix baking soda and vinegar in a bag on a scale. Find out if the reading changes, with the bag open or sealed.",
+  "intro": "Baking soda, a cup of vinegar and a zip bag all sit on one scale. When they fizz, will everything get heavier, stay the same or get lighter?",
   "minutes": 3,
   "stage": "fizz",
   "parts": [],
@@ -26,17 +26,17 @@
   ],
   "prediction": {
     "type": "choice",
-    "question": "When the fizzing stops, the scale will read…",
-    "options": ["More", "The same", "Less"]
+    "question": "When the fizzing stops, everything on the scale…",
+    "options": ["Gets heavier", "Stays the same", "Gets lighter"]
   },
   "answer": {
     "kind": "compare",
     "a": "scale.end",
     "b": "scale.start",
     "tolerance": 0.0005,
-    "aBigger": "More",
-    "bBigger": "Less",
-    "same": "The same"
+    "aBigger": "Gets heavier",
+    "bBigger": "Gets lighter",
+    "same": "Stays the same"
   },
   "misconceptions": ["gas-has-no-mass", "nothing-escapes"],
   "allowedEdits": [
@@ -45,5 +45,5 @@
     { "id": "more-soda", "label": "Use 10 g of baking soda", "edit": { "op": "set", "setting": "soda", "value": 10 } }
   ],
   "theoryId": "conservation-of-mass",
-  "safety": "Wear goggles, and use a bag that can stretch, never a sealed bottle: the gas builds up pressure and a bottle can burst."
+  "safety": "Wear goggles. Use a bag that can stretch, never a closed bottle. The gas pushes hard, and a bottle can burst."
 }

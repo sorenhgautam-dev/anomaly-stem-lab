@@ -2,9 +2,9 @@
   "id": "pwm-motors",
   "title": "Pulse-width modulation",
   "body": [
-    "Pulse-width modulation (PWM) controls a motor by switching its power fully on and off very fast, hundreds or thousands of times a second. The duty cycle is the share of the time it's on.",
-    "Those pulses are too quick for the motor to follow. Its coil smooths out the current and its spinning parts smooth out the speed, so it settles at a steady speed set by the average voltage. Switch slowly enough, though, and it really would jerk.",
-    "Average voltage = duty cycle × supply voltage. At 50% duty on 6 V the motor gets 3 V on average and spins at roughly half speed."
+    "Pulse-width modulation (PWM) means switching a motor's power fully on and off very fast. That's hundreds or thousands of times a second. The duty cycle is the share of the time the power is on.",
+    "Those pulses are too quick for the motor to follow. Its coil smooths out the current, and its spinning parts smooth out the speed. Think of quick, regular pushes on a playground roundabout: it keeps turning smoothly. So the motor settles at a steady speed set by the average voltage. Switch slowly enough, though, and it really would jerk.",
+    "Average voltage = duty cycle × supply voltage. At 50% duty on 6 V, the motor gets 3 V on average. It spins at roughly half speed."
   ],
   "equation": "average voltage = duty cycle × supply voltage",
   "realWorld": "Computer fans, drones and dimmable LED lights all use PWM to set their speed or brightness.",

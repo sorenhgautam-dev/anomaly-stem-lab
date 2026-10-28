@@ -1,13 +1,13 @@
 {
   "id": "series-circuits",
-  "title": "Series circuits",
+  "title": "Bulbs in a row",
   "body": [
-    "In a series circuit the parts sit one after another in a single loop. There's only one path, so the same current flows through every part.",
-    "Bulbs don't use up current. They turn electrical energy into light and heat. The current coming out of a bulb is the same as the current going in.",
-    "Each bulb you add in series adds resistance, so less current flows around the whole loop. All the bulbs dim together, and identical bulbs always glow equally."
+    "Here the bulbs sit one after the other in one loop. Scientists call this a series circuit. There's only one path, so the same flow goes through every bulb.",
+    "A bulb doesn't use up the flow. It uses the flow's energy to make light and heat. Think of a water wheel in a stream. The wheel takes energy from the water, but all the water flows on.",
+    "Each bulb you add is like another narrow bit of pipe. Less flows round the whole loop, so all the bulbs dim together. Two bulbs that are exactly alike always glow the same."
   ],
-  "equation": "R_total = R₁ + R₂",
-  "realWorld": "In a string of lights wired in series, one broken bulb opens the loop, so the whole string goes dark.",
+  "equation": "flow through bulb A = flow through bulb B",
+  "realWorld": "Some strings of fairy lights are wired in a row like this. If one bulb breaks, the loop opens. Then the whole string goes dark.",
   "sources": [
     "OpenStax College Physics 2e, §21.1 Resistors in Series and Parallel. https://openstax.org/books/college-physics-2e/pages/21-1-resistors-in-series-and-parallel"
   ]

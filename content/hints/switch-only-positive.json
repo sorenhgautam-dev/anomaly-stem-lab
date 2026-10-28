@@ -1,8 +1,8 @@
 {
   "misconceptionId": "switch-only-positive",
   "hints": [
-    "Trace the loop from the battery's plus end, through the bulb, and back to the minus end. Where does the open switch break it?",
-    "Current only flows around a complete loop. A gap anywhere in the loop stops the current everywhere, whether it's before the bulb or after it.",
-    "Close the switch and run it. Then open it again and watch the bulb go out."
+    "Start at the battery's plus end and follow the loop all the way round. Where does the switch leave a gap?",
+    "Electricity moves all the way round the loop at once, like a bike chain. If one link breaks, the whole chain stops. So a gap after the bulb stops the bulb too.",
+    "Flip the switch on and press Run. Then flip it off again. Does the bulb go out?"
   ]
 }

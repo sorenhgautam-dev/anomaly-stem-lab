@@ -2,13 +2,13 @@
   "id": "ohms-law-power",
   "title": "Ohm's law and power",
   "body": [
-    "Ohm's law links voltage, current and resistance: V = I × R. On a fixed 9 V, a 10 Ω resistor lets through 100 times more current than a 1 kΩ one.",
-    "The power a resistor turns into heat is P = V × I. Put the two together and you get P = V² ÷ R, so across a fixed voltage the lower-value resistor gets far hotter.",
-    "In a series chain it's the other way round. The same current flows through each resistor, so P = I² × R and the larger value runs hotter.",
-    "Every resistor has a power rating, and 0.25 W is a common one for small resistors. Push past it and the resistor overheats and can fail."
+    "Think of voltage as the push, current as the flow, and resistance as a narrow pipe. Ohm's law links all three: V = I × R. On 9 V, a 10 Ω resistor lets through 100 times the current of a 1 kΩ one.",
+    "Power is how fast the resistor turns electrical energy into heat: P = V × I. Put the two laws together and you get P = V² ÷ R. So on a fixed voltage, the lower-value resistor gets far hotter.",
+    "In a series chain it's the other way round. The same current flows through each resistor. Then P = I² × R, so the larger value runs hotter.",
+    "Every resistor has a power rating: the most heat it can safely handle. For small resistors, 0.25 W is common. Push past it and the resistor overheats and can fail."
   ],
   "equation": "P = V × I = V² ÷ R",
-  "realWorld": "Circuit designers check each resistor's power against its rating, so nothing overheats when the device runs flat out.",
+  "realWorld": "Circuit designers check each resistor's power against its rating. That way nothing overheats, even when the device runs at full power.",
   "sources": [
     "OpenStax College Physics 2e, §20.2 Ohm's Law: Resistance and Simple Circuits. https://openstax.org/books/college-physics-2e/pages/20-2-ohms-law-resistance-and-simple-circuits",
     "OpenStax College Physics 2e, §20.4 Electric Power and Energy. https://openstax.org/books/college-physics-2e/pages/20-4-electric-power-and-energy",

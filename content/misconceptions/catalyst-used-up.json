@@ -2,6 +2,6 @@
   "id": "catalyst-used-up",
   "lab": "chemistry",
   "title": "Catalysts get used up",
-  "belief": "The catalyst joins in the reaction, so it gets used up like the other chemicals. There'll be less of it at the end.",
+  "belief": "The catalyst joins in the reaction, so it gets used up like the other chemicals. There'll be less left at the end.",
   "conceptIds": ["catalysts", "reaction-rates"]
 }

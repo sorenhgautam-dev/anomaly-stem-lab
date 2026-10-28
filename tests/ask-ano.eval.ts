@@ -98,7 +98,7 @@ const CASES: Case[] = [
     reference: "Nice question! In hot water the particles zoom around faster, so they bump into the tablet more often and harder, like a busy playground at break time. More good collisions, faster reaction. What would ice water do?",
   },
   {
-    facts: base("Indicator colours", "easy", "wrong", null, { ph: 3 }, "Why is lemon juice an acid if we eat it?"),
+    facts: base("Cabbage juice colours", "easy", "wrong", null, { ph: 3 }, "Why is lemon juice an acid if we eat it?"),
     must: [/acid|ph/i],
     mustNot: [/food can't be acid/i],
     reference: "Lots of foods are acids! Lemon juice has a pH around 3, which is why it tastes sour, like vinegar on chips. Being an acid doesn't mean it's dangerous to eat. What colour did the indicator turn?",

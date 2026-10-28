@@ -2,7 +2,7 @@
   "id": "one-wire-enough",
   "lab": "robotics",
   "title": "One wire is enough",
-  "belief": "A bulb just needs power from the battery's plus end. One wire from there to the bulb is enough to light it.",
+  "belief": "The bulb only needs power from the battery. One wire from the plus end should light it.",
   "conceptIds": [
     "complete-circuit",
     "current-paths"

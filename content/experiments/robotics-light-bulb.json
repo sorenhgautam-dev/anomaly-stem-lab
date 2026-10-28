@@ -6,7 +6,7 @@
   "order": 1,
   "title": "Light a bulb",
   "goal": "Make the bulb light up.",
-  "intro": "Here's a battery, a bulb and one wire. Is that enough to light it?",
+  "intro": "You have a battery, a bulb and one wire. Is one wire enough to light the bulb?",
   "minutes": 2,
   "stage": "circuit",
   "parts": ["wire"],
@@ -25,7 +25,7 @@
       { "from": "wire-2.a", "to": "batt.b", "via": [[170, 420]] }
     ]
   },
-  "prediction": { "type": "choice", "question": "Will the bulb light?", "options": ["Yes", "No"] },
+  "prediction": { "type": "choice", "question": "Will the bulb light up?", "options": ["Yes", "No"] },
   "answer": {
     "kind": "cases",
     "cases": [{ "when": { "reading": "bulb.lit", "op": "==", "value": 1 }, "answer": "Yes" }],

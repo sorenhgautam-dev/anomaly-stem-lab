@@ -3,18 +3,27 @@
     "id": "easy",
     "title": "Easy",
     "grades": "Grades 6–8",
-    "line": "First circuits, melting ice, where the sugar goes. Big ideas, quick builds."
+    "line": "Light bulbs, switches, melting ice and dissolving sugar. Quick builds, big surprises.",
+    "symbol": "Ea",
+    "teaser": "current-used-up",
+    "ano": "Easy! Quick builds and big surprises. Ready for your first guess?"
   },
   {
     "id": "medium",
     "title": "Medium",
     "grades": "Grades 9–10",
-    "line": "LEDs and resistors, steering a robot, reaction speed and pH."
+    "line": "Light an LED, steer a robot, heat up gases and speed up reactions.",
+    "symbol": "Md",
+    "teaser": "no-resistor-needed",
+    "ano": "Medium! LEDs, robots and acids. Things get a bit trickier now."
   },
   {
     "id": "advanced",
     "title": "Advanced",
     "grades": "Grades 11–12",
-    "line": "Power budgets, gears and PWM, gas laws, catalysts and equilibrium."
+    "line": "Gears, motor speed, power, gas laws, catalysts and reactions that balance out.",
+    "symbol": "Ad",
+    "teaser": "big-gear-faster",
+    "ano": "Advanced! Gears, gas laws and balancing reactions. Bring your best guesses."
   }
 ]

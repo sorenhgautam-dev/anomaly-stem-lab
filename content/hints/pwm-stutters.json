@@ -1,8 +1,8 @@
 {
   "misconceptionId": "pwm-stutters",
   "hints": [
-    "Look at the rpm line after the first half second. Does it jump up and down, or stay level?",
-    "The power switches 1000 times a second. The motor's coil and its heavy spinning parts can't follow pulses that fast, so they smooth them out and the motor follows the average voltage.",
-    "Set the duty cycle to 20% and watch the speed settle low and steady."
+    "Watch the motor's speed once it gets going. Does it jump up and down, or stay level?",
+    "The power switches on and off 1000 times a second. Inertia means the motor's heavy spinning parts want to keep spinning. They can't follow pulses that fast, so they smooth them out. Think of a playground roundabout getting lots of quick shoves: it spins steadily.",
+    "Set the duty cycle to 20%. Does the motor jerk, or settle at a lower, steady speed?"
   ]
 }

@@ -1,8 +1,8 @@
 {
   "misconceptionId": "more-resistance-more-heat",
   "hints": [
-    "Compare the current through the 10 Ω resistor and the 1 kΩ resistor. Did it stay the same?",
-    "Across a fixed 9 V, a resistor with more ohms lets less current through. The heat it makes each second is P = V² ÷ R, so the lower-value resistor gets hotter.",
-    "Swap in the 1 kΩ resistor and check its power reading."
+    "Compare the current through the 10 Ω resistor and the 1 kΩ resistor. Is it the same?",
+    "Across a fixed 9 V, more resistance lets less current through. Power, the heat made each second, is P = V² ÷ R. So the lower-value resistor gets hotter. Think of two hoses on the same tap. The wide one lets far more water rush through.",
+    "Swap in the 1 kΩ resistor and check its power reading. Is it under the 0.25 W rating?"
   ]
 }

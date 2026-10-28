@@ -2,7 +2,7 @@
   "id": "switch-only-positive",
   "lab": "robotics",
   "title": "A switch only works before the bulb",
-  "belief": "A switch has to go on the plus side, before the bulb. After the bulb the current has already done its job, so the switch can't stop it.",
+  "belief": "A switch has to go before the bulb. Once the electricity has passed the bulb, a switch can't stop it.",
   "conceptIds": [
     "complete-circuit",
     "switches"

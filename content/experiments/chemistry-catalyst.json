@@ -5,8 +5,8 @@
   "grades": "11-12",
   "order": 2,
   "title": "Activation energy and catalysts",
-  "goal": "Speed up the breakdown of hydrogen peroxide with manganese dioxide and predict what happens to the catalyst.",
-  "intro": "Hydrogen peroxide breaks down into water and oxygen, but very slowly on its own. Tip in some manganese dioxide and watch it fizz.",
+  "goal": "Add manganese dioxide to hydrogen peroxide. It's a catalyst, something that speeds up a reaction. Predict how much of it is left at the end.",
+  "intro": "Hydrogen peroxide slowly breaks down into water and oxygen. On its own, a bottle keeps for months. Tip in some manganese dioxide and watch it fizz.",
   "minutes": 3,
   "stage": "catalyst",
   "parts": [],
@@ -25,7 +25,7 @@
   ],
   "prediction": {
     "type": "choice",
-    "question": "When the fizzing stops, the catalyst left will be…",
+    "question": "When the fizzing stops, how much of the catalyst is left?",
     "options": ["All of it", "Some of it", "None of it"]
   },
   "answer": {
@@ -46,5 +46,5 @@
     { "id": "none", "label": "Leave the catalyst out", "edit": { "op": "set", "setting": "catalyst", "value": 0 } }
   ],
   "theoryId": "catalysts",
-  "safety": "Wear goggles and gloves: hydrogen peroxide irritates skin and eyes, and manganese dioxide is harmful if swallowed or breathed in."
+  "safety": "Wear goggles and gloves. Hydrogen peroxide stings skin and eyes. Manganese dioxide is harmful if you swallow it or breathe it in."
 }

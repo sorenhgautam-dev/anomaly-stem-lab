@@ -1,35 +1,45 @@
 {
   "greet": [
-    "Hey, I'm Ano. Want to break some science?",
-    "Hi! I'm Ano. Let's go find a wrong idea and break it."
+    "Hi, I'm Ano! You guess first, then we test it. Ready?",
+    "Hey, I'm Ano. Let's see if your guess holds up.",
+    "Hi! I'm Ano. Make a guess, then we'll see what really happens."
   ],
   "building": [
-    "Nice. What do you think will happen?",
-    "Looking good. Make your call before you run it."
+    "Nice. So, what do you think will happen?",
+    "Looking good. Make your guess before you press Run.",
+    "Almost ready. What's your guess this time?"
   ],
   "correct": [
-    "Nailed it! That's exactly how a scientist thinks.",
-    "Spot on. Your prediction matched reality."
+    "Nailed it! That's how a real scientist thinks.",
+    "Spot on. Your guess matched what really happened.",
+    "You got it! Peek at the theory to see why it works."
   ],
   "wrong": [
-    "Whoa, did you see that? Let's figure out why.",
-    "Huh. Reality disagreed with you. That's the fun part."
+    "Whoa, did you see that? Let's work out why.",
+    "Huh, not what you guessed. That's the fun part!",
+    "Surprise! Lots of people guess that. Let's find out what happened."
   ],
   "stuck": [
-    "Want a hint? Just a small one.",
-    "Let's look at the one part that matters."
+    "Here's a little hint. Check it out below.",
+    "Need a nudge? There's a small hint just below.",
+    "Stuck? That's okay. Take a look at the hint below."
+  ],
+  "noAnswer": [
+    "Great question! Run it again and watch closely. What changes?",
+    "Hmm, I can’t answer that one right now. Try changing one thing and run it again.",
+    "Good thinking! Watch the numbers while it runs. What do you notice?"
   ],
   "levelUp": [
-    "Level complete! Ready for the next one?",
-    "That's the level. Onward?"
+    "Level done! Ready for the next one?",
+    "You finished the whole level. Want to try a harder one?"
   ],
   "headlines": {
-    "correct": ["Nailed it.", "Spot on.", "You called it.", "Exactly right."],
-    "wrong": ["Not quite.", "Plot twist.", "Interesting.", "Reality disagrees."]
+    "correct": ["Nailed it.", "Spot on.", "You got it.", "That's right."],
+    "wrong": ["Not quite.", "Plot twist.", "Surprise.", "Look again."]
   },
   "hero": {
-    "wrong": "Whoa, did you see that? They hit the floor together. Let's find out why.",
-    "correct": "Nailed it! Weight doesn't change how fast things fall. Most people guess wrong here.",
+    "wrong": "Whoa, they landed together! That surprises lots of people. Let's find out why.",
+    "correct": "Nailed it! Weight doesn't change how fast things fall. The air barely slows these balls.",
     "next": "Want more? Pick your level."
   }
 }

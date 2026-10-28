@@ -1,8 +1,8 @@
 {
   "misconceptionId": "big-gear-faster",
   "hints": [
-    "Count the turns. How many times does the motor gear go round while the big gear goes round once?",
-    "Meshed gears pass the same number of teeth each second. A gear with three times the teeth takes three times as long to go round once, so the bigger gear turns slower.",
-    "Use a small 8-tooth output gear and predict again."
+    "Count the turns on each gear. While the big gear goes round once, how many turns does the motor gear make?",
+    "Meshed gears, gears with their teeth locked together, pass the same number of teeth each second. A gear with three times the teeth takes three times as long per turn. It's like a bike in its lowest gear: easy to pedal, but slow. The bigger gear turns slower, with more turning force.",
+    "Use a small 8-tooth output gear and predict again. Will it turn faster or slower than the motor gear?"
   ]
 }

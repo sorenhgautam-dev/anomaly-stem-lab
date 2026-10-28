@@ -1,8 +1,8 @@
 {
   "id": "battery-constant-current",
   "lab": "robotics",
-  "title": "A battery always gives the same current",
-  "belief": "A battery pushes out a fixed amount of current. Add another bulb and they have to share it, so both get dimmer.",
+  "title": "The bulbs have to share",
+  "belief": "A battery gives out a set amount of electricity. Add a second bulb and they have to share it, so both get dimmer.",
   "conceptIds": [
     "battery-voltage",
     "parallel-circuits"

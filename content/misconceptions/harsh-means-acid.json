@@ -1,7 +1,7 @@
 {
   "id": "harsh-means-acid",
   "lab": "chemistry",
-  "title": "Anything harsh is an acid",
-  "belief": "Things that clean, sting or burn are acids. Soap and baking soda are for cleaning, so they must be acids.",
+  "title": "Cleaners must be acids",
+  "belief": "Things that clean or sting must be acids. So soap and baking soda are acids too.",
   "conceptIds": ["acids-and-bases"]
 }

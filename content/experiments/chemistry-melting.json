@@ -5,8 +5,8 @@
   "grades": "6-8",
   "order": 1,
   "title": "Melting and particles",
-  "goal": "Find out what the thermometer does while ice is melting.",
-  "intro": "This beaker of ice starts at −10 °C, with a steady heater underneath. What will the thermometer do while the ice is melting?",
+  "goal": "Find out what the thermometer does while ice melts.",
+  "intro": "This ice starts at −10 °C, below freezing. The heater gives it the same amount of heat every second. What will the thermometer do while the ice melts?",
   "minutes": 3,
   "stage": "melt",
   "parts": [],
@@ -50,5 +50,5 @@
     }
   ],
   "theoryId": "changes-of-state",
-  "safety": "Hot plates stay hot after they are switched off, so let them cool before you touch them, and keep cables away from water."
+  "safety": "Hot plates stay hot after you switch them off. Let them cool before you touch them. Keep cables away from water."
 }

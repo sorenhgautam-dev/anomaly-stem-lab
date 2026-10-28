@@ -2,6 +2,6 @@
   "id": "equilibrium-is-frozen",
   "lab": "chemistry",
   "title": "Equilibrium means it has stopped",
-  "belief": "Once a reaction reaches equilibrium it's finished. Nothing is happening any more, so heating it can't change anything.",
+  "belief": "Once the reaction settles into equilibrium, it's finished. Nothing is happening any more, so a new temperature can't change anything.",
   "conceptIds": ["equilibrium"]
 }

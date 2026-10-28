@@ -1,13 +1,13 @@
 {
   "id": "acids-and-bases",
-  "title": "Acids, bases and the pH scale",
+  "title": "Acid, base or neither?",
   "body": [
-    "Acids give lemon juice and vinegar their sour taste. Bases, like soap and baking soda solution, feel slippery. Some cleaners are acids and many are bases, so whether something cleans or stings doesn't tell you which it is.",
-    "The pH scale usually runs from 0 to 14. Below 7 is acidic, 7 is neutral, and above 7 is basic. Each step is ten times stronger, so pH 2 is a hundred times more acidic than pH 4.",
-    "An indicator is a dye that changes colour with pH. Red cabbage juice turns pink or red in acids, stays purple near neutral, and turns blue and then green in bases."
+    "Acids make lemon juice and vinegar taste sour. Bases, like soap and baking soda in water, feel slippery. Plain water is neither, so we call it neutral. Some cleaners are acids, and many are bases. So cleaning or stinging won't tell you which.",
+    "Scientists use pH to say how acidic something is. It's a number that usually runs from 0 to 14. Below 7 is an acid. Exactly 7 is neutral. Above 7 is a base.",
+    "Red cabbage juice is an indicator, a dye that changes colour. It turns pink or red in acids. It stays purple when a liquid is neutral. In bases, it turns blue and then green."
   ],
-  "equation": "pH < 7 acidic · pH 7 neutral · pH > 7 basic",
-  "realWorld": "Your stomach uses strong acid to digest food, and antacid tablets are bases that neutralise the extra. Gardeners test soil pH because some plants, like blueberries, only thrive in acidic soil.",
+  "equation": "below 7: acid · 7: neutral · above 7: base",
+  "realWorld": "Your stomach uses strong acid to break down food. Heartburn tablets, called antacids, are bases that cancel out the extra acid. Gardeners test their soil too, because blueberries grow best in acidic soil.",
   "sources": [
     "OpenStax Chemistry 2e, §14.1 Brønsted-Lowry Acids and Bases. https://openstax.org/books/chemistry-2e/pages/14-1-bronsted-lowry-acids-and-bases",
     "OpenStax Chemistry 2e, §14.2 pH and pOH. https://openstax.org/books/chemistry-2e/pages/14-2-ph-and-poh"

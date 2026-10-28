@@ -5,7 +5,7 @@
   "grades": "6-8",
   "order": 2,
   "title": "Dissolving sugar",
-  "goal": "Predict what the scale reads once the sugar has dissolved in the water.",
+  "goal": "Stir sugar into water until you can't see it. Find out what the scale shows then.",
   "intro": "Stir sugar into water and it vanishes from sight. Does it vanish from the scale too?",
   "minutes": 2,
   "stage": "dissolve",
@@ -16,22 +16,22 @@
   ],
   "prediction": {
     "type": "choice",
-    "question": "When the sugar has dissolved, the scale will read…",
-    "options": ["More", "The same", "Less"]
+    "question": "Once you can't see the sugar, everything on the scale…",
+    "options": ["Gets heavier", "Stays the same", "Gets lighter"]
   },
   "answer": {
     "kind": "compare",
     "a": "scale.end",
     "b": "scale.start",
     "tolerance": 0.0005,
-    "aBigger": "More",
-    "bBigger": "Less",
-    "same": "The same"
+    "aBigger": "Gets heavier",
+    "bBigger": "Gets lighter",
+    "same": "Stays the same"
   },
   "misconceptions": ["dissolved-means-gone"],
   "allowedEdits": [
     { "id": "more-sugar", "label": "Use 50 g of sugar", "edit": { "op": "set", "setting": "sugar", "value": 50 } }
   ],
   "theoryId": "dissolving",
-  "safety": "Never taste anything in a lab, even sugar water, and wipe up spills straight away so nobody slips."
+  "safety": "Never taste anything in a lab, even sugar water. Wipe up spills straight away so nobody slips."
 }

@@ -5,8 +5,8 @@
   "grades": "9-10",
   "order": 2,
   "title": "Reaction speed and temperature",
-  "goal": "Race two identical fizzy tablets in cold and hot water and predict which one finishes first.",
-  "intro": "Two identical fizzy tablets go in at the same moment, one in cold water and one in hot. Which one finishes first?",
+  "goal": "Race two fizzy tablets, one in cold water and one in hot. Predict which one finishes first.",
+  "intro": "Two identical fizzy tablets drop in at the same moment. One goes in cold water, the other in hot. Which one do you think finishes first?",
   "minutes": 3,
   "stage": "rate",
   "parts": [],
@@ -62,5 +62,5 @@
     }
   ],
   "theoryId": "reaction-rates",
-  "safety": "Hot water scalds: fill beakers carefully, keep them away from the edge of the bench, and wear goggles."
+  "safety": "Hot water can scald. Fill beakers carefully and keep them away from the edge of the bench. Wear goggles."
 }

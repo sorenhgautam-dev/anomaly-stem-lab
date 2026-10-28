@@ -1,8 +1,8 @@
 {
   "misconceptionId": "no-resistor-needed",
   "hints": [
-    "Check the LED's peak current, just before it popped. How does it compare with the 20 mA it's designed for?",
-    "Once an LED is on, its current climbs steeply with every bit of extra voltage. With nothing holding it back, the current rushes far past the LED's limit and burns it out. A resistor in line keeps it at a safe level.",
-    "Put the resistor back in line with the LED and run it again."
+    "Click the LED and check its safe current. With only a wire in the circuit, what keeps the current below that?",
+    "Once an LED is on, it hardly slows the current down. With no resistor, the current rushes far past 20 mA and burns it out. A resistor is like a narrow bit of pipe. It lets only a safe trickle through.",
+    "Put the 100 Ω resistor in its slot. Then run it again. Does the LED glow and survive?"
   ]
 }

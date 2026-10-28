@@ -2,7 +2,7 @@
   "id": "gears-keep-speed",
   "lab": "robotics",
   "title": "Gears only change direction",
-  "belief": "Meshed gears just pass the turning along. The output gear spins the other way, but at the same speed as the motor.",
+  "belief": "Meshed gears just pass the turning along. The output gear spins the other way, at the same speed as the motor.",
   "conceptIds": [
     "gear-ratio",
     "rotational-speed"

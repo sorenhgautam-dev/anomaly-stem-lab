@@ -2,12 +2,12 @@
   "id": "reaction-rates",
   "title": "Why heat speeds up reactions",
   "body": [
-    "For particles to react, they have to collide, and hit hard enough to break their old bonds. That minimum energy is called the activation energy. Most collisions are too gentle, and nothing happens.",
-    "In hot water the particles move faster. They collide more often, and far more of those collisions have enough energy to react. So the reaction runs faster.",
-    "A handy rule of thumb: for many reactions near room temperature, every 10 °C rise roughly doubles the rate. That's why a fizzy tablet in hot water is finished long before one in cold water."
+    "To react, particles have to bump into each other hard enough to break their old bonds. Bonds are the links that hold atoms together. The least energy a bump needs to do this is called the activation energy. Most bumps are too gentle, and nothing happens.",
+    "In hot water, the particles move faster. They bump more often, and far more of those bumps are hard enough to react. Think of bumper cars: speed them up and they crash more often, and harder. So the reaction runs faster.",
+    "Here's a handy rule. Near room temperature, each 10 °C rise roughly doubles the speed of many reactions. That's why a tablet in hot water finishes long before one in cold water."
   ],
-  "equation": "k = A·e^(−Ea/RT) (the Arrhenius equation)",
-  "realWorld": "Fridges keep food fresh by slowing down the reactions that make it go off. Cooking does the opposite: heat speeds up the reactions that change raw food.",
+  "equation": "10 °C warmer ≈ about twice as fast (near room temperature)",
+  "realWorld": "Fridges keep food fresh by slowing down the reactions that make it go bad. Cooking does the opposite: heat speeds up the reactions that change raw food.",
   "sources": [
     "OpenStax Chemistry 2e, §12.2 Factors Affecting Reaction Rates. https://openstax.org/books/chemistry-2e/pages/12-2-factors-affecting-reaction-rates",
     "OpenStax Chemistry 2e, §12.5 Collision Theory. https://openstax.org/books/chemistry-2e/pages/12-5-collision-theory"

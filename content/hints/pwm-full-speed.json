@@ -2,7 +2,7 @@
   "misconceptionId": "pwm-full-speed",
   "hints": [
     "Check the motor's average voltage reading. Is it the full 6 V?",
-    "At 50% duty the power is on half the time, so the average voltage is half of 6 V. A DC motor's speed roughly follows the average voltage, so it runs at about half speed.",
+    "The duty cycle is the share of time the power is on. At 50%, the power is on half the time, so the average is 3 V. A motor's speed roughly follows that average. It's like flicking a tap on and off very fast: you get about half the water.",
     "Set the duty cycle to 20% and compare the speed with what you get at 100%."
   ]
 }

@@ -5,8 +5,8 @@
   "grades": "11-12",
   "order": 3,
   "title": "Equilibrium (Le Chatelier)",
-  "goal": "Move a sealed tube of nitrogen dioxide into a water bath and predict how its brown colour changes.",
-  "intro": "This sealed tube holds brown nitrogen dioxide in balance with colourless dinitrogen tetroxide. Choose a water bath, then predict the colour.",
+  "goal": "Put a sealed tube of brown nitrogen dioxide in a water bath. Predict how its colour changes.",
+  "intro": "This sealed tube holds brown nitrogen dioxide and colourless dinitrogen tetroxide. They sit in equilibrium, a steady balance between the two. Pick a water bath, then predict the colour.",
   "minutes": 3,
   "stage": "equilibrium",
   "parts": [],
@@ -51,5 +51,5 @@
     }
   ],
   "theoryId": "equilibrium",
-  "safety": "Nitrogen dioxide is toxic, so the tubes stay sealed and only your teacher handles them, in a fume cupboard."
+  "safety": "Nitrogen dioxide is poisonous, so the tubes stay sealed. Only your teacher handles them, in a fume cupboard that pulls fumes away."
 }

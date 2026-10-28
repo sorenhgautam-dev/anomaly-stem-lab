@@ -4,9 +4,9 @@
   "level": "easy",
   "grades": "6-8",
   "order": 4,
-  "title": "Indicator colours (acid or base)",
-  "goal": "Use red cabbage indicator to find out whether a household liquid is an acid, a base or neutral.",
-  "intro": "Red cabbage juice changes colour in acids and bases. Pick a liquid from the kitchen and predict its colour before you add the indicator.",
+  "title": "Cabbage juice colours (acid or base)",
+  "goal": "Test a kitchen liquid with red cabbage juice. Is it an acid, a base or neither?",
+  "intro": "Red cabbage juice changes colour when it meets an acid or a base. A base is the opposite of an acid. Pick a liquid from the kitchen. What colour do you think the juice will turn?",
   "minutes": 3,
   "stage": "indicator",
   "parts": [],
@@ -20,7 +20,7 @@
         { "value": "lemon", "label": "Lemon juice" },
         { "value": "vinegar", "label": "Vinegar" },
         { "value": "water", "label": "Water" },
-        { "value": "baking-soda", "label": "Baking soda solution" },
+        { "value": "baking-soda", "label": "Baking soda in water" },
         { "value": "soap", "label": "Soapy water" }
       ],
       "initial": "soap"
@@ -28,7 +28,7 @@
   ],
   "prediction": {
     "type": "choice",
-    "question": "The indicator will turn…",
+    "question": "When you add the cabbage juice, it will turn…",
     "options": ["Pink or red", "Purple", "Green or blue"]
   },
   "answer": {
@@ -46,11 +46,11 @@
     { "id": "use-water", "label": "Try water", "edit": { "op": "set", "setting": "liquid", "value": "water" } },
     {
       "id": "use-baking-soda",
-      "label": "Try baking soda solution",
+      "label": "Try baking soda in water",
       "edit": { "op": "set", "setting": "liquid", "value": "baking-soda" }
     },
     { "id": "use-soap", "label": "Try soapy water", "edit": { "op": "set", "setting": "liquid", "value": "soap" } }
   ],
   "theoryId": "acids-and-bases",
-  "safety": "Wear goggles and never taste lab liquids: lemon juice, vinegar and soapy water all sting if they get in your eyes."
+  "safety": "Wear goggles, and never taste anything in a lab. Lemon juice, vinegar and soapy water all sting your eyes."
 }

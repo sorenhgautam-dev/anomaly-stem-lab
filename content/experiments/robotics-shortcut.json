@@ -6,7 +6,7 @@
   "order": 3,
   "title": "The shortcut wire",
   "goal": "Find out what a wire across bulb B does to bulb A.",
-  "intro": "Two bulbs in a row, and a spare wire that can bridge right across bulb B. What can one little wire change?",
+  "intro": "Two bulbs sit in a row. A spare wire can reach across bulb B, from one end to the other. What can one little wire change?",
   "minutes": 3,
   "stage": "circuit",
   "parts": ["wire"],

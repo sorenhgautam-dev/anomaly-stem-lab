@@ -210,3 +210,13 @@ next-env.d.ts
 /DESIGN.md
 /GAUNTLET.md
 /HANDOFF.md
+
+# ECC skills (unzipped reference material, not shipped)
+/.skills/
+
+# Working notes kept locally, off GitHub (owner, 29 October 2026): only README.md and CLAUDE.md are published
+/AGENTS.md
+/GAUNTLET_LOG.md
+/RESOURCES.md
+/tests/BUG_HUNT.md
+/tests/EDGE_CASES.md

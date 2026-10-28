@@ -49,7 +49,7 @@ export function BeliefShiftCard({ eyebrow = "What you just learned", title, deta
   const lg = size === "lg";
   return (
     <PaperCard float={float} phase={phase} className={cn("relative w-72 overflow-hidden", lg ? "flex flex-col p-6" : "p-4", tone === "untested" && "bg-cream-50", className)}>
-      <p className="type-eyebrow flex items-center gap-1.5 text-ink-500">
+      <p className={cn("type-eyebrow flex items-center gap-1.5 text-ink-500", href && "pr-12")}>
         {accent === "chem" && <IconFlask aria-hidden className="size-3.5 text-chem-wall" />}
         {accent === "robo" && <IconRobot aria-hidden className="size-3.5 text-robo-wall" />}
         {eyebrow}

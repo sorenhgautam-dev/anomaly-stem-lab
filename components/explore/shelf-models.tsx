@@ -15,6 +15,8 @@ import { Gear3D } from "@/components/lab3d/kit/robot/Gear3D";
 import { MotorCan3D } from "@/components/lab3d/kit/robot/MotorCan3D";
 import { RobotChassis3D } from "@/components/lab3d/kit/robot/RobotChassis3D";
 import { LAB, PALETTE as P } from "@/lib/tokens";
+import { Cluster } from "@/components/lab3d/kit/bio/Cluster";
+import { Colony, Dish3D } from "@/components/lab3d/kit/bio/Dish3D";
 
 /*
  * One real piece of apparatus from the lab kit for each experiment, for the
@@ -66,9 +68,54 @@ const MODELS: Record<string, () => ReactNode> = {
   "robotics-steering": () => <RobotChassis3D track={0.5} wheelRadius={0.12} left={0} right={0} />,
   "robotics-gears": () => <Gear3D teeth={18} angle={still} />,
   "robotics-pwm": () => <MotorCan3D />,
+  // The cancer labs: soft cells in their dishes, a cluster in its scanner ring.
+  "treatment-chemo-hair": () => (
+    <Dish3D radius={0.3}>
+      <Colony count={() => 70} room={90} radius={0.26} color={LAB.robotics.teal} />
+    </Dish3D>
+  ),
+  "detection-tumour-growth": () => (
+    <group>
+      <mesh rotation={[0, 0, 0]} position={[0, 0.34, 0]}>
+        <torusGeometry args={[0.3, 0.06, 20, 56]} />
+        <meshPhysicalMaterial color="#ffffff" roughness={0.3} clearcoat={0.8} />
+      </mesh>
+      <Cluster count={() => 90} color={LAB.robotics.teal} radius={0.11} position={[0, 0.34, 0]} />
+    </group>
+  ),
+  "cell-out-of-control": () => (
+    <Dish3D radius={0.3}>
+      <Colony count={() => 130} room={80} radius={0.26} color={LAB.chemistry.gold} />
+    </Dish3D>
+  ),
+  "prevention-uv-cloudy": () => (
+    <group>
+      <mesh position={[-0.12, 0.6, 0]}>
+        <sphereGeometry args={[0.16, 32, 20]} />
+        <meshStandardMaterial color={LAB.chemistry.gold} emissive={LAB.chemistry.gold} emissiveIntensity={0.5} />
+      </mesh>
+      <mesh position={[0.08, 0.5, 0.1]}>
+        <sphereGeometry args={[0.14, 28, 18]} />
+        <meshStandardMaterial color="#ffffff" roughness={0.9} />
+      </mesh>
+      <mesh position={[0.2, 0.2, 0]}>
+        <boxGeometry args={[0.24, 0.18, 0.06]} />
+        <meshPhysicalMaterial color={LAB.chemistry.wall} roughness={0.4} clearcoat={0.5} />
+      </mesh>
+    </group>
+  ),
+  "cell-contact-test": () => (
+    <Dish3D radius={0.3}>
+      <Colony count={() => 60} room={60} radius={0.26} color={LAB.chemistry.sage} />
+    </Dish3D>
+  ),
 };
 
-/** The model for an experiment (a plain beaker if it has none yet). */
+/** The model for an experiment (a plain dish of cells if it has none yet). */
 export function shelfModel(id: string): ReactNode {
-  return (MODELS[id] ?? (() => <Beaker3D level={() => 0.5} color={() => LAB.chemistry.sage} />))();
+  return (MODELS[id] ?? (() => (
+    <Dish3D radius={0.3}>
+      <Colony count={() => 50} room={70} radius={0.26} color={LAB.chemistry.sage} />
+    </Dish3D>
+  )))();
 }

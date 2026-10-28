@@ -5,6 +5,7 @@ import { ViewTransition } from "react";
 import { IconCheck } from "@/components/icons/icons";
 import type { LabId } from "@/engine/types";
 import { cn } from "@/lib/cn";
+import { worldOf } from "@/lib/labs";
 import { Tilt } from "@/components/ui/Tilt";
 import { resumeAudio, whoosh } from "@/lib/sound";
 import { ApparatusWindow } from "./ApparatusWindow";
@@ -39,8 +40,8 @@ export function PathNode({ index, id, lab, title, minutes, status, href, morph }
         <span className="type-heading block text-lg leading-tight">{title}</span>
         <span className="type-readout mt-1.5 flex items-center gap-2 text-[12px] text-ink-700">
           <span aria-hidden className="relative grid size-2.5 place-items-center">
-            {status === "current" && <span className={cn("absolute inset-[-3px] animate-breathe rounded-full motion-reduce:hidden", lab === "chemistry" ? "bg-chem-gold/60" : "bg-robo-gold/50")} />}
-            <span className={cn("relative size-2.5 rounded-full", status === "current" ? (lab === "chemistry" ? "bg-chem-gold" : "bg-robo-gold") : st.light)} />
+            {status === "current" && <span className={cn("absolute inset-[-3px] animate-breathe rounded-full motion-reduce:hidden", worldOf(lab) === "chemistry" ? "bg-chem-gold/60" : "bg-robo-gold/50")} />}
+            <span className={cn("relative size-2.5 rounded-full", status === "current" ? (worldOf(lab) === "chemistry" ? "bg-chem-gold" : "bg-robo-gold") : st.light)} />
           </span>
           {status === "done" && <IconCheck aria-hidden className="size-3.5 text-verify-700" />}
           {st.label}
@@ -54,7 +55,7 @@ export function PathNode({ index, id, lab, title, minutes, status, href, morph }
     // Locked nodes are a solid cream panel with muted text (not transparent, so the path never shows through).
     playable ? "transition-shadow duration-300 ease-out-soft group-hover:shadow-warm-lg" : "bg-cream-100 text-ink-700 shadow-warm-sm",
     // The lab's gold marks the next experiment (orange stays Ano's).
-    status === "current" && (lab === "chemistry" ? "ring-[3px] ring-chem-gold" : "ring-[3px] ring-robo-gold"),
+    status === "current" && (worldOf(lab) === "chemistry" ? "ring-[3px] ring-chem-gold" : "ring-[3px] ring-robo-gold"),
   );
   return (
     <div className="relative">
@@ -68,7 +69,7 @@ export function PathNode({ index, id, lab, title, minutes, status, href, morph }
               resumeAudio();
               whoosh();
             }}
-            className="group block rounded-card outline-none"
+            className="group block rounded-card"
           >
             {/* The link stays still (the hit area); the card tilts inside it. */}
             <Tilt lift={1} degrees={4} innerClassName={classes}>

@@ -6,6 +6,7 @@ import { PerspectiveCamera, View } from "@react-three/drei";
 import type { Group } from "three";
 import type { LabId } from "@/engine/types";
 import { cn } from "@/lib/cn";
+import { worldOf } from "@/lib/labs";
 import { prefersReducedMotion } from "@/lib/motion";
 import { IconLock } from "@/components/icons/icons";
 import { FitModel } from "@/components/three/FitModel";
@@ -21,7 +22,7 @@ import { shelfModel } from "./shelf-models";
  */
 
 function Turntable({ id, index }: { id: string; index: number }) {
-  useLabEnvironment(id.startsWith("robotics") ? "robotics" : "chemistry");
+  useLabEnvironment(id.startsWith("robotics") || id.startsWith("treatment") || id.startsWith("detection") ? "robotics" : "chemistry");
   const g = useRef<Group>(null);
   const [still] = useState(prefersReducedMotion);
   const [model] = useState(() => shelfModel(id));
@@ -44,7 +45,7 @@ export function ApparatusWindow({ id, lab, index, locked, className }: { id: str
   const track = useRef<HTMLDivElement>(null);
   useViewPresence(track);
   return (
-    <span aria-hidden className={cn("relative block size-20 shrink-0 overflow-hidden rounded-tile", lab === "chemistry" ? "bg-chem-world" : "bg-robo-world", className)}>
+    <span aria-hidden className={cn("relative block size-20 shrink-0 overflow-hidden rounded-tile", lab === "prevention" ? "bg-prevent-world" : worldOf(lab) === "chemistry" ? "bg-chem-world" : "bg-robo-world", className)}>
       {id && (
         <View ref={track} className="absolute inset-0">
           <Turntable id={id} index={index} />

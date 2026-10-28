@@ -4,13 +4,13 @@ import { useState } from "react";
 import landing from "@/content/landing.json";
 import { cn } from "@/lib/cn";
 import { RollingLetters } from "@/components/ui/RollingText";
-import { HowBench3D } from "./HowBench3D";
+import { HowChemo3D } from "./HowChemo3D";
 import type { HowSequence } from "./how-sequence";
 import { SectionHeading } from "./SectionHeading";
 import { useScrollScene } from "./useScrollScene";
 
 /*
- * How it works (DESIGN.md §7.1 item 1): one live sequence, not a row of
+ * How it works (DESIGN.md §7.1 item 2): one live sequence, not a row of
  * cards. The real Light the LED experiment plays through Predict, Diagnose,
  * Break and Rebuild (states from the engine, how-sequence.ts) on one bench,
  * with one caption at a time beside it.
@@ -44,7 +44,7 @@ export function HowItWorks({ sequence }: { sequence: HowSequence }) {
 
   return (
     <section ref={ref} id="how-it-works" aria-labelledby="how-it-works-title" className={cn("relative scroll-mt-24", pinned && "h-[320vh]")}>
-      <div className={cn("mx-auto flex w-full max-w-7xl flex-col px-4 py-24 sm:px-8 sm:py-32", pinned && "sticky top-0 h-dvh justify-center sm:py-0")}>
+      <div className={cn("mx-auto flex w-full max-w-7xl flex-col px-4 py-24 sm:px-8 sm:py-32", pinned && "sticky top-0 z-15 h-dvh justify-center sm:py-0")}>
         {/* Phones read heading, steps, bench, caption (the left column dissolves into the grid); desktop puts the bench on the right. */}
         <div className={cn("grid items-center gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14", pinned && "lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-10")}>
           {/* Short desktop screens: a smaller heading and no big step number, so the pinned scene fits. */}
@@ -103,7 +103,8 @@ export function HowItWorks({ sequence }: { sequence: HowSequence }) {
           {/* The 3D bench: on phones a card; pinned on wide screens it stands bare on the dark, the whole bench always in frame. The step's tag and verdict sit over it, the reality line under it. */}
           <div className="relative order-3 flex flex-col gap-4 lg:order-none">
             <div className="relative">
-              <HowBench3D bench={bench} stepKey={step} label={benchLabel(bench)} bare={pinned} className={cn("aspect-[16/11] rounded-frame ring-1 ring-robo-gold/30", pinned && "lg:aspect-auto lg:h-[min(56dvh,34rem)] lg:rounded-none lg:ring-0")} />
+              {/* See-through: the eyepieces draw in the site canvas behind it (a pinned scene sits above the canvas, z-15). */}
+              <HowChemo3D bench={bench} label={benchLabel(bench)} className="rounded-frame ring-1 ring-robo-gold/30" />
               <div className="pointer-events-none absolute inset-x-4 top-4 flex flex-wrap items-start justify-between gap-3 sm:inset-x-6 sm:top-6">
                 <span key={bench.tag} className="paper-card inline-flex h-9 animate-pop-in items-center rounded-full px-3.5 text-[14px] font-semibold text-ink-900 motion-reduce:animate-none">
                   {bench.tag}
@@ -131,12 +132,8 @@ export function HowItWorks({ sequence }: { sequence: HowSequence }) {
                 </>
               ) : (
                 <>
-                  <span className="mr-1 text-cream-200/70">When you press Run, the LED will…</span>
-                  {sequence.options.map((o) => (
-                    <span key={o} className={cn("inline-flex h-9 items-center rounded-full px-3.5 font-semibold", o === sequence.guess ? "bg-robo-gold text-ink-900" : "bg-white/10 text-cream-100")}>
-                      {o}
-                    </span>
-                  ))}
+                  <span className="mr-1 text-cream-200/70">{sequence.question}</span>
+                  <span className="inline-flex h-9 items-center rounded-full bg-robo-gold px-3.5 font-semibold text-ink-900">{sequence.guess}</span>
                 </>
               )}
             </div>
@@ -149,8 +146,9 @@ export function HowItWorks({ sequence }: { sequence: HowSequence }) {
 
 /** What the bench shows, for screen readers. */
 function benchLabel(b: HowSequence["steps"][number]): string {
-  const parts = [`LED circuit, LED ${b.flipped ? "backwards" : "the right way round"}, ${b.slot === "empty" ? "nothing" : `a ${b.slot}`} in the resistor's place.`];
-  if (b.run) parts.push(`What really happened: ${b.run.answer}, ${b.run.mA.toFixed(1)} milliamps.`);
+  const d = b.dishes;
+  const parts = [`Three dishes of cells. Cancer cells ${Math.round(d.cancer)}%, hair follicle cells ${Math.round(d.hair)}%, slow-dividing cells ${Math.round(d.slow)}%.`];
+  if (b.run) parts.push(`What really happened: ${b.run.answer}.`);
   if (b.ghost) parts.push(`Your guess: ${b.ghost.answer}.`);
   return parts.join(" ");
 }

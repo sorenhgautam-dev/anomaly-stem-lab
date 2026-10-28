@@ -42,7 +42,7 @@ export function CarouselControls({
             onClick={() => go(i)}
             aria-label={`${label} ${i + 1} of ${count}`}
             aria-current={i === index ? "true" : undefined}
-            className="group grid size-11 place-items-center rounded-full outline-none transition-colors duration-200 hover:bg-white hover:shadow-warm-sm"
+            className="group grid size-11 place-items-center rounded-full transition-colors duration-200 hover:bg-white hover:shadow-warm-sm"
           >
             <span
               aria-hidden

@@ -16,8 +16,8 @@ export interface Crumb {
 
 export function BreadcrumbBar({ items, className }: { items: Crumb[]; className?: string }) {
   return (
-    <nav aria-label="Breadcrumb" className={cn("paper-card inline-flex max-w-full items-center rounded-full p-1 shadow-warm-sm", className)}>
-      <ol className="flex min-w-0 items-center">
+    <nav aria-label="Breadcrumb" className={cn("paper-card inline-flex max-w-full items-center rounded-[1.4rem] p-1 shadow-warm-sm", className)}>
+      <ol className="flex min-w-0 flex-wrap items-center">
         {items.map((item, i) => (
           <Fragment key={item.href}>
             {i > 0 && (
@@ -32,11 +32,11 @@ export function BreadcrumbBar({ items, className }: { items: Crumb[]; className?
                 transitionTypes={item.current ? undefined : ["nav-back"]}
                 aria-current={item.current ? "page" : undefined}
                 className={cn(
-                  "flex h-11 min-w-11 items-center justify-center truncate rounded-full px-3.5 text-sm transition-colors duration-200",
+                  "flex min-h-11 min-w-11 items-center justify-center rounded-full px-3.5 py-1 text-center text-sm leading-tight transition-colors duration-200",
                   item.current ? "bg-ink-900 font-semibold text-white" : "font-medium text-ink-700 hover:bg-ink-900/[0.06] hover:text-ink-900",
                 )}
               >
-                <span className="truncate">{item.label}</span>
+                <span>{item.label}</span>
               </Link>
             </li>
           </Fragment>

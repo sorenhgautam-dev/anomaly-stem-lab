@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { IconFlag } from "@/components/icons/icons";
 import type { LabId, LevelId } from "@/engine/types";
 import { cn } from "@/lib/cn";
+import { worldOf } from "@/lib/labs";
 import { fx } from "@/lib/fx";
 import { useProgress } from "@/lib/progress";
 import { resolveChime } from "@/lib/sound";
@@ -82,7 +83,7 @@ export function ExperimentPath({ lab, level, stars, nextLevel }: { lab: LabId; l
   const playable = stars.filter((s) => s.id);
   const doneCount = playable.filter((s) => hydrated && done[s.id!]).length;
   const complete = hydrated && playable.length > 0 && doneCount === playable.length;
-  const tint = lab === "chemistry" ? "chem" : "robo";
+  const tint = worldOf(lab) === "chemistry" ? "chem" : "robo";
 
   // Celebrate a finished level once per visit (two-colour confetti).
   const celebrated = useRef(false);

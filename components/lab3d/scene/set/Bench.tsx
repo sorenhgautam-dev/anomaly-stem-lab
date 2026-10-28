@@ -9,6 +9,7 @@ import { mergeParts } from "../../kit/detail";
 import { kitMaterial } from "../../kit/materials";
 import { BENCH } from "./bench-size";
 import { LOOK } from "./look";
+import { worldOf } from "@/lib/labs";
 
 /*
  * The lab bench (DESIGN.md §8, §8.2): a thick worktop with a band under its
@@ -45,7 +46,7 @@ function benchShapes() {
 export function Bench({ lab }: { lab: LabId }) {
   const tier = useQuality((s) => s.level);
   const look = LOOK[lab];
-  const finish = lab === "chemistry" ? "satin" : "matte";
+  const finish = worldOf(lab) === "chemistry" ? "satin" : "matte";
   const g = benchShapes();
   const { top, band, carcass, kick } = BENCH;
   return (
@@ -54,7 +55,7 @@ export function Bench({ lab }: { lab: LabId }) {
       <RoundedBox args={band.size} radius={0.04} smoothness={3} position={band.at} material={kitMaterial(finish, tier, look.band)} />
       <RoundedBox args={carcass.size} radius={0.05} smoothness={3} position={carcass.at} material={kitMaterial(finish, tier, look.cabinet)} />
       <mesh geometry={g.doors} material={kitMaterial(finish, tier, look.cabinet)} />
-      <mesh geometry={g.handles} material={kitMaterial(lab === "chemistry" ? "sand" : "gold", tier)} />
+      <mesh geometry={g.handles} material={kitMaterial(worldOf(lab) === "chemistry" ? "sand" : "gold", tier)} />
       <RoundedBox args={kick.size} radius={0.03} smoothness={2} position={kick.at} material={kitMaterial("matte", tier, look.kick)} />
     </group>
   );

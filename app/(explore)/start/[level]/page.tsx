@@ -4,15 +4,16 @@ import { ExploreBar } from "@/components/explore/ExploreBar";
 import { HeadlineWithAno } from "@/components/explore/HeadlineWithAno";
 import { LabCard } from "@/components/landing/LabCard";
 import { Frame } from "@/components/ui/Frame";
-import { comingSoonFor, experimentsFor, isLevel, LAB_INFO, LEVEL_IDS, levelInfo } from "@/lib/content";
+import { comingSoonFor, experimentsFor, isLevel, LEVEL_IDS, levelInfo, VISIBLE_LAB_INFO } from "@/lib/content";
 
 export function generateStaticParams() {
   return LEVEL_IDS.map((level) => ({ level }));
 }
 
 /*
- * Choose your lab (DESIGN.md §7.3, CLAUDE.md §1.1): Chemistry with a glossy
- * flask, Robotics with a little rover, each with this level's real count.
+ * Choose your lab (DESIGN.md §7.3, CLAUDE.md §8): the four cancer labs in
+ * story order (Cell, Prevention, Detection, Treatment), each in its own
+ * colours with its apparatus and this level's real count.
  * Params are read behind Suspense (instant navigations); the frame carries
  * the level's name, so the level card just clicked grows into it (§9).
  * Clicking a lab card dives into it before its map opens (LabCard `dive`).
@@ -30,7 +31,7 @@ async function LabsForLevel({ params }: { params: PageProps<"/start/[level]">["p
   const { level } = await params;
   if (!isLevel(level)) notFound();
   const info = levelInfo(level);
-  const labs = (["chemistry", "robotics"] as const).map((id) => LAB_INFO.find((l) => l.id === id)!);
+  const labs = VISIBLE_LAB_INFO;
   return (
     <Frame tint="sage" morph={`level-${level}`}>
       <ExploreBar />
@@ -38,7 +39,7 @@ async function LabsForLevel({ params }: { params: PageProps<"/start/[level]">["p
         <HeadlineWithAno
           left="Choose"
           right="your lab."
-          line={`${info.title} it is (${info.grades.toLowerCase()}). Chemicals and particles, or circuits and robots?`}
+          line={`${info.title} it is (${info.grades.toLowerCase()}). Four labs, one story: what cancer is, preventing it, finding it early, treating it.`}
           expression="curious"
           action={{ move: "wave", key: 1 }}
           sizeClassName="text-[clamp(4rem,19vw,6.5rem)] md:text-[clamp(4rem,9.5vw,9rem)]"

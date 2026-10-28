@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/Toggle";
 import { PART_NAMES } from "./BuildControls";
 import { readingLabel } from "./readings";
 import { CountUp } from "@/components/ui/CountUp";
+import { useLabBuild, useLabDef } from "./lab-def";
 
 /*
  * "What's happening" (the inspector, DESIGN.md §7.5 right, CLAUDE.md §3.5): the selected part's
@@ -122,8 +123,8 @@ function CircuitPanel({ def, build, outcome }: { def: ExperimentDef; build: Buil
 }
 
 export function Inspector({ className, zoom }: { className?: string; zoom: { label: string; caption: string } | null }) {
-  const def = useLab((s) => s.def);
-  const build = useLab((s) => s.build);
+  const def = useLabDef();
+  const build = useLabBuild();
   const result = useLab((s) => s.result);
   const phase = useLab((s) => s.phase);
   const zoomed = useLabUi((s) => s.particles);

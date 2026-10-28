@@ -1,11 +1,11 @@
 import landing from "@/content/landing.json";
-import { EXPERIMENTS, LAB_INFO } from "@/lib/content";
+import { EXPERIMENTS, VISIBLE_LAB_INFO } from "@/lib/content";
 import { LabCard } from "./LabCard";
 import { LabsScene } from "./LabsScene";
 import { SectionHeading } from "./SectionHeading";
 
 /*
- * The two labs (DESIGN.md §7.1 item 2), in the landing's black and gold
+ * The four cancer labs in story order (DESIGN.md §7.1 item 3), in the landing's black and gold
  * stretch (app/page.tsx), with real experiment counts from content/. On wide
  * screens the section pins and the two cards rise and turn into place with
  * the scroll while their 3D cameras fly in to each bench (LabObjectView
@@ -13,7 +13,7 @@ import { SectionHeading } from "./SectionHeading";
  * and rotate", our own code.
  */
 export function LabsSection() {
-  const labs = (["chemistry", "robotics"] as const).map((id) => LAB_INFO.find((l) => l.id === id)!);
+  const labs = VISIBLE_LAB_INFO;
   return (
     <LabsScene labelledBy="labs">
       <div className="mx-auto w-full max-w-7xl px-4 py-24 sm:px-8 sm:py-32">

@@ -1,4 +1,4 @@
-import { comingSoonFor, experimentsFor, LAB_IDS, LEVEL_INFO, misconceptionText } from "@/lib/content";
+import { comingSoonFor, experimentsFor, LAB_IDS, labInfo, LEVEL_INFO, misconceptionText } from "@/lib/content";
 import type { LabId, LevelId } from "@/engine/types";
 
 /*
@@ -20,8 +20,8 @@ export interface LevelPick {
   count: number;
   soon: number;
   experiments: { id: string; title: string; lab: LabId }[];
-  /** Experiments per lab. */
-  labs: Record<LabId, number>;
+  /** Experiments per visible lab, in story order. */
+  labs: { id: LabId; title: string; count: number }[];
   beliefs: number;
   /** Up to three of the beliefs, by title, the level's chosen teaser first. */
   teasers: string[];
@@ -42,9 +42,9 @@ export function levelPicks(): LevelPick[] {
       ano: level.ano,
       count: experiments.length,
       soon: LAB_IDS.reduce((n, lab) => n + comingSoonFor(lab, level.id).length, 0),
-      // Chemistry then robotics on the shelf, in each lab's own order.
-      experiments: [...experiments].sort((a, b) => (a.lab === b.lab ? a.order - b.order : a.lab === "chemistry" ? -1 : 1)).map((e) => ({ id: e.id, title: e.title, lab: e.lab })),
-      labs: { chemistry: experiments.filter((e) => e.lab === "chemistry").length, robotics: experiments.filter((e) => e.lab === "robotics").length },
+      // The labs in story order on the shelf, each in its own order.
+      experiments: [...experiments].sort((a, b) => (a.lab === b.lab ? a.order - b.order : LAB_IDS.indexOf(a.lab) - LAB_IDS.indexOf(b.lab))).map((e) => ({ id: e.id, title: e.title, lab: e.lab })),
+      labs: LAB_IDS.map((lab) => ({ id: lab, title: labInfo(lab).title.replace(" Lab", ""), count: experiments.filter((e) => e.lab === lab).length })),
       beliefs: beliefs.size,
       teasers: [level.teaser, ...[...beliefs].filter((id) => id !== level.teaser)]
         .map((id) => misconceptionText(id)?.title)

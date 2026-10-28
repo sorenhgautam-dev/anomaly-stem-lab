@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Vector3, type Camera, type Group } from "three";
-import { useLab } from "@/lib/store";
+import { useLab, verdictShown } from "@/lib/store";
 import { useVoice } from "@/lib/voice";
 import { Ano } from "@/components/ano/Ano";
 import type { AnoExpression, AnoMove } from "@/components/ano/types";
@@ -143,11 +143,12 @@ export function LabAno({ track, shots }: { track: React.RefObject<HTMLElement | 
   const phase = useLab((s) => s.phase);
   const ano = useLab((s) => s.ano);
   const runId = useLab((s) => s.runId);
-  const verdict = useLab((s) => (s.phase === "result" ? (s.result?.verdict ?? null) : null));
+  const verdict = useLab(verdictShown);
   const speaking = useVoice((s) => s.speaking !== null);
   const group = useRef<Group>(null);
   const [flight] = useState(() => new Flight());
   const flown = useRef(-1);
+  const pointed = useRef(labView.point);
   // Inside the particle dive Ano waits where he was in the build shot.
   const name = useShotName(shots);
   const shot = shots[name === "particles" ? "build" : name];
@@ -171,7 +172,7 @@ export function LabAno({ track, shots }: { track: React.RefObject<HTMLElement | 
   });
 
   const expression: AnoExpression = phase === "running" ? "thinking" : verdict === "correct" ? "celebrating" : verdict === "wrong" ? "surprised" : ano === "stuck" ? "thinking" : ano === "greet" ? "happy" : "curious";
-  const move: AnoMove | null = phase === "result" ? (verdict === "correct" ? "nod" : "hop") : phase === "build" && ano === "greet" ? "wave" : null;
+  const move: AnoMove | null = phase === "result" && verdict ? (verdict === "correct" ? "nod" : "hop") : phase === "build" && ano === "greet" ? "wave" : null;
 
   useFrame(({ camera, clock }, delta) => {
     const g = group.current;
@@ -182,6 +183,12 @@ export function LabAno({ track, shots }: { track: React.RefObject<HTMLElement | 
       flown.current = runId;
       // He flies only where the stage names a spot clear of its apparatus ("ano" anchor, e.g. the circuits);
       // elsewhere, and on narrow views, he points the result out from his corner rather than cover it.
+      const spot = labView.anchors.get("ano");
+      if (width >= 1024 && spot) flight.flyTo(anchor(labView.focus), 3.4, now, camera, 0.34, spot);
+    }
+    // The replay stopped at the moment the student's idea split off: point at it again.
+    if (labView.point !== pointed.current) {
+      pointed.current = labView.point;
       const spot = labView.anchors.get("ano");
       if (width >= 1024 && spot) flight.flyTo(anchor(labView.focus), 3.4, now, camera, 0.34, spot);
     }

@@ -8,12 +8,12 @@ import { cn } from "@/lib/cn";
  * toward apricot at its base (one hue).
  */
 
-export type StageTone = "led" | "bag" | "gravity";
+export type StageTone = "treatment" | "detection" | "cell";
 
 const TONES: { tone: StageTone; className: string }[] = [
-  { tone: "gravity", className: "bg-stage-gravity" },
-  { tone: "led", className: "bg-stage-led" },
-  { tone: "bag", className: "bg-stage-bag" },
+  { tone: "treatment", className: "bg-stage-treatment" },
+  { tone: "detection", className: "bg-stage-detection" },
+  { tone: "cell", className: "bg-stage-cell" },
 ];
 
 export function StageCard({ tone, className }: { tone?: StageTone; className?: string }) {

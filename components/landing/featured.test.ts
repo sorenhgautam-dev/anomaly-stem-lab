@@ -1,29 +1,26 @@
 import { describe, expect, it } from "vitest";
-import { getExperiment, misconceptionText } from "@/lib/content";
-import { featuredCards } from "./featured";
+import { initialBuild } from "@/engine/edits";
+import { simulateOutcome } from "@/engine/outcome";
+import { realModel } from "@/engine/registry";
+import { getExperiment } from "@/lib/content";
+import { featuredCards, SLIDES } from "./featured";
 
 // The hero's cards come from the simulator, not from written values (DESIGN.md §0).
-describe("featured hero cards", () => {
-  const [gravity, led, bag] = featuredCards();
+describe("featured hero cards: the three cancer experiments", () => {
+  const cards = featuredCards();
 
-  it("judges the drop teaser with its own model: the same-time guess is verified", () => {
-    expect(gravity.result.prediction).toBe("Same time");
-    expect(gravity.result.reality).toBe("Same time");
-    expect(gravity.result.status).toBe("verified");
+  it("has the chemo, tumour and cells slides, in that order (CLAUDE.md §3 hero slides)", () => {
+    expect(SLIDES.map((s) => s.run.experiment)).toEqual(["treatment-chemo-hair", "detection-tumour-growth", "cell-out-of-control"]);
+    for (const s of SLIDES) expect(getExperiment(s.run.experiment)?.heroSlide).toBe(SLIDES.indexOf(s) + 1);
   });
 
-  it("runs the backwards LED through the circuit solver: dark, no current, an anomaly", () => {
-    expect(led.result.reality).toMatch(/^Stay dark · 0 mA$/);
-    expect(led.result.status).toBe("anomaly");
-    // The belief is the misconception the engine diagnoses from "Glow".
-    const options = getExperiment("robotics-led")!.misconceptions.map((id) => misconceptionText(id)!.title);
-    expect(options).toContain(led.belief.title);
-  });
-
-  it("runs the sealed bag through the fizz model: the reading doesn't change", () => {
-    expect(bag.result.reality).toMatch(/^Stays the same · \d+(\.\d)? g$/);
-    expect(bag.result.status).toBe("anomaly");
-    const options = getExperiment("chemistry-sealed-bag")!.misconceptions.map((id) => misconceptionText(id)!.title);
-    expect(options).toContain(bag.belief.title);
+  it.each(SLIDES.map((s, i) => [s.id, s, i] as const))("%s: the reality row and the stage number are the simulator's", (_id, slide, i) => {
+    const def = getExperiment(slide.run.experiment)!;
+    const real = simulateOutcome(def, initialBuild(def), realModel(def.stage));
+    const answer = String(real.result.value);
+    expect(cards[i].result.reality).toBe(slide.answers[answer] ?? answer);
+    expect(cards[i].result.status).toBe(answer === slide.run.guess ? "verified" : "anomaly");
+    expect(cards[i].stage?.value).toBe(Math.round(real.readings[slide.run.reading.key] * 10 ** slide.run.reading.digits) / 10 ** slide.run.reading.digits);
+    expect(cards[i].href).toBe(`/labs/${def.lab}/${def.level}/${def.id}`);
   });
 });

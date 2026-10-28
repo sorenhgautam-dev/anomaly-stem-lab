@@ -3,6 +3,8 @@ import type { ExperimentDef, StageId } from "@/engine/types";
 import type { ShotsFor } from "../shots";
 import { BurnStage3D, burnShots } from "./BurnStage3D";
 import { CatalystStage3D, catalystShots } from "./CatalystStage3D";
+import { CellsStage3D, cellsShots } from "./CellsStage3D";
+import { ChemoStage3D, chemoShots } from "./ChemoStage3D";
 import { CircuitStage3D, circuitShots } from "./CircuitStage3D";
 import { DissolveStage3D, dissolveShots } from "./DissolveStage3D";
 import { EquilibriumStage3D, equilibriumShots } from "./EquilibriumStage3D";
@@ -16,6 +18,8 @@ import { NeutraliseStage3D, neutraliseShots } from "./NeutraliseStage3D";
 import { PwmStage3D, pwmShots } from "./PwmStage3D";
 import { RateStage3D, rateShots } from "./RateStage3D";
 import { RobotStage3D, robotShots } from "./RobotStage3D";
+import { TumourStage3D, tumourShots } from "./TumourStage3D";
+import { UvStage3D, uvShots } from "./UvStage3D";
 
 /*
  * Every stage's 3D apparatus (DESIGN.md §7.5: "All experiments are 3D"),
@@ -46,6 +50,13 @@ const STAGES: Record<StageId, Stage3D> = {
   gaslaw: { Stage: GasLawStage3D, shots: gasLawShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: each dot is an air molecule. Squeezed into less space, they hit the plunger more often." } },
   catalyst: { Stage: CatalystStage3D, shots: catalystShots },
   equilibrium: { Stage: EquilibriumStage3D, shots: equilibriumShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: brown pairs are nitrogen dioxide (NO₂), grey ones are dinitrogen tetroxide (N₂O₄)." } },
+  // The cancer labs. Stages not built yet (beams, inherit) borrow the chemo bench; no experiment uses them until they're built.
+  chemo: { Stage: ChemoStage3D, shots: chemoShots },
+  tumour: { Stage: TumourStage3D, shots: tumourShots },
+  cells: { Stage: CellsStage3D, shots: cellsShots, zoom: undefined },
+  uv: { Stage: UvStage3D, shots: uvShots },
+  beams: { Stage: ChemoStage3D, shots: chemoShots },
+  inherit: { Stage: ChemoStage3D, shots: chemoShots },
 };
 
 export function stage3d(def: ExperimentDef): Stage3D {

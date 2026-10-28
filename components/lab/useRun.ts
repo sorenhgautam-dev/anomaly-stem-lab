@@ -7,6 +7,7 @@ import { fx } from "@/lib/fx";
 import { useProgress } from "@/lib/progress";
 import { glassClink, glitchStutter, resolveChime, softClick, spinUp, resumeAudio } from "@/lib/sound";
 import { useLab } from "@/lib/store";
+import type { WhatIf } from "@/lib/what-if";
 import { PALETTE as P } from "@/lib/tokens";
 import { anchor, labView } from "@/components/lab3d/lab-state";
 import { vfx } from "@/components/lab3d/kit/vfx";
@@ -55,7 +56,17 @@ function faultMoment(def: ExperimentDef, faults: string[], say: (text: string) =
   }
 }
 
-export function useRun(def: ExperimentDef, say: (text: string) => void) {
+/** Adds a real bust to the live counter on the landing page. Fire and forget: a failure changes nothing for the student. */
+function reportBust(experimentId: string, misconceptionId: string) {
+  void fetch("/api/impact", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ experimentId, misconceptionId }),
+    keepalive: true,
+  }).catch(() => {});
+}
+
+export function useRun(def: ExperimentDef, say: (text: string) => void, { record = true }: { record?: boolean } = {}) {
   const [moment, setMoment] = useState<{ id: number; verdict: "correct" | "wrong"; levelUp: boolean } | null>(null);
   const offFault = useRef<(() => void) | null>(null);
   useEffect(() => () => offFault.current?.(), []);
@@ -80,7 +91,11 @@ export function useRun(def: ExperimentDef, say: (text: string) => void) {
       const r = useLab.getState().result;
       if (!r) return;
       const wasDone = levelDone(def);
-      useProgress.getState().recordRun(def.id, r.verdict === "correct", r.diagnosis?.evidence ?? null, r.diagnosis?.focus ?? null);
+      // The guided tour (/demo) guesses for the visitor, so its run isn't theirs to save.
+      if (record) {
+        const busted = useProgress.getState().recordRun(def.id, r.verdict === "correct", r.diagnosis?.evidence ?? null, r.diagnosis?.focus ?? null, useLab.getState().confidence);
+        for (const id of busted) reportBust(def.id, id);
+      }
       const levelUp = r.verdict === "correct" && !wasDone && levelDone(def);
       setMoment((m) => ({ id: (m?.id ?? 0) + 1, verdict: r.verdict, levelUp }));
       if (r.verdict === "wrong") {
@@ -108,7 +123,39 @@ export function useRun(def: ExperimentDef, say: (text: string) => void) {
         faultMoment(def, faults, say);
       });
     }
-  }, [def, say]);
+  }, [def, say, record]);
 
-  return { run, moment };
+  // A "What if?" plays like a run, but it explores a change: no verdict moment, nothing saved.
+  const runWhatIf = useCallback(
+    (variant: WhatIf) => {
+      resumeAudio();
+      softClick();
+      const started = useLab.getState().whatIf(variant);
+      if (!started) return;
+      spinUp();
+      offFault.current?.();
+      offFault.current = null;
+      const timeline = started.outcome.timeline;
+      playback.setSpeed(1);
+      playback.load(timeline, durationFor(timeline), () => {
+        offFault.current?.();
+        offFault.current = null;
+        useLab.getState().reveal();
+        glassClink(0.5, 0.8);
+        say("Soft clink");
+      });
+      const faults = started.outcome.faults.filter((f) => f === "short-circuit" || f.startsWith("burnout:"));
+      if (faults.length > 0) {
+        let fired = false;
+        offFault.current = playback.onFrame((t) => {
+          if (fired || t < FAULT_AT) return;
+          fired = true;
+          faultMoment(def, faults, say);
+        });
+      }
+    },
+    [def, say],
+  );
+
+  return { run, runWhatIf, moment };
 }

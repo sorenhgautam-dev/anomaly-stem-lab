@@ -1,10 +1,12 @@
 "use client";
 
 import { IconPlay } from "@/components/icons/icons";
+import { worldOf } from "@/lib/labs";
 import { useLab } from "@/lib/store";
 import { Button } from "@/components/ui/Button";
 import { PredictionChoices } from "@/components/ui/PredictionChoices";
 import { Slider } from "@/components/ui/Slider";
+import { useLabDef } from "./lab-def";
 
 /*
  * The one thing to predict, then Run (CLAUDE.md §6.1 steps 3–4, DESIGN.md
@@ -13,7 +15,7 @@ import { Slider } from "@/components/ui/Slider";
  */
 
 export function PredictDock({ onRun }: { onRun: () => void }) {
-  const def = useLab((s) => s.def);
+  const def = useLabDef();
   const prediction = useLab((s) => s.prediction);
   const setPrediction = useLab((s) => s.setPrediction);
   if (!def) return null;
@@ -25,10 +27,10 @@ export function PredictDock({ onRun }: { onRun: () => void }) {
           {spec.question}
         </p>
         {spec.type === "choice" ? (
-          <PredictionChoices question={spec.question} options={spec.options} value={prediction?.type === "choice" ? prediction.value : null} onChange={(value) => setPrediction({ type: "choice", value })} lab={def.lab} />
+          <PredictionChoices question={spec.question} options={spec.options} value={prediction?.type === "choice" ? prediction.value : null} onChange={(value) => setPrediction({ type: "choice", value })} lab={worldOf(def.lab)} />
         ) : (
           <div data-prediction>
-            <Slider label="Your guess" value={prediction?.type === "slider" ? prediction.value : (spec.min + spec.max) / 2} min={spec.min} max={spec.max} step={spec.step} unit={spec.unit} tint={def.lab === "chemistry" ? "chem" : "robo"} onChange={(value) => setPrediction({ type: "slider", value })} />
+            <Slider label="Your guess" value={prediction?.type === "slider" ? prediction.value : (spec.min + spec.max) / 2} min={spec.min} max={spec.max} step={spec.step} unit={spec.unit} tint={worldOf(def.lab) === "chemistry" ? "chem" : "robo"} onChange={(value) => setPrediction({ type: "slider", value })} />
           </div>
         )}
       </div>

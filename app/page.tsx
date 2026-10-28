@@ -9,7 +9,7 @@ import { HowItWorks } from "@/components/landing/HowItWorks";
 import { LabsSection } from "@/components/landing/LabsSection";
 import { LevelDialSection } from "@/components/landing/LevelDialSection";
 import { MeetAno } from "@/components/landing/MeetAno";
-import { NightTrace } from "@/components/landing/NightTrace";
+import { ProblemSection } from "@/components/landing/ProblemSection";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 
@@ -18,9 +18,9 @@ const FEATURED = featuredCards();
 const HOW = howSequence();
 
 /*
- * The landing page (DESIGN.md §7.1): the hero carousel with the "Which falls
- * faster?" teaser; then a black and gold stretch (Robotics' graphite and
- * gold) for How it works, the two labs and Meet Ano; then an earthy sage one
+ * The landing page (DESIGN.md §7.1): the hero carousel of three cancer
+ * experiments; the problem, on a teal block; then a black and gold stretch
+ * for How it works (the real chemo run), the four labs and Meet Ano; then an earthy sage one
  * (Chemistry's sage, sand gold and teal) for the belief deck, the level dial,
  * the final call to action and the footer: the page itself is sage paper,
  * and the black and gold stretch is one rounded block on it, inset like the
@@ -33,8 +33,8 @@ export default function Home() {
         <SmoothScroll />
         <main className="flex flex-col">
           <Hero count={EXPERIMENTS.length} featured={FEATURED} />
+          <ProblemSection />
           <div className="relative bg-paper-night md:mx-3 md:rounded-frame">
-            <NightTrace />
             <HowItWorks sequence={HOW} />
             <LabsSection />
             <MeetAno />

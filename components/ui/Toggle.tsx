@@ -53,7 +53,7 @@ export function SegmentedToggle<T extends string>({
           onClick={() => pick(i)}
           onKeyDown={(e) => onKey(e, i)}
           className={cn(
-            "whitespace-nowrap rounded-full px-3.5 text-sm font-semibold sm:px-4 outline-none transition-[background-color,box-shadow,color] duration-300 ease-out-soft",
+            "whitespace-nowrap rounded-full px-3.5 text-sm font-semibold sm:px-4 transition-[background-color,box-shadow,color] duration-300 ease-out-soft",
             i === index ? "bg-white text-ink-900 shadow-warm-sm" : "text-ink-500 hover:bg-white/60 hover:text-ink-900",
           )}
         >
@@ -75,7 +75,7 @@ export function Switch({ label, checked, onChange, className }: { label: string;
         softClick();
         onChange(!checked);
       }}
-      className={cn("group inline-flex h-11 items-center gap-3 rounded-full bg-white pl-1.5 pr-4 text-sm font-semibold text-ink-900 shadow-warm-sm outline-none transition-shadow duration-300 hover:shadow-warm", className)}
+      className={cn("group inline-flex h-11 items-center gap-3 rounded-full bg-white pl-1.5 pr-4 text-sm font-semibold text-ink-900 shadow-warm-sm transition-shadow duration-300 hover:shadow-warm", className)}
     >
       <span aria-hidden className={cn("relative h-8 w-[3.25rem] rounded-full transition-colors duration-300", checked ? "bg-ribbon" : "bg-cream-200")}>
         <span className={cn("absolute left-1 top-1 size-6 rounded-full bg-white shadow-warm-sm transition-transform duration-300 ease-spring", checked && "translate-x-5")} />

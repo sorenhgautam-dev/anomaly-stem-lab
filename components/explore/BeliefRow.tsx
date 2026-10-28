@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { IconFlask, IconRobot } from "@/components/icons/icons";
+import type { LabId } from "@/engine/types";
+import { IconFlask, IconMolecule, IconRobot, IconScan, IconShield, IconTarget } from "@/components/icons/icons";
 import type { BeliefItem, BeliefStatus } from "@/lib/beliefs";
 import { cn } from "@/lib/cn";
 import { curly } from "@/lib/typography";
@@ -19,10 +20,21 @@ const STAMP: Record<BeliefStatus, { text: string; className: string }> = {
   untested: { text: "Not tested", className: "border-dashed border-ink-300 text-ink-500 rotate-2" },
 };
 
+/** Each lab's small mark beside a belief: its icon, name and colour. */
+const MARK: Record<LabId, { icon: typeof IconMolecule; label: string; tone: string }> = {
+  cell: { icon: IconMolecule, label: "Cell Lab", tone: "text-chem-wall" },
+  prevention: { icon: IconShield, label: "Prevention Lab", tone: "text-ink-700" },
+  detection: { icon: IconScan, label: "Detection Lab", tone: "text-robo-teal" },
+  treatment: { icon: IconTarget, label: "Treatment Lab", tone: "text-robo-wall" },
+  chemistry: { icon: IconFlask, label: "Chemistry", tone: "text-chem-wall" },
+  robotics: { icon: IconRobot, label: "Robotics", tone: "text-robo-wall" },
+};
+
 export function BeliefRow({ item, status, index }: { item: BeliefItem; status: BeliefStatus; index: number }) {
   const level = levelInfo(item.level);
   const stamp = STAMP[status];
-  const Mark = item.lab === "chemistry" ? IconFlask : IconRobot;
+  const mark = MARK[item.lab];
+  const Mark = mark.icon;
   return (
     <Link
       href={item.href}
@@ -37,7 +49,7 @@ export function BeliefRow({ item, status, index }: { item: BeliefItem; status: B
       </span>
       <span className="min-w-0">
         <span className="flex items-center gap-2">
-          <Mark aria-label={item.lab === "chemistry" ? "Chemistry" : "Robotics"} className={cn("size-4 shrink-0", item.lab === "chemistry" ? "text-chem-wall" : "text-robo-wall")} />
+          <Mark aria-label={mark.label} className={cn("size-4 shrink-0", mark.tone)} />
           {/* Wraps rather than truncating: on phones a belief's title is the point of the row. */}
           <span className="type-heading text-[1.15rem] leading-tight">{curly(item.title)}</span>
         </span>

@@ -25,9 +25,11 @@ export function TimeScrubber({ timeScale = 1 }: { timeScale?: number }) {
   const [speed, setSpeed] = useState(String(playback.speed));
 
   useEffect(() => {
-    const offFrame = playback.onFrame((t) => {
+    const offFrame = playback.onFrame((t, values) => {
       if (input.current) input.current.value = String(t / playback.duration);
-      if (clock.current) clock.current.textContent = `${(t * timeScale).toFixed(1)} s`;
+      // A run with its own clock (real seconds, as its chart shows them) reads that; others scale the playback time.
+      const seconds = Number.isFinite(values.clock) ? values.clock : t * timeScale;
+      if (clock.current) clock.current.textContent = `${seconds.toFixed(1)} s`;
     });
     const offState = playback.onState(() => {
       setPlaying(playback.playing);
@@ -62,7 +64,7 @@ export function TimeScrubber({ timeScale = 1 }: { timeScale?: number }) {
           }}
           className="h-11 w-full cursor-pointer accent-ink-900"
         />
-        <output ref={clock} className="type-readout w-16 text-right text-sm text-ink-700">
+        <output ref={clock} className="type-readout w-20 text-right text-sm text-ink-700">
           0.0 s
         </output>
       </label>

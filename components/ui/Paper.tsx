@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
  * the objects and colour blocks on top, never from glowing blobs.
  */
 
-const TINT = { paper: "bg-paper", chem: "bg-paper-chem", robo: "bg-paper-robo", sage: "bg-paper-sage", night: "bg-paper-night", teal: "bg-paper-teal" } as const;
+const TINT = { paper: "bg-paper", chem: "bg-paper-chem", robo: "bg-paper-robo", sage: "bg-paper-sage", night: "bg-paper-night", teal: "bg-paper-teal", gold: "bg-paper-gold" } as const;
 
 export type PaperTint = keyof typeof TINT;
 

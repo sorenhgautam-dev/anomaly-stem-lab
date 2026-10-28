@@ -35,7 +35,7 @@ export function ElementTile({ level, className }: { level: LevelPick; className?
         </p>
         <p className="flex flex-col items-end">
           <ScrollCount value={level.count} className="type-readout text-[clamp(1.4rem,3vw,2rem)] leading-none" />
-          <span className="mt-1 text-[13px] font-semibold opacity-75">experiments</span>
+          <span className="mt-1 text-[13px] font-semibold opacity-75">{level.count === 1 ? "experiment" : "experiments"}</span>
         </p>
       </div>
       <p aria-hidden className="type-hero tilt-layer relative -my-2 text-[clamp(7rem,17vw,12rem)] leading-[0.8] normal-case [--depth:0.06]">

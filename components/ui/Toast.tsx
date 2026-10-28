@@ -4,7 +4,7 @@ import { create } from "zustand";
 
 /*
  * Toasts (DESIGN.md §5): small glass cards bottom-centre (top-centre on
- * phones, where the lab's dock fills the bottom) that pop in and leave on
+ * phones, and in the lab at every width, where the dock fills the bottom) that pop in and leave on
  * their own. Call toast("Saved") from anywhere; mount <Toaster /> once.
  */
 
@@ -25,7 +25,7 @@ export function toast(text: string, ms = 3200): void {
 export function Toaster() {
   const items = useToasts((s) => s.items);
   return (
-    <div aria-live="polite" className="pointer-events-none fixed inset-x-0 top-4 z-90 flex flex-col items-center gap-2 px-4 sm:top-auto sm:bottom-5">
+    <div aria-live="polite" className="pointer-events-none fixed inset-x-0 top-4 z-90 flex flex-col items-center gap-2 px-4 sm:top-auto sm:bottom-5 [body:has([data-lab-hud])_&]:sm:bottom-auto [body:has([data-lab-hud])_&]:sm:top-24">
       {items.map((t) => (
         <p key={t.id} className="paper-card animate-pop-in rounded-full px-4 py-2.5 text-sm font-medium text-ink-900 motion-reduce:animate-none">
           {t.text}

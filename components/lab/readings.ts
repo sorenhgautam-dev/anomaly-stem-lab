@@ -5,6 +5,19 @@
  */
 
 const KNOWN: Record<string, { label: string; unit: string; digits?: number }> = {
+  // Cancer labs (teaching-model values, never real doses or times).
+  "cancer.end": { label: "Cancer cells at the end", unit: "%", digits: 0 },
+  "hair.min": { label: "Hair cells at their lowest", unit: "%", digits: 0 },
+  "hair.end": { label: "Hair cells at the end", unit: "%", digits: 0 },
+  "slow.min": { label: "Slow cells at their lowest", unit: "%", digits: 0 },
+  "cells.start": { label: "Cells at the start", unit: "", digits: 0 },
+  "cells.end": { label: "Cells at the end", unit: "", digits: 0 },
+  "normal.end": { label: "Normal cells at the end", unit: "", digits: 0 },
+  "cancer.count": { label: "Cancer cells at the end", unit: "", digits: 0 },
+  "uv.share": { label: "UV getting through", unit: "%", digits: 0 },
+  "damage.end": { label: "Damage points", unit: "", digits: 0 },
+  "normal.room": { label: "Room in the dish", unit: "", digits: 0 },
+  "spread.end": { label: "Cells that crossed over", unit: "", digits: 0 },
   "scale.start": { label: "Scale before", unit: "g", digits: 2 },
   "scale.end": { label: "Scale after", unit: "g", digits: 2 },
   "co2.made": { label: "Gas made", unit: "g", digits: 2 },
@@ -53,6 +66,7 @@ const KNOWN: Record<string, { label: string; unit: string; digits?: number }> = 
 };
 
 const PERCENT_FROM_FRACTION = new Set([
+  "uv.share",
   "sugar.dissolved",
   "melt.fraction",
   "no2.fraction",

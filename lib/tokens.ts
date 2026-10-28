@@ -21,6 +21,8 @@ export const PALETTE = {
 export const LAB = {
   chemistry: { wall: "#097770", floor: "#065A55", bench: "#E0CDBE", gold: "#EDCA82", sage: "#A9C0A6" },
   robotics: { wall: "#1A1B1F", deep: "#0F1012", bench: "#F4F4F2", trim: "#16171A", gold: "#D4A537", teal: "#1FA7A0", stage: "#141518", stage2: "#1E2024" },
+  /** Prevention Lab: a sunny day (DESIGN.md §3.2). */
+  prevention: { wall: "#EDCA82", sky: "#F3DEAE", floor: "#D9B467", bench: "#E0CDBE", sage: "#A9C0A6", teal: "#097770" },
 } as const;
 
 /** Confetti in two brand colours only (DESIGN.md §0, §7.5). */

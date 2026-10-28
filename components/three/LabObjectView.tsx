@@ -2,23 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { PerspectiveCamera, RoundedBox, View } from "@react-three/drei";
+import { PerspectiveCamera, View } from "@react-three/drei";
 import type { Group, PerspectiveCamera as Camera } from "three";
 import type { LabId } from "@/engine/types";
 import { cn } from "@/lib/cn";
 import { scenes } from "@/lib/scroll";
 import { prefersReducedMotion } from "@/lib/motion";
-import { useQuality } from "@/lib/quality";
-import { LAB } from "@/lib/tokens";
 import { Spring } from "@/components/ano/spring";
-import { Led3D } from "@/components/lab3d/kit/circuit/lamps3d";
-import { Beaker3D, Flask3D } from "@/components/lab3d/kit/chem/glass";
-import { Thermometer3D } from "@/components/lab3d/kit/chem/instruments";
-import { kitMaterial } from "@/components/lab3d/kit/materials";
-import { Gear3D } from "@/components/lab3d/kit/robot/Gear3D";
-import { RobotChassis3D } from "@/components/lab3d/kit/robot/RobotChassis3D";
 import { useLabEnvironment } from "@/components/lab3d/scene/lab-light";
-import { FitModel } from "./FitModel";
+import { LabBench } from "./lab-benches";
 import { pointer } from "./pointer";
 import { useViewPresence } from "./frameloop";
 
@@ -62,57 +54,6 @@ class ObjectMotion {
     g.position.y = Math.sin(this.t * 1.2) * 0.05;
     g.scale.setScalar(this.scale.step(diving ? 1.45 : over ? 1.08 : 1, dt));
   }
-}
-
-/** Chemistry on its beige bench: a conical flask, a beaker of sand-gold liquid and a thermometer. */
-function ChemistryBench() {
-  const tier = useQuality((s) => s.level);
-  return (
-    <group position={[0, -0.62, 0]}>
-      <RoundedBox args={[2.7, 0.16, 1.1]} radius={0.06} smoothness={4} position={[0, -0.08, 0]} material={kitMaterial("satin", tier, LAB.chemistry.bench)} />
-      <group position={[0.08, 0, -0.1]}>
-        <FitModel width={1} height={1.25}>
-          <Flask3D level={() => 0.55} color={() => LAB.chemistry.sage} />
-        </FitModel>
-      </group>
-      <group position={[-0.78, 0, 0.18]}>
-        <FitModel width={0.62} height={0.62}>
-          <Beaker3D level={() => 0.62} color={() => LAB.chemistry.gold} />
-        </FitModel>
-      </group>
-      <group position={[0.82, 0, 0.12]} rotation={[0, 0, -0.1]}>
-        <FitModel width={0.3} height={0.95}>
-          <Thermometer3D celsius={() => 36} height={0.8} />
-        </FitModel>
-      </group>
-    </group>
-  );
-}
-
-/** Robotics on its white bench with black trim: the little robot, a gold gear standing up and an LED. */
-function RoboticsBench() {
-  const tier = useQuality((s) => s.level);
-  return (
-    <group position={[0, -0.62, 0]}>
-      <RoundedBox args={[2.7, 0.12, 1.1]} radius={0.05} smoothness={4} position={[0, -0.06, 0]} material={kitMaterial("matte", tier, LAB.robotics.bench)} />
-      <RoundedBox args={[2.64, 0.06, 1.04]} radius={0.025} smoothness={3} position={[0, -0.15, 0]} material={kitMaterial("matte", tier, LAB.robotics.trim)} />
-      <group position={[0.05, 0, 0.05]}>
-        <FitModel width={1.15} height={0.7}>
-          <RobotChassis3D track={0.5} wheelRadius={0.12} left={0} right={0} />
-        </FitModel>
-      </group>
-      <group position={[-0.86, 0, -0.18]} rotation={[0, 0.5, 0]}>
-        <FitModel width={0.72} height={0.8}>
-          <Gear3D teeth={18} color="gold" angle={() => 0} />
-        </FitModel>
-      </group>
-      <group position={[0.92, 0, 0.12]}>
-        <FitModel width={0.42} height={0.5}>
-          <Led3D half={0.2} flipped={false} state={{ brightness: 0.6, burnt: false }} ghost={null} powered />
-        </FitModel>
-      </group>
-    </group>
-  );
 }
 
 /** Half the bench's width with a margin for its near corners, and the camera's half field of view (30°). */
@@ -164,7 +105,7 @@ function LabObjectScene({ lab, track, scrollScene }: { lab: LabId; track: React.
     const fit = Math.max(1, BENCH_HALF / (HALF_FOV_TAN * c.aspect * 3.9));
     // On the landing, the labs section's scroll scene flies each camera in to its bench (scenes.labs, 0 → 1).
     const k = scrollScene ? 1 - (1 - scenes.labs) ** 3 : 1;
-    const a = (1 - k) * (lab === "chemistry" ? -0.9 : 0.9);
+    const a = (1 - k) * (["cell", "detection", "chemistry"].includes(lab) ? -0.9 : 0.9);
     const d = (3.9 + (1 - k) * 3.4) * fit;
     c.position.set(Math.sin(a) * d, (0.5 + (1 - k) * 1.6) * fit, Math.cos(a) * d);
     c.lookAt(0, -0.08, 0);
@@ -175,7 +116,7 @@ function LabObjectScene({ lab, track, scrollScene }: { lab: LabId; track: React.
       <PerspectiveCamera ref={cam} makeDefault position={[0, 0.5, 3.9]} fov={30} onUpdate={(c) => c.lookAt(0, -0.08, 0)} />
       <group ref={group}>
         <group ref={bench} visible={false}>
-          {lab === "chemistry" ? <ChemistryBench /> : <RoboticsBench />}
+          <LabBench lab={lab} />
         </group>
       </group>
     </>

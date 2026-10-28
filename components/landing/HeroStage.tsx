@@ -14,15 +14,16 @@ import { useStudioEnvironment } from "@/components/three/studio-env";
 import { useViewPresence } from "@/components/three/frameloop";
 import { pointer } from "@/components/three/pointer";
 import { StageCard, type StageTone } from "@/components/ui/StageCard";
-import { BagBench, DropBench, LedBench } from "./stage/benches";
+import { Readout } from "@/components/lab3d/kit/chem/instruments";
+import { LabBench } from "@/components/three/lab-benches";
 import { LightBeam } from "./stage/particles";
 
 /*
  * The landing hero's stage (DESIGN.md §2 P4, §7.1): the stage card in the
  * slide's lab palette, and on it, in one 3D view, the slide's real
  * experiment, large, as the star (stage/benches.tsx), with Ano floating small
- * off to its side, under a soft beam of light with dust drifting through it. Lit by the slide's lab (Robotics' graphite rig
- * for the LED, Chemistry's teal for the bag and the drop). Ano always wears
+ * off to its side, under a soft beam of light with dust drifting through it. Lit by the slide's lab (the graphite rig
+ * for Treatment and Detection, the teal Cell Lab for the cells). Ano always wears
  * his happy face here; each slide gives him a move.
  */
 
@@ -31,13 +32,20 @@ export interface StageValue {
   unit: string;
 }
 
-/** How big each slide's experiment stands: as large as fits the card (the LED's bench is the widest). */
-const BENCH_SCALE: Record<StageTone, number> = { led: 0.98, bag: 1.12, gravity: 1.05 };
+/** How big each slide's experiment stands: as large as fits the card. */
+const BENCH_SCALE: Record<StageTone, number> = { treatment: 0.82, detection: 0.92, cell: 0.88 };
 
 const BEAM: Record<StageTone, { color: string; dust: string; glow: boolean }> = {
-  led: { color: LAB.robotics.gold, dust: LAB.robotics.gold, glow: true },
-  bag: { color: LAB.chemistry.gold, dust: "#ffffff", glow: true },
-  gravity: { color: "#ffffff", dust: LAB.chemistry.gold, glow: false },
+  treatment: { color: LAB.robotics.gold, dust: LAB.robotics.gold, glow: true },
+  detection: { color: LAB.robotics.teal, dust: "#ffffff", glow: true },
+  cell: { color: LAB.chemistry.gold, dust: "#ffffff", glow: true },
+};
+
+/** What each slide's readout says, from the simulator's value. */
+const READOUT: Record<StageTone, (v: StageValue | undefined) => string> = {
+  treatment: (v) => `Hair cells at their lowest\n${v?.value ?? 0}%`,
+  detection: (v) => `Cells after 30 months\n${(v?.value ?? 0).toLocaleString("en-GB")}`,
+  cell: (v) => `Normal cells when full\n${v?.value ?? 0}`,
 };
 
 /** The three slides' experiments, built once, each with its own reading; only the slide's one shows. Their shaders are compiled up front. */
@@ -71,15 +79,23 @@ function Benches({ tone, values }: { tone: StageTone; values: Partial<Record<Sta
   );
   return (
     <>
-      {bench("led", <LedBench milliamps={values.led?.value ?? 0} />)}
-      {bench("bag", <BagBench grams={values.bag?.value ?? 0} />)}
-      {bench("gravity", <DropBench seconds={values.gravity?.value ?? 0} />)}
+      {(["treatment", "detection", "cell"] as const).map((t) =>
+        bench(
+          t,
+          <>
+            <group position={[0, 0.62, 0]}>
+              <LabBench lab={t} />
+            </group>
+            <Readout text={() => READOUT[t](values[t])} style="screen" height={0.11} position={[0, t === "detection" ? 1.55 : t === "treatment" ? 1.55 : 1.2, -0.2]} />
+          </>,
+        ),
+      )}
     </>
   );
 }
 
 function Scene({ tone, values, action, track }: { tone: StageTone; values: Partial<Record<StageTone, StageValue>>; action: AnoAction; track: React.RefObject<HTMLElement | null> }) {
-  useStudioEnvironment(1.15, tone === "led" ? "robotics" : "chemistry");
+  useStudioEnvironment(1.15, tone === "cell" ? "chemistry" : "robotics");
   // Highlights sweep across the gloss as the mouse moves (DESIGN.md §9.1).
   useFrame(({ scene }) => {
     const x = pointer.active ? pointer.x / window.innerWidth - 0.5 : 0;

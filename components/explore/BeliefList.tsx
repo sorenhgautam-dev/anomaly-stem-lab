@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { LabId, LevelId } from "@/engine/types";
 import { cn } from "@/lib/cn";
 import { beliefStatus, type BeliefItem, type BeliefStatus } from "@/lib/beliefs";
+import { LAB_IDS } from "@/lib/content";
 import { useProgress } from "@/lib/progress";
 import { BeliefRow } from "./BeliefRow";
 import { Button } from "@/components/ui/Button";
@@ -28,9 +29,10 @@ const GROUPS: { status: BeliefStatus; title: string; note: string; dot: string }
   { status: "untested", title: "Not tested yet", note: "Run the experiment next to each one to find out.", dot: "bg-cream-300 ring-1 ring-ink-300" },
 ];
 
-/** Inside a group: Chemistry before Robotics, then Easy, Medium, Advanced, then by title. */
+/** Inside a group: the labs in story order, then Easy, Medium, Advanced, then by title. */
 const LEVEL_ORDER: Record<LevelId, number> = { easy: 0, medium: 1, advanced: 2 };
-const byLabThenLevel = (a: BeliefItem, b: BeliefItem) => a.lab.localeCompare(b.lab) || LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level] || a.title.localeCompare(b.title);
+const LAB_ORDER = (lab: LabId) => (LAB_IDS as LabId[]).indexOf(lab);
+const byLabThenLevel = (a: BeliefItem, b: BeliefItem) => LAB_ORDER(a.lab) - LAB_ORDER(b.lab) || LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level] || a.title.localeCompare(b.title);
 
 export function BeliefList({ items }: { items: BeliefItem[] }) {
   const hydrated = useProgress((s) => s.hydrated);
@@ -55,8 +57,10 @@ export function BeliefList({ items }: { items: BeliefItem[] }) {
           onChange={setLab}
           options={[
             { value: "all", label: "Both" },
-            { value: "chemistry", label: "Chemistry" },
-            { value: "robotics", label: "Robotics" },
+            { value: "cell", label: "Cell" },
+            { value: "prevention", label: "Prevention" },
+            { value: "detection", label: "Detection" },
+            { value: "treatment", label: "Treatment" },
           ]}
         />
         <SegmentedToggle<LevelFilter>

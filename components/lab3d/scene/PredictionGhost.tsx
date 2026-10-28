@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import type { Group } from "three";
 import type { ExperimentDef, Prediction } from "@/engine/types";
-import { useLab } from "@/lib/store";
+import { useLab, verdictShown } from "@/lib/store";
 import { prefersReducedMotion } from "@/lib/motion";
 import { labView } from "../lab-state";
 import { useLabUi } from "../lab-ui";
@@ -44,8 +44,10 @@ export function predictionWords(def: ExperimentDef | null, prediction: Predictio
 export function PredictionGhost() {
   const def = useLab((s) => s.def);
   const prediction = useLab((s) => s.prediction);
-  const stageGhost = useLab((s) => s.phase === "result" && s.result?.verdict === "wrong" && !!s.result.diagnosis?.ghost);
-  const correct = useLab((s) => s.phase === "result" && s.result?.verdict === "correct");
+  const stageGhost = useLab((s) => verdictShown(s) === "wrong" && !!s.result?.diagnosis?.ghost);
+  const correct = useLab((s) => verdictShown(s) === "correct");
+  // A "What if?" run explores a change: there's no guess of the student's to show beside it.
+  const exploring = useLab((s) => !!s.explore);
   // Hidden inside the particle dive, where it would fill the view.
   const zoomed = useLabUi((s) => s.particles);
   const board = useMemo(() => new TextBoard("ghost", 0.12, 24), []);
@@ -54,7 +56,7 @@ export function PredictionGhost() {
   const value = predictionWords(def, prediction);
   // Long answers wrap onto a second line so the label stays clear of the HUD.
   const text = !prediction ? "" : value.length > 16 ? `Your idea:\n${value}` : `Your idea: ${value}`;
-  const show = !!prediction && !correct && !stageGhost && !zoomed;
+  const show = !!prediction && !correct && !stageGhost && !zoomed && !exploring;
 
   useEffect(() => {
     if (text) board.set(text);

@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "react";
 import { Vector3 } from "three";
 import { initialBuild, partInSlot } from "@/engine/edits";
 import type { CircuitPartKind, ExperimentDef, Prediction, PropValue } from "@/engine/types";
-import { useLab } from "@/lib/store";
+import { useLab, verdictShown } from "@/lib/store";
 import { PART_NAMES } from "@/components/lab/BuildControls";
 import { flowFor, wireShapes } from "../kit/circuit/board-geometry";
 import { Board3D } from "../kit/circuit/Board3D";
@@ -102,10 +102,12 @@ export function CircuitStage3D() {
   const prediction = useLab((s) => s.prediction);
   const lamp = useMemo(() => lampSlot(def)?.id ?? null, [def]);
   // The ghost a part shows after a wrong run: the matched misconception's outcome, or else, on the lamp, the prediction itself.
-  const ghostFor = (slotId: string): PartState | null => (ghost ? partState(ghost, slotId) : phase === "result" && result?.verdict === "wrong" && slotId === lamp ? lampFromPrediction(def, prediction) : null);
+  const verdict = useLab(verdictShown);
+  const exploring = useLab((s) => !!s.explore);
+  const ghostFor = (slotId: string): PartState | null => (ghost ? partState(ghost, slotId) : verdict === "wrong" && slotId === lamp ? lampFromPrediction(def, prediction) : null);
   // The idea the lamp's inspect label carries after a run that wasn't right: the ghost's own words, or the prediction itself.
   const ideaFor = (slotId: string, kind: CircuitPartKind) => {
-    if (phase === "build" || result?.verdict === "correct") return null;
+    if (phase === "build" || exploring || result?.verdict === "correct") return null;
     const g = kind === "led" || kind === "bulb" ? ghostFor(slotId) : null;
     const own = g ? ghostIdea(g, partState(outcome, slotId)) : null;
     if (own) return own;

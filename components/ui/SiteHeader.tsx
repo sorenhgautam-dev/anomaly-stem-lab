@@ -28,7 +28,7 @@ export function SiteHeader({ cta = { href: "/start", label: "Start experimenting
   return (
     <header className={cn("relative z-30 flex items-center justify-between gap-4 px-4 pt-4 sm:px-6 md:px-8 md:pt-5", className)}>
       <Logo />
-      <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
+      <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
         {NAV.map((n) => (
           <Link key={n.href} href={n.href} className="group/roll inline-flex h-11 items-center rounded-full px-4 text-[15px] font-medium text-ink-700 transition-colors duration-200 hover:bg-ink-900/[0.06] hover:text-ink-900">
             <RollLabel text={n.label} />
@@ -40,12 +40,12 @@ export function SiteHeader({ cta = { href: "/start", label: "Start experimenting
         <Button href={cta.href} className="hidden sm:inline-flex">
           {cta.label}
         </Button>
-        <IconButton label={open ? "Close menu" : "Open menu"} className="md:hidden" aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
+        <IconButton label={open ? "Close menu" : "Open menu"} className="lg:hidden" aria-expanded={open} aria-controls="site-menu" onClick={() => setOpen((o) => !o)}>
           {open ? <IconClose /> : <IconMenu />}
         </IconButton>
       </div>
       {open && (
-        <nav id="site-menu" aria-label="Main" className="paper-card absolute inset-x-4 top-[4.5rem] flex animate-pop-in flex-col rounded-card p-2 md:hidden">
+        <nav id="site-menu" aria-label="Main" className="paper-card absolute inset-x-4 top-[4.5rem] flex animate-pop-in flex-col rounded-card p-2 lg:hidden">
           {NAV.map((n) => (
             <Link key={n.href} href={n.href} onClick={() => setOpen(false)} className="flex h-12 items-center rounded-[0.875rem] px-4 text-base font-medium text-ink-900 hover:bg-ink-900/[0.05]">
               {n.label}

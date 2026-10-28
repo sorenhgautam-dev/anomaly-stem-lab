@@ -13,6 +13,9 @@ import { LevelShelf } from "./LevelShelf";
 import { levelForGrade, LevelKnob } from "./LevelKnob";
 import type { LevelPick } from "./level-picks";
 
+/** Each lab's colour as a small dot (DESIGN.md §3.2). */
+const LAB_DOT: Record<string, string> = { cell: "bg-chem-wall", prevention: "bg-chem-gold", detection: "bg-robo-teal", treatment: "bg-robo-gold" };
+
 /*
  * Pick a level like setting an instrument (DESIGN.md §7.2): turn the level
  * knob to your grade (or go straight to a level with its small element
@@ -103,14 +106,14 @@ export function LevelPicker({ levels, morph = false, onLevel, className }: { lev
               ))}
             </ol>
             <p className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-[15px] text-ink-700">
-              <span className="inline-flex items-center gap-2">
-                <span aria-hidden className="size-2.5 rounded-full bg-chem-wall" />
-                <strong className="font-semibold text-ink-900">{level.labs.chemistry}</strong> Chemistry
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <span aria-hidden className="size-2.5 rounded-full bg-robo-wall" />
-                <strong className="font-semibold text-ink-900">{level.labs.robotics}</strong> Robotics
-              </span>
+              {level.labs
+                .filter((l) => l.count > 0)
+                .map((l) => (
+                  <span key={l.id} data-level-lab={l.id} className="inline-flex items-center gap-2">
+                    <span aria-hidden className={cn("size-2.5 rounded-full", LAB_DOT[l.id])} />
+                    <strong className="font-semibold text-ink-900">{l.count}</strong> {l.title}
+                  </span>
+                ))}
             </p>
           </div>
           <Button
@@ -129,7 +132,7 @@ export function LevelPicker({ levels, morph = false, onLevel, className }: { lev
       </div>
       <section aria-label={`${level.title} experiments`}>
         <p className="mb-1 text-center text-[15px] text-ink-500">
-          On the {level.title} shelf: <span className="font-semibold text-ink-900">{level.count} experiments</span>
+          On the {level.title} shelf: <span className="font-semibold text-ink-900">{level.count} {level.count === 1 ? "experiment" : "experiments"}</span>
         </p>
         {/* Every level's shelf stays built and only this level's shows, so turning the knob never builds 3D models mid-turn. */}
         {levels.map((l) => (

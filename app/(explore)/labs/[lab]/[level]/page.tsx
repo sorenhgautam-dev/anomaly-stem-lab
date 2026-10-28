@@ -5,14 +5,16 @@ import { ExploreBar } from "@/components/explore/ExploreBar";
 import { HeadlineWithAno } from "@/components/explore/HeadlineWithAno";
 import { Frame } from "@/components/ui/Frame";
 import { comingSoonFor, experimentsFor, isLab, isLevel, LAB_IDS, LEVEL_IDS, labInfo, levelInfo } from "@/lib/content";
+import { worldOf } from "@/lib/labs";
 
 export function generateStaticParams() {
   return LAB_IDS.flatMap((lab) => LEVEL_IDS.map((level) => ({ lab, level })));
 }
 
 /*
- * The experiment map for one lab and level (DESIGN.md §7.4, CLAUDE.md §1.1),
- * on a Chem- or Robo-tinted frame. Params are read behind Suspense so
+ * The experiment map for one lab and level (DESIGN.md §7.4, CLAUDE.md §8),
+ * on its lab's colour: Cell teal, Prevention sand gold, Detection and
+ * Treatment graphite. Params are read behind Suspense so
  * navigations stay instant.
  */
 export default function MapPage({ params }: PageProps<"/labs/[lab]/[level]">) {
@@ -36,14 +38,14 @@ async function MapForLabAndLevel({ params }: { params: PageProps<"/labs/[lab]/[l
   const info = levelInfo(level);
 
   return (
-    <Frame tint={lab === "chemistry" ? "teal" : "night"} morph={`lab-${lab}`}>
+    <Frame tint={lab === "prevention" ? "gold" : worldOf(lab) === "chemistry" ? "teal" : "night"} morph={`lab-${lab}`}>
       <ExploreBar />
       <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 pb-28 pt-10 sm:px-8 md:pt-14">
         <HeadlineWithAno
-          className="text-white"
+          className={lab === "prevention" ? "text-ink-900" : "text-white"}
           left={labInfo(lab).title.replace(" Lab", "")}
           right={`${info.title}.`}
-          line={experiments.length > 0 ? "Pick the next experiment. You build a little, then guess. Finish one and the next one opens." : "These experiments are still being built. Try another level or lab for now."}
+          line={experiments.length > 0 ? "Pick the next experiment. You guess first, then watch what really happens. Finish one and the next one opens." : "These experiments are still being built. Try another level or lab for now."}
           expression="happy"
           action={{ move: "wave", key: 1 }}
           sizeClassName="text-[clamp(3.25rem,15vw,6rem)] md:text-[clamp(4rem,8vw,7.5rem)]"

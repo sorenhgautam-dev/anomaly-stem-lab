@@ -11,6 +11,7 @@ import { stage3d } from "../stages/registry";
 import { CameraDirector } from "./CameraDirector";
 import { LabAno } from "./LabAno";
 import { PredictionGhost } from "./PredictionGhost";
+import { ReplayMarker } from "./ReplayMarker";
 import { Studio } from "./Studio";
 import { StudioLife } from "./StudioLife";
 import { VerdictBurst } from "./VerdictBurst";
@@ -53,6 +54,7 @@ export function LabScene({ track }: { track: React.RefObject<HTMLElement | null>
       <LabAno track={track} shots={shots} />
       <Vfx />
       <VerdictBurst />
+      <ReplayMarker />
     </>
   );
 }

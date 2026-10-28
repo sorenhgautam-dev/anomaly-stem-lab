@@ -1,18 +1,29 @@
 "use client";
 
+import { useMemo } from "react";
 import { IconBook, IconHint, IconMap, IconRestart } from "@/components/icons/icons";
 import { hintsFor, misconceptionText } from "@/lib/content";
+import { useProgress } from "@/lib/progress";
+import { replayMoment } from "@/lib/replay";
+import { rootLine, rootMatchFor } from "@/lib/root-beliefs";
 import { useLab } from "@/lib/store";
+import type { WhatIf } from "@/lib/what-if";
 import { Button } from "@/components/ui/Button";
 import { ResultCard } from "@/components/ui/ResultCard";
 import { LevelProgress } from "./LevelProgress";
+import { ExplainSimpler } from "./ExplainSimpler";
+import { ReplayPanel } from "./ReplayPanel";
 import { TimeScrubber } from "./TimeScrubber";
+import { WhatIfResult, WhatIfRow } from "./WhatIf";
 
 /*
  * After the verdict (CLAUDE.md §1, §6.1; DESIGN.md §7.5). Correct: the
  * Result card (both rows ticked), the level ribbon filling, then Next
  * experiment and See the theory. Wrong: the Result card, the belief Ano
- * suspects, the 3-step hint ladder and the one small change that breaks it.
+ * suspects (and the root idea, once two wrong guesses share one), the 3-step
+ * hint ladder, the one small change that breaks it, and the replay that
+ * stops at the moment the guess and reality split. Both offer "What if?"
+ * variations; a "What if?" run shows its own result instead.
  */
 
 const RUNG = ["Hint", "Why it happened", "Try this"] as const;
@@ -23,7 +34,7 @@ function answerText(p: { type: "choice"; value: string } | { type: "slider"; val
   return p.type === "choice" ? p.value : String(Math.round(p.value * 100) / 100);
 }
 
-export function ResultDock({ nextHref, mapHref, onTheory, timeScale }: { nextHref: string | null; mapHref: string; onTheory: () => void; timeScale: number }) {
+export function ResultDock({ nextHref, mapHref, onTheory, onWhatIf, timeScale }: { nextHref: string | null; mapHref: string; onTheory: () => void; onWhatIf: (variant: WhatIf) => void; timeScale: number }) {
   const def = useLab((s) => s.def);
   const result = useLab((s) => s.result);
   const prediction = useLab((s) => s.prediction);
@@ -34,7 +45,18 @@ export function ResultDock({ nextHref, mapHref, onTheory, timeScale }: { nextHre
   const tryConflict = useLab((s) => s.tryConflict);
   const build = useLab((s) => s.build);
   const setBuild = useLab((s) => s.setBuild);
+  const explore = useLab((s) => s.explore);
+  const runId = useLab((s) => s.runId);
+  const suspected = useProgress((s) => s.suspected);
+  const moment = useMemo(() => (def && result && !explore && result.verdict === "wrong" ? replayMoment(def.id, result.outcome, result.diagnosis?.ghost ?? null) : null), [def, result, explore]);
   if (!def || !result) return null;
+  if (explore)
+    return (
+      <div className="flex flex-col gap-4">
+        <WhatIfResult onRun={onWhatIf} />
+        <TimeScrubber timeScale={timeScale} />
+      </div>
+    );
   const correct = result.verdict === "correct";
   const card = <ResultCard className="w-full sm:w-72" title={def.title} confidence={CONFIDENCE[confidence]} prediction={answerText(prediction)} reality={answerText(result.outcome.result)} status={correct ? "verified" : "anomaly"} />;
 
@@ -60,6 +82,7 @@ export function ResultDock({ nextHref, mapHref, onTheory, timeScale }: { nextHre
             </div>
           </div>
         </div>
+        <WhatIfRow onRun={onWhatIf} />
         <TimeScrubber timeScale={timeScale} />
       </div>
     );
@@ -69,16 +92,26 @@ export function ResultDock({ nextHref, mapHref, onTheory, timeScale }: { nextHre
   const belief = focus ? misconceptionText(focus) : undefined;
   const hints = hintsFor(focus ?? def.misconceptions[0])?.hints;
   const likely = result.diagnosis?.likely === focus && focus !== null;
+  const root = rootMatchFor(focus, suspected);
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-        <div className="animate-pop-in motion-reduce:animate-none">{card}</div>
+        {/* Left: what happened (the card, then the replay that stops where it split). Right: why, and what to try. */}
+        <div className="flex flex-col gap-3 sm:w-72 sm:shrink-0">
+          <div className="animate-pop-in motion-reduce:animate-none">{card}</div>
+          {moment && <ReplayPanel key={runId} moment={moment} runId={runId} timeScale={timeScale} />}
+        </div>
         <div className="min-w-0 flex-1">
-          {result.diagnosis?.ghost && <p className="text-[14px] text-ink-500">The teal ghost shows your guess. It sits next to what really happened.</p>}
+          {result.diagnosis?.ghost && <p className="text-[14px] text-ink-500">The see-through ghost shows your guess. It sits next to what really happened.</p>}
           {/* Ano's diagnosis: worded apart from the student's own "You were sure" chip. */}
           {belief && (
             <p className="mt-2 text-[15px] leading-relaxed text-ink-900">
               {likely ? "This looks like the idea you used:" : "Maybe you used this idea:"} <span className="font-semibold text-anomaly-700">&ldquo;{belief.belief}&rdquo;</span>
+            </p>
+          )}
+          {root && (
+            <p data-root-belief={root.root.id} className="mt-2 rounded-tile bg-anomaly-100/60 px-3 py-2 text-[15px] leading-relaxed text-ink-900">
+              <span className="font-semibold">Spotted a pattern.</span> {rootLine(root)}
             </p>
           )}
           {hints && hintStep > 0 && (
@@ -91,6 +124,7 @@ export function ResultDock({ nextHref, mapHref, onTheory, timeScale }: { nextHre
               ))}
             </ol>
           )}
+          {hints && hintStep >= 2 && <ExplainSimpler key={runId} text={hints[1]} className="mt-3" />}
           <div className="mt-4 flex flex-wrap gap-2">
             {suggestion && (
               <Button onClick={tryConflict} icon={<IconHint aria-hidden className="size-4" />}>
@@ -107,6 +141,7 @@ export function ResultDock({ nextHref, mapHref, onTheory, timeScale }: { nextHre
               Change something and try again
             </Button>
           </div>
+          <WhatIfRow onRun={onWhatIf} className="mt-4" />
         </div>
       </div>
       <TimeScrubber timeScale={timeScale} />

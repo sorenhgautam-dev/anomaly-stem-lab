@@ -1,14 +1,16 @@
 import Link from "next/link";
 import landing from "@/content/landing.json";
+import { LearningNote } from "./LearningNote";
 import { Logo } from "./Logo";
 
-/* The footer (DESIGN.md §7.1): logo, nav, credits. */
+/* The footer (DESIGN.md §7.1 item 8): logo, nav, the sources page, the learning note, credits. */
 
 const NAV = [
   { href: "/start", label: "Labs" },
   { href: "/#how-it-works", label: "How it works" },
   { href: "/#meet-ano", label: "Meet Ano" },
   { href: "/beliefs", label: "My ideas" },
+  { href: "/science", label: landing.footer.sources },
   { href: "/credits", label: landing.footer.credits },
 ];
 
@@ -18,6 +20,7 @@ export function SiteFooter() {
       <div className="flex flex-col gap-2">
         <Logo />
         <p className="max-w-sm text-sm text-ink-500">{landing.footer.line}</p>
+        <LearningNote className="max-w-sm" />
       </div>
       <nav aria-label="Footer">
         <ul className="flex flex-wrap gap-1">

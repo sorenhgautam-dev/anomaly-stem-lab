@@ -25,6 +25,8 @@ const LETTER_STEP_MS = 45;
 const LETTER_LAND_MS = 430;
 /** When "ANOMALY." lands: the slam keyframe's 60 % mark. */
 export const SLAM_LAND_MS = 310;
+/** How long "ANOMALY." stays on screen before it leaves. */
+export const WRONG_HOLD_MS = 1900;
 
 // verify-500 is under 3:1 on cream, so the Win word uses its dark end, deepening toward ink.
 const WIN = ["var(--color-verify-700)", "color-mix(in oklab, var(--color-verify-700) 70%, var(--color-ink-900))"];
@@ -56,7 +58,7 @@ export function VerdictMoment({ moment }: { moment: { id: number; verdict: "corr
   useEffect(() => {
     if (!moment) return;
     const show = window.setTimeout(() => setShown(moment), 0);
-    const hide = window.setTimeout(() => setShown(null), moment.verdict === "correct" ? 2300 : 1900);
+    const hide = window.setTimeout(() => setShown(null), moment.verdict === "correct" ? 2300 : WRONG_HOLD_MS);
     return () => {
       window.clearTimeout(show);
       window.clearTimeout(hide);

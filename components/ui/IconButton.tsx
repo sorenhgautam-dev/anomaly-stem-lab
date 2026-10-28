@@ -13,7 +13,7 @@ import { softClick, resumeAudio } from "@/lib/sound";
  * leans toward the cursor (CLAUDE.md §10.1).
  */
 
-const shell = cva("group relative inline-grid shrink-0 place-items-center rounded-full outline-none disabled:pointer-events-none disabled:opacity-40", {
+const shell = cva("group relative inline-grid shrink-0 place-items-center rounded-full disabled:pointer-events-none disabled:opacity-40", {
   variants: {
     size: { md: "size-12", sm: "size-11" },
     tone: { light: "text-ink-900", dark: "text-white" },

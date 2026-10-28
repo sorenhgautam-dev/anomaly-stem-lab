@@ -61,7 +61,7 @@ export function PredictionChoices({
             onClick={() => pick(i)}
             onKeyDown={(e) => onKey(e, i)}
             className={cn(
-              "group relative flex min-h-14 items-center justify-between gap-3 rounded-card p-[2px] text-left outline-none transition-shadow duration-300 ease-out-soft",
+              "group relative flex min-h-14 items-center justify-between gap-3 rounded-card p-[2px] text-left transition-shadow duration-300 ease-out-soft",
               selected ? (lab === "chemistry" ? "bg-chem shadow-warm" : "bg-robo shadow-warm") : "bg-ink-900/[0.07] shadow-warm-sm hover:shadow-warm",
             )}
           >

@@ -15,7 +15,7 @@ import { softClick, resumeAudio } from "@/lib/sound";
  */
 
 const button = cva(
-  "group relative inline-flex shrink-0 select-none items-center justify-center rounded-full font-sans font-semibold tracking-[-0.01em] outline-none disabled:pointer-events-none disabled:opacity-45",
+  "group relative inline-flex shrink-0 select-none items-center justify-center rounded-full font-sans font-semibold tracking-[-0.01em] disabled:pointer-events-none disabled:opacity-45",
   {
     variants: {
       variant: {

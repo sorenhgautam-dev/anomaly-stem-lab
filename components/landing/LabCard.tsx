@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, ViewTransition, type MouseEvent } from "react";
+import type { LabId } from "@/engine/types";
 import { cn } from "@/lib/cn";
+import { worldOf } from "@/lib/labs";
 import { prefersReducedMotion, useTilt } from "@/lib/motion";
 import { resumeAudio, whoosh } from "@/lib/sound";
 import { LabObjectView } from "@/components/three/LabObjectView";
@@ -24,7 +26,7 @@ import { ScrollCount } from "@/components/ui/ScrollCount";
 
 const DIVE_MS = 260;
 
-export function LabCard({ lab, title, line, count, soon = 0, cta, href = "/start", morph, dive = false, scrollScene = false }: { lab: "chemistry" | "robotics"; title: string; line: string; count: number; soon?: number; cta: string; href?: string; morph?: string; dive?: boolean; scrollScene?: boolean }) {
+export function LabCard({ lab, title, line, count, soon = 0, cta, href = "/start", morph, dive = false, scrollScene = false }: { lab: LabId; title: string; line: string; count: number; soon?: number; cta: string; href?: string; morph?: string; dive?: boolean; scrollScene?: boolean }) {
   const host = useRef<HTMLAnchorElement>(null);
   const inner = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -41,21 +43,21 @@ export function LabCard({ lab, title, line, count, soon = 0, cta, href = "/start
     window.setTimeout(() => host.current?.removeAttribute("data-diving"), 2000);
   };
   return (
-    <Link ref={host} href={href} prefetch={morph ? true : undefined} onClick={onClick} data-lab-card className="group block rounded-frame outline-none transition-[opacity,scale] duration-300 ease-out-soft [perspective:1200px] data-diving:scale-[1.02]">
+    <Link ref={host} href={href} prefetch={morph ? true : undefined} onClick={onClick} data-lab-card className="group block rounded-frame transition-[opacity,scale] duration-300 ease-out-soft [perspective:1200px] data-diving:scale-[1.02]">
       {/* With `morph`, the card grows into the lab's map frame (DESIGN.md §9). */}
       <ViewTransition name={morph} share="morph" default="none">
         <div
           ref={inner}
           className={cn(
             "relative flex min-h-[30rem] flex-col justify-between overflow-hidden lg:min-h-0 rounded-frame p-6 shadow-warm transition-shadow duration-500 ease-out-soft will-change-transform group-hover:shadow-warm-lg sm:p-8",
-            lab === "chemistry" ? "bg-chem-world" : "bg-robo-world",
+            lab === "prevention" ? "bg-prevent-world" : worldOf(lab) === "chemistry" ? "bg-chem-world" : "bg-robo-world",
           )}
         >
           {/* Shorter on lab select (`dive`), so both cards' buttons sit in the first screen. */}
           <LabObjectView lab={lab} scrollScene={scrollScene} className={cn("relative -mx-6 -mt-2 h-64 sm:h-72", dive && "lg:h-56")} />
           <div className="paper-card tilt-layer relative rounded-card p-5 [--depth:0.04]">
             <p className="type-label text-ink-500">
-              <ScrollCount value={count} /> experiments{soon > 0 && ` · ${soon} coming soon`}
+              <ScrollCount value={count} /> {count === 1 ? "experiment" : "experiments"}{soon > 0 && ` · ${soon} coming soon`}
             </p>
             <h3 className="type-heading mt-1 text-3xl">{title}</h3>
             <p className="mt-2 text-[15px] leading-relaxed text-ink-700">{line}</p>

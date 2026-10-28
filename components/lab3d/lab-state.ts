@@ -14,6 +14,7 @@ import { Vector3 } from "three";
  *  - idea:      a part's inspect label is carrying the student's idea, so
  *               the floating "Your idea" label steps aside (never two labels
  *               stacked on one part)
+ *  - point:     bumps when the replay pauses at "the moment you were wrong"
  * Stages set the "focus" anchor (what shows the result) and may set "ghost"
  * (where the prediction's ghost label floats) and "ano" (where Ano floats to
  * point the result out, when beside the part there's no room).
@@ -26,6 +27,8 @@ export const labView = {
   focus: null as string | null,
   frame: { s: 1, ox: 0, oy: 0 },
   idea: false,
+  /** Bumped when the replay stops at the moment the student's idea split off: Ano flies to point at labView.focus. */
+  point: 0,
 };
 
 /** The soft cursor grows over 3D things you can click (DESIGN.md §9.1). */

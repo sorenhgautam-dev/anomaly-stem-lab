@@ -5,7 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import { MeshBasicMaterial, type Mesh } from "three";
 import type { LabId } from "@/engine/types";
 import { prefersReducedMotion } from "@/lib/motion";
-import { useLab } from "@/lib/store";
+import { useLab, verdictShown } from "@/lib/store";
 import { PALETTE as P } from "@/lib/tokens";
 import { BENCH } from "./set/bench-size";
 import { LOOK } from "./set/look";
@@ -24,7 +24,7 @@ import { LOOK } from "./set/look";
 /** The bench's lit front edge and two status lights that follow the run. */
 function BenchLights({ lab, still }: { lab: LabId; still: boolean }) {
   const phase = useLab((s) => s.phase);
-  const verdict = useLab((s) => (s.phase === "result" ? (s.result?.verdict ?? null) : null));
+  const verdict = useLab(verdictShown);
   const tint = LOOK[lab].accent;
   const mats = useMemo(() => ({ strip: new MeshBasicMaterial({ color: tint, transparent: true, opacity: 0.55, toneMapped: false }), a: new MeshBasicMaterial({ color: P.verify[500], toneMapped: false }), b: new MeshBasicMaterial({ color: P.verify[500], toneMapped: false }) }), [tint]);
   const strip = useRef<Mesh>(null);

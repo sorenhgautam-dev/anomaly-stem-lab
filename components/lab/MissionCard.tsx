@@ -5,6 +5,7 @@ import { IconShield } from "@/components/icons/icons";
 import type { ExperimentDef } from "@/engine/types";
 import { labInfo, levelInfo } from "@/lib/content";
 import { cn } from "@/lib/cn";
+import { LearningNote } from "@/components/ui/LearningNote";
 import { useLab, type Confidence } from "@/lib/store";
 import { PaperCard } from "@/components/ui/PaperCard";
 import { SegmentedToggle } from "@/components/ui/Toggle";
@@ -42,6 +43,7 @@ export function MissionCard({ def, className }: { def: ExperimentDef; className?
             {def.safety}
           </p>
         )}
+        <LearningNote />
         <div className="flex flex-col gap-1.5">
           <span className="text-[13px] font-semibold text-ink-700">How sure are you?</span>
           <SegmentedToggle label="How sure are you?" value={confidence} onChange={setConfidence} options={CONFIDENCE} />

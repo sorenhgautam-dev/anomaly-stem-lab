@@ -42,7 +42,9 @@ const GROUPS: { title: string; items: [string, string][] }[] = [
   },
   {
     title: "Science",
-    items: [["OpenStax Chemistry 2e, University Physics", "CC BY 4.0, used to check the theory pages"]],
+    items: [
+      ["World Health Organization, National Cancer Institute (cancer.gov), Cancer Research UK, American Cancer Society", "every fact about cancer, checked on the source page and listed on the Sources page"],
+    ],
   },
 ];
 

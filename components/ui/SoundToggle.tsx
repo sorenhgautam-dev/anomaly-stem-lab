@@ -4,6 +4,7 @@ import { useEffect, useSyncExternalStore } from "react";
 import { cn } from "@/lib/cn";
 import { setMuted } from "@/lib/sound";
 import { IconButton } from "./IconButton";
+import { stopSpeaking } from "@/lib/voice";
 
 /*
  * The visible mute toggle (CLAUDE.md §3.1: sound starts only after the first
@@ -41,6 +42,8 @@ function load() {
 function toggle() {
   muted = !muted;
   setMuted(muted);
+  // Muting stops Ano mid-sentence too.
+  if (muted) stopSpeaking();
   try {
     window.localStorage.setItem(KEY, muted ? "1" : "0");
   } catch {

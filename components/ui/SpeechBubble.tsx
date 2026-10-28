@@ -5,6 +5,8 @@ import { IconSpeaker } from "@/components/icons/icons";
 import { cn } from "@/lib/cn";
 import { WordReveal } from "./WordReveal";
 import { speak, stopSpeaking, useVoice } from "@/lib/voice";
+import { isMuted } from "@/lib/sound";
+import { toast } from "./Toast";
 
 /*
  * Ano's speech bubble (DESIGN.md §5): a white card with a small tail toward
@@ -48,7 +50,7 @@ export function SpeechBubble({
         {listen && (
           <button
             type="button"
-            onClick={() => (speaking ? stopSpeaking() : void speak(text, { fromAi }))}
+            onClick={() => (speaking ? stopSpeaking() : isMuted() ? toast("Sound is off. Turn it on at the top to hear Ano.") : void speak(text, { fromAi }))}
             aria-pressed={speaking}
             className="-my-2 -mr-2 inline-flex h-11 items-center gap-1.5 rounded-full px-3 text-[13px] font-semibold text-ink-700 transition-colors hover:bg-ink-900/[0.06] hover:text-ink-900"
           >

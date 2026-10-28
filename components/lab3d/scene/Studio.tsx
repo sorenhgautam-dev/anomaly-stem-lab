@@ -8,6 +8,7 @@ import { ChemistrySet } from "./set/ChemistrySet";
 import { LOOK } from "./set/look";
 import { RoboticsSet } from "./set/RoboticsSet";
 import { Room } from "./set/Room";
+import { worldOf } from "@/lib/labs";
 
 /*
  * The lab's set (DESIGN.md §8 lab colour worlds): the room in the lab's
@@ -22,7 +23,7 @@ export function Studio({ lab, shadowKey }: { lab: LabId; shadowKey: string }) {
     <group>
       <Room lab={lab} />
       <Bench lab={lab} />
-      {lab === "chemistry" ? <ChemistrySet /> : <RoboticsSet />}
+      {lab === "prevention" ? null : worldOf(lab) === "chemistry" ? <ChemistrySet /> : <RoboticsSet />}
       <ContactShadows key={shadowKey} frames={tier === "low" ? 1 : 2} position={[0, 0.002, 0.2]} scale={7} far={1.6} blur={2.4} opacity={0.42} resolution={tier === "low" ? 256 : 512} color={LOOK[lab].shadow} />
     </group>
   );

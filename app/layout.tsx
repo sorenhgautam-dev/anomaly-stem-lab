@@ -16,6 +16,8 @@ const archivo = Archivo({
   subsets: ["latin"],
   axes: ["wdth"],
   display: "swap",
+  preload: true,
+  adjustFontFallback: true,
 });
 
 // Body and UI.
@@ -23,6 +25,8 @@ const schibsted = Schibsted_Grotesk({
   variable: "--font-schibsted",
   subsets: ["latin"],
   display: "swap",
+  preload: true,
+  adjustFontFallback: true,
 });
 
 // Instrument readouts and numbers, with its width axis so the HUD can set it a little narrower.
@@ -31,12 +35,14 @@ const martianMono = Martian_Mono({
   subsets: ["latin"],
   axes: ["wdth"],
   display: "swap",
+  preload: true,
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
   title: "ANOMALY",
   description:
-    "A science lab where you guess first. Build chemistry and robotics experiments, and Ano helps you find out why a guess went wrong.",
+    "A cancer science lab for students aged 11 to 18. Guess what will happen, watch the real science in 3D, and Ano helps you find out why a guess went wrong.",
 };
 
 export const viewport: Viewport = {

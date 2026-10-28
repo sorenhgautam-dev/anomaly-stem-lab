@@ -17,6 +17,7 @@ import { useStageValues } from "../useStageValues";
 
 const W = 512;
 const H = 300;
+const mono = (px: number) => `500 semi-condensed ${px}px "Martian Mono", ui-monospace, monospace`;
 const PAD = { l: 64, r: 22, t: 64, b: 40 };
 
 class GraphCard {
@@ -69,13 +70,19 @@ class GraphCard {
     const y = (v: number) => H - PAD.b - ((v - lo) / (hi - lo)) * (H - PAD.t - PAD.b);
     // Title and the value right now.
     const now = real && real.length > 1 ? sampleAt(real, key, t) : start;
-    ctx.font = '500 semi-condensed 24px "Martian Mono", ui-monospace, monospace';
-    ctx.fillStyle = P.ink[500];
+    const reading = `${now.toLocaleString("en-GB", { minimumFractionDigits: this.digits, maximumFractionDigits: this.digits })} ${this.unit}`;
     ctx.textBaseline = "middle";
+    ctx.font = mono(24);
+    // The title gets the room the value leaves, shrinking (never under 15 px) so a big count never runs into it.
+    const room = W - PAD.r - (PAD.l - 30) - ctx.measureText(reading).width - 20;
+    let size = 24;
+    while (size > 15 && (ctx.font = mono(size), ctx.measureText(this.label).width > room)) size--;
+    ctx.fillStyle = P.ink[500];
     ctx.fillText(this.label, PAD.l - 30, 36);
+    ctx.font = mono(24);
     ctx.textAlign = "right";
     ctx.fillStyle = P.ink[900];
-    ctx.fillText(`${now.toFixed(this.digits)} ${this.unit}`, W - PAD.r, 36);
+    ctx.fillText(reading, W - PAD.r, 36);
     ctx.textAlign = "left";
     // Axes.
     ctx.strokeStyle = "rgba(18,18,18,0.12)";

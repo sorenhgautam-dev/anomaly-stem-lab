@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { prefersReducedMotion } from "@/lib/motion";
 import { freezeFor } from "@/components/three/frameloop";
-import { useLab } from "@/lib/store";
+import { useLab, verdictShown } from "@/lib/store";
 import { PALETTE as P } from "@/lib/tokens";
 import { LOOK } from "./set/look";
 import { anchor, labView } from "../lab-state";
@@ -23,7 +23,7 @@ const FREEZE_MS = 360;
 export function VerdictBurst() {
   const runId = useLab((s) => s.runId);
   const lab = useLab((s) => s.def?.lab ?? "chemistry");
-  const verdict = useLab((s) => (s.phase === "result" ? (s.result?.verdict ?? null) : null));
+  const verdict = useLab(verdictShown);
 
   // ANOMALY: freeze the frame loop for a beat while the canvas glitches, then let go.
   useEffect(() => {

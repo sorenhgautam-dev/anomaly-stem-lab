@@ -5,6 +5,7 @@ import { useThree } from "@react-three/fiber";
 import { CanvasTexture, SRGBColorSpace } from "three";
 import type { LabId } from "@/engine/types";
 import { LOOK } from "./look";
+import { worldOf } from "@/lib/labs";
 
 /*
  * The lab's room (DESIGN.md §8): one continuous studio in the lab's colour. The
@@ -21,7 +22,7 @@ function backdrop(lab: LabId) {
   c.height = 512;
   const ctx = c.getContext("2d")!;
   const stops: [number, string][] =
-    lab === "chemistry"
+    worldOf(lab) === "chemistry"
       ? [
           [0, look.wall],
           [0.55, look.wall],

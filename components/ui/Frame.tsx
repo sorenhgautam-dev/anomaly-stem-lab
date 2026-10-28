@@ -18,6 +18,7 @@ const RIBBON: Partial<Record<PaperTint, string>> = {
   sage: "[--ribbon-1:var(--color-chem-sage)] [--ribbon-2:color-mix(in_oklab,var(--color-chem-sage)_50%,var(--color-chem-wall))] [--ribbon-3:var(--color-chem-wall)]",
   night: "[--ribbon-1:color-mix(in_oklab,var(--color-robo-gold)_45%,var(--color-robo-stage))] [--ribbon-2:color-mix(in_oklab,var(--color-robo-gold)_75%,var(--color-robo-stage))] [--ribbon-3:var(--color-robo-gold)]",
   teal: "[--ribbon-1:color-mix(in_oklab,var(--color-chem-gold)_40%,var(--color-chem-floor))] [--ribbon-2:color-mix(in_oklab,var(--color-chem-gold)_70%,var(--color-chem-floor))] [--ribbon-3:var(--color-chem-gold)]",
+  gold: "[--ribbon-1:var(--color-prevent-sky)] [--ribbon-2:color-mix(in_oklab,var(--color-chem-gold)_60%,var(--color-prevent-floor))] [--ribbon-3:var(--color-prevent-floor)]",
 };
 
 export function Frame({ children, ribbon = true, tint, morph, className }: { children: ReactNode; ribbon?: boolean; tint?: PaperTint; morph?: string; className?: string }) {

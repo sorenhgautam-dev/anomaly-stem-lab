@@ -8,6 +8,7 @@ import { useLab } from "@/lib/store";
 import { Button } from "@/components/ui/Button";
 import { Slider } from "@/components/ui/Slider";
 import { SegmentedToggle } from "@/components/ui/Toggle";
+import { useLabBuild, useLabDef } from "./lab-def";
 
 /*
  * The "one thing to change" (CLAUDE.md §2 rule 5). Circuits: the parts tray,
@@ -19,8 +20,8 @@ import { SegmentedToggle } from "@/components/ui/Toggle";
 export const PART_NAMES: Record<CircuitPartKind, string> = { battery: "Battery", wire: "Wire", switch: "Switch", resistor: "Resistor", bulb: "Bulb", led: "LED", motor: "Motor", buzzer: "Buzzer" };
 
 function Tray() {
-  const def = useLab((s) => s.def)!;
-  const build = useLab((s) => s.build)!;
+  const def = useLabDef()!;
+  const build = useLabBuild()!;
   const armed = useLab((s) => s.armed);
   const arm = useLab((s) => s.arm);
   const place = useLab((s) => s.place);
@@ -54,8 +55,8 @@ function Tray() {
 }
 
 function StageControls() {
-  const def = useLab((s) => s.def)!;
-  const build = useLab((s) => s.build)!;
+  const def = useLabDef()!;
+  const build = useLabBuild()!;
   const edit = useLab((s) => s.edit);
   const set = (id: string, value: number | boolean | string) => edit({ op: "set", setting: id, value });
   return (
@@ -85,7 +86,7 @@ function StageControls() {
 }
 
 export function BuildControls({ className }: { className?: string }) {
-  const def = useLab((s) => s.def);
+  const def = useLabDef();
   if (!def) return null;
   const circuit = def.stage === "circuit" && def.parts.length > 0;
   if (!circuit && !def.controls?.length) return null;

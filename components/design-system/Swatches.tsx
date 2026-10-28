@@ -17,7 +17,7 @@ const RAMPS: { name: keyof typeof PALETTE; swatches: [string, string][] }[] = [
 ];
 
 const GRADIENTS: [string, string][] = [
-  ["Sunrise", "bg-sunrise"],
+  ["Paper", "bg-paper"],
   ["Ribbon", "bg-ribbon"],
   ["Chem", "bg-chem"],
   ["Robo", "bg-robo"],
@@ -31,15 +31,15 @@ const GRADIENTS: [string, string][] = [
 export function Swatches() {
   return (
     <>
-      <Section id="colour" title="Colour ramps" note="About 70% cream and white, 20% ink, 10% vibrant colour. Verify and anomaly are for verdicts only.">
+      <Section id="colour" title="Colour ramps" note="About 65% paper and white, 20% ink, 15% vibrant colour. Verify and anomaly are for verdicts only.">
         <div className="grid gap-5 lg:grid-cols-2">
           {RAMPS.map((ramp) => (
             <div key={ramp.name}>
               <p className="text-sm font-semibold capitalize">{ramp.name}</p>
-              <div className="mt-2 flex overflow-hidden rounded-card shadow-warm-sm">
+              <div className="mt-2 grid grid-cols-4 overflow-hidden rounded-card shadow-warm-sm sm:flex">
                 {ramp.swatches.map(([shade, cls]) => (
-                  <div key={shade} className={cn("flex h-20 flex-1 flex-col justify-end p-2", cls)}>
-                    <span className="type-readout w-fit rounded-md bg-white/85 px-1.5 py-0.5 text-[11px] text-ink-900">
+                  <div key={shade} className={cn("flex h-20 min-w-0 flex-1 flex-col justify-end p-2", cls)}>
+                    <span className="type-readout w-fit rounded-md bg-white px-1.5 py-0.5 text-[11px] text-ink-900">
                       {shade} {(PALETTE[ramp.name] as Record<string, string>)[shade]}
                     </span>
                   </div>
@@ -53,7 +53,7 @@ export function Swatches() {
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {GRADIENTS.map(([name, cls]) => (
             <div key={name} className={cn("flex h-28 items-end rounded-card p-3 shadow-warm-sm", cls)}>
-              <span className="rounded-full bg-white/85 px-2.5 py-1 text-xs font-semibold text-ink-900">{name}</span>
+              <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-ink-900">{name}</span>
             </div>
           ))}
         </div>

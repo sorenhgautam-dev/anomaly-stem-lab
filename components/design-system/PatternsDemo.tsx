@@ -5,6 +5,10 @@ import { StageCard } from "@/components/ui/StageCard";
 import { ResultCard } from "@/components/ui/ResultCard";
 import { BeliefShiftCard } from "@/components/ui/BeliefShiftCard";
 import { AnoView } from "@/components/ano/AnoView";
+import { featuredCards } from "@/components/landing/featured";
+
+/** The hero's first featured card, from the engine like the landing's. */
+const HERO = featuredCards()[0];
 
 /*
  * The page patterns together (DESIGN.md §2): rounded frame (P1), header
@@ -26,8 +30,8 @@ export function PatternsDemo() {
             } />
         </div>
         <div className="pointer-events-none relative mt-8 flex flex-wrap gap-4 md:absolute md:inset-0 md:mt-0">
-          <ResultCard float phase={0.6} className="pointer-events-auto relative z-20 md:absolute md:bottom-[18%] md:left-[7%]" title="Gravity in vacuum" confidence="High" prediction="Equal speed" reality="Verified" status="verified" />
-          <BeliefShiftCard float phase={2.8} className="pointer-events-auto relative z-20 hidden sm:block md:absolute md:bottom-[14%] md:right-[6%]" title="Why heavier objects fall together" detail="Ano spotted the air resistance bias" tone="verified" statusLabel="Verified" href="/" />
+          <ResultCard float phase={0.6} className="pointer-events-auto relative z-20 md:absolute md:bottom-[18%] md:left-[7%]" {...HERO.result} />
+          <BeliefShiftCard float phase={2.8} className="pointer-events-auto relative z-20 hidden sm:block md:absolute md:bottom-[14%] md:right-[6%]" title={HERO.belief.title} detail={HERO.belief.detail} tone={HERO.belief.tone} statusLabel={HERO.belief.status} href="/" />
         </div>
       </div>
     </Frame>

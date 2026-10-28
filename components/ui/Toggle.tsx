@@ -2,7 +2,7 @@
 
 import { useRef, type KeyboardEvent } from "react";
 import { cn } from "@/lib/cn";
-import { softClick, unlockAudio } from "@/lib/sound";
+import { softClick, resumeAudio } from "@/lib/sound";
 
 /*
  * Toggles are pills (DESIGN.md §5). SegmentedToggle picks one of a few
@@ -26,7 +26,7 @@ export function SegmentedToggle<T extends string>({
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
   const index = Math.max(0, options.findIndex((o) => o.value === value));
   const pick = (i: number) => {
-    unlockAudio();
+    resumeAudio();
     softClick();
     onChange(options[i].value);
   };
@@ -39,7 +39,7 @@ export function SegmentedToggle<T extends string>({
     pick(next);
   };
   return (
-    <div role="radiogroup" aria-label={label} className={cn("inline-grid h-12 max-w-full auto-cols-fr grid-flow-col gap-1 overflow-x-auto rounded-full bg-ink-900/[0.06] p-0.5", className)}>
+    <div role="radiogroup" aria-label={label} className={cn("inline-grid h-12 max-w-full auto-cols-max grid-flow-col gap-1 overflow-x-auto rounded-full bg-ink-900/[0.06] p-0.5", className)}>
       {options.map((o, i) => (
         <button
           key={o.value}
@@ -53,7 +53,7 @@ export function SegmentedToggle<T extends string>({
           onClick={() => pick(i)}
           onKeyDown={(e) => onKey(e, i)}
           className={cn(
-            "whitespace-nowrap rounded-full px-4 text-sm font-semibold outline-none transition-[background-color,box-shadow,color] duration-300 ease-out-soft",
+            "whitespace-nowrap rounded-full px-3.5 text-sm font-semibold sm:px-4 outline-none transition-[background-color,box-shadow,color] duration-300 ease-out-soft",
             i === index ? "bg-white text-ink-900 shadow-warm-sm" : "text-ink-500 hover:bg-white/60 hover:text-ink-900",
           )}
         >
@@ -71,7 +71,7 @@ export function Switch({ label, checked, onChange, className }: { label: string;
       role="switch"
       aria-checked={checked}
       onClick={() => {
-        unlockAudio();
+        resumeAudio();
         softClick();
         onChange(!checked);
       }}

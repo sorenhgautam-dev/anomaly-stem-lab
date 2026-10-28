@@ -30,7 +30,7 @@ export function FontComparison() {
     <Section id="fonts" title="Font comparison" note="The hero headline in Archivo and the two alternatives from DESIGN.md §4, at the same size. Screenshots: tests/screenshots/round-1/fonts-*.png.">
       <div className="flex flex-col gap-6">
         {FONTS.map((f) => (
-          <figure key={f.id} data-font={f.id} className="overflow-hidden rounded-card bg-sunrise p-6 shadow-warm-sm sm:p-8">
+          <figure key={f.id} data-font={f.id} className="overflow-hidden rounded-card bg-paper p-6 shadow-warm-sm sm:p-8">
             <p aria-hidden className={cn("whitespace-nowrap text-[clamp(3rem,9vw,8rem)] uppercase leading-[0.85] tracking-[-0.03em] text-ink-900", f.className)}>
               Predict&ensp;Test it.
             </p>
@@ -47,7 +47,7 @@ export function FontComparison() {
 
 export function TypeScale() {
   return (
-    <Section id="type" title="Type" note="Archivo for display and headings, Geist for body and UI, Geist Mono for readouts.">
+    <Section id="type" title="Type" note="Archivo for display and headings, Schibsted Grotesk for body and UI, Martian Mono for readouts.">
       <div className="flex flex-col gap-6">
         <p className="type-hero text-[clamp(4rem,13vw,11rem)]">Predict</p>
         <h3 className="type-heading text-5xl">Learn why your intuition tripped.</h3>

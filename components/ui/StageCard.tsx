@@ -1,15 +1,30 @@
 import { cn } from "@/lib/cn";
 
 /*
- * The stage card (DESIGN.md §2 P4): a soft cream rounded card behind Ano that
- * frames the hero object, with a warm light pooling at its base.
+ * The stage card (DESIGN.md §2 P4): the solid rounded card behind Ano that
+ * frames the hero object. With `tone`, it takes a lab's palette (the landing
+ * hero's slides: Robotics graphite, Chemistry teal, the drop's beige) and
+ * cross-fades between them as the tone changes; without, it's cream warming
+ * toward apricot at its base (one hue).
  */
 
-export function StageCard({ className }: { className?: string }) {
+export type StageTone = "led" | "bag" | "gravity";
+
+const TONES: { tone: StageTone; className: string }[] = [
+  { tone: "gravity", className: "bg-stage-gravity" },
+  { tone: "led", className: "bg-stage-led" },
+  { tone: "bag", className: "bg-stage-bag" },
+];
+
+export function StageCard({ tone, className }: { tone?: StageTone; className?: string }) {
   return (
-    <div aria-hidden className={cn("pointer-events-none absolute rounded-[2.75rem] bg-cream-100/85 shadow-warm-lg", className)}>
-      <span className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(70%_55%_at_50%_100%,color-mix(in_oklab,var(--color-apricot-300)_55%,transparent),transparent_70%)]" />
-      <span className="absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-white/70" />
+    <div aria-hidden data-hero-stage data-stage-card className={cn("pointer-events-none absolute overflow-hidden rounded-[2.75rem] bg-cream-50 shadow-warm-lg", className)}>
+      {tone ? (
+        TONES.map((t) => <span key={t.tone} className={cn("absolute inset-0 transition-opacity duration-700 ease-out-soft", t.className, t.tone === tone ? "opacity-100" : "opacity-0")} />)
+      ) : (
+        <span className="absolute inset-0 rounded-[inherit] bg-[linear-gradient(to_top,var(--color-apricot-200),transparent_55%)]" />
+      )}
+      <span className="absolute inset-0 rounded-[inherit] ring-[1.5px] ring-inset ring-ink-900/[0.06]" />
     </div>
   );
 }

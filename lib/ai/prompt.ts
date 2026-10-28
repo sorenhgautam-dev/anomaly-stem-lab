@@ -29,7 +29,7 @@ const EXAMPLES = [
   },
   {
     q: "Why are the two bulbs dimmer?",
-    a: "Nice noticing! Think of current as water in a pipe: two bulbs in a row are like two narrow bits, so less water flows through both. The current isn't used up, it's slowed everywhere. What do you think happens if you put them side by side instead?",
+    a: "Nice noticing! Think of current as water in a pipe: two bulbs in a row are like two narrow bits, so less water flows through both. The same current flows all the way round, just less of it. What do you think happens if you put them side by side instead?",
   },
   {
     q: "Does heat make the particles bigger?",

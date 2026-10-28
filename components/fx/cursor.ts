@@ -2,13 +2,17 @@ import { PALETTE as P } from "@/lib/tokens";
 import type { Bounds, FxWorld } from "@/lib/fx/world";
 
 /*
- * The soft cursor (DESIGN.md §9.1): an ink dot with a thin white edge that
- * sits exactly on the pointer (so aiming stays precise) and leaves a tiny warm
- * trail. Over anything clickable a ring grows round it; a press squashes it
- * and the release sends out a small ripple. Normal blending, so it reads on
- * the cream theme and on dark scenes alike. Replaces the system cursor on
+ * The soft cursor (DESIGN.md §9.1): a clear arrow pointer, ink with a white
+ * edge, its tip exactly on the pointer (so aiming stays precise and it never
+ * reads as a stray dot), leaving a tiny trail. Over anything clickable a ring
+ * grows round the tip; a press squashes the arrow and the release sends out a
+ * small ripple. Normal blending, so it reads on paper and on dark scenes
+ * alike. Gold and ink only (orange is Ano's). Replaces the system cursor on
  * mouse devices (globals.css).
  */
+
+/** The arrow's outline, tip at (0, 0), in CSS pixels (a classic pointer, about 23 px tall). */
+const ARROW: [number, number][] = [[0, 0], [0, 19.5], [5.2, 15.1], [8.7, 22.8], [11.9, 21.4], [8.5, 13.9], [14.4, 13.9]];
 
 /** Points along the trail. */
 const LINKS = 9;
@@ -50,10 +54,9 @@ export class SoftCursor {
     }
   }
 
-  /** A click: a ripple and a pinch of confetti-coloured dots. */
+  /** A click: one gold ripple, like a drop landing on paper. */
   release() {
-    this.world.ring({ x: this.x, y: this.y, from: 8, to: 34, life: 0.45, color: P.flame[400], width: 1.6 });
-    this.world.burst({ x: this.x, y: this.y, count: 6, kind: "glow", colors: [P.apricot[500], P.flame[400], P.volt[400]], speed: [60, 140], life: [0.22, 0.4], size: [2, 3], drag: 7 });
+    this.world.ring({ x: this.x, y: this.y, from: 8, to: 34, life: 0.45, color: P.ink[700], width: 1.6 });
   }
 
   /** Advance one frame. Returns false once everything has settled. */
@@ -89,7 +92,7 @@ export class SoftCursor {
     ctx.globalCompositeOperation = "source-over";
     this.drawTrail(ctx, bounds);
     this.drawRing(ctx, bounds);
-    this.drawDot(ctx, bounds);
+    this.drawArrow(ctx, bounds);
     ctx.globalAlpha = 1;
   }
 
@@ -99,16 +102,16 @@ export class SoftCursor {
     const tailY = p[(LINKS - 1) * 2 + 1];
     if (Math.hypot(tailX - this.x, tailY - this.y) < 4) return;
     const g = ctx.createLinearGradient(this.x, this.y, tailX, tailY);
-    g.addColorStop(0, P.apricot[500]);
-    g.addColorStop(0.6, P.flame[400]);
-    g.addColorStop(1, `${P.flame[300]}00`);
+    g.addColorStop(0, P.ink[700]);
+    g.addColorStop(0.6, `${P.ink[500]}99`);
+    g.addColorStop(1, `${P.ink[300]}00`);
     ctx.strokeStyle = g;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     // Tapers from the dot to the tail: draw each link a little thinner.
     for (let i = 1; i < LINKS; i++) {
-      ctx.globalAlpha = 0.5 * this.fade * (1 - this.hover * 0.6);
-      ctx.lineWidth = 5 * (1 - i / LINKS);
+      ctx.globalAlpha = 0.28 * this.fade * (1 - this.hover * 0.6);
+      ctx.lineWidth = 4 * (1 - i / LINKS);
       ctx.beginPath();
       ctx.moveTo(p[i * 2 - 2], p[i * 2 - 1]);
       ctx.lineTo(p[i * 2], p[i * 2 + 1]);
@@ -119,9 +122,9 @@ export class SoftCursor {
 
   private drawRing(ctx: CanvasRenderingContext2D, bounds: Bounds) {
     if (this.hover < 0.02) return;
-    const r = (6 + this.hover * 16) * (1 - this.press * 0.18);
-    ctx.globalAlpha = 0.22 * this.hover * this.fade;
-    ctx.fillStyle = P.apricot[300];
+    const r = (8 + this.hover * 16) * (1 - this.press * 0.18);
+    ctx.globalAlpha = 0.18 * this.hover * this.fade;
+    ctx.fillStyle = P.ink[300];
     ctx.beginPath();
     ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
     ctx.fill();
@@ -132,17 +135,23 @@ export class SoftCursor {
     bounds.add(this.x, this.y, r + 4);
   }
 
-  private drawDot(ctx: CanvasRenderingContext2D, bounds: Bounds) {
-    const r = 4.2 * (1 - this.hover * 0.45) * (1 - this.press * 0.3);
+  private drawArrow(ctx: CanvasRenderingContext2D, bounds: Bounds) {
+    // A touch smaller over clickable things (the ring takes over) and when pressed.
+    const k = 1.05 * (1 - this.hover * 0.18) * (1 - this.press * 0.12);
     ctx.globalAlpha = this.fade;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.scale(k, k);
     ctx.beginPath();
-    ctx.arc(this.x, this.y, r + 1.4, 0, Math.PI * 2);
-    ctx.fillStyle = P.white;
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+    ARROW.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+    ctx.closePath();
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = P.white;
+    ctx.stroke();
     ctx.fillStyle = P.ink[900];
     ctx.fill();
-    bounds.add(this.x, this.y, 30);
+    ctx.restore();
+    bounds.add(this.x + 8, this.y + 12, 30);
   }
 }

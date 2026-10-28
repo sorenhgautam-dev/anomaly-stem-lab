@@ -7,7 +7,7 @@ import { extendTailwindMerge } from "tailwind-merge";
 const twMerge = extendTailwindMerge({
   extend: {
     classGroups: {
-      "bg-image": [{ bg: ["ribbon", "chem", "robo", "level-easy", "level-medium", "level-advanced", "win", "glitch", "sunrise"] }],
+      "bg-image": [{ bg: ["ribbon", "chem", "robo", "level-easy", "level-medium", "level-advanced", "win", "glitch", "paper", "paper-chem", "paper-robo"] }],
       shadow: [{ shadow: ["warm-sm", "warm", "warm-lg"] }],
     },
   },

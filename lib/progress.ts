@@ -95,7 +95,7 @@ export const useProgress = create<ProgressState>()((set, get) => ({
   },
 }));
 
-/** Unlocked if every earlier experiment in its lab and level is done. */
+/** Open once every earlier experiment in its lab and level is done. */
 export function isUnlocked(experiment: ExperimentDef, siblings: ExperimentDef[], done: Record<string, true>): boolean {
   return siblings.filter((e) => e.order < experiment.order).every((e) => done[e.id]);
 }

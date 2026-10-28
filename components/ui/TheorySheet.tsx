@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { IconClose } from "@/components/icons/icons";
 import type { TheoryDef } from "@/engine/types";
 import { cn } from "@/lib/cn";
 import { IconButton } from "./IconButton";
@@ -16,7 +16,7 @@ import { IconButton } from "./IconButton";
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="border-t border-ink-900/[0.08] pt-5">
-      <h3 className="type-eyebrow text-ink-500">{title}</h3>
+      <h3 className="type-heading text-base">{title}</h3>
       <div className="mt-2 flex flex-col gap-3 text-[15px] leading-[1.6] text-ink-700">{children}</div>
     </section>
   );
@@ -50,18 +50,18 @@ export function TheorySheet({
         >
           <div className="flex items-start justify-between gap-4 px-6 pb-4 pt-6">
             <div>
-              <p className="type-eyebrow text-apricot-700">The theory</p>
+              <p className="type-label text-apricot-700">The theory</p>
               <Dialog.Title className="type-heading mt-1.5 text-[1.75rem] leading-[1.05]">{theory.title}</Dialog.Title>
             </div>
             <Dialog.Close asChild>
               <IconButton label="Close the theory">
-                <X />
+                <IconClose />
               </IconButton>
             </Dialog.Close>
           </div>
           <Dialog.Description className="sr-only">What happened in this experiment and the science behind it.</Dialog.Description>
           <div className="flex flex-col gap-5 overflow-y-auto px-6 pb-8">
-            {diagram && <div className="overflow-hidden rounded-card bg-sunrise">{diagram}</div>}
+            {diagram && <div className="overflow-hidden rounded-card bg-paper">{diagram}</div>}
             {whatHappened && (
               <Section title="What happened">
                 <p>{whatHappened}</p>

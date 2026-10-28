@@ -26,7 +26,7 @@ export function Preloader() {
   }, [state]);
   if (state === "gone") return null;
   return (
-    <div ref={root} role="progressbar" aria-label="Loading ANOMALY" aria-valuemin={0} aria-valuemax={100} aria-valuenow={0} className={cn("pointer-events-none fixed inset-0 z-95 flex [view-transition-name:preloader] flex-col items-center justify-center gap-5 bg-sunrise", state === "leaving" && "animate-preloader-out motion-reduce:animate-overlay-out")}>
+    <div ref={root} role="progressbar" aria-label="Loading ANOMALY" aria-valuemin={0} aria-valuemax={100} aria-valuenow={0} className={cn("pointer-events-none fixed inset-0 z-95 flex [view-transition-name:preloader] flex-col items-center justify-center gap-5 bg-paper", state === "leaving" && "animate-preloader-out motion-reduce:animate-overlay-out")}>
       <AnoParts />
       <p data-percent className="type-hero text-[clamp(3.5rem,11vw,6.5rem)] tabular-nums text-ink-900">
         0%

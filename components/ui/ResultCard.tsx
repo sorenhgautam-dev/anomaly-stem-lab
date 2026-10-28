@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { ConfidenceChip, StatusDot, type Confidence, type Status } from "./Chip";
-import { GlassCard } from "./GlassCard";
+import { PaperCard } from "./PaperCard";
 
 /*
- * Result card (DESIGN.md §2 P5, §5): title and confidence chip, then the
- * student's prediction against reality, with a verdict dot.
+ * Result card (DESIGN.md §2 P5, §5): title and how sure the student was,
+ * then their guess against what really happened, with a verdict dot.
  */
 
 export interface ResultCardProps {
@@ -18,6 +18,8 @@ export interface ResultCardProps {
   status: Status | null;
   /** Optional action under the rows (e.g. "Try it"). */
   action?: ReactNode;
+  /** Colours for the confidence chip (the landing hero gives it the slide's lab colour). */
+  chipClassName?: string;
   float?: boolean;
   phase?: number;
   className?: string;
@@ -32,18 +34,18 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-export function ResultCard({ title, confidence, prediction, reality, status, action, float, phase, className }: ResultCardProps) {
+export function ResultCard({ title, confidence, prediction, reality, status, action, chipClassName, float, phase, className }: ResultCardProps) {
   return (
-    <GlassCard float={float} phase={phase} className={cn("w-72 p-4", className)}>
+    <PaperCard float={float} phase={phase} className={cn("w-72 p-4", className)}>
       <div className="flex items-start justify-between gap-3">
         <p className="type-heading text-base leading-tight">{title}</p>
-        {confidence && <ConfidenceChip level={confidence} />}
+        {confidence && <ConfidenceChip level={confidence} className={chipClassName} />}
       </div>
       <dl className="mt-3">
-        <Row label="Prediction">{prediction}</Row>
-        <Row label="Reality">{status ? <StatusDot status={status} label={reality} /> : reality}</Row>
+        <Row label="You guessed">{prediction}</Row>
+        <Row label="What really happened">{status ? <StatusDot status={status} label={reality} /> : reality}</Row>
       </dl>
       {action && <div className="mt-2">{action}</div>}
-    </GlassCard>
+    </PaperCard>
   );
 }

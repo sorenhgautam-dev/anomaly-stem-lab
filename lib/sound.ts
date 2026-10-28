@@ -1,7 +1,7 @@
 /*
  * Sound effects, synthesised with the Web Audio API so there are no audio
  * files to load and everything works offline. Nothing plays until
- * unlockAudio() runs inside the first user gesture (browser autoplay rules
+ * resumeAudio() runs inside the first user gesture (browser autoplay rules
  * and CLAUDE.md §3.1).
  */
 
@@ -12,14 +12,26 @@ let lastHitAt = 0;
 
 const MASTER_VOLUME = 0.55;
 
-export function unlockAudio(): void {
-  if (!ctx) {
-    ctx = new AudioContext();
-    master = ctx.createGain();
-    master.gain.value = muted ? 0 : MASTER_VOLUME;
-    master.connect(ctx.destination);
-  }
-  if (ctx.state === "suspended") void ctx.resume();
+function create(): void {
+  if (ctx) return;
+  ctx = new AudioContext();
+  master = ctx.createGain();
+  master.gain.value = muted ? 0 : MASTER_VOLUME;
+  master.connect(ctx.destination);
+}
+
+/**
+ * Make the audio context ahead of time, suspended (allowed before any gesture), in idle time after the page
+ * loads: starting the audio device can take ~100 ms, which froze the first click. resumeAudio() then only resumes.
+ */
+export function warmAudio(): void {
+  const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1200));
+  idle(() => create());
+}
+
+export function resumeAudio(): void {
+  create();
+  if (ctx?.state === "suspended") void ctx.resume();
 }
 
 export function setMuted(value: boolean): void {
@@ -125,6 +137,27 @@ export function softClick(): void {
   noiseTick(audio, 0.05, 0.012, 2400, now);
 }
 
+/** A knob's detent: a crisp, dry mechanical tick as it clicks onto a step. */
+export function detentClick(): void {
+  const audio = ready();
+  if (!audio) return;
+  const now = audio.ctx.currentTime;
+  noiseTick(audio, 0.09, 0.008, 4200, now);
+  partial(audio, 1150, 0.035, 0.03, now, "triangle");
+  partial(audio, 320, 0.05, 0.05, now);
+}
+
+/** A tile flipping over and landing: a soft flap, then a firm clack. */
+export function tileClack(): void {
+  const audio = ready();
+  if (!audio) return;
+  const now = audio.ctx.currentTime;
+  noiseTick(audio, 0.035, 0.05, 1400, now);
+  noiseTick(audio, 0.11, 0.015, 3200, now + 0.17);
+  partial(audio, 240, 0.09, 0.09, now + 0.17);
+  partial(audio, 760, 0.03, 0.06, now + 0.17, "triangle");
+}
+
 /** The ANOMALY DETECTED sting: a short detuned digital wobble. */
 export function anomalySting(): void {
   const audio = ready();
@@ -146,4 +179,93 @@ export function resolveChime(): void {
   if (!audio) return;
   const now = audio.ctx.currentTime;
   [1046.5, 1318.5, 1568].forEach((freq, i) => partial(audio, freq, 0.09, 0.9, now + i * 0.08));
+}
+
+/*
+ * Beats for the verdict moments and camera moves (DESIGN.md §9.1 "small
+ * sounds land exactly on animation beats"). Each takes a delay in seconds so
+ * callers can schedule it on the beat of the animation it belongs to.
+ */
+
+/** C major pentatonic from C6: the verdict word's letters climb it as they land. */
+const PENTATONIC = [1046.5, 1174.7, 1318.5, 1568, 1760, 2093, 2349.3, 2637];
+
+/** A soft pluck for one letter of the verdict word, rising with each letter. */
+export function letterPluck(index: number, delay = 0): void {
+  const audio = ready();
+  if (!audio) return;
+  const when = audio.ctx.currentTime + delay;
+  const f = PENTATONIC[index % PENTATONIC.length] * (index >= PENTATONIC.length ? 2 : 1);
+  partial(audio, f, 0.035, 0.28, when, "triangle");
+  partial(audio, f * 2, 0.012, 0.16, when);
+}
+
+/** ANOMALY: a stuttering digital glitch through the freeze, then a low slam as the word lands. */
+export function glitchStutter(slamAt = 0.32): void {
+  const audio = ready();
+  if (!audio) return;
+  const now = audio.ctx.currentTime;
+  [0, 0.055, 0.11, 0.2].forEach((t, i) => {
+    noiseTick(audio, 0.07, 0.035, 1800 + i * 900, now + t);
+    partial(audio, 220 * (i % 2 ? 1.06 : 1), 0.03, 0.05, now + t, "square");
+  });
+  // The slam: a falling low body.
+  const body = audio.ctx.createOscillator();
+  const env = audio.ctx.createGain();
+  const at = now + slamAt;
+  body.frequency.setValueAtTime(120, at);
+  body.frequency.exponentialRampToValueAtTime(42, at + 0.22);
+  env.gain.setValueAtTime(0.0001, now);
+  env.gain.setValueAtTime(0.2, at);
+  env.gain.exponentialRampToValueAtTime(0.0001, at + 0.38);
+  body.connect(env).connect(audio.out);
+  body.start(now);
+  body.stop(at + 0.42);
+}
+
+/** A soft rising whoosh: filtered noise sweeping up, for dives and fly-throughs. */
+export function whoosh(duration = 0.42): void {
+  const audio = ready();
+  if (!audio) return;
+  const now = audio.ctx.currentTime;
+  const length = Math.ceil(audio.ctx.sampleRate * duration);
+  const buffer = audio.ctx.createBuffer(1, length, audio.ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1;
+  const src = audio.ctx.createBufferSource();
+  const filter = audio.ctx.createBiquadFilter();
+  const env = audio.ctx.createGain();
+  src.buffer = buffer;
+  filter.type = "bandpass";
+  filter.Q.value = 0.9;
+  filter.frequency.setValueAtTime(380, now);
+  filter.frequency.exponentialRampToValueAtTime(2600, now + duration);
+  env.gain.setValueAtTime(0.0001, now);
+  env.gain.exponentialRampToValueAtTime(0.11, now + duration * 0.6);
+  env.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+  src.connect(filter).connect(env).connect(audio.out);
+  src.start(now);
+}
+
+/** Run pressed: a short rising spin-up under the click. */
+export function spinUp(): void {
+  const audio = ready();
+  if (!audio) return;
+  const now = audio.ctx.currentTime;
+  const osc = audio.ctx.createOscillator();
+  const env = audio.ctx.createGain();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(180, now);
+  osc.frequency.exponentialRampToValueAtTime(720, now + 0.28);
+  env.gain.setValueAtTime(0.0001, now);
+  env.gain.exponentialRampToValueAtTime(0.06, now + 0.05);
+  env.gain.exponentialRampToValueAtTime(0.0001, now + 0.34);
+  osc.connect(env).connect(audio.out);
+  osc.start(now);
+  osc.stop(now + 0.36);
+}
+
+/** Whether sound is muted right now (for the toggle's first render after mount). */
+export function isMuted(): boolean {
+  return muted;
 }

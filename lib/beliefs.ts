@@ -40,7 +40,7 @@ export function beliefItems(): BeliefItem[] {
 export type BeliefStatus = "broken" | "challenged" | "untested";
 
 export function beliefStatus(id: string, broken: Record<string, true>, evidence: Record<string, number>): { status: BeliefStatus; tone: BeliefTone; label: string } {
-  if (broken[id]) return { status: "broken", tone: "broken", label: "Belief broken" };
-  if ((evidence[id] ?? 0) > 0) return { status: "challenged", tone: "challenged", label: "Challenged" };
-  return { status: "untested", tone: "untested", label: "Not yet tested" };
+  if (broken[id]) return { status: "broken", tone: "broken", label: "Busted" };
+  if ((evidence[id] ?? 0) > 0) return { status: "challenged", tone: "challenged", label: "Still testing" };
+  return { status: "untested", tone: "untested", label: "Not tested yet" };
 }

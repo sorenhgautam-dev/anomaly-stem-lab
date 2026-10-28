@@ -5,12 +5,13 @@ import { useRef, type ComponentProps, type PointerEvent, type ReactNode, type Re
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/cn";
 import { ripple, useMagnetic } from "@/lib/motion";
-import { softClick, unlockAudio } from "@/lib/sound";
+import { softClick, resumeAudio } from "@/lib/sound";
 
 /*
  * Pill buttons (DESIGN.md §5). The element itself is the hit area and never
- * moves; its face (background) lifts, sweeps a sheen and presses down inside
- * it, and the label leans toward the cursor (CLAUDE.md §10.1).
+ * moves; its face (background) lifts 2 px and deepens (ink-900 to ink-700 on
+ * the primary pill), presses down inside it, and the label leans toward the
+ * cursor (CLAUDE.md §10.1).
  */
 
 const button = cva(
@@ -37,7 +38,7 @@ const face = cva(
   {
     variants: {
       variant: {
-        primary: "bg-ink-900 shadow-warm-sm group-hover:shadow-warm",
+        primary: "bg-ink-900 shadow-warm-sm group-hover:bg-ink-700 group-hover:shadow-warm",
         secondary: "border border-ink-900/10 bg-white shadow-warm-sm group-hover:shadow-warm",
         ghost: "bg-ink-900/0 group-hover:bg-ink-900/5",
       },
@@ -69,19 +70,15 @@ export function Button(props: ButtonProps) {
 
   const onPointerUp = (e: PointerEvent<HTMLElement>) => {
     if (faceRef.current) ripple(faceRef.current, e.clientX, e.clientY, variant === "primary" ? "rgb(255 190 133 / 0.55)" : "rgb(255 122 31 / 0.25)");
-    unlockAudio();
+    resumeAudio();
     softClick();
   };
 
   const content = (
     <>
-      <span ref={faceRef} aria-hidden className={face({ variant })}>
-        {variant === "primary" && (
-          <span className="absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-[linear-gradient(90deg,transparent,var(--color-apricot-300),var(--color-flame-300),transparent)] opacity-0 transition-[transform,opacity] duration-700 ease-out-soft group-hover:translate-x-[420%] group-hover:opacity-30" />
-        )}
-      </span>
+      <span ref={faceRef} aria-hidden className={face({ variant })} />
       <span className="relative transition-transform duration-300 ease-out-soft group-hover:-translate-y-0.5 group-active:translate-y-0 group-active:scale-[0.97]">
-        <span ref={inner} className="inline-flex items-center gap-2 transition-transform duration-300 ease-out-soft">
+        <span ref={inner} className="inline-flex items-center gap-2">
           {children}
           {icon}
         </span>

@@ -43,6 +43,8 @@ interface LabState {
   evidence: Evidence;
 
   start: (def: ExperimentDef, evidence: Evidence) => void;
+  /** Saved evidence arrived (IndexedDB loads after the page): seed it without restarting the attempt. */
+  seedEvidence: (evidence: Evidence) => void;
   /** Replace the build (placing, flipping, sliders). Clears a finished run. */
   setBuild: (build: Build) => void;
   edit: (edit: EditDef) => void;
@@ -90,6 +92,9 @@ export const useLab = create<LabState>()((set, get) => ({
       armed: null,
       evidence,
     }),
+
+  // Only fills empty evidence: a run's own diagnosis evidence is never overwritten.
+  seedEvidence: (evidence) => set((s) => (Object.keys(s.evidence).length === 0 ? { evidence } : s)),
 
   setBuild: (build) =>
     set((s) => ({

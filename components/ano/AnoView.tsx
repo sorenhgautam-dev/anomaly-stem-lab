@@ -17,6 +17,8 @@ import { Ano, type AnoProps } from "./Ano";
 
 const FRAMING = {
   full: { position: [0, 0.32, 8.1] as [number, number, number], fov: 26, target: 0.32 },
+  // Larger in its box, for the landing hero where Ano fills the stage card.
+  hero: { position: [0, 0.3, 6.3] as [number, number, number], fov: 26, target: 0.28 },
   bust: { position: [0, 0.5, 5.6] as [number, number, number], fov: 26, target: 0.5 },
   // Head and shoulders only: the view's bottom edge cuts Ano at the chest, as if behind a card.
   peek: { position: [0, 1.05, 3.4] as [number, number, number], fov: 26, target: 0.95 },

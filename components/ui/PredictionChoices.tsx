@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef, type KeyboardEvent } from "react";
-import { Check } from "lucide-react";
+import { IconCheck } from "@/components/icons/icons";
 import { cn } from "@/lib/cn";
-import { softClick, unlockAudio } from "@/lib/sound";
+import { softClick, resumeAudio } from "@/lib/sound";
 
 /*
  * Prediction choices (DESIGN.md §5): large white option cards. The chosen one
@@ -30,7 +30,7 @@ export function PredictionChoices({
   const current = value === null ? -1 : options.indexOf(value);
 
   const pick = (i: number) => {
-    unlockAudio();
+    resumeAudio();
     softClick();
     onChange(options[i]);
   };
@@ -74,7 +74,7 @@ export function PredictionChoices({
                   selected ? "scale-100 bg-ink-900 text-white" : "scale-90 bg-cream-100 text-transparent ring-1 ring-ink-900/10",
                 )}
               >
-                <Check className="size-3.5" strokeWidth={3} />
+                <IconCheck className="size-3.5" />
               </span>
             </span>
           </button>

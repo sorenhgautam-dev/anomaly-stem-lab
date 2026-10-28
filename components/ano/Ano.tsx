@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useQuality } from "@/lib/quality";
 import { prefersReducedMotion } from "@/lib/motion";
-import { studioEnvironment } from "@/components/three/studio-env";
+import { visorEnvironment } from "@/components/three/studio-env";
 import { AnoRig } from "./rig";
 import type { AnoAction, AnoExpression, AnoPose } from "./types";
 
@@ -24,9 +24,11 @@ export interface AnoProps {
   track?: RefObject<HTMLElement | null>;
   position?: [number, number, number];
   scale?: number;
+  /** The soft floor shadow under Ano; off where he floats with no floor beneath (the lab). */
+  shadow?: boolean;
 }
 
-export function Ano({ expression = "happy", action = null, speaking = false, pose = "stand", look = "cursor", track, position = [0, 0, 0], scale = 1 }: AnoProps) {
+export function Ano({ expression = "happy", action = null, speaking = false, pose = "stand", look = "cursor", track, position = [0, 0, 0], scale = 1, shadow = true }: AnoProps) {
   const tier = useQuality((s) => s.level);
   const [rig] = useState(() => new AnoRig(tier));
   const input = useRef({ expression, speaking, pose, look });
@@ -40,7 +42,8 @@ export function Ano({ expression = "happy", action = null, speaking = false, pos
   }, []);
   const get = useThree((s) => s.get);
   useEffect(() => rig.setTier(tier), [rig, tier]);
-  useEffect(() => rig.setVisorEnvironment(studioEnvironment(get().gl)), [rig, get]);
+  useEffect(() => rig.setShadow(shadow), [rig, shadow]);
+  useEffect(() => rig.setVisorEnvironment(visorEnvironment(get().gl)), [rig, get]);
   useEffect(() => () => rig.dispose(), [rig]);
   const move = action?.move;
   const moveKey = action?.key;

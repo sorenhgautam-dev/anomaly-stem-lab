@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { bindFx } from "@/lib/fx";
 import { drawWorld } from "@/lib/fx/draw";
 import { Bounds, FxWorld } from "@/lib/fx/world";
+import { warmAudio } from "@/lib/sound";
 import { SoftCursor } from "./cursor";
 
 /*
@@ -19,6 +20,9 @@ const NATIVE = 'input:not([type="range"], [type="checkbox"], [type="radio"], [ty
 
 export function FxLayer() {
   const ref = useRef<HTMLCanvasElement>(null);
+
+  // The sound engine's audio context is made in idle time, so the first click doesn't pay for it.
+  useEffect(() => warmAudio(), []);
 
   useEffect(() => {
     const canvas = ref.current;

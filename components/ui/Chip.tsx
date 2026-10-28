@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Check, X } from "lucide-react";
+import { IconCheck, IconClose } from "@/components/icons/icons";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/cn";
 
@@ -15,7 +15,7 @@ const chip = cva("inline-flex h-6 shrink-0 items-center gap-1.5 whitespace-nowra
       // apricot-700 on apricot-100 is 4.2:1, under WCAG AA for 12 px text, so
       // the warm chips use ink-700 (DESIGN.md §3: all text passes AA).
       high: "bg-apricot-100 text-ink-700",
-      medium: "bg-volt-100 text-volt-600",
+      medium: "bg-chem-wall/10 text-chem-wall",
       low: "bg-cream-200 text-ink-700",
       verified: "bg-verify-100 text-verify-700",
       anomaly: "bg-anomaly-100 text-anomaly-700",
@@ -37,11 +37,13 @@ export function Chip({ tone, children, className }: { tone?: ChipTone; children:
 export type Confidence = "High" | "Medium" | "Low";
 
 const CONFIDENCE_TONE: Record<Confidence, ChipTone> = { High: "high", Medium: "medium", Low: "low" };
+/** How sure the student said they were, in their words (never Ano's: his diagnosis has its own wording). */
+const CONFIDENCE_WORDS: Record<Confidence, string> = { High: "You were sure", Medium: "You were fairly sure", Low: "You were guessing" };
 
 export function ConfidenceChip({ level, className }: { level: Confidence; className?: string }) {
   return (
     <Chip tone={CONFIDENCE_TONE[level]} className={className}>
-      {level} conf.
+      {CONFIDENCE_WORDS[level]}
     </Chip>
   );
 }
@@ -54,9 +56,9 @@ export function StatusDot({ status, label, className }: { status: Status; label?
   return (
     <span className={cn("inline-flex items-center gap-1.5 text-sm font-semibold", verified ? "text-verify-700" : "text-anomaly-700", className)}>
       <span aria-hidden className={cn("grid size-4 place-items-center rounded-full text-white", verified ? "bg-verify-500" : "bg-anomaly-500")}>
-        {verified ? <Check className="size-2.5" strokeWidth={3.5} /> : <X className="size-2.5" strokeWidth={3.5} />}
+        {verified ? <IconCheck className="size-2.5" /> : <IconClose className="size-2.5" />}
       </span>
-      {label ?? (verified ? "Verified" : "Anomaly")}
+      {label ?? (verified ? "Right" : "Surprise")}
     </span>
   );
 }

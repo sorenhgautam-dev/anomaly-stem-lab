@@ -4,19 +4,26 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { prefersReducedMotion } from "@/lib/motion";
+import { scrollKit } from "@/lib/scroll";
 
 /*
  * Smooth, weighted scrolling (DESIGN.md §9.1) with Lenis, plus smooth jumps
  * to in-page anchors. Headlines lean a touch with the scroll speed (--scroll-skew,
  * read by SplitHeadline), easing back to upright when the page stops.
  * Native scrolling with reduced motion or a touch screen.
- * Lenis runs its own requestAnimationFrame rather than the canvas's loop, so
- * the page still scrolls if WebGL is unavailable.
+ * Lenis runs on GSAP's ticker and feeds ScrollTrigger, so smooth scroll and
+ * every scroll-driven scene share one loop (CLAUDE.md §9); neither depends
+ * on the 3D canvas, so the page still scrolls if WebGL is unavailable.
  */
 export function SmoothScroll() {
   useEffect(() => {
+    const { gsap, ScrollTrigger } = scrollKit();
     if (prefersReducedMotion() || window.matchMedia("(pointer: coarse)").matches) return;
-    const lenis = new Lenis({ autoRaf: true, lerp: 0.1, wheelMultiplier: 0.95, anchors: { offset: -16 } });
+    const lenis = new Lenis({ autoRaf: false, lerp: 0.1, wheelMultiplier: 0.95, anchors: { offset: -16 } });
+    const tick = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
+    lenis.on("scroll", ScrollTrigger.update);
     const root = document.documentElement;
     let target = 0;
     let skew = 0;
@@ -32,6 +39,7 @@ export function SmoothScroll() {
       if (!raf) raf = requestAnimationFrame(settle);
     });
     return () => {
+      gsap.ticker.remove(tick);
       cancelAnimationFrame(raf);
       root.style.removeProperty("--scroll-skew");
       lenis.destroy();

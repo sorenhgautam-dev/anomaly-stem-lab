@@ -16,7 +16,7 @@ export interface Crumb {
 
 export function BreadcrumbBar({ items, className }: { items: Crumb[]; className?: string }) {
   return (
-    <nav aria-label="Breadcrumb" className={cn("glass-card inline-flex max-w-full items-center rounded-full p-1 shadow-warm-sm", className)}>
+    <nav aria-label="Breadcrumb" className={cn("paper-card inline-flex max-w-full items-center rounded-full p-1 shadow-warm-sm", className)}>
       <ol className="flex min-w-0 items-center">
         {items.map((item, i) => (
           <Fragment key={item.href}>

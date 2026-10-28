@@ -44,6 +44,12 @@ export interface LevelInfo {
   title: string;
   grades: string;
   line: string;
+  /** The level's element symbol on its periodic-table tile (Ea, Md, Ad). */
+  symbol: string;
+  /** The misconception id teased on the level select page. */
+  teaser: string;
+  /** What Ano says when the dial lands on this level. */
+  ano: string;
 }
 export interface LabInfo {
   id: LabId;
@@ -80,7 +86,7 @@ export function getExperiment(id: string): ExperimentDef | undefined {
   return EXPERIMENTS.find((e) => e.id === id);
 }
 
-/** The playable experiments of a lab and level, in unlock order. */
+/** The playable experiments of a lab and level, in the order they open. */
 export function experimentsFor(lab: LabId, level: LevelId): ExperimentDef[] {
   return EXPERIMENTS.filter((e) => e.lab === lab && e.level === level).sort((a, b) => a.order - b.order);
 }

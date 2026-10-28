@@ -1,35 +1,41 @@
-import { BookOpen, FlaskConical, Sparkles } from "lucide-react";
+import { IconFlask, IconRobot } from "@/components/icons/icons";
 import { BeliefShiftCard } from "@/components/ui/BeliefShiftCard";
 import { Button } from "@/components/ui/Button";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { PaperCard } from "@/components/ui/PaperCard";
 import { InfoChipCard } from "@/components/ui/InfoChipCard";
 import { ResultCard } from "@/components/ui/ResultCard";
-import { Sunrise } from "@/components/ui/Sunrise";
+import { Paper } from "@/components/ui/Paper";
+import { featuredCards } from "@/components/landing/featured";
+import { beliefItems } from "@/lib/beliefs";
 import { Section } from "./Section";
 
-/* Glass, result, belief shift and info chip cards (DESIGN.md §5). */
+/* Paper, result, belief shift and info chip cards (DESIGN.md §5), filled with real engine output. */
+
+const FEATURED = featuredCards();
+const UNTESTED = beliefItems()[0];
 
 export function CardsDemo() {
   return (
-    <Section id="cards" title="Cards" note="White glass over the Sunrise. Each card floats on its own phase.">
+    <Section id="cards" title="Cards" note="Solid paper cards with a crisp edge and a short warm shadow. Each card floats on its own phase.">
       <div className="relative overflow-hidden rounded-frame p-6 sm:p-10">
-        <Sunrise />
+        <Paper />
         <div className="relative grid items-start gap-6 md:grid-cols-2 xl:grid-cols-3">
-          <ResultCard float phase={0} title="Gravity in vacuum" confidence="High" prediction="Equal speed" reality="Verified" status="verified" action={<Button size="md" className="w-full">Try it</Button>} />
-          <ResultCard float phase={2.3} title="Backwards LED" confidence="Medium" prediction="Lights up" reality="Anomaly" status="anomaly" />
-          <ResultCard float phase={4.1} title="Sealed bag" confidence="Low" prediction="Gets lighter" reality="Not run yet" status={null} />
-          <BeliefShiftCard float phase={1.2} title="Why heavier objects fall together" detail="Ano spotted the air resistance bias" tone="verified" statusLabel="Verified" href="/" />
-          <BeliefShiftCard float phase={3.4} title="LEDs only work one way" detail="Current can only flow forward" tone="anomaly" statusLabel="Anomaly" href="/" />
-          <BeliefShiftCard float phase={5.2} title="Mass doesn't vanish" detail="Gas can't escape a sealed bag" tone="challenged" statusLabel="Challenged" href="/" />
-          <BeliefShiftCard title="Current gets used up" detail="Not tested yet" tone="untested" statusLabel="Not yet tested" />
-          <GlassCard className="flex flex-col gap-2">
-            <p className="type-heading text-lg">Plain glass card</p>
-            <p className="text-sm text-ink-500">bg white/80, blur 24 px, border white/60, radius 20, warm shadow.</p>
-          </GlassCard>
+          {/* Real cards: the engine runs the featured scenarios (components/landing/featured.ts). */}
+          {FEATURED.map((c, k) => (
+            <ResultCard key={c.result.title} float phase={k * 2.1} {...c.result} action={k === 0 ? <Button size="md" className="w-full">Try it</Button> : undefined} />
+          ))}
+          {FEATURED.map((c, k) => (
+            <BeliefShiftCard key={c.belief.title} float phase={1.2 + k * 2.1} title={c.belief.title} detail={c.belief.detail} tone={c.belief.tone} statusLabel={c.belief.status} href={c.href ?? undefined} />
+          ))}
+          <BeliefShiftCard title={UNTESTED.title} detail={UNTESTED.belief} tone="untested" statusLabel="Not yet tested" />
+          <PaperCard className="flex flex-col gap-2">
+            <p className="type-heading text-lg">Plain paper card</p>
+            <p className="text-sm text-ink-500">Solid white, 1.5 px ink edge at 10%, fine grain, radius 18, crisp warm shadow.</p>
+          </PaperCard>
           <div className="flex flex-col items-start gap-3">
-            <InfoChipCard icon={<Sparkles />} title="How it works" subtitle="Predict, run, see where it broke" href="/" />
-            <InfoChipCard icon={<FlaskConical />} title="Chemistry lab" subtitle="Mix, heat and weigh" />
-            <InfoChipCard icon={<BookOpen />} tint="robo" title="Robotics lab" subtitle="Circuits, robots and code" />
+            <InfoChipCard icon={<IconFlask />} title="How it works" subtitle="Predict, run, see where it broke" href="/" />
+            <InfoChipCard icon={<IconFlask />} title="Chemistry lab" subtitle="Mix, heat and weigh" />
+            <InfoChipCard icon={<IconRobot />} tint="robo" title="Robotics lab" subtitle="Circuits, robots and code" />
           </div>
         </div>
       </div>

@@ -14,5 +14,14 @@ export const PALETTE = {
   anomaly: { 100: "#FFE3E0", 500: "#F2392C", 700: "#B4231A" },
 } as const;
 
-/** Confetti and celebration colours (DESIGN.md §8). */
-export const CONFETTI = [PALETTE.apricot[500], PALETTE.flame[400], PALETTE.volt[500], PALETTE.grape[500], PALETTE.verify[500], PALETTE.apricot[300]] as const;
+/**
+ * The labs' own colour worlds (DESIGN.md §8, the owner's palettes), cool and
+ * distinct from the warm site. Each lab uses only its own set.
+ */
+export const LAB = {
+  chemistry: { wall: "#097770", floor: "#065A55", bench: "#E0CDBE", gold: "#EDCA82", sage: "#A9C0A6" },
+  robotics: { wall: "#1A1B1F", deep: "#0F1012", bench: "#F4F4F2", trim: "#16171A", gold: "#D4A537", teal: "#1FA7A0", stage: "#141518", stage2: "#1E2024" },
+} as const;
+
+/** Confetti in two brand colours only (DESIGN.md §0, §7.5). */
+export const CONFETTI = [PALETTE.verify[500], PALETTE.apricot[400]] as const;

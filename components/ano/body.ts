@@ -92,14 +92,14 @@ export class AnoBody {
   }
 
   /**
-   * The visor reflects the studio more softly than the body, so its own
-   * reflections never read as extra features on the face.
+   * The visor reflects its own small studio (`visorEnvironment`) like dark
+   * glass: one clear highlight across the top of its curve.
    */
   setVisorEnvironment(env: Texture): void {
     this.visorEnv = env;
     const m = this.visorMat as MeshStandardMaterial;
     m.envMap = env;
-    m.envMapIntensity = 0.3;
+    m.envMapIntensity = 1;
     m.needsUpdate = true;
   }
 

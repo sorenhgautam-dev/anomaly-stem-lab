@@ -4,6 +4,7 @@ import { CardsDemo } from "@/components/design-system/CardsDemo";
 import { ControlsDemo } from "@/components/design-system/ControlsDemo";
 import { PatternsDemo } from "@/components/design-system/PatternsDemo";
 import { Swatches } from "@/components/design-system/Swatches";
+import { IconsDemo } from "@/components/design-system/IconsDemo";
 import { FontComparison, TypeScale } from "@/components/design-system/Typography";
 
 export const metadata = { title: "Design system · ANOMALY", robots: { index: false, follow: false } };
@@ -20,7 +21,6 @@ export default function DesignSystemPage() {
       <PatternsDemo />
       <div className="mx-auto w-full max-w-7xl px-4 pb-24 sm:px-8">
         <header className="py-14">
-          <p className="type-eyebrow text-apricot-700">ANOMALY · Bright Lab</p>
           <h1 className="type-hero mt-3 text-[clamp(3.5rem,9vw,8rem)]">Design system</h1>
           <p className="mt-4 max-w-2xl text-lg text-ink-700">Tokens and components from DESIGN.md. Everything here is a Tailwind class or a component in components/ui.</p>
         </header>
@@ -28,6 +28,7 @@ export default function DesignSystemPage() {
         <FontComparison />
         <TypeScale />
         <Swatches />
+        <IconsDemo />
         <ControlsDemo />
         <CardsDemo />
       </div>

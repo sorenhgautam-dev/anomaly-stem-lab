@@ -50,12 +50,26 @@
   --color-anomaly-100: #ffe3e0;
   --color-anomaly-500: #f2392c;
   --color-anomaly-700: #b4231a;
+  /* The labs' colour worlds (DESIGN.md §8): Chemistry teal, beige, sand gold and sage; Robotics graphite, white, gold and teal. */
+  --color-chem-wall: #097770;
+  --color-chem-floor: #065a55;
+  --color-chem-bench: #e0cdbe;
+  --color-chem-gold: #edca82;
+  --color-chem-sage: #a9c0a6;
+  --color-robo-wall: #1a1b1f;
+  --color-robo-deep: #0f1012;
+  --color-robo-bench: #f4f4f2;
+  --color-robo-gold: #d4a537;
+  --color-robo-teal: #1fa7a0;
+  /* The landing's Robotics stage card fades between these two graphites. */
+  --color-robo-stage: #141518;
+  --color-robo-stage-2: #1e2024;
 
   /* Corner radius follows hierarchy: the frame rounds most, controls least. */
   --radius-frame: 2rem;
   --radius-sheet: 1.75rem;
-  --radius-card: 1.25rem;
-  --radius-panel: 1.25rem;
+  --radius-card: 1.125rem;
+  --radius-panel: 1rem;
   --radius-tile: 0.625rem;
   --radius-control: 0.625rem;
 
@@ -63,26 +77,34 @@
   --shadow-warm-sm: 0 10px 22px -14px rgb(140 70 20 / 0.3), 0 1px 3px rgb(0 0 0 / 0.04);
   --shadow-warm: 0 24px 48px -20px rgb(140 70 20 / 0.28), 0 2px 6px rgb(0 0 0 / 0.04);
   --shadow-warm-lg: 0 40px 80px -32px rgb(140 70 20 / 0.36), 0 4px 12px rgb(0 0 0 / 0.05);
+  /* Paper cards: a crisp contact line and a short warm drop (DESIGN.md §5). */
+  --shadow-paper: 0 1px 0 rgb(0 0 0 / 0.04), 0 14px 28px -18px rgb(90 45 10 / 0.35);
+  --shadow-paper-lift: 0 1px 0 rgb(0 0 0 / 0.04), 0 22px 36px -20px rgb(90 45 10 / 0.42);
 
   /* Motion (DESIGN.md §9): springs or this curve, never linear. */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   /* A spring with a little overshoot, for letters, words and verdict cards. */
   --ease-spring: cubic-bezier(0.22, 1.45, 0.36, 1);
 
-  /* Glass cards bob gently, each on its own phase (set animation-delay). */
+  /* Paper cards bob gently, each on its own phase (set animation-delay). */
   --animate-float: float 7s var(--ease-out-soft) infinite alternate;
   /* Headline words roll up from a mask and settle with a little overshoot. */
   --animate-roll-up: roll-up 820ms var(--ease-spring) both;
-  /* Sunrise background blobs drift slowly (DESIGN.md §3, 20–30 s). */
-  --animate-drift-a: drift-a 26s ease-in-out infinite alternate;
-  --animate-drift-b: drift-b 22s ease-in-out infinite alternate;
-  --animate-drift-c: drift-c 30s ease-in-out infinite alternate;
   /* The ribbon (P7) sways. */
   --animate-ribbon: ribbon 16s ease-in-out infinite alternate;
   /* The current experiment's node breathes. */
   --animate-breathe: breathe 2.4s ease-in-out infinite;
   /* Small UI entrances (cards, toasts, sheets). */
   --animate-pop-in: pop-in 420ms var(--ease-spring) both;
+  /* The experiment map's path draws itself (a mask with pathLength 1). */
+  --animate-draw-path: draw-path 1.6s var(--ease-out-soft) 240ms both;
+  /* The lab HUD arrives: each panel springs in from its own edge (the mission card arrives by morph). */
+  --animate-hud-right: hud-right 760ms var(--ease-spring) both;
+  --animate-hud-up: hud-up 760ms var(--ease-spring) both;
+  /* Floating cards swap data: they flip up into place on a spring. */
+  --animate-card-in: card-in 760ms var(--ease-spring) both;
+  /* The level select's element tile flips over to the next level, landing with a small overshoot. */
+  --animate-tile-flip: tile-flip 640ms var(--ease-spring) both;
   --animate-fade-up: fade-up 520ms var(--ease-out-soft) both;
   /* Theory sheet: slides in from the right (desktop) or up (mobile), and back. */
   --animate-sheet-in-right: sheet-in-right 460ms var(--ease-out-soft) both;
@@ -105,8 +127,29 @@
   --animate-slam: slam 520ms var(--ease-spring) both;
   --animate-verdict: verdict 2.3s var(--ease-out-soft) both;
   --animate-scanflash: scanflash 900ms steps(1, end) both;
+  /* Correct: a soft Win-coloured bloom swells behind the word and fades. */
+  --animate-win-bloom: win-bloom 1.4s var(--ease-out-soft) both;
   /* Ano's talk bars. */
   --animate-talk: talk 520ms ease-in-out infinite alternate;
+  /* Ano's lines appear word by word (components/ui/WordReveal). */
+  --animate-word-in: word-in 420ms var(--ease-out-soft) both;
+  /* The sound toggle's equaliser bars, each on its own beat. */
+  --animate-eq: eq 900ms ease-in-out infinite alternate;
+  @keyframes word-in {
+    from {
+      transform: translate3d(0, 110%, 0);
+    }
+  }
+
+  @keyframes eq {
+    from {
+      scale: 1 0.35;
+    }
+    to {
+      scale: 1 1;
+    }
+  }
+
   @keyframes float {
     from {
       transform: translate3d(0, -6px, 0);
@@ -125,24 +168,6 @@
   @keyframes roll-out {
     to {
       transform: translate3d(0, -105%, 0) rotate(-3deg);
-    }
-  }
-
-  @keyframes drift-a {
-    to {
-      transform: translate3d(8%, -6%, 0) scale(1.12);
-    }
-  }
-
-  @keyframes drift-b {
-    to {
-      transform: translate3d(-10%, 8%, 0) scale(0.92);
-    }
-  }
-
-  @keyframes drift-c {
-    to {
-      transform: translate3d(-6%, -10%, 0) scale(1.08);
     }
   }
 
@@ -171,6 +196,55 @@
     from {
       opacity: 0;
       transform: translate3d(0, 12px, 0) scale(0.96);
+    }
+  }
+
+  @keyframes draw-path {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes hud-right {
+    from {
+      opacity: 0;
+      transform: perspective(900px) translate3d(36px, 0, 0) rotateY(-16deg);
+    }
+    35% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes hud-up {
+    from {
+      opacity: 0;
+      transform: perspective(900px) translate3d(0, 34px, 0) rotateX(14deg) scale(0.97);
+    }
+    35% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes tile-flip {
+    from {
+      opacity: 0.2;
+      transform: perspective(1200px) rotateY(-96deg) scale(0.96);
+    }
+    45% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: perspective(900px) translate3d(0, 28px, -60px) rotateX(-38deg) scale(0.94);
+    }
+    40% {
+      opacity: 1;
     }
   }
 
@@ -325,6 +399,20 @@
     }
   }
 
+  @keyframes win-bloom {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    30% {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.35);
+    }
+  }
+
   @keyframes talk {
     from {
       transform: scaleY(0.35);
@@ -342,17 +430,17 @@
 /* Fonts load once in app/layout.tsx (next/font) and map here (DESIGN.md §4). */
 @theme inline {
   --font-display: var(--font-archivo), "Arial Narrow", "Roboto Condensed", Impact, ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-sans: var(--font-schibsted), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-martian), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 
 /* ---- Type (DESIGN.md §4) ---- */
 
-/* Giant headlines: Archivo 900, condensed, uppercase, tight. */
+/* Giant headlines: Archivo 900, condensed (the wide end of DESIGN.md's 62–75, closest to the reference), uppercase, tight. */
 @utility type-hero {
   font-family: var(--font-display);
   font-weight: 900;
-  font-stretch: 68%;
+  font-stretch: 75%;
   text-transform: uppercase;
   letter-spacing: -0.03em;
   line-height: 0.85;
@@ -367,7 +455,7 @@
   line-height: 1.08;
 }
 
-/* Small caps meta ("BELIEF SHIFT"). */
+/* Small caps meta ("BELIEF SHIFT"): only on Belief shift cards and the hero meta line. */
 @utility type-eyebrow {
   font-family: var(--font-sans);
   font-size: 0.6875rem;
@@ -377,72 +465,186 @@
   text-transform: uppercase;
 }
 
+/* Small labels everywhere else (DESIGN.md §4 keeps small caps to belief cards and the hero meta line): sentence case. */
+@utility type-label {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.3;
+}
+
 /* Instrument readouts and numbers. */
 @utility type-readout {
   font-family: var(--font-mono);
   font-weight: 500;
+  font-stretch: 87.5%;
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- Signature gradients (DESIGN.md §3) ---- */
+/* ---- Colour blocks and gradients (DESIGN.md §3): one hue family each, never radial ---- */
 
 @utility bg-ribbon {
-  background-image: linear-gradient(90deg, var(--color-apricot-200), var(--color-apricot-500) 38%, var(--color-flame-400) 68%, var(--color-apricot-300));
+  background-image: linear-gradient(90deg, var(--color-apricot-300), var(--color-apricot-500));
 }
 
 @utility bg-chem {
-  background-image: linear-gradient(135deg, var(--color-apricot-400), var(--color-flame-500));
+  background-image: linear-gradient(135deg, var(--color-apricot-400), var(--color-apricot-600));
 }
 
 @utility bg-robo {
-  background-image: linear-gradient(135deg, var(--color-volt-400), var(--color-grape-500));
+  background-image: linear-gradient(135deg, var(--color-volt-400), var(--color-volt-600));
+}
+
+/* The ribbon's three colours (components/ui/Ribbon.tsx), registered so a page can cross-fade them (the landing hero does, per slide). */
+@property --ribbon-1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffd9b3;
+}
+
+@property --ribbon-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffbe85;
+}
+
+@property --ribbon-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ff7a1f;
+}
+
+/* The landing hero's stage card, per slide (each in its lab's palette): Robotics graphite, Chemistry teal, the drop's beige. */
+@utility bg-stage-led {
+  background-image: linear-gradient(180deg, var(--color-robo-stage), var(--color-robo-stage-2));
+}
+
+@utility bg-stage-bag {
+  background-image: linear-gradient(180deg, var(--color-chem-wall), var(--color-chem-floor));
+}
+
+/* The drop's stage: Chemistry's sand gold deepening to Robotics' gold, as strong as the other two slides' teal and graphite. */
+@utility bg-stage-gravity {
+  background-image: linear-gradient(180deg, var(--color-chem-gold), var(--color-robo-gold));
+}
+
+/* The lab cards are each lab's own colour world (DESIGN.md §8): teal deepening to its floor, graphite lifting off its deep. */
+@utility bg-chem-world {
+  background-image: linear-gradient(180deg, var(--color-chem-wall) 55%, var(--color-chem-floor));
+}
+
+@utility bg-robo-world {
+  background-image: linear-gradient(180deg, var(--color-robo-wall) 40%, var(--color-robo-deep));
 }
 
 @utility bg-level-easy {
-  background-image: linear-gradient(135deg, var(--color-verify-500), var(--color-volt-400));
+  background-image: linear-gradient(135deg, var(--color-verify-500), var(--color-verify-700));
 }
 
 @utility bg-level-medium {
-  background-image: linear-gradient(135deg, var(--color-apricot-400), var(--color-flame-400));
+  background-image: linear-gradient(135deg, var(--color-apricot-400), var(--color-apricot-600));
 }
 
 @utility bg-level-advanced {
-  background-image: linear-gradient(135deg, var(--color-grape-500), var(--color-volt-600));
+  background-image: linear-gradient(135deg, var(--color-grape-400), var(--color-grape-500));
 }
 
 @utility bg-win {
-  background-image: linear-gradient(100deg, var(--color-verify-500), var(--color-volt-400));
+  background-image: linear-gradient(100deg, var(--color-verify-500), var(--color-verify-700));
 }
 
 @utility bg-glitch {
-  background-image: linear-gradient(100deg, var(--color-anomaly-500), var(--color-flame-500));
+  background-image: linear-gradient(100deg, var(--color-anomaly-500), var(--color-anomaly-700));
 }
 
-/* A still Sunrise for small surfaces; the animated one is components/ui/Sunrise. */
-@utility bg-sunrise {
-  background-color: var(--color-cream-50);
-  background-image:
-    radial-gradient(60% 70% at 0% 100%, color-mix(in oklab, var(--color-apricot-300) 85%, transparent), transparent 70%),
-    radial-gradient(50% 60% at 100% 0%, color-mix(in oklab, var(--color-flame-300) 50%, transparent), transparent 70%),
-    radial-gradient(40% 60% at 100% 60%, color-mix(in oklab, var(--color-volt-300) 30%, transparent), transparent 70%);
+/*
+ * Paper (DESIGN.md §3): flat warm cream with a fine grain and a very soft
+ * top-to-bottom shift to cream-50. The lab tints shift toward one hue only.
+ * Still: backgrounds don't move (§9). The grain is --paper-grain (base layer).
+ */
+@utility bg-paper {
+  background-color: var(--color-cream-100);
+  background-image: var(--paper-grain), linear-gradient(180deg, var(--color-cream-100), var(--color-cream-50) 70%);
+}
+
+/*
+ * Two moods for whole sections and pages, from the labs' palettes: night
+ * (Robotics' graphite, deep and grain-free, with gold accents) and sage (Chemistry's
+ * earthy sage paper, sand-gold and teal accents). Paper cards stay light on
+ * both, so everything on them reads as before.
+ */
+@utility bg-paper-night {
+  background-color: var(--color-robo-stage);
+  background-image: linear-gradient(180deg, var(--color-robo-stage), var(--color-robo-stage-2));
+}
+
+@utility bg-paper-sage {
+  background-color: color-mix(in oklab, var(--color-chem-sage) 42%, var(--color-cream-50));
+  background-image: var(--paper-grain), linear-gradient(180deg, color-mix(in oklab, var(--color-chem-sage) 34%, var(--color-cream-50)), color-mix(in oklab, var(--color-chem-sage) 52%, var(--color-cream-50)));
+}
+
+/* Chemistry's teal world for its maps (DESIGN.md §8), so the teal lab card grows into the same colour (§9). Robotics' maps take the night mood. */
+@utility bg-paper-teal {
+  background-color: var(--color-chem-wall);
+  background-image: linear-gradient(180deg, var(--color-chem-wall), var(--color-chem-floor));
+}
+
+/* Paper tinted toward a lab's bench (DESIGN.md §8): Chemistry's beige, Robotics' white. */
+@utility bg-paper-chem {
+  background-color: color-mix(in oklab, var(--color-chem-bench) 35%, var(--color-cream-50));
+  background-image: var(--paper-grain), linear-gradient(180deg, var(--color-cream-50), color-mix(in oklab, var(--color-chem-bench) 55%, var(--color-cream-50)));
+}
+
+@utility bg-paper-robo {
+  background-color: var(--color-robo-bench);
+  background-image: var(--paper-grain), linear-gradient(180deg, var(--color-white), var(--color-robo-bench) 70%);
+}
+
+/* While the page scrolls, nothing under the still mouse starts a hover effect (ScrollHoverGuard): hover fades on rows and cards sliding past repainted mid-scroll and dropped frames. */
+html[data-scrolling] body * {
+  pointer-events: none !important;
 }
 
 /* ---- Surfaces (DESIGN.md §5) ---- */
 
-/* White glass card: frosted, thin bright edge, warm shadow. */
-@utility glass-card {
-  background-color: color-mix(in oklab, var(--color-white) 80%, transparent);
-  border: 1px solid color-mix(in oklab, var(--color-white) 60%, transparent);
-  box-shadow: var(--shadow-warm);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  backdrop-filter: blur(24px) saturate(160%);
+/* Paper card (DESIGN.md §5): solid white, a crisp 1.5 px ink edge, fine grain, a short warm shadow. No blur, no transparency. */
+@utility paper-card {
+  background-color: var(--color-white);
+  background-image: var(--paper-grain);
+  border: 1.5px solid color-mix(in oklab, var(--color-ink-900) 10%, transparent);
+  box-shadow: var(--shadow-paper);
 }
 
-/* Low quality tier (DESIGN.md §9.2): no backdrop blur, a more solid fill. */
-html[data-quality="low"] .glass-card {
-  background-color: color-mix(in oklab, var(--color-white) 94%, transparent);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+/* Lab select: while one lab card dives in (LabCard `dive`), the other falls back. */
+[data-lab-grid]:has([data-diving]) [data-lab-card]:not([data-diving]) {
+  opacity: 0.4;
+  scale: 0.96;
+}
+
+/*
+ * Rolling headlines (components/ui/RollingText.tsx): letters wait inside
+ * their word masks ("wait") and roll up with a small overshoot ("go"), one
+ * after another by --roll-delay. Reduced motion: still text.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  [data-roll="wait"] [data-roll-letter] {
+    transform: translate3d(0, 108%, 0) rotate(4deg);
+  }
+
+  [data-roll="go"] [data-roll-letter] {
+    animation: var(--animate-roll-up);
+    animation-delay: var(--roll-delay, 0ms);
+  }
+}
+
+/*
+ * A layer inside a tilting card that shifts with the tilt, for depth: --depth
+ * is how far (negative moves against the cursor). Scaled by --tilt-lift, so
+ * it eases back when the cursor leaves.
+ */
+@utility tilt-layer {
+  translate: calc((var(--tilt-x, 50%) - 50%) * var(--depth, -0.4) * var(--tilt-lift, 0)) calc((var(--tilt-y, 50%) - 50%) * var(--depth, -0.4) * var(--tilt-lift, 0));
 }
 
 /*
@@ -458,6 +660,13 @@ html[data-quality="low"] .glass-card {
       animation-timeline: view();
       animation-range: entry 0% entry var(--reveal-end, 90%);
     }
+  }
+}
+
+/* Current riding a wire (How it works): the dots move two spacings per loop of the animation. */
+@keyframes current {
+  to {
+    stroke-dashoffset: -44;
   }
 }
 
@@ -505,12 +714,25 @@ html[data-quality="low"] .glass-card {
 @layer base {
   :root {
     color-scheme: light;
+    --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .36 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    /* The same grain in a cool blue, for the Robotics tint. */
+    --paper-grain-cool: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .16 0 0 0 0 .22 0 0 0 0 .55 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
   }
 
   body {
-    background-color: var(--color-cream-50);
+    background-color: var(--color-cream-100);
     color: var(--color-ink-900);
     font-family: var(--font-sans);
+  }
+
+  /* No double-tap zoom delay on controls; an intentional tap highlight. */
+  a,
+  button,
+  [role="button"],
+  [role="radio"],
+  label {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgb(255 158 79 / 0.18);
   }
 
   ::selection {
@@ -559,8 +781,9 @@ html[data-fx-cursor] dialog[open] * {
  *    select page, a lab card into its map, a map node into the experiment's
  *    mission card. Back plays the morph in reverse by itself.
  *  - Everything else wipes: the old screen sinks and fades while the new one
- *    is revealed from below across a Sunrise backdrop (the group's own
- *    background). Going back (a nav-back link or the browser's back button)
+ *    is revealed from below, landing with a slight overshoot, across a solid
+ *    graphite curtain (the group's own background; the night mood, studied
+ *    from Animmaster's page-transition previews). Going back (a nav-back link or the browser's back button)
  *    reveals from the top instead.
  *  - The VFX layer and the wordmark keep their own names, so they carry on.
  *  - Reduced motion: a quick fade.
@@ -571,26 +794,22 @@ html[data-fx-cursor] dialog[open] * {
   animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-::view-transition-group(.sunrise-wipe) {
+::view-transition-group(.colour-wipe) {
   animation-duration: 760ms;
   animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  background-color: var(--color-cream-50);
-  background-image:
-    radial-gradient(70% 80% at 10% 100%, color-mix(in oklab, var(--color-apricot-400) 90%, transparent), transparent 70%),
-    radial-gradient(60% 70% at 95% 10%, color-mix(in oklab, var(--color-flame-300) 70%, transparent), transparent 70%),
-    radial-gradient(50% 70% at 100% 70%, color-mix(in oklab, var(--color-volt-300) 45%, transparent), transparent 70%);
+  background-color: var(--color-robo-stage);
 }
 
-::view-transition-old(.sunrise-wipe) {
+::view-transition-old(.colour-wipe) {
   animation: wipe-out 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-::view-transition-new(.sunrise-wipe) {
-  animation: wipe-in 760ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+::view-transition-new(.colour-wipe) {
+  animation: wipe-in 820ms cubic-bezier(0.3, 1.22, 0.5, 1) 80ms both;
 }
 
-html:active-view-transition-type(nav-back)::view-transition-new(.sunrise-wipe),
-html[data-nav-back]::view-transition-new(.sunrise-wipe) {
+html:active-view-transition-type(nav-back)::view-transition-new(.colour-wipe),
+html[data-nav-back]::view-transition-new(.colour-wipe) {
   animation-name: wipe-in-back;
 }
 
@@ -631,9 +850,11 @@ html[data-nav-back]::view-transition-new(.sunrise-wipe) {
   animation-name: morph-soften;
 }
 
+/* Mid-flight the morphing card lifts a little toward the viewer and softens, then lands. */
 @keyframes morph-soften {
   40% {
     filter: blur(4px);
+    transform: scale(1.025);
   }
 }
 
@@ -642,17 +863,28 @@ html[data-nav-back]::view-transition-new(.sunrise-wipe) {
   animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* The named classes are listed too: (.colour-wipe) outranks (*), so it would otherwise still wipe. */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
-  ::view-transition-image-pair(*) {
+  ::view-transition-group(.colour-wipe),
+  ::view-transition-group(.morph),
+  ::view-transition-image-pair(*),
+  ::view-transition-image-pair(.morph) {
     animation: none;
   }
   ::view-transition-old(*),
-  ::view-transition-new(*) {
+  ::view-transition-new(*),
+  ::view-transition-old(.colour-wipe),
+  ::view-transition-new(.colour-wipe) {
     animation: quick-fade 160ms ease-out both;
   }
-  ::view-transition-new(*) {
+  ::view-transition-new(*),
+  ::view-transition-new(.colour-wipe) {
     animation-direction: reverse;
+  }
+  html:active-view-transition-type(nav-back)::view-transition-new(.colour-wipe),
+  html[data-nav-back]::view-transition-new(.colour-wipe) {
+    animation-name: quick-fade;
   }
 }
 

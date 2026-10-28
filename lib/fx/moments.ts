@@ -12,9 +12,9 @@ function success(at: Point2, scale = 1) {
   if (!world) return;
   world.flash(at.x, at.y, 240 * scale, 0.8, P.verify[500]);
   if (reduced) return;
-  world.ring({ x: at.x, y: at.y, from: 24, to: 300 * scale, life: 0.95, color: P.volt[400], width: 3 });
-  world.ring({ x: at.x, y: at.y, from: 10, to: 200 * scale, life: 0.85, color: P.verify[500], width: 1.5, delay: 0.12 });
-  world.burst({ x: at.x, y: at.y, count: n(50), kind: "glow", colors: [P.verify[500], P.volt[400], P.white], speed: [180, 560 * scale], life: [0.7, 1.3], size: [3, 7], drag: 2.2, gravity: 160, spread: 18 });
+  world.ring({ x: at.x, y: at.y, from: 24, to: 300 * scale, life: 0.95, color: P.verify[500], width: 3 });
+  world.ring({ x: at.x, y: at.y, from: 10, to: 200 * scale, life: 0.85, color: P.verify[700], width: 1.5, delay: 0.12 });
+  world.burst({ x: at.x, y: at.y, count: n(50), kind: "glow", colors: [P.verify[500], P.white], speed: [180, 560 * scale], life: [0.7, 1.3], size: [3, 7], drag: 2.2, gravity: 160, spread: 18 });
   world.burst({ x: at.x, y: at.y, count: n(26), kind: "spark", colors: [P.verify[500], P.white], speed: [320, 760 * scale], life: [0.4, 0.8], size: [1.4, 2.4], drag: 2.4, gravity: 320 });
 }
 
@@ -26,8 +26,8 @@ function anomaly(at: Point2, scale = 1) {
   if (reduced) return;
   world.ring({ x: at.x, y: at.y, from: 24, to: 280 * scale, life: 0.85, color: P.anomaly[500], width: 3, broken: true });
   // A blue copy a beat behind: the RGB split of the glitch.
-  world.ring({ x: at.x + 4, y: at.y, from: 20, to: 270 * scale, life: 0.7, color: P.volt[500], width: 1.5, broken: true, delay: 0.05 });
-  world.burst({ x: at.x, y: at.y, count: n(36), kind: "shard", colors: [P.flame[400], P.anomaly[500], P.anomaly[700]], speed: [220, 620 * scale], life: [0.6, 1.1], size: [5, 11], drag: 2.4, gravity: 240, spin: 9, spread: 14 });
+  world.ring({ x: at.x + 4, y: at.y, from: 20, to: 270 * scale, life: 0.7, color: P.anomaly[700], width: 1.5, broken: true, delay: 0.05 });
+  world.burst({ x: at.x, y: at.y, count: n(36), kind: "shard", colors: [P.anomaly[500], P.anomaly[700]], speed: [220, 620 * scale], life: [0.6, 1.1], size: [5, 11], drag: 2.4, gravity: 240, spin: 9, spread: 14 });
 }
 
 /** A short circuit at a point: crackling arcs, a shower of sparks, then smoke. */
@@ -39,9 +39,9 @@ function shortCircuit(at: Point2) {
   for (let i = 0; i < 4; i++) {
     const a = Math.random() * Math.PI * 2;
     const d = 50 + Math.random() * 60;
-    world.arc(at.x, at.y, at.x + Math.cos(a) * d, at.y + Math.sin(a) * d, 0.6 + Math.random() * 0.7, i % 2 ? P.apricot[300] : P.volt[300]);
+    world.arc(at.x, at.y, at.x + Math.cos(a) * d, at.y + Math.sin(a) * d, 0.6 + Math.random() * 0.7, i % 2 ? P.white : P.volt[300]);
   }
-  world.burst({ x: at.x, y: at.y, count: n(44), kind: "spark", colors: [P.verify[500], P.white, P.volt[400]], speed: [260, 680], angle: [-Math.PI + 0.25, -0.25], life: [0.5, 1.1], size: [1.2, 2.2], gravity: 950, drag: 0.6 });
+  world.burst({ x: at.x, y: at.y, count: n(44), kind: "spark", colors: [P.verify[500], P.white], speed: [260, 680], angle: [-Math.PI + 0.25, -0.25], life: [0.5, 1.1], size: [1.2, 2.2], gravity: 950, drag: 0.6 });
   smoke(at, 1, 0.25);
 }
 
@@ -65,7 +65,7 @@ function smoke(at: Point2, amount = 1, delay = 0) {
   }
 }
 
-/** Level complete: confetti in the brand colours from both top corners. */
+/** Level complete: two-colour confetti (verify and apricot) from both top corners. */
 function confetti() {
   const { world, reduced } = fxState;
   if (!world || reduced) return;
@@ -101,7 +101,7 @@ function powerUp(at: Point2) {
   world.flash(at.x, at.y, 160, 0.5, P.volt[500]);
   if (reduced) return;
   world.ring({ x: at.x, y: at.y, from: 10, to: 190, life: 0.6, color: P.volt[400], width: 1.5 });
-  world.burst({ x: at.x, y: at.y, count: n(14), kind: "glow", colors: [P.volt[300], P.apricot[300]], speed: [60, 200], life: [0.4, 0.8], size: [2, 3.5], drag: 3, spread: 30 });
+  world.burst({ x: at.x, y: at.y, count: n(14), kind: "glow", colors: [P.volt[300], P.white], speed: [60, 200], life: [0.4, 0.8], size: [2, 3.5], drag: 3, spread: 30 });
 }
 
 export const fx = { success, anomaly, shortCircuit, burnout, smoke, confetti, shake, powerUp };

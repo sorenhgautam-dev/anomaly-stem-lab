@@ -9,9 +9,9 @@ import { cn } from "@/lib/cn";
  */
 
 const FILL: Record<"chem" | "robo" | "ribbon", string> = {
-  chem: "var(--color-apricot-400), var(--color-flame-500)",
-  robo: "var(--color-volt-400), var(--color-grape-500)",
-  ribbon: "var(--color-apricot-300), var(--color-flame-400)",
+  chem: "var(--color-apricot-400), var(--color-apricot-600)",
+  robo: "var(--color-volt-400), var(--color-volt-600)",
+  ribbon: "var(--color-apricot-300), var(--color-apricot-500)",
 };
 
 export function Slider({

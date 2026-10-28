@@ -1,13 +1,14 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Volume2 } from "lucide-react";
+import { IconSpeaker } from "@/components/icons/icons";
 import { cn } from "@/lib/cn";
+import { WordReveal } from "./WordReveal";
 import { speak, stopSpeaking, useVoice } from "@/lib/voice";
 
 /*
  * Ano's speech bubble (DESIGN.md §5): a white card with a small tail toward
- * Ano, Geist 15–16 px, and a Listen button. The text is the caption, so it's
+ * Ano, Schibsted Grotesk 15–16 px, and a Listen button. The text is the caption, so it's
  * always on screen while the line is spoken (CLAUDE.md §7.4).
  */
 
@@ -25,6 +26,7 @@ export function SpeechBubble({
   name = "Ano",
   children,
   className,
+  tailClassName,
 }: {
   text: string;
   tail?: "left" | "bottom" | "top";
@@ -34,13 +36,15 @@ export function SpeechBubble({
   name?: string;
   children?: ReactNode;
   className?: string;
+  /** Extra classes for the tail (e.g. hiding it while Ano is away). */
+  tailClassName?: string;
 }) {
   const speaking = useVoice((s) => s.speaking === text);
   return (
     <div className={cn("relative rounded-card bg-white p-4 text-ink-900 shadow-warm", className)} aria-live="polite">
-      <span aria-hidden className={cn("absolute size-3 rounded-[3px] bg-white", TAIL[tail])} />
+      <span aria-hidden className={cn("absolute size-3 rounded-[3px] bg-white", TAIL[tail], tailClassName)} />
       <div className="relative flex items-center justify-between gap-3">
-        <p className="type-eyebrow text-apricot-700">{name}</p>
+        <p className="type-label text-apricot-700">{name}</p>
         {listen && (
           <button
             type="button"
@@ -48,13 +52,14 @@ export function SpeechBubble({
             aria-pressed={speaking}
             className="-my-2 -mr-2 inline-flex h-11 items-center gap-1.5 rounded-full px-3 text-[13px] font-semibold text-ink-700 transition-colors hover:bg-ink-900/[0.06] hover:text-ink-900"
           >
-            {speaking ? <TalkBars /> : <Volume2 aria-hidden className="size-4" strokeWidth={1.75} />}
+            {speaking ? <TalkBars /> : <IconSpeaker aria-hidden className="size-4" />}
             {speaking ? "Stop" : "Listen"}
           </button>
         )}
       </div>
-      <p key={text} className="relative mt-1.5 animate-fade-up text-[15px] leading-[1.5] text-ink-900 motion-reduce:animate-none">
-        {text}
+      {/* The line appears word by word, like it's being said; re-keyed so each new line plays. */}
+      <p key={text} className="relative mt-1.5 text-[15px] leading-[1.5] text-ink-900">
+        <WordReveal text={text} />
       </p>
       {children && <div className="relative mt-3 flex flex-wrap gap-2">{children}</div>}
     </div>

@@ -72,6 +72,11 @@ export class AnoRig {
     this.b.setTier(tier);
   }
 
+  /** Show or hide the floor shadow (hidden where Ano floats with no floor under him). */
+  setShadow(on: boolean): void {
+    this.b.shadow.visible = on;
+  }
+
   setVisorEnvironment(env: Texture): void {
     this.b.setVisorEnvironment(env);
   }

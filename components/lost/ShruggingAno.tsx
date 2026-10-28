@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnoView } from "@/components/ano/AnoView";
+import type { AnoAction } from "@/components/ano/types";
 import { prefersReducedMotion } from "@/lib/motion";
 
 /*
@@ -11,7 +12,8 @@ import { prefersReducedMotion } from "@/lib/motion";
 
 const EVERY_MS = 3600;
 
-export function ShruggingAno({ className }: { className?: string }) {
+/** A shrug that plays now and then (once with reduced motion), as an Ano action. */
+export function useShrug(): AnoAction | null {
   const [key, setKey] = useState(0);
   useEffect(() => {
     const first = window.setTimeout(() => setKey(1), 700);
@@ -22,5 +24,9 @@ export function ShruggingAno({ className }: { className?: string }) {
       window.clearInterval(id);
     };
   }, []);
-  return <AnoView className={className} expression="curious" action={key ? { move: "shrug", key } : null} label="Ano shrugging" />;
+  return key ? { move: "shrug", key } : null;
+}
+
+export function ShruggingAno({ className }: { className?: string }) {
+  return <AnoView className={className} expression="curious" action={useShrug()} label="Ano shrugging" />;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Pause, Play, RotateCcw } from "lucide-react";
+import { IconPause, IconPlay, IconRestart } from "@/components/icons/icons";
 import { theoryFor } from "@/lib/content";
 import { BreadcrumbBar } from "@/components/ui/BreadcrumbBar";
 import { Button } from "@/components/ui/Button";
@@ -21,7 +21,7 @@ import { Section } from "./Section";
 
 export function ControlsDemo() {
   const [slide, setSlide] = useState(0);
-  const [chem, setChem] = useState<string | null>("The same");
+  const [chem, setChem] = useState<string | null>("Stays the same");
   const [robo, setRobo] = useState<string | null>(null);
   const [soda, setSoda] = useState(5);
   const [bag, setBag] = useState<"open" | "sealed">("open");
@@ -34,7 +34,7 @@ export function ControlsDemo() {
       <Section id="buttons" title="Buttons" note="Hover for the sheen and lift, press to squash, release for the ripple. The hit area never moves.">
         <div className="flex flex-wrap items-center gap-3">
           <Button size="xl">Start experimenting</Button>
-          <Button size="lg" icon={<ArrowRight className="size-4" />}>
+          <Button size="lg" icon={<IconPlay className="size-4" />}>
             Next experiment
           </Button>
           <Button variant="secondary" size="lg">
@@ -44,13 +44,13 @@ export function ControlsDemo() {
           <Button variant="ghost">Ghost</Button>
           <Button disabled>Disabled</Button>
           <IconButton label="Play">
-            <Play />
+            <IconPlay />
           </IconButton>
           <IconButton label="Pause">
-            <Pause />
+            <IconPause />
           </IconButton>
-          <IconButton label="Rewind" tone="dark">
-            <RotateCcw />
+          <IconButton label="Restart" tone="dark">
+            <IconRestart />
           </IconButton>
         </div>
       </Section>
@@ -87,7 +87,7 @@ export function ControlsDemo() {
           </div>
           <div className="flex flex-col gap-3">
             <p className="text-sm font-semibold">Prediction choices · Chemistry</p>
-            <PredictionChoices lab="chemistry" question="When the fizzing stops, the scale will read…" options={["More", "The same", "Less"]} value={chem} onChange={setChem} />
+            <PredictionChoices lab="chemistry" question="When the fizzing stops, everything on the scale…" options={["Gets heavier", "Stays the same", "Gets lighter"]} value={chem} onChange={setChem} />
           </div>
           <div className="flex flex-col gap-3">
             <p className="text-sm font-semibold">Prediction choices · Robotics</p>

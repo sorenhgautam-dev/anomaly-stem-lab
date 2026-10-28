@@ -15,7 +15,7 @@ const GROUPS: { title: string; items: [string, string][] }[] = [
     title: "Fonts",
     items: [
       ["Archivo", "SIL Open Font License 1.1"],
-      ["Geist and Geist Mono", "SIL Open Font License 1.1"],
+      ["Schibsted Grotesk and Martian Mono", "SIL Open Font License 1.1"],
     ],
   },
   {
@@ -37,7 +37,6 @@ const GROUPS: { title: string; items: [string, string][] }[] = [
       ["Radix UI Dialog", "MIT"],
       ["class-variance-authority", "Apache-2.0"],
       ["zustand, zod, idb, clsx, tailwind-merge", "MIT / ISC"],
-      ["Lucide icons", "ISC"],
       ["math.js", "Apache-2.0"],
     ],
   },
@@ -49,17 +48,17 @@ const GROUPS: { title: string; items: [string, string][] }[] = [
 
 export default function CreditsPage() {
   return (
-    <ViewTransition default="sunrise-wipe">
+    <ViewTransition enter="colour-wipe" exit="colour-wipe" default="none">
       <div className="flex min-h-dvh flex-col bg-cream-50">
-        <Frame className="min-h-0 md:min-h-0">
+        <Frame tint="sage" className="min-h-0 md:min-h-0">
           <SiteHeader />
-          <main className="relative mx-auto w-full max-w-4xl flex-1 px-4 pb-40 pt-16 sm:px-8">
+          <main className="relative mx-auto w-full max-w-4xl flex-1 px-4 pb-28 pt-16 sm:px-8">
             <h1 className="type-hero text-[clamp(3.5rem,10vw,7rem)]">Credits</h1>
             <p className="mt-4 max-w-xl text-lg text-ink-700">ANOMALY is MIT licensed and built on open-source work. Thank you to everyone behind it.</p>
             <div className="mt-12 grid gap-10 sm:grid-cols-2">
               {GROUPS.map((g) => (
                 <section key={g.title} aria-labelledby={`credits-${g.title}`}>
-                  <h2 id={`credits-${g.title}`} className="type-eyebrow text-ink-500">
+                  <h2 id={`credits-${g.title}`} className="type-heading text-lg">
                     {g.title}
                   </h2>
                   <ul className="mt-3 flex flex-col gap-2">

@@ -59,6 +59,8 @@ Keys are only read in `app/api/ask-ano/route.ts`. Never commit `.env.local`.
 
 ANOMALY is MIT licensed. Every 3D object is built from code; no assets are copied from reference sites.
 
-- **Fonts**: [Host Grotesk](https://github.com/Element-Type/HostGrotesk), [Instrument Serif](https://fonts.google.com/specimen/Instrument+Serif) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/), all SIL Open Font License 1.1. The 3D title uses Host Grotesk converted with `scripts/make-typeface.mjs` (licence in `components/landing/fonts/`).
-- **Libraries**: three.js, @react-three/fiber, @react-three/drei, @react-three/rapier, lenis, maath, zustand, zod, @xyflow/react, opentype.js (MIT); postprocessing (Zlib); mathjs, Vercel AI SDK (Apache-2.0); idb, lucide-react (ISC).
+- **Fonts**: [Archivo](https://fonts.google.com/specimen/Archivo), [Schibsted Grotesk](https://fonts.google.com/specimen/Schibsted+Grotesk) and [Martian Mono](https://fonts.google.com/specimen/Martian+Mono), all SIL Open Font License 1.1, self-hosted with `next/font`.
+- **Icons**: our own set in `components/icons/`, drawn for ANOMALY.
+- **UI patterns**: some interactions were studied on [Aceternity UI](https://ui.aceternity.com/), [Skiper UI](https://skiper-ui.com/) and [Animmaster Lib](https://animmasterlib.dev/) and rebuilt from scratch. No code was copied, because their licences don't allow it in an MIT project. RESOURCES.md §11 lists each pattern and where it lives.
+- **Libraries**: three.js, @react-three/fiber, @react-three/drei, @react-three/rapier, lenis, maath, zustand, zod, @xyflow/react, opentype.js (MIT); postprocessing (Zlib); mathjs, Vercel AI SDK (Apache-2.0); idb (ISC).
 - **Science**: theory pages cite OpenStax Chemistry 2e and College Physics 2e (CC BY 4.0) and the research papers listed in each misconception's `sources`. PhET and CircuitJS were studied only; no GPL code is used.

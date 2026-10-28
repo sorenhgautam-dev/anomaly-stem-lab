@@ -1,375 +1,600 @@
 # HANDOFF.md
 
-The unattended gauntlet (GAUNTLET.md) ran from setup through round 6 on 16 October 2026. The full round-by-round record, with every decision and its reasoning, is in `GAUNTLET_LOG.md`.
+## Session 6: easy for kids, and smoother (28 October 2026)
+The brief:
+- fix the experiment page, the landing hero, How it works and the cursor;
+- rewrite every word for the student's level so a 12-year-old understands it;
+- make the site smoother.
 
-## Summary
-1. **All six rounds are done:**
-   - the Bright Lab design system;
-   - 3D Ano;
-   - the landing page;
-   - the selection pages;
-   - an experiment page that is fully 3D for all 21 experiments (none left in 2D);
-   - page transitions, loading, 404 and a final cleanup.
-2. **The final full run, on every page, passes every gate**, with two exceptions. G12's literal command fails on one LGPL binary that Next.js installs, and it passes with the documented exception. G11 ran on the mock provider only, because there are no API keys.
-3. **Performance:** 60 fps on every measured page, also on the Low tier with the CPU throttled 4×, at 16–65 draw calls.
-4. **Nothing is committed.** No git command that changes anything was run. Ten suggested commits, grouped by branch, are below.
-5. **Needs you:**
-   - API keys;
-   - approval of the AI provider mapping;
-   - confirmation of the libvips licence exception;
-   - the missing reference image;
-   - a few design calls (the questions at the end).
+Nothing is committed, and the engine is unchanged; the only `engine/` edits are string expectations in `engine/chemistry/content.test.ts`. Every decision is in `GAUNTLET_LOG.md` under "Session 6".
 
-## What's done, per queue item
-| # | Queue item | Done |
-|---|---|---|
-| 0 | Setup | DESIGN.md and GAUNTLET.md copied into the repo and referenced from CLAUDE.md. Playwright gates on the production build, with axe, hit areas, screenshots and frame sampling with CPU throttling. The licence gate. GAUNTLET_LOG.md. The 11 failing chemistry theory tests fixed with checked OpenStax sources. Ask Ano rebuilt as one job with one provider, with startup key validation, server-side limits, the voice route and a 20-question eval with a mock |
-| 1 | Design foundation | DESIGN.md §3 ramps, gradients and warm shadows, and the §4 fonts (Archivo condensed, Geist, Geist Mono) in the Tailwind theme. Every §5 component in `components/ui/` (cva variants, hit area equals visible area). The P1–P7 patterns. The light soft cursor and VFX. A dev-only `/design-system` page with the font comparison |
-| 2 | Ano 3D | One persistent site canvas with drei Views. High/Medium/Low quality tiers (detect-gpu plus PerformanceMonitor). Ano built in code: glossy shell, canvas face with 5 expressions; moves wave, nod, hop, spin, boop and shrug; blinking, breathing, cursor-following, visor reflections |
-| 3 | Landing | The hero carousel with the giant split headline and Ano in the gap. The "Which falls faster?" drop experiment playing in place. How it works, Labs, Meet Ano, the belief wall, the levels strip, the final call to action, the footer and credits |
-| 4 | Selection pages | Level select (Ano peeking over Medium), lab select (3D flask and rover cards), the experiment map (a path of nodes with status and Ano by the next one, plus a level-complete celebration), My beliefs (a filterable belief grid). One top bar with Level · Lab · Experiment breadcrumbs |
-| 5 | Experiment page in 3D | One continuous 3D studio lab per experiment, with a camera that guides arrive → build → predict → run → reveal and lets you orbit, zoom and reset. A shared apparatus kit. Light the LED and Mass in a sealed bag polished first, then the other 13 stages. Ghost of the prediction vs reality; ANOMALY freeze and glitch; success shockwave and confetti; zoom to particles or current; a live 3D graph; click-to-inspect labels; Ano flying to the part that matters. A light glass HUD |
-| 6 | Transitions, VFX and final pass | Shared-element morphs (level card → lab select, lab card → map, map node → mission card), a Sunrise wipe everywhere else, reverse on back, a quick fade with reduced motion. A preloader and route loading screen (a CSS Ano assembling with a real percentage). The 404, "LOST · IN SPACE.". Render only when needed. Legacy tokens, fonts and 2D stages removed. Scroll-speed skew and count-up readouts. The full gauntlet on every page |
+### What changed
+- **Experiment page:**
+  - the melting chart's y-axis fits the run's data, so the gap between your guess and what happened is easy to see;
+  - Ano's bubble never repeats the panel;
+  - the ghost copy names the real colour (teal);
+  - "You were sure" (the student) is worded apart from Ano's diagnosis ("Maybe you used this idea:");
+  - on wide screens the camera fits the picture above the dock as it grows, so the result panel never covers the hot plate or beaker, and Ano never lands on the apparatus.
+- **Landing hero:**
+  - where the headline crosses a dark card its letters turn white;
+  - the sealed bag is modelled as a real zip bag (a low milky pillow, crinkles, a front zip, a write-on panel);
+  - "Gets lighter" replaces "Less";
+  - the gravity slide's stage is a strong gold;
+  - each experiment is larger, with Ano small and to the side.
+- **How it works:** the heading's reveal always ends fully visible, and the battery shows one voltage ("3 V"; the cells say "AA").
+- **Cursor:** a clear arrow pointer, not a dot.
+- **Language:**
+  - 372 strings in 101 content files, rewritten per level (Easy, Medium, Advanced: ≤15 words a sentence, everyday comparisons, Ano as a friendly older student), then a final "read it as a 12-year-old" pass;
+  - the UI labels in plain words.
 
-## Final gates (round 6, every page, production build)
+  Every content change is listed old → new in `tests/screenshots/kids-after/wording-changes.md`.
+- **Smoother:**
+  - hover effects pause while scrolling;
+  - the audio context is warmed in idle time;
+  - slide changes and the knob's level render as transitions;
+  - 3D models are built and compiled ahead;
+  - no layout reads on scroll.
+
+  The numbers are in Checks.
+
+### UI wording changes
+| Before | After |
+|---|---|
+| Inspector / Live | What's happening / Right now |
+| Nudge / Principle / Fix | Hint / Why it happened / How to fix it |
+| High conf. / Medium conf. / Low conf. | You were sure / You were fairly sure / You were guessing |
+| Ano is fairly sure you might be using this idea / Ano thinks… | This looks like the idea you used / Maybe you used this idea |
+| Prediction / Reality | You guessed / What really happened |
+| Belief shift | What you just learned |
+| Anomaly spotted / Verified / Not yet tested | Surprise! / True! (Right!) / Not tested yet |
+| Interactive intuition lab, powered by Ano | A science lab where you guess first |
+| My beliefs / beliefs to break | My ideas / tricky ideas to test |
+| Broken / Challenged (belief stamps) | Busted / Testing (groups: Busted / Still testing) |
+| Run · predict first / Your prediction | Run (guess first) / Your guess |
+| Change something and run again | Change something and try again |
+| ANOMALY (alone) | ANOMALY + "Surprise! That's not what you guessed." |
+| Inspector rows: Turns on above, Safe current, Pointing + to −, Power rating, Rated for, Voltage across | Needs at least, Safe up to, Pointing the right way, Can handle, Made for, Voltage |
+
+### Checks (production build)
+- **Static checks:** `npm run build`, `npm run test` (530 passed, 1 skipped), `npm run lint` and the slop scan (0 hits) pass on the committed code.
+- **Smoothness** (production build, M1 Pro, frame times while scrolling and around each action):
+
+  | Moment | Before | After |
+  |---|---|---|
+  | Scrolling My ideas | 53 fps, ~10 % of frames at 33 ms | 60 fps, no slow frames |
+  | Hero slide change | worst 166–183 ms | 16.8 ms |
+  | Turning the level knob | worst 217 ms | 33 ms |
+  | Level select → lab select | 83 ms | 67 ms (one frame in the page wipe) |
+  | Scrolling the landing, running an experiment | smooth | smooth |
+- **e2e:** the full Playwright suite wasn't re-run on the final build before these commits (the after screenshots were still being taken on the production servers). The last full run passed 193 of 193 in session 5. This session's specs only changed strings (the new option and button words). Run `GAUNTLET_ROUND=final-s6 npx playwright test` after `npm run build` to confirm.
+
+### Before and after (local, git-ignored)
+- **Before:** `tests/screenshots/kids-before/`:
+  - the 9 pages at 1440 and 390;
+  - `slides/` (each hero slide);
+  - `experiments/` (every experiment as it opens and after a run, at 1440 and 390).
+- **After:** `tests/screenshots/kids-after/`, with the same structure, plus `wording-changes.md`.
+
+### Suggested commits for session 6, by branch type
+Make the session 2–5 commits first; several files are shared.
+1. **`opinion/kids-language-content`**: "Rewrite all content for each level in plain words a 12-year-old understands"
+   - All of `content/`
+   - String expectations: `engine/chemistry/content.test.ts`, `components/landing/featured.test.ts`, `tests/e2e/flows.spec.ts`, `tests/e2e/perf.spec.ts`, `tests/e2e/quality.spec.ts`, `components/design-system/ControlsDemo.tsx`
+2. **`opinion/kids-language-ui`**: "Plain-word UI labels: What's happening, You guessed, Hint, You were sure, Surprise!, My ideas"
+   - `components/lab/Inspector.tsx`, `ResultDock.tsx`, `PredictDock.tsx`, `VerdictMoment.tsx`, `AnoDock.tsx`, `readings.ts`
+   - `components/ui/Chip.tsx`, `ResultCard.tsx`, `BeliefShiftCard.tsx`, `SiteHeader.tsx`, `SiteFooter.tsx`
+   - `components/explore/BeliefList.tsx`, `BeliefRow.tsx`, `ExploreBar.tsx`
+   - `components/landing/BeliefDeck.tsx`, `featured.ts`, `HowItWorks.tsx`
+   - `lib/beliefs.ts`, `lib/ai/hints.ts`
+   - `app/(explore)/beliefs/page.tsx`, `app/(explore)/labs/[lab]/[level]/page.tsx`
+3. **`opinion/experiment-page-fixes`**: "Melting chart fits its data; the lab picture fits above the dock; Ano never lands on apparatus"
+   - `components/lab3d/kit/chem/heat/chart.ts`, `components/lab3d/scene/CameraDirector.tsx`, `components/lab3d/scene/LabAno.tsx`, `components/lab3d/lab-state.ts`, `components/lab/LabExperiment.tsx`
+4. **`opinion/landing-hero-fixes`**: "Hero: white letters over dark cards, a real zip bag, a gold gravity stage, bigger experiments with a smaller Ano"
+   - New: `components/landing/HeroHeadline.tsx`
+   - Changed: `components/landing/Hero.tsx`, `HeroStage.tsx`, `useHeroScene.ts`, `components/ui/StageCard.tsx`, `components/lab3d/kit/chem/bag.tsx`, `components/lab3d/kit/materials.ts`, `components/lab3d/stages/FizzStage3D.tsx`, `app/globals.css`
+5. **`adjustment/how-it-works-heading-and-battery`**: "How it works heading always ends fully visible; one voltage on the battery"
+   - `components/ui/ScrollWords.tsx`, `components/landing/HowItWorks.tsx` (if not in 2), `components/lab3d/kit/circuit/parts3d.tsx`
+6. **`adjustment/clear-cursor`**: "A clear arrow cursor instead of a dot"
+   - `components/fx/cursor.ts`
+7. **`sustaining/smoother-scroll-and-input`**: "Smoother: pause hover while scrolling, warm audio in idle, transitions for slides and levels, build 3D ahead"
+   - New: `components/ui/ScrollHoverGuard.tsx`
+   - Changed: `app/layout.tsx`, `app/globals.css` (if not in 4), `lib/sound.ts`, `components/fx/FxLayer.tsx`, `components/landing/useCarousel.ts`, `components/landing/useScrollScene.ts`, `components/explore/LevelPicker.tsx`, `components/explore/LevelShelf.tsx`, `components/three/LabObjectView.tsx`
+   - `components/landing/HeroStage.tsx` and `HeroHeadline.tsx` also carry smoothness changes; they go in 4.
+8. **`sustaining/gauntlet-session-6`**: "Log session 6"
+   - `GAUNTLET_LOG.md`, `HANDOFF.md`
+
+`components/ui/SmoothScroll.tsx` has a newer timestamp, but its content is unchanged this session. `lib/content-manifest.ts` is regenerated by the build.
+
+### Open from session 6
+- **Left on purpose:**
+  - **Gas laws options:** "Rise/Fall in proportion" (Advanced) can't be put more simply without giving the answer away.
+  - **Titles:** "Mass in a sealed bag", "Melting and particles" and "Activation energy and catalysts" are CLAUDE.md's names, so they stay; their intros and theory explain the words.
+- **Smoothness:** one ~67 ms frame remains when a new page mounts during the page wipe. Background shader compiles fixed the rest.
+- **Not committed:**
+  - `design/reference/`, which isn't mine;
+  - `.next-kids/`, a local comparison build that can be deleted.
+
+---
+
+## Session 5: make it feel alive (28 October 2026)
+The brief asked for:
+- better models;
+- more interaction;
+- real motion and scroll scenes;
+- patterns from Animmaster, Aceternity and Skiper as the main source, restyled completely;
+- the pages done one by one, each with screenshots, a scroll video and a fresh Critic;
+- ten iterations at most.
+
+All ten iterations are logged in `GAUNTLET_LOG.md` under "Session 5", with every Critic verdict, fix and decision. Nothing is committed (read-only git throughout), and the engine is unchanged.
+
+### What changed
+1. **The landing: a scroll story.**
+   - **One scroll engine:** GSAP ScrollTrigger driven by Lenis on one ticker (`lib/scroll.ts`).
+   - **The hero:** scrolling out dollies the camera into the stage while the cards part and Ano drifts aside.
+   - **How it works:** one pinned 3D bench where the real Light the LED experiment plays Predict, Diagnose, Break and Rebuild with the scroll. The camera takes a shot per step, always framing the whole bench.
+   - **The two lab cards:** they rise into place while their cameras orbit in.
+   - **The black-and-gold stretch:** a gold circuit trace draws down it with a pulse of current.
+   - **Headlines and numbers:** headlines rise word by word; numbers count up.
+2. **Every 3D object answers the hand** (`components/three/Inspectable.tsx`): on the landing bench, the hero and the level shelf, hover lifts and tilts it, a click opens a label with its name and live values, and a drag turns it.
+3. **Ano in every page headline** (`HeadlineWithAno`): level select, lab select, the maps, My beliefs and the 404.
+   - He stands in the gap, waves on arrival and reacts to each level.
+   - His bubble hangs from him with its tail pointing up at him.
+   - His dotted dark rim is fixed: it came from a mirror-sharp clearcoat.
+4. **Level select as one instrument:** knob, then the element tile, then a readout (beliefs to break, three of them, the per-lab split) and Start, all in the first screen. The shelf has a teal cabinet back so its glass reads.
+5. **The maps in their lab's colour world:** Chemistry teal and Robotics graphite with gold, so the lab card grows into the same colour. The next experiment is marked in gold.
+6. **The labs:**
+   - **Phones:** the dock comes right under the stage, and Run brings the stage back into view.
+   - **Ghost beside reality:** the student's idea stands as a glowing ghost lamp beside the real one, with one label above both.
+   - **Ano:** points the result out without covering it, and his bubble drops its tail while he's away.
+   - **Battery:** printed + and −.
+   - **The rest:**
+     - a crisp balance LCD;
+     - no twinkle dust;
+     - ANOMALY sparks from the floor, not the dark LED;
+     - captions at the top on phones.
+7. **Designed states:** an error page (`app/error.tsx`, sage, a shrugging Ano, "Try again"), an empty belief filter, and the 404 in sage with Ano shrugging.
+
+### Components from each library (all rebuilt as our own code)
+The three licences were read on 28 October 2026, and none allows its code in this MIT repo, so no code was copied (details in `RESOURCES.md` §11).
+- **Aceternity UI** (its own licence: no redistributing the source):
+  - Container Scroll Animation: the hero's camera dolly;
+  - Sticky Scroll Reveal: the pinned How it works;
+  - Timeline: the gold trace;
+  - 3D Card Effect: the element tile and the lab cards;
+  - Animated Tooltip: the 3D object labels.
+- **Skiper UI** (custom terms; free items need attribution, and the Terms of Service forbid copying):
+  - Text Scroll (skiper31): `ScrollWords`;
+  - Animated number (skiper37): `ScrollCount`;
+  - Card stack with gsap (skiper16 and skiper17): `LabsScene`;
+  - Svg follow scroll (skiper19): `NightTrace`;
+  - Custom tooltip (skiper101): the 3D labels;
+  - Scroll progress: How it works' rail.
+- **Animmaster** (paid packs, no redistributing; public previews studied only):
+  - Scroll and 3D Animation: the hero and the labs camera moves;
+  - Hover and Mouse Effect: `Inspectable` and Ano following the cursor;
+  - Physics Effect: the specimens;
+  - Page Transition: the colour wipe with overshoot.
+
+### Checks (production build)
+- **Static checks:** `tsc`, lint and the G13 slop scan pass (0 hits; the one allowed item is the ANOMALY scanline flash). Vitest: 530 pass, 1 skipped.
+- **e2e:**
+  - **193 of 193 pass** on the build before round 9;
+  - flows, overflow and performance (74 of 74) re-run and pass on the final build.
+- **FPS: 59.9 with zero jank in all three tiers** on every measured page: the landing, Light the LED (also during a run), Mass in a sealed bag (also during a run), lab select and the design system. The Low tier ran with the CPU throttled 4×. The final build ran on AC power with Low Power Mode off, on an Apple M1 Pro (Metal). Data: `tests/.results/perf-round-final-s5b.json`.
+- **Draw calls** (all under the 150 budget):
+
+  | Page | High | Medium | Low |
+  |---|---|---|---|
+  | Landing | 111 | 46 | 42 |
+  | Light the LED | 84 (88 running) | 84 | 84 |
+  | Mass in a sealed bag | 63 (64 running) | 63 | 63 |
+  | Lab select | 68 | 68 | 68 |
+
+### Before and after (local, git-ignored)
+- **Before:** `tests/screenshots/alive-before/`: 9 pages at 1440 and 390, plus 1440 scroll videos.
+- **After:** `tests/screenshots/alive-after/`: the same 9 pages and videos, plus each demo lab's ANOMALY path (`led-anomaly-*`, `bag-anomaly-*`: build, running and result at 1440).
+
+### Suggested commits for session 5
+Sessions 2–5 are all uncommitted and share files; make the session 2–4 commits above first. The session 5 commits, by branch:
+1. **`remake/scroll-story`**: "Landing scroll story: one GSAP and Lenis loop, the hero camera dolly, word-by-word headlines, count-ups, the gold circuit trace, the labs card scene"
+   - New: `lib/scroll.ts`, `components/ui/ScrollWords.tsx`, `components/ui/ScrollCount.tsx`, `components/landing/useHeroScene.ts`, `components/landing/LabsScene.tsx`, `components/landing/NightTrace.tsx`
+   - Changed: `package.json`, `package-lock.json` (gsap 3.15.0), `components/ui/SmoothScroll.tsx`, `components/landing/Hero.tsx`, `HeroCards.tsx`, `HeroStage.tsx`, `SectionHeading.tsx`, `LabsSection.tsx`, `LevelDialSection.tsx`, `LowerBand.tsx`, `MeetAno.tsx`, `components/ui/StageCard.tsx`, `components/three/LabObjectView.tsx`, `app/page.tsx`, `app/globals.css`
+2. **`remake/how-it-works-bench`**: "How it works: one pinned 3D bench playing the real LED experiment step by step"
+   - New: `components/landing/HowBench3D.tsx`
+   - Changed: `components/landing/HowItWorks.tsx`, `components/landing/stage/benches.tsx`, `components/lab3d/kit/materials.ts`
+3. **`ideas/inspectable-3d`**: "Every 3D object reacts: hover lift and tilt, click label with live values, drag to turn"
+   - New: `components/three/Inspectable.tsx`
+4. **`remake/ano-in-headlines`**: "Ano stands in every page headline with his bubble attached; softer clearcoat"
+   - New: `components/explore/HeadlineWithAno.tsx`, `components/lost/LostHeadline.tsx`, `lib/typography.ts`
+   - Changed: `components/explore/LevelSelect.tsx`, `app/(explore)/start/page.tsx`, `app/(explore)/start/[level]/page.tsx`, `app/(explore)/beliefs/page.tsx`, `app/not-found.tsx`, `components/lost/ShruggingAno.tsx`, `components/ano/parts.ts`, `components/ui/SpeechBubble.tsx`, `components/three/shapes.ts`, `components/three/ShapesField.tsx`
+5. **`opinion/level-select-instrument-row`**: "Level select as one instrument row with a beliefs readout; teal shelf cabinet; named mini tiles"
+   - Changed: `components/explore/LevelPicker.tsx`, `ElementTile.tsx`, `LevelShelf.tsx`, `level-picks.ts`, `BeliefRow.tsx`, `BeliefList.tsx`, `components/landing/LabCard.tsx`, `components/ui/Chip.tsx`, `components/ui/SoundToggle.tsx`
+6. **`opinion/maps-in-lab-worlds`**: "Experiment maps in each lab's colour world, gold for the next experiment"
+   - Changed: `app/(explore)/labs/[lab]/[level]/page.tsx`, `components/explore/ExperimentPath.tsx`, `PathNode.tsx`, `ExploreBar.tsx`, `components/ui/Paper.tsx`, `components/ui/Frame.tsx` (and `app/globals.css` if commit 1 hasn't taken it)
+7. **`opinion/labs-ghost-beside-reality`**: "Labs: ghost beside reality, one label per part, Ano clear of the result, phone run flow, battery + on the simulator's terminal"
+   - Changed:
+     - `components/lab/LabExperiment.tsx`, `AnoDock.tsx`, `Inspector.tsx`, `ResultDock.tsx`;
+     - `components/lab3d/`: `lab-state.ts`, `shots.ts`;
+     - `components/lab3d/scene/`: `LabAno.tsx`, `PredictionGhost.tsx`, `VerdictBurst.tsx`, `StudioLife.tsx`, `set/look.ts`;
+     - `components/lab3d/kit/`: `TextBoard.ts`, `chem/Scale3D.tsx`;
+     - `components/lab3d/kit/circuit/`: `InspectLabel.tsx`, `PartModel.tsx`, `Slot3D.tsx`, `lamps3d.tsx`, `parts3d.tsx`;
+     - `components/lab3d/stages/`: `CircuitStage3D.tsx`, `FizzStage3D.tsx`;
+     - `components/ui/Toast.tsx`.
+8. **`sustaining/error-page`**: "Designed error page"
+   - New: `app/error.tsx`
+9. **`sustaining/gauntlet-session-5`**: "Log session 5 and credit the studied patterns"
+   - Changed: `GAUNTLET_LOG.md`, `HANDOFF.md`, `RESOURCES.md`
+
+`components/ui/CountUp.tsx` shows a newer timestamp but is identical to HEAD (it was restored), so there is nothing to commit. `lib/content-manifest.ts` is regenerated by the build.
+
+### Open from session 5
+- **The final Critic still failed on these** (the iteration cap was reached), worst first:
+  - **Light the LED at a glance:** the printed + is small (about 10 px at 1440), the LED's short leg hides behind its dome from the reveal angle, and at 390 the LED's label covers the "Resistor" tag.
+  - **Mass in a sealed bag, result at 1440:** the result card covers the balance's display, and Ano parks over the bag's right half. The bag stage has no `"ano"` anchor yet (the circuit stage shows how).
+  - **The bag model** inflates into a rigid dome that reads as glass, not a zip bag (§8.2).
+  - **Both demo labs at 390:** an empty band under the bench, apparatus small, and in-scene readouts about 5 px even at 1.5×. Mirroring the key readings into the dock on phones would fix it.
+  - **Two wordings for one idea:** "Your idea: Less" while running, "Your idea: 127.38 g" at the result.
+  - **Page details:**
+    - the /beliefs headline lines up with neither the logo nor the list;
+    - the 404's lower 40 % is empty, and Ano stands neutral between shrugs;
+    - the landing's specimens crowd "TEST IT.";
+    - the knob's readout plate hides the 6 and 12 ticks.
+- **Skiper UI's licence** still contradicts its terms: patterns only, no code (RESOURCES.md §11). Decide whether to credit it further or drop it.
+- **Manual checks on a real screen:**
+  - dragging 3D objects on touch;
+  - the scroll story on a trackpad and with reduced motion;
+  - Ano waving on arrival;
+  - the How it works camera at 1024.
+- **Still open from session 4:** a dedicated lighting pass for the labs.
+
+---
+
+## Session 4: the lab rebuild, real 3D, and the level select page (28 October 2026)
+Three briefs ran in this session. Nothing is committed (read-only git throughout). The record of every step and decision is in `GAUNTLET_LOG.md` under "Lab rebuild" and "Level select redesign".
+
+1. **The labs, rebuilt to DESIGN.md §8 and §8.2** (Tasks 1–6):
+   - **Each lab in its own colour world:**
+     - Chemistry: teal room, beige bench on sage casework, a fume-hood frame and a reagent shelf.
+     - Robotics: graphite room, white bench with black trim, a pegboard and tool rail.
+   - **Each lab's own light:** a strong rim and a clean key.
+   - **Effects, confetti and ghosts:** in each lab's palette, with ghosts in its teal.
+   - **The kit:** every model is rebuilt to the model standard: lathed glass with real wall thickness, bevelled parts, tube wires and cables, and printed labels and dials. The demo models came first; three parallel builders did the rest.
+   - **Ano:** a real visor panel with a rolled edge and its own reflections, and a belt that follows his body.
+   - **A dev-only close-up gallery** at `/design-system/kit`.
+2. **Real 3D across the site:**
+   - **Floating specimens:** the glossy pills, cubes and rings behind the headlines are now real lab specimens (flasks, beakers, test tubes, LEDs, cells, resistors, gears, molecules).
+   - **Lab cards:** each shows its lab's colour world with a bench of real apparatus.
+3. **The level select page** (the owner's brief), with:
+   - an instrument knob with detents and an LCD;
+   - a periodic-table tile (Ea, Md, Ad) that flips with a clack;
+   - the level's experiments on a 3D shelf, named on hover;
+   - "N beliefs to break" with a teaser;
+   - a plain Start;
+   - Ano reacting to each level.
+4. **The template-pattern sweep:**
+   - **My beliefs** is now a lab-notebook register: element tiles, lab marks and status stamps, with no card bands or arrows.
+   - **Map nodes** show each experiment's apparatus in a window onto its lab.
+   - **Meet Ano** picks expressions with his visor faces.
+   - **Call-to-action arrows** are removed.
+5. **The landing in the lab palettes:**
+   - each hero slide's stage holds the real experiment in 3D, with values from the same engine run as its cards: the backwards LED at 0 mA, the sealed bag at 130 g, the drop landing together at 0.85 s;
+   - the stage, specimens, ribbon and page tint cross-fade per slide;
+   - orange is left only on Ano, and his face is centred;
+   - particles each have a physical cause: dust in the stage light, CO₂ in the bag, dust puffs where the balls land.
+6. **Black and gold, then earthy sage** (the owner's request):
+   - **The landing:** after the hero, a graphite block with gold accents (How it works, the two labs, Meet Ano), then sage paper for the rest.
+   - **Sage pages:** level select, lab select, My beliefs and Credits.
+   - **Level colours** are now earthy everywhere: sage, sand gold, teal.
+
+### Checks (production build)
+- **Static checks:** `tsc`, lint and the G13 slop scan (0 hits) pass; vitest passes 530.
+- **e2e** (flows, overflow, quality): **99 of 99 pass** on the final build.
+- **Draw calls:**
+
+  | Page | High | Medium | Low |
+  |---|---|---|---|
+  | Landing | 65 | 45 | 41 |
+  | Lab select | 48 | 53 | 48 |
+
+  LED lab 81–84, sealed bag 63–64; the other labs are 58–100. All are under 150.
+- **FPS:** 59.9 on all three tiers with zero jank on every page, from the final run on AC power (`tests/.results/perf-round-final-s4.json`). An earlier run read a flat 30 everywhere because macOS Low Power Mode was on; ignore that one.
+
+### Screenshots (local, git-ignored)
+- **Labs:**
+  - before: `tests/screenshots/labs-before/`;
+  - during: `labs-after-t1/`, `labs-after-t4/`;
+  - after: `labs-after/`, with kit close-ups `kit-*.png` and both labs at 1440 and 390.
+- **Level select, lab select, map, beliefs:**
+  - before: `tests/screenshots/levels-before/`;
+  - after: `levels-after/`, including `start-shelf-*.png`.
+- **Landing slides:** before `tests/screenshots/landing-before/`, after `landing-after/`. Each holds `slide-1-gravity`, `slide-2-led` and `slide-3-bag` at 1440 and 390.
+- **Black and gold, then sage:** `tests/screenshots/moods-after/`:
+  - full pages at 1440 and 390;
+  - each landing section in view;
+  - each slide.
+
+### Suggested commits for session 4
+Sessions 2–4 are all uncommitted and share many files. **Make commits 1–10 below first.** They will already carry this session's edits in any file they list (for example `app/globals.css`, `lib/tokens.ts`, `components/lab3d/scene/Studio.tsx`, `components/explore/LevelPicker.tsx`, `components/landing/Hero.tsx`), so each of them describes its area's final state. Then make these, with the files that are left. Two files from commits 5 and 6 no longer exist:
+- `components/explore/GradeDial.tsx`: drop it from commit 6.
+- `components/three/lab-objects.ts`: commit it as deleted in commit 5.
+
+11. **`remake/lab-colour-worlds`**: "Labs in their own colour worlds: teal and graphite rooms, benches, fume hood, reagent shelf, pegboard, per-lab light, effects and ghosts"
+    - New: `components/lab3d/scene/lab-light.ts`, `components/lab3d/scene/set/` (`Room.tsx`, `Bench.tsx`, `ChemistrySet.tsx`, `RoboticsSet.tsx`, `look.ts`, `bench-size.ts`)
+    - Changed: `components/lab3d/scene/LabAno.tsx`, `components/lab3d/kit/circuit/Slot3D.tsx`, `components/lab3d/kit/circuit/Wire3D.tsx`
+12. **`remake/lab-kit-models`**: "Every lab model to the model standard: lathed glass, bevelled parts, tube wires, printed labels, each lab's palette"
+    - New: `components/lab3d/kit/detail.ts`, `components/lab3d/kit/chem/heat/Thermometer3D.tsx`, `heat/HotPlate3D.tsx`, `heat/tones.ts`, `components/lab3d/kit/chem/gas/stand.ts`, `components/lab3d/kit/chem/liquid/stand.tsx`, `liquid/Bottle.tsx`, `components/lab3d/kit/chem/react/rack.tsx`
+    - Changed:
+      - `kit/chem/`: `glass.tsx`, `bag.tsx`, the rest of `heat/`, `gas/`, `liquid/` and `react/`;
+      - `kit/circuit/`: `parts3d.tsx`, `lamps3d.tsx`, `motors3d.tsx`;
+      - `kit/robot/`: everything not already in commit 7;
+      - stages: everything in `components/lab3d/stages/` not already in commit 7.
+13. **`remake/ano-visor`**: "Ano: a real visor panel with its own reflections, a belt that follows his body, no floor shadow where he floats"
+    - New: `components/ano/FaceIcon.tsx` (his faces as icons, used by commit 18)
+    - Changed: `components/ano/parts.ts`, `components/ano/body.ts`, `components/ano/rig.ts`, `components/ano/Ano.tsx`
+14. **`sustaining/kit-gallery`**: "Dev-only close-up gallery of every lab model"
+    - New: `app/design-system/kit/page.tsx`, `components/design-system/KitGallery.tsx`
+15. **`remake/real-3d-specimens`**: "Floating lab specimens instead of glossy blobs; lab cards as each lab's world with real apparatus"
+    - New: `components/three/specimens.ts`, `components/three/FitModel.tsx`
+16. **`remake/level-select-instrument`**: "Level select: an instrument knob, a periodic-table tile that flips, the level's experiments on a 3D shelf, beliefs to break, Ano reacting"
+    - New: `components/explore/LevelKnob.tsx`, `ElementTile.tsx`, `LevelShelf.tsx`, `shelf-models.tsx`
+    - Changed: `content/levels.json`
+17. **`opinion/lab-map-and-belief-register`**: "Experiment map nodes show their apparatus; My beliefs as a lab notebook register"
+    - New: `components/explore/ApparatusWindow.tsx`, `components/explore/BeliefRow.tsx`
+18. **`remake/landing-lab-palettes`**: "Landing hero: each slide in its lab's palette with the real experiment on the stage, cross-fading stage, specimens, ribbon and tint, dust in the stage light"
+    - New: `components/landing/HeroStage.tsx`, `components/landing/stage/benches.tsx`, `components/landing/stage/particles.tsx`
+19. **`adjustment/black-gold-and-sage`**: "Black and gold, then earthy sage: night and sage paper moods, earthy level colours, mood-matched ribbons"
+    - Already in earlier commits: `app/globals.css`, `components/ui/Paper.tsx`, `components/ui/Frame.tsx`, `app/page.tsx`, `content/landing.json`, `components/landing/HowItWorks.tsx`, `components/landing/LabsSection.tsx`, `components/landing/FinalCta.tsx`, the explore pages and `app/credits/page.tsx`. Make it its own commit only if those land first.
+20. **`sustaining/gauntlet-session-4`**: "Log session 4"
+    - Already in commit 10: `GAUNTLET_LOG.md`, `HANDOFF.md`. If commit 10 is already made, commit them here.
+
+If splitting by area is too fiddly with the shared files, commit sessions 2–4 as one `remake/` branch per area instead.
+
+### Open from session 4
+- **Task 6, the lighting tune, had no separate pass.** Each lab's rig has a strong white rim and a clean key (set in Tasks 3–4), and the labs were judged at 1440 and 390. A dedicated pass with the final models is still worth doing.
+- **The stray black dot near Ano's head** couldn't be reproduced in a capture. Check it on a real screen; the hero's specimens and colours have changed since.
+- **HUD controls in the labs** (sliders, toggles, the Run button) still use the site's apricot and volt. They belong to the experiment UI in the queued "bold and alive pages" brief.
+- **Still open from session 3:**
+  - **Lab framing:** at 1024 the side cards cover apparatus; on phones Ano covers the apparatus.
+  - **Phone layout:** Run plays off-screen on phones; the 3D labels are small; the breadcrumb truncates.
+  - **The design system at 390** drops Ano.
+
+  Fixed this session: the NO₂ tubes (now brown), the landing at 390 spacing (the hero is rebuilt) and Credits' colour (now sage).
+- **The dev server can serve stale CSS** for new Tailwind `@utility` classes (Turbopack's persistent cache). If a new class doesn't show in dev, stop it and delete its build folder (`.next-gauntlet` for the gauntlet server).
+- **Not done yet:** the queued "bold and alive pages" brief, beyond what the sweep and the landing work covered.
+
+---
+
+Session 3 of the unattended gauntlet, 28 October 2026. The brief was to bring ANOMALY up to the updated DESIGN.md (the §0 anti-slop bans first), using Aceternity UI, Skiper UI and Animmaster as the main source of animated UI, in a Lead, Builder and Critic loop capped at 10 iterations. Session 2 (the Lusion-level motion pass, the same day) is **also still uncommitted** and shares files with this session. Its summary is kept at the end. The full record of every iteration, Critic verdict, fix and decision is in `GAUNTLET_LOG.md` under "Session 3".
+
+## 1. Summary
+1. **All 10 iterations ran (i1–i10)**, each ending in a full gate run on a production build. The final run covered all 29 pages: **193 of 193 browser tests passed, and G1–G13 pass** (G12 passes its documented libvips exception). The final rubric falls short: **21 of 29 pages score at least 4 on every point.** The other 8 dip on lab framing at 1024 and 390, credits' colour, and two phone layouts (§4, §7).
+2. **The §0 bans are out of the code:** the G13 slop scan went from 141 hits to 0. That means our own icon set, paper instead of glass, Schibsted Grotesk and Martian Mono, one hue per gradient, no orbs, sparkles or iridescence, plain copy, and hero cards filled by the real simulator.
+3. **The layout bans are replaced:**
+   - How it works is one live LED sequence;
+   - the labs sit on an ink block;
+   - there's a belief deck;
+   - a grade dial with one changing card is on `/start` and the landing;
+   - My beliefs is one grouped column.
+4. **No library code could be used.** None of the three licences is MIT, Apache, BSD, ISC or CC0, and Animmaster is paid only. Instead, 11 patterns were studied on their sites and rebuilt in our own code, each credited (RESOURCES.md §11, README). The licences need your call (§7).
+5. **Nothing is committed.** No git command that changes anything was run. Ten suggested commits are in §6. 0 of the 30 real AI calls were used (there's still no `.env.local`).
+
+## 2. Sub-tasks, done and not done
+Every sub-task was built and gated. "Critic" is the fresh-context sub-agent's verdict. The cap is 3 fix attempts per sub-task. A fix made after a FAIL ships in the next iteration's build and is judged there, or by the final Critics.
+
+| # | Sub-task | Built | Critic outcome |
+|---|---|---|---|
+| i1 | Our own icon set (34 icons, Lucide removed) | Yes | FAIL ×3; fix attempt 3 (the last) gated in i7. The remaining small-size nits were judged by the final Critics |
+| i2 | Paper, not glass (fonts, paper, one-hue colour, no orbs, iridescence or sheens, lab light per hue) | Yes | FAIL ×3; cap reached. **Open:** the lab bench and board tint. A small follow-up is in the final build |
+| i3 | Copy and real data (no em dashes or slop copy; hero cards from the engine) | Yes | FAIL ×2; fix attempt 2 (the teaser's belief card follows the visitor's drop) gated in i7 |
+| i4 | How it works as one live LED sequence | Yes | **PASS** |
+| i5 | Labs on an ink block, and the belief deck | Yes | FAIL ×1 (the fan overflowed at 390); fixed and gated in i7, with a new overflow check that passes on all 29 pages |
+| i6 | The grade dial on `/start` and the landing | Yes | FAIL ×2; fix attempt 2 (the arc and numbers take input, a 46 px knob) gated in i10 |
+| i7 | My beliefs as one grouped column | Yes | FAIL ×1; fixed (Belief shift cards, tinted and sorted) and gated in i9 |
+| i8 | Nav text roll, equaliser sound toggle, Ano's line reveal | Yes | **PASS** |
+| i9 | The lab's Run, running and result flow; a closer lab camera | Yes | Judged inside the final Critic's lab pages (static shots can't show the running state; checked by hand) |
+| i10 | Final pass: every page, every gate, final Critics | Yes | See §4 |
+
+**Not done:**
+- **Library code:** licences (§7).
+- **The open i2 gap:** see "Open issues".
+- **From the Critics, outside any sub-task's scope:**
+  - 3D views below the fold render blank in full-page captures (render-on-demand; needs a phone check);
+  - the landing's result card nearly touches "Learn why…" at 390;
+  - speech-bubble tails point at headlines rather than Ano;
+  - the 404's Ano floats above the gap rather than in it.
+
+## 3. Components from each library
+None of these libraries' code is in the repo (see "Licences" in §7). These are original implementations of patterns studied on their sites. Each is restyled with our tokens, fonts and icons, respects reduced motion, and runs on every quality tier.
+
+| Library and licence (read 28 Oct 2026) | Pattern studied | Our component | Where |
+|---|---|---|---|
+| **Aceternity UI.** Custom "Aceternity License": end products are allowed, but "You cannot re-distribute the Item … its source files, regardless of modifications" | Sticky scroll reveal | `components/landing/HowItWorks.tsx`, `HowBench.tsx` | Landing, How it works |
+| | Card stack, draggable card | `components/landing/BeliefDeck.tsx`, `useDeckDrag.ts` | Landing, belief deck |
+| | Container text flip | `components/explore/LevelPicker.tsx` (with `RollingText`) | `/start` and the landing level card |
+| | Text generate effect (rebuilt without blur or fade) | `components/ui/WordReveal.tsx` | Every speech bubble |
+| | Stateful button | `components/lab/RunStatus.tsx` | Lab dock: Run, then running, then result |
+| | Following pointer | `components/fx/cursor.ts` (from session 1) | The soft cursor |
+| **Skiper UI.** Free tier: "Free to use and modify … Attribution to Skiper UI is required"; the author says "I don't claim to be the original creator"; the site's Terms of Service forbid copying site material | Scroll progress 001 | The How it works progress rail | Landing |
+| | Card swipe carousel | `useDeckDrag.ts` (300 ms flick, 140 px drag) | Belief deck |
+| | Animated number | `GradeDial.tsx`, `LevelPicker.tsx` (rolling counts) | Dial and level card |
+| | Text roll navigation | `components/ui/RollLabel.tsx` | Header nav |
+| | Music toggle btn | `components/ui/SoundToggle.tsx` | Sound toggle (equaliser bars) |
+| | Mouse follow animations | `components/fx/cursor.ts` | The soft cursor's trail |
+| **Animmaster Lib.** Paid only ($3–$8). Terms: may not "redistribute the library or its source files"; described as "rebuilt with clean code" from popular sites | Public previews only (page transitions, sliders, text effects) | None | Nothing usable; logged |
+
+Banned patterns weren't used: Aceternity's aurora, beams, sparkles, bento grid, grid and dot backgrounds, liquid glass, terminal, and colourful text.
+
+## 4. Final gates and rubric scores
+**Final run: iteration i10, every page, production build.**
+
 | Gate | Result | Notes |
 |---|---|---|
 | G1 Types | Pass | `npx tsc --noEmit` |
 | G2 Lint | Pass | `npm run lint` |
-| G3 Unit | Pass | 519 passed, 1 skipped (the real-provider eval) |
-| G4 Build | Pass | `npm run build` |
-| G5 Flows | Pass (9/9) | Journey landing → level → lab → map → experiment; LED and sealed bag, correct and wrong; theory sheet; back navigation and breadcrumbs; carousel arrows, dots and swipe; preloader; 404 |
-| G6 Console | Pass | No errors, hydration warnings or failed requests. The only warning is three.js's own `THREE.Clock` deprecation, raised inside R3F |
-| G7 Hit areas | Pass | All 29 pages (8 site pages, all 21 experiments): within 2 px, none under 44 px |
-| G8 Accessibility | Pass | axe has no serious or critical issues on any page; the keyboard-only run and reduced motion pass |
-| G9 Visual | Pass | Every page at 1440, 1024 and 390; every page scores at least 4 on every rubric point (below) |
-| G10 Performance | Pass | Apple M1 Pro over Metal: 59.9 fps median, p95 ≤ 16.8 ms, no frame over 50 ms on every target, idle and during a run, normal and on the Low tier with 4× CPU throttling (checked to really apply) |
-| G11 AI and voice | Pass (mock) | 30 passed: teacher-quality checks, written-hint fallback, verdict guard, cache, limits, voice fallback. Real providers: not run (no keys; 0 of 30 calls used) |
-| G12 Licences | Literal fail; documented pass | `@img/sharp-libvips-darwin-arm64` is LGPL-3.0 (Next.js's optional image binary, server-side only). `@react-three/rapier` has no licence field, but its repo is MIT. `npm run licences:documented` passes |
+| G3 Unit | Pass | 530 passed, 1 skipped (the real-provider eval). New tests: `featured.test.ts` and `how-sequence.test.ts` (hero and How it works are engine output) |
+| G4 Build | Pass | `ANOMALY_DESIGN_SYSTEM=1 npm run build` |
+| G5 Flows | Pass | The journey; LED and sealed bag, correct and wrong; theory; back navigation and breadcrumbs; carousel; preloader; 404; the hero teaser |
+| G6 Console | Pass | No errors, hydration warnings or failed requests |
+| G7 Hit areas | Pass | All 29 pages: visible box equals the hit box within 2 px, nothing under 44 px |
+| G8 Accessibility | Pass | axe has no serious or critical issues on any page; keyboard and reduced motion pass |
+| Overflow (new) | Pass | All 29 pages are exactly 390 and 1024 px wide after scrolling through (`tests/e2e/overflow.spec.ts`) |
+| G9 Visual | See the rubric below | All 29 pages at 1440, 1024 and 390, plus scrolled landing sections |
+| G10 Performance | Pass | Apple M1 Pro, Metal. 59.9 fps, p95 ≤ 16.8 ms and 0 jank on High, Medium and Low with 4× CPU throttling, idle and running. Draw calls: landing 20, LED 66 (69 running), sealed bag 44, lab select 25, design system 16 |
+| G11 AI and voice | Pass (mock) | No keys; 0 of 30 real calls |
+| G12 Licences | Literal fail, documented pass | Only `@img/sharp-libvips` (LGPL, Next.js's image binary), as before. `lucide-react` removed; no packages added |
+| G13 Slop scan | Pass | `npm run slop`: 0 hits (141 at the start). One functional exception: the ANOMALY scanline flash |
 
-## Rubric per page (DESIGN.md §12, scored 1–5)
-| Page | Pattern | Vibrancy | Type | Spacing | Polish | Consistency | Clarity |
-|---|---|---|---|---|---|---|---|
-| Landing | 5 | 5 | 5 | 4 | 5 | 5 | 4 |
-| Level select | 5 | 5 | 5 | 4 | 5 | 5 | 5 |
-| Lab select | 4 | 5 | 5 | 4 | 5 | 5 | 5 |
-| Experiment map | 4 | 4 | 5 | 4 | 5 | 5 | 5 |
-| My beliefs | 4 | 4 | 5 | 4 | 4 | 5 | 5 |
-| Credits | 4 | 4 | 5 | 4 | 4 | 5 | 5 |
-| 404 | 5 | 5 | 5 | 4 | 5 | 5 | 5 |
-| Light the LED, Mass in a sealed bag | 4 | 4 | 4 | 4 | 5 | 5 | 5 |
-| Other experiments (19 pages) | 4 | 4 | 4 | 4 | 4 | 4–5 | 5 |
-| Design system (dev only) | 5 | 5 | 5 | 4 | 5 | 5 | 4 |
+193 browser tests passed, 0 failed, 0 skipped.
 
-The scores were judged against DESIGN.md's written patterns, because the reference image is missing.
+**Rubric, from the final fresh-context Critics** (DESIGN.md §12, 8 points; every page should score at least 4):
 
-## Screenshots
+Scores are Pattern, Vibrancy, Type, Spacing, Polish, Consistency, Clarity and No slop. Where a score differs by width it's shown as 1440·390 (or 1440·1024·390); **bold** marks a point under 4.
+
+| Page | P | V | T | S | Po | C | Cl | NS | Passes? |
+|---|---|---|---|---|---|---|---|---|---|
+| Landing | 5·4 | 5·4 | 5 | 5·**3** | 5·4 | 5 | 5·4 | 5 | No: at 390 the hero result card touches "Learn why…", and the deck clips its title |
+| Level select | 5·4 | 5 | 5 | 4 | 4 | 5 | 5 | 5 | Yes |
+| Lab select | 4 | 5 | 5 | 4 | 4 | 5 | 5 | 5 | Yes |
+| Experiment map | 4 | 4 | 5 | 4 | 4 | 5 | 5 | 5 | Yes |
+| Light the LED | 4 | 4 | 4 | 4 | 4 | 5 | 4·**3**·4 | 5 | No: at 1024 the Inspector covers the LED and the mission card clips the battery |
+| Mass in a sealed bag | 4 | 5 | 4 | 4 | 4 | 5 | 5 | 5 | Yes |
+| My beliefs | 5·4 | 4 | 5 | 4 | 4 | 5 | 4 | 5 | Yes |
+| Credits | 4 | **3** | 5 | 4 | 4 | 4 | 5 | 5 | No: almost no colour on screen |
+| 404 | 5 | 4 | 5 | 4 | 4 | 5 | 5 | 5 | Yes |
+| Design system (dev only) | 5·**3** | 5·4 | 5 | 4 | 4 | 5·4 | 5 | 5 | No: at 390 the hero drops Ano, leaving an empty band |
+| Burning, Catalyst, Dissolving, Gas and heat, Gas laws, Melting, Neutralisation | 4 | 4 | 4 | 4 | 4 | 5 | 4 | 5 | Yes (but at 1024 the cards cover parts of catalyst and neutralisation) |
+| Light a bulb, Series, Switches, The shortcut wire, Ohm's law, Gears | 4 | 4 | 4 | 4 | 4 | 5 | 4 | 5 | Yes |
+| PWM | 4 | 5 | 4 | 4 | 4 | 5 | 4 | 5 | Yes |
+| Steering | 4 | 4 | 4 | 4 | 4 | 5 | 4 | 4 | Yes |
+| Indicator colours | 4·4 | 4 | 4 | 4·**2** | 4·**3** | 5·4 | 4·**3** | 5 | No: at 390 the Liquid toggle runs past the dock and the screen edge |
+| Reaction speed | 4 | 4 | 4 | 4 | 4 | 5 | 4·**3** | 5 | No: at 390 Ano covers the hot beaker |
+| Equilibrium | 4 | 4 | 4 | 4 | 4 | 5 | **3** | 5 | No: the NO₂ tubes render near-cream, so the brown can't be seen |
+| Two bulbs side by side (parallel) | 4 | 4 | 4 | 4 | 4 | 5 | 4·**3** | 5 | No: at 390 the circuit is a thin strip with 4 px labels |
+
+**21 of the 29 pages score at least 4 on every point; 8 don't.** No page scores under 4 on No slop. Each gap's fix is in §7 under "Rubric gaps". The 10-iteration cap was reached before they could be made.
+
+## 5. Screenshots
 Screenshots are git-ignored, so they're local only.
-- **Final, every page:** `tests/screenshots/round-6/<page>-<1440|1024|390>.png`, plus `-full.png` full-page versions.
-- **Font comparison:**
-  - `tests/screenshots/round-1/fonts-archivo.png`, `fonts-anton.png`, `fonts-bricolage.png`
-  - the same three again in `tests/screenshots/round-6/`
-- **Earlier rounds, changed pages only:**
-  - `tests/screenshots/round-1/`: design system
-  - `round-2/`: design system with Ano
-  - `round-3/`: landing and credits
-  - `round-4/`: selection pages
-  - `round-5/`: all experiment pages
-- **Gate data:** `tests/.results/quality-round-6/*.json` (per-page hit areas and axe) and `tests/.results/perf-round-6.json` (frame times and draw calls).
+- **After (final):**
+  - `tests/screenshots/round-i10/<page>-<1440|1024|390>.png`, plus `-full.png` versions, for all 29 pages;
+  - `tests/screenshots/round-i10/landing-sections/` holds scrolled landing sections (full-page captures show scroll-revealed sections blank);
+  - `fonts-*.png` is the font comparison.
+- **Before:** `tests/screenshots/round-p6/` is the end of session 2 and the start of this session.
+- **Per iteration:** `tests/screenshots/round-i1/` … `round-i9/` (the 10 base pages).
+- **Gate data:** `tests/.results/perf-round-i10.json` and `tests/.results/quality-round-i10/*.json`.
 
-## Decisions made (the main ones; reasons in GAUNTLET_LOG.md)
-**Look and layout**
-- DESIGN.md is followed from its text; the reference image isn't in the repo.
-- Fonts: Archivo (condensed, with its width axis) for display, Geist for body, Geist Mono for readouts. Anton and Bricolage Grotesque were shown for comparison on `/design-system`.
-- The prediction cards stay DOM glass cards over the 3D lab, for keyboard and screen-reader access. The prediction appears in 3D as a ghost label.
-- The giant verdict words are a DOM overlay whose letters assemble out of depth; the 3D moment is the shockwave, confetti and Ano.
-- The robot arena mat is dark for contrast (question 5).
+## 6. Suggested commits, by branch, in order
+Nothing is committed: sessions 2 and 3 are both still in the working tree. Both sessions edited many of the same files, so these commits are grouped by area and hold each file's final version, with every file in exactly one commit. Commits 4–8 depend on each other (the icon set, paper styles and motion kit are used everywhere, and `lucide-react` leaves `package.json` in 4). Commit them together and run `npm run build && npm run test && npm run slop` after commit 8, or squash 4–8 into one `remake/` branch.
 
-**3D and performance**
-- One site canvas with drei Views; no post-processing in labs (bloom washes out on cream); faked glass everywhere (one real transmission object at most, CLAUDE.md §9).
-- Our own pooled, instanced VFX and spring cameras instead of three.quarks and Theatre.js: fewer dependencies, and 60 fps with 4× CPU throttling.
-- Particle views exaggerate small changes so they're visible; the readouts always show the true values.
-- The canvas renders only while a 3D view is on screen and the tab is visible.
+1. **`claude-align-md`**: "Bring DESIGN.md and GAUNTLET.md up to the owner's latest copies (anti-slop rules, G13)"
+   - `DESIGN.md`, `GAUNTLET.md`
+2. **`adjustment/reference-image`**: "Add the landing reference image"
+   - `design/reference/landing.png`
+3. **`sustaining/keep-prediction-on-hydrate`**: "Keep the student's prediction when saved progress finishes loading"
+   - `lib/store.ts`
+4. **`remake/paper-design-system`**: "Paper, not glass: own icon set, Schibsted Grotesk and Martian Mono, paper surfaces, one hue per gradient, spring motion kit"
+   - New: `components/icons/Svg.tsx`, `components/icons/icons.tsx`, `components/ui/Paper.tsx`, `components/ui/PaperCard.tsx`, `components/ui/RollingText.tsx`, `components/ui/RollLabel.tsx`, `components/ui/WordReveal.tsx`, `components/ui/Tilt.tsx`, `components/ui/SoundToggle.tsx`, `components/design-system/IconsDemo.tsx`, `lib/motion-loop.ts`
+   - Deleted: `components/ui/GlassCard.tsx`, `components/ui/Sunrise.tsx`
+   - Changed: `app/layout.tsx`, `app/globals.css`, `app/design-system/page.tsx`, `app/credits/page.tsx`, `app/not-found.tsx`, `lib/cn.ts`, `lib/tokens.ts`, `lib/motion.ts`, `lib/sound.ts`, `lib/fx/moments.ts`, `components/fx/cursor.ts`, `components/loading/Preloader.tsx`, `components/loading/RouteLoading.tsx`, `package.json`, `package-lock.json`, `README.md`, `RESOURCES.md`
+   - Changed in `components/ui/`: `BeliefShiftCard`, `BreadcrumbBar`, `Button`, `CarouselControls`, `Chip`, `Frame`, `IconButton`, `InfoChipCard`, `Logo`, `PredictionChoices`, `ResultCard`, `Ribbon`, `SiteHeader`, `Slider`, `SpeechBubble`, `SplitHeadline`, `StageCard`, `TheorySheet`, `Toast`, `Toggle`
+   - Changed in `components/design-system/`: `AnoDemo`, `CardsDemo`, `ControlsDemo`, `PatternsDemo`, `Swatches`, `Typography`
+5. **`remake/landing-live`**: "Landing: simulator-fed hero cards, How it works as one live LED sequence, labs on ink, the belief deck, the level dial, knock-around shapes"
+   - New: `components/landing/featured.ts`, `components/landing/featured.test.ts`, `components/landing/how-sequence.ts`, `components/landing/how-sequence.test.ts`, `components/landing/HowBench.tsx`, `components/landing/BeliefDeck.tsx`, `components/landing/useDeckDrag.ts`, `components/landing/LevelDialSection.tsx`, `components/landing/useScrollScene.ts`, `components/three/ShapesField.tsx`, `components/three/shapes.ts`, `components/three/shapes.test.ts`, `components/three/shape-meshes.ts`
+   - Deleted: `components/landing/BeliefWall.tsx`, `components/landing/LevelsStrip.tsx`
+   - Changed: `app/page.tsx`, `content/landing.json`, `components/three/LabObjectView.tsx`, `components/three/lab-objects.ts`, `components/three/studio-env.ts`, `components/ano/AnoView.tsx`
+   - Changed in `components/landing/`: `BeliefSection`, `DropControls`, `DropScene`, `DropView`, `FinalCta`, `Hero`, `HeroCards`, `HowItWorks`, `LabCard`, `LabsSection`, `LowerBand`, `MeetAno`, `SectionHeading`, `useDropRun`
+6. **`remake/selection-pages`**: "Grade dial with one changing level card on /start, My beliefs as one grouped column, sideways overflow clipped"
+   - New: `components/explore/GradeDial.tsx`, `components/explore/LevelPicker.tsx`, `components/explore/LevelSelect.tsx`, `components/explore/level-picks.ts`, `components/explore/BeliefList.tsx`
+   - Deleted: `components/explore/LevelCard.tsx`, `components/explore/BeliefGrid.tsx`
+   - Changed: `lib/content.ts`, `lib/progress.ts` (comments only), `app/(explore)/layout.tsx`, `app/(explore)/start/page.tsx`, `app/(explore)/start/[level]/page.tsx`, `app/(explore)/labs/[lab]/[level]/page.tsx`, `app/(explore)/beliefs/page.tsx`, `components/explore/ExperimentPath.tsx`, `components/explore/ExploreBar.tsx`, `components/explore/PathNode.tsx`
+7. **`remake/lab-studio-and-run`**: "Lab: the running state, a closer camera, one-hue studio light and benches, readouts in Martian Mono, verdict moments on the beat"
+   - New: `components/lab/RunStatus.tsx`, `components/lab3d/scene/StudioLife.tsx`
+   - Changed in `components/lab/`: `AnoDock`, `BuildControls`, `Inspector`, `LabExperiment`, `MissionCard`, `PredictDock`, `ResultDock`, `TimeScrubber`, `VerdictMoment`, `useRun`
+   - Changed: `components/lab3d/shots.ts`
+   - Changed in `components/lab3d/scene/`: `LabScene`, `Studio`, `VerdictBurst`
+   - Changed in `components/lab3d/kit/`: `materials`, `Graph3D`, `TextBoard`, `circuit/Board3D`, `circuit/Tray3D`, `robot/Arena3D`, `robot/Lcd`, `robot/Multimeter3D`, `robot/Scope3D`, `chem/Scale3D`, `chem/instruments`, `chem/gas/PressureGauge`, `chem/heat/chart`, `chem/liquid/PhMeter`
+   - Changed: `components/lab3d/stages/IndicatorStage3D.tsx`
+8. **`sustaining/plain-copy`**: "Rewrite 'not just', 'never …, only' and unsupported copy plainly"
+   - `content/ano-lines.json`, `content/hints/base-only-dilutes.json`, `content/hints/oxygen-only-helps.json`, `content/theory/neutralisation.json`, `lib/ai/prompt.ts`
+9. **`filing/slop-scan-and-overflow-check`**: "Add the G13 slop scan and a no-sideways-scroll check; sample the Medium tier; test the hero teaser"
+   - New: `scripts/slop-scan.mjs`, `tests/e2e/overflow.spec.ts`
+   - Changed: `tests/e2e/perf.spec.ts`, `tests/e2e/flows.spec.ts`
+10. **`sustaining/gauntlet-sessions-2-and-3`**: "Log the second and third gauntlet sessions"
+    - `GAUNTLET_LOG.md`, `HANDOFF.md`
 
-**Navigation and loading**
-- Page morphs use React `<ViewTransition>` with full prefetch on the cards that morph. Back plays the wipe from the top.
-- The preloader is CSS (it must show before the 3D canvas exists) and finishes within 3.2 s.
+## 7. Open issues, manual checks, keys and questions
+**Open issues:**
+- **Rubric gaps (8 pages below 4 on at least one point, from the final Critics):**
+  - **Lab framing at 1024 and 390.** The side cards cover apparatus at 1024 (LED, catalyst, series, neutralisation, PWM, equilibrium), and Ano covers the hot beaker on reaction speed at 390. Fix: frame each stage's camera inside the HUD's free area (between the top cards and the dock, beside Ano), or collapse the side cards below 1280 px.
+  - **Phones:**
+    - Run sits about 1,000–1,900 px below the 3D stage, so the run plays off-screen. Scroll the stage back into view on Run, or move the empty Inspector below the dock.
+    - The 3D labels are about 4–6 px.
+    - The breadcrumb cuts names to "Me…".
+  - **Indicator colours at 390:** the Liquid segmented control overflows its dock card. It needs to wrap or scroll inside its parent.
+  - **Equilibrium:** the NO₂ tubes render near-cream; give the brown more saturation.
+  - **Parallel at 390:** the circuit is a thin strip. A closer phone camera would fix it.
+  - **Landing at 390:** add space between the hero result card and "Learn why…". The deck's card clips its title and body.
+  - **Credits:** almost no colour. A colour block or one accent element would fix it.
+  - **Design system at 390:** the hero preview drops Ano.
+- **Library licences.** See the questions below. Until you decide, nothing from those sites is in the code.
+- **Lab bench tint (i2, cap reached).** The last Critic found the Chemistry bench greige, too close to the white scale and bag, and the Robotics board and tray grey. The final build has a follow-up (white board, volt tray, apricot-100 Chemistry bench, per-lab contact shadow). The final Critics' lab scores are above.
+- **3D below the fold** renders blank in full-page captures, because views only draw on screen. It renders when scrolled into view (checked on the dev server for the deck and dial). Check the Robotics lab card on a real phone.
+- **From the Critics, still open:**
+  - at 390, the hero result card nearly touches "Learn why your intuition tripped.";
+  - speech-bubble tails point at headlines;
+  - the 404's Ano sits above the gap;
+  - the map's apricot ribbon on the cool Robotics page;
+  - the plinth status lights glow verify-green before any run (verify is reserved for verdicts).
 
-**AI and keys**
-- AI: one job per provider (mapping below). A missing key turns its job off and falls back to written hints or browser speech. `ANOMALY_REQUIRE_KEYS=1` makes missing keys fatal, as CLAUDE.md §7.5 asks (question 4).
+**Needs manual check:**
+- **Sound.** Session 2's plucks, stutter and whoosh, and the equaliser that now beats while sound is on, have never been heard (no speakers in headless Chrome).
+- **Real AI providers.** With keys: run `ASK_ANO_EVAL=real npx vitest run tests/ask-ano.eval.ts`, about 20 calls.
+- **Low-end hardware and tablets.** G10 ran on an M1 Pro with 4× throttling.
+- **Safari and Firefox:** not tested.
+- **Touch:** the dial on a real phone (only the arc and knob take input, so the page scrolls over the rest).
 
-**Process**
-- The 13 remaining stages were built by four parallel helpers in separate files on the shared kit, then reviewed and integrated.
-- Housekeeping: one `git mv -n` dry run early on changed nothing. A one-off formatter run on a few files was set back to the repo's long-line style.
+**Keys needed** (`.env.local`, never committed; template in `.env.example`):
 
-## Suggested commits, by branch, in order
-Each branch holds the final version of its files. Because some files were edited in several rounds, an intermediate branch on its own isn't guaranteed to build. Merge all ten in this order, then run `npm run build && npm run test && npm run test:e2e`. `RESOURCES.md` has your own uncommitted change from before this session; it was left alone and isn't in these commits.
-
-**1. `claude-align-md`** — "Point the project guide to DESIGN.md and GAUNTLET.md"
-
-- `CLAUDE.md` (changed)
-- `DESIGN.md` (new)
-- `GAUNTLET.md` (new)
-
-**2. `sustaining/gauntlet-setup`** — "Add the gauntlet: Playwright gates, page list, logs and handoff"
-
-- `tests/e2e/` (new, 6 files)
-- `.gitignore` (changed)
-- `GAUNTLET_LOG.md` (new)
-- `HANDOFF.md` (new)
-- `eslint.config.mjs` (changed)
-- `next.config.ts` (changed)
-- `package-lock.json` (changed)
-- `package.json` (changed)
-- `playwright.config.ts` (new)
-- `tsconfig.json` (changed)
-
-**3. `sustaining/chemistry-theory-sources`** — "Cite OpenStax sections on every chemistry theory page"
-
-- `content/theory/` (changed, 11 files)
-
-**4. `suggestion/ai-one-job-per-provider`** — "Give each AI job one provider, with startup key checks, server-side limits and the voice route"
-
-- `lib/ai/` (new, 6 files)
-- `lib/ask-ano/` (deleted, 2 files)
-- `.env.example` (changed)
-- `app/api/ano-voice/route.ts` (new)
-- `app/api/ask-ano/route.ts` (changed)
-- `instrumentation.ts` (new)
-- `lib/env.ts` (new)
-- `tests/ask-ano.eval.ts` (new)
-- `tests/stubs/server-only.ts` (new)
-- `vitest.config.mts` (changed)
-
-**5. `remake/bright-lab-foundation`** — "Add the Bright Lab design system: tokens, fonts, UI components, page transitions CSS, VFX restyle and the design-system page"
-
-- `components/design-system/` (new, 8 files)
-- `app/design-system/page.tsx` (new)
-- `app/globals.css` (changed)
-- `app/layout.tsx` (changed)
-- `components/fx/FxLayer.tsx` (changed)
-- `components/fx/cursor.ts` (changed)
-- `components/ui/BeliefShiftCard.tsx` (new)
-- `components/ui/BreadcrumbBar.tsx` (new)
-- `components/ui/Button.tsx` (new)
-- `components/ui/CarouselControls.tsx` (new)
-- `components/ui/Chip.tsx` (new)
-- `components/ui/CountUp.tsx` (new)
-- `components/ui/Frame.tsx` (new)
-- `components/ui/GlassCard.tsx` (new)
-- `components/ui/IconButton.tsx` (new)
-- `components/ui/InfoChipCard.tsx` (new)
-- `components/ui/Logo.tsx` (new)
-- `components/ui/PredictionChoices.tsx` (new)
-- `components/ui/ResultCard.tsx` (new)
-- `components/ui/Ribbon.tsx` (new)
-- `components/ui/ShaderWarmup.tsx` (deleted)
-- `components/ui/SiteFooter.tsx` (new)
-- `components/ui/SiteHeader.tsx` (new)
-- `components/ui/Slider.tsx` (new)
-- `components/ui/SmoothScroll.tsx` (new)
-- `components/ui/SpeechBubble.tsx` (new)
-- `components/ui/SplitHeadline.tsx` (new)
-- `components/ui/StageCard.tsx` (new)
-- `components/ui/Sunrise.tsx` (new)
-- `components/ui/TheorySheet.tsx` (new)
-- `components/ui/Toast.tsx` (new)
-- `components/ui/Toggle.tsx` (new)
-- `lib/cn.ts` (changed)
-- `lib/fx/draw.ts` (changed)
-- `lib/fx/moments.ts` (changed)
-- `lib/fx/streams.ts` (changed)
-- `lib/motion.ts` (new)
-- `lib/tokens.ts` (changed)
-- `lib/voice.ts` (new)
-
-**6. `remake/ano-3d`** — "Add the site canvas, quality tiers, render-when-needed and 3D Ano"
-
-- `components/ano/Ano.tsx` (new)
-- `components/ano/Ano3D.tsx` (deleted)
-- `components/ano/AnoView.tsx` (new)
-- `components/ano/body.ts` (new)
-- `components/ano/face.ts` (new)
-- `components/ano/parts.ts` (new)
-- `components/ano/rig.ts` (new)
-- `components/ano/spring.ts` (new)
-- `components/ano/types.ts` (new)
-- `components/three/LabObjectView.tsx` (new)
-- `components/three/SiteCanvas.tsx` (new)
-- `components/three/SiteCanvasMount.tsx` (new)
-- `components/three/boot.ts` (new)
-- `components/three/frameloop.ts` (new)
-- `components/three/lab-objects.ts` (new)
-- `components/three/pointer.ts` (new)
-- `components/three/studio-env.ts` (new)
-- `lib/quality.ts` (changed)
-- `scripts/gpu-benchmarks.mjs` (new)
-
-**7. `remake/landing-bright`** — "Rebuild the landing page: hero carousel, in-place drop experiment and the sections below"
-
-- `app/credits/page.tsx` (new)
-- `app/page.tsx` (changed)
-- `components/landing/BeliefSection.tsx` (new)
-- `components/landing/BeliefWall.tsx` (new)
-- `components/landing/CameraRail.tsx` (deleted)
-- `components/landing/CursorBody.tsx` (deleted)
-- `components/landing/DropControls.tsx` (new)
-- `components/landing/DropScene.tsx` (new)
-- `components/landing/DropView.tsx` (new)
-- `components/landing/Dust.tsx` (deleted)
-- `components/landing/Effects.tsx` (deleted)
-- `components/landing/FinalCta.tsx` (new)
-- `components/landing/FloatingObjects.tsx` (deleted)
-- `components/landing/GoldBurst.tsx` (deleted)
-- `components/landing/Hero.tsx` (new)
-- `components/landing/HeroCards.tsx` (new)
-- `components/landing/HeroExperiment.tsx` (deleted)
-- `components/landing/HowItWorks.tsx` (new)
-- `components/landing/KineticTitle.tsx` (deleted)
-- `components/landing/LabCard.tsx` (new)
-- `components/landing/LabsSection.tsx` (new)
-- `components/landing/Landing.tsx` (deleted)
-- `components/landing/LevelsStrip.tsx` (new)
-- `components/landing/LowerBand.tsx` (new)
-- `components/landing/MagneticButton.tsx` (deleted)
-- `components/landing/MeetAno.tsx` (new)
-- `components/landing/Overlay.tsx` (deleted)
-- `components/landing/Preloader.tsx` (deleted)
-- `components/landing/Scene.tsx` (deleted)
-- `components/landing/SectionHeading.tsx` (new)
-- `components/landing/StudioLighting.tsx` (deleted)
-- `components/landing/drop-sim.test.ts` (new)
-- `components/landing/drop-sim.ts` (new)
-- `components/landing/drop-store.ts` (new)
-- `components/landing/fonts/OFL-host-grotesk.txt` (deleted)
-- `components/landing/fonts/host-grotesk-600.typeface.json` (deleted)
-- `components/landing/geometries.ts` (deleted)
-- `components/landing/glyphs.ts` (deleted)
-- `components/landing/groups.ts` (deleted)
-- `components/landing/landing-store.ts` (deleted)
-- `components/landing/layout.ts` (deleted)
-- `components/landing/live.ts` (deleted)
-- `components/landing/materials.ts` (deleted)
-- `components/landing/object-layout.test.ts` (deleted)
-- `components/landing/object-layout.ts` (deleted)
-- `components/landing/random.ts` (deleted)
-- `components/landing/science-objects.tsx` (deleted)
-- `components/landing/title-material.ts` (deleted)
-- `components/landing/useCarousel.ts` (new)
-- `components/landing/useDropRun.ts` (new)
-- `content/landing.json` (changed)
-- `lib/random.ts` (new)
-
-**8. `remake/selection-pages`** — "Rebuild level select, lab select, the experiment map and My beliefs, with page morphs"
-
-- `components/map/` (deleted, 1 file)
-- `app/(explore)/beliefs/page.tsx` (changed)
-- `app/(explore)/labs/[lab]/[level]/page.tsx` (changed)
-- `app/(explore)/layout.tsx` (changed)
-- `app/(explore)/start/[level]/page.tsx` (changed)
-- `app/(explore)/start/page.tsx` (changed)
-- `components/explore/AnoLine.tsx` (deleted)
-- `components/explore/BeliefGrid.tsx` (new)
-- `components/explore/Breadcrumbs.tsx` (deleted)
-- `components/explore/ExperimentMap.tsx` (deleted)
-- `components/explore/ExperimentPath.tsx` (new)
-- `components/explore/ExploreBar.tsx` (new)
-- `components/explore/LabChoice.tsx` (deleted)
-- `components/explore/LabChoiceScene.tsx` (deleted)
-- `components/explore/LevelCard.tsx` (new)
-- `components/explore/NavDirection.tsx` (new)
-- `components/explore/PathNode.tsx` (new)
-- `lib/beliefs.ts` (new)
-
-**9. `remake/lab-3d`** — "Rebuild every experiment as one continuous 3D lab with a shared apparatus kit"
-
-- `components/labroom/` (deleted, 25 files)
-- `components/chemistry/` (deleted, 11 files)
-- `components/robotics/` (deleted, 6 files)
-- `components/lab3d/` (new, 93 files)
-- `components/lab/AnoDock.tsx` (new)
-- `components/lab/AnoOrb.tsx` (deleted)
-- `components/lab/AnoPanel.tsx` (deleted)
-- `components/lab/BuildControls.tsx` (new)
-- `components/lab/Controls.tsx` (deleted)
-- `components/lab/Inspector.tsx` (changed)
-- `components/lab/KineticHeadline.tsx` (deleted)
-- `components/lab/LabExperiment.tsx` (changed)
-- `components/lab/LabMoments.tsx` (deleted)
-- `components/lab/LevelMiniMap.tsx` (deleted)
-- `components/lab/LevelProgress.tsx` (new)
-- `components/lab/MissionBar.tsx` (deleted)
-- `components/lab/MissionCard.tsx` (new)
-- `components/lab/PartsTray.tsx` (deleted)
-- `components/lab/PredictDock.tsx` (new)
-- `components/lab/PredictionPanel.tsx` (deleted)
-- `components/lab/ResultDock.tsx` (new)
-- `components/lab/ResultPanel.tsx` (deleted)
-- `components/lab/RoomWindow.tsx` (deleted)
-- `components/lab/StageView.tsx` (deleted)
-- `components/lab/TheoryView.tsx` (deleted)
-- `components/lab/TimeScrubber.tsx` (changed)
-- `components/lab/VerdictCard.tsx` (deleted)
-- `components/lab/VerdictMoment.tsx` (new)
-- `components/lab/WindowTicker.tsx` (deleted)
-- `components/lab/stages.tsx` (deleted)
-- `components/lab/useAskAno.ts` (new)
-- `components/lab/useRun.ts` (changed)
-- `lib/store.ts` (changed)
-
-**10. `remake/loading-and-404`** — "Add the loading screens and the lost-in-space 404"
-
-- `components/loading/` (new, 4 files)
-- `components/lost/` (new, 1 file)
-- `app/loading.tsx` (new)
-- `app/not-found.tsx` (new)
-
-## Open issues and "needs manual check"
-- **Real AI providers are untested.** Ask Ano, the voice route and the real-mode eval have only run against mocks and fallbacks. With keys in place:
-  1. Run `ASK_ANO_EVAL=real npx vitest run tests/ask-ano.eval.ts` (about 20 calls) and record the pass rate.
-  2. Try Ask Ano and Listen by hand.
-- **Low-end hardware.** Performance was measured on an M1 Pro, with the Low tier and a 4× CPU throttle. Check on a real Chromebook or older laptop, and on a tablet: touch orbit uses two fingers.
-- **Browsers.** View transitions need Chromium 125+ or recent Safari or Firefox; elsewhere pages simply cut, which is fine. Safari and Firefox weren't tested.
-- **First frame of a lab.** The lab's 3D bench appears about 1.1–1.5 s after you navigate into an experiment, while its shaders compile; the HUD is there at once. Warming the shaders on the map page would hide this.
-- **Morphs need the page prefetched** (it is, by default, for the cards that morph). On a slow network the move falls back to the Sunrise wipe.
-- **1024 px labs.** A few apparatus edges touch the mission card (reaction speed, catalyst). Orbiting fixes it; the camera could pull back a little more on those two.
-- **The robot arena's dark mat** goes against DESIGN.md's cream-first rule. It's easy to lighten in `components/lab3d/kit/robot/Arena3D.tsx` (`matTexture()`).
-- **The design-system page** only renders in dev, or with `ANOMALY_DESIGN_SYSTEM=1`. Build with that flag set to run its gates.
-- **Upstream warnings:**
-  - `THREE.Clock` deprecation, from R3F.
-  - Next.js says it "ignored package-lock.json in /Users/paritoshbhattarai", a stray lockfile in the home folder. Harmless; delete that file or set `outputFileTracingRoot` to silence it.
-- **CLAUDE.md is partly out of date** with what was built. DESIGN.md now overrides its look sections, and it still lists `@xyflow/react` (removed), JetBrains Mono (Geist Mono is used), and the dark lab rooms and hybrid 2D plan (now all 3D). A `claude-align-md` update would help the team (question 7).
-
-## Keys needed (`.env.local`, never committed; template in `.env.example`)
-| Variable | For | Needed? |
+| Variable | For | Without it |
 |---|---|---|
-| `GROQ_API_KEY` | Ask Ano answers | Yes, for live Ask Ano (written hints otherwise) |
-| `ELEVENLABS_API_KEY` | Ano's voice for Ask Ano answers | Yes, for the server voice (browser speech otherwise) |
-| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Rate limits (5 per session, 20 per IP per hour, 300 per day) and the answer cache | Yes, in production (in-memory limits otherwise) |
-| `GOOGLE_GENERATIVE_AI_API_KEY` | Eval grading only (`tests/ask-ano.eval.ts`) | Only to grade the real eval |
-| `CEREBRAS_API_KEY`, `MISTRAL_API_KEY`, `OPENROUTER_API_KEY` | Proposed jobs below | Not yet; nothing calls them |
-| `ANOMALY_REQUIRE_KEYS=1` | Makes missing keys stop the server (CLAUDE.md §7.5) | Recommended in production |
+| `GROQ_API_KEY` | Ask Ano answers | Written hints |
+| `ELEVENLABS_API_KEY` | Ano's voice for answers | Browser speech |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Rate limits and the answer cache | In-memory limits |
+| `GOOGLE_GENERATIVE_AI_API_KEY` | Eval grading | Real eval can't be graded |
+| `CEREBRAS_API_KEY`, `MISTRAL_API_KEY`, `OPENROUTER_API_KEY` | Proposed jobs (session 1) | Nothing calls them yet |
 
-Startup only ever logs the *names* of missing keys, never values.
+Provider mapping (proposed in session 1, still waiting): Groq for Ask Ano, ElevenLabs for voice, Gemini for eval grading, Mistral for question screening, Cerebras for answer fact-checks, OpenRouter for typed hypotheses.
 
-## Provider mapping (proposed; please approve or change)
-One provider per job, one job per provider, no fallback chains (CLAUDE.md §7.5):
+**Questions for you:**
+1. **Library licences.**
+   - Skiper's free tier allows use with attribution, but its own Terms of Service forbid copying, and the author disclaims being the original creator.
+   - Aceternity forbids redistributing source files.
+   - Animmaster is paid and non-redistributable.
 
-| Job | Provider | Module / route | Status |
-|---|---|---|---|
-| Ask Ano answers | Groq | `lib/ai/askAno.ts`, `app/api/ask-ano` | Built; falls back to the next written hint |
-| Ano's voice (Ask Ano answers) | ElevenLabs | `lib/ai/voice.ts`, `app/api/ano-voice` | Built; falls back to the browser's `speechSynthesis` |
-| Eval grading | Gemini | `tests/ask-ano.eval.ts` only | Real-mode eval built with heuristic grading; Gemini grader not wired |
-| Question screening (on-topic check) | Mistral | — | Proposed |
-| Answer fact-check against the simulator | Cerebras | — | Proposed |
-| Typed hypothesis → misconception match | OpenRouter | — | Proposed (new feature) |
+   Do you want any original library code in this MIT repo? If so, which licence risk do you accept, and should we add Skiper's attribution or buy a licence? Otherwise our rebuilds stay.
+2. **Rim light.** DESIGN.md §8 asks for a cool volt rim, but on apricot objects it read as an iridescent lilac edge (§0), so Chemistry and the landing use a warm white rim. Keep that?
+3. **Corrective "X, not Y" lines in hints and theory**, for example "Equilibrium is a balance, not a stop." They aren't marketing copy, so the scanner allows them, but a Critic flagged them as borderline. Keep or rewrite?
+4. **Easy uses the verify-green family** (DESIGN.md §3 "Levels"), but verify is also reserved for verdicts. Keep green for Easy?
+5. **From session 2, still open:**
+   - hero type width (68 → 75 %);
+   - the 260 ms lab-card dive;
+   - no shapes in the labs.
+6. **From session 1:**
+   - the provider mapping;
+   - the libvips exception;
+   - `ANOMALY_REQUIRE_KEYS`;
+   - the arena mat;
+   - refreshing CLAUDE.md (it still names Lucide, Host Grotesk, glass and a dark lab).
 
-## Questions for the owner
-1. **Provider mapping:** approve the table above, or say which provider should do which job (the last three are proposals only).
-2. **Licence:** is the `@img/sharp-libvips` LGPL-3.0 exception acceptable? It's Next.js's optional server-side image binary, dynamically linked and never sent to the browser.
-3. **Reference image:** `design/reference/landing.png` was never found. If you add it, should the pages be re-scored against it?
-4. **Missing keys:** fall back quietly (current default), or stop the server (`ANOMALY_REQUIRE_KEYS=1`, CLAUDE.md §7.5's wording)? I suggest stopping in production and falling back in development.
-5. **Robot arena:** keep the dark cutting-mat floor for contrast, or lighten it to match the cream-first rule?
-6. **Fonts:** CLAUDE.md asks the team to pick the display font from three researched options. Archivo is in use; Anton and Bricolage Grotesque are in the comparison screenshots. Keep Archivo?
-7. **CLAUDE.md:** shall the next session bring CLAUDE.md in line with what was built (DESIGN.md look, all-3D labs, the dependency list)?
-8. **Vercel:** remember the project's Node.js setting must be 24.x (CLAUDE.md §4). Nothing here depends on it, but the build was only run locally, on Node 20.19.
+---
+
+### Session 2 (also uncommitted), in brief
+Rounds p1–p6:
+- one spring motion kit;
+- knock-around glossy shapes;
+- a pinned scroll scene;
+- the lab-card dive;
+- a living lab studio;
+- verdict sounds on the beat, and a mute toggle.
+
+Four bugs were fixed: a lost prediction, an in-page wipe, a reduced-motion wipe, and teaser overflow. Its final run passed 135 of 135. Its files are folded into the commits in §6, and its log is in `GAUNTLET_LOG.md` under "Session 2".

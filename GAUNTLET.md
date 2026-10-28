@@ -1,4 +1,4 @@
-# GAUNTLET.md — unattended build-and-test loop
+# GAUNTLET.md: unattended build-and-test loop
 
 The owner is away and wants the redesign in `DESIGN.md` built and proven while they're gone. Work through the queue below in **rounds**. Every round must pass the **gates** before moving on. Keep going without waiting for "continue" (this overrides the earlier "pause after each phase" instruction for this session), and stop when a stop condition is met.
 
@@ -39,7 +39,7 @@ You can't measure the owner's weekly limit exactly, so stay well inside it with 
 
 ## 4. The queue (one item per round, in order)
 
-1. **Design foundation:** colour ramps, gradients, fonts and shadows from DESIGN.md in the Tailwind theme; all components from DESIGN.md section 5; a dev-only `/design-system` page showing every component and the font comparison (Archivo + up to two alternatives).
+1. **Design foundation and slop removal:** first remove every DESIGN.md section 0 ban from the existing codebase (icons, emojis, glass, em dashes, fonts, bento, 3-card rows, terminals, orbs, dot grids, sparkles, rainbow, slop copy, fake demo data), then colour ramps, gradients, fonts and shadows from DESIGN.md in the Tailwind theme; all components from DESIGN.md section 5; a dev-only `/design-system` page showing every component and the font comparison (Archivo + up to two alternatives).
 2. **Ano 3D:** build Ano per DESIGN.md section 6 with all expressions and animations, shown on `/design-system`.
 3. **Landing page:** hero carousel (P1–P7, 3 slides) and all sections below the hero (DESIGN.md 7.1).
 4. **Selection pages:** level select, lab select, experiment map, My beliefs (7.2–7.4, 7.6).
@@ -64,6 +64,8 @@ You can't measure the owner's weekly limit exactly, so stay well inside it with 
 | G10 Performance | Production build. Sample frame times in headed Chromium where a GPU is available and log draw calls from r3f-perf | Within the CLAUDE.md section 9 budget, and the Low tier stays smooth with 4× CPU throttling (DESIGN.md 9.2). **If it can't be measured reliably here, mark it "needs manual check" instead of guessing** |
 | G11 AI and voice | Ask Ano eval with the mock provider every round; real providers only in rounds 5 and 6, within the 30-call cap; voice route falls back to browser speech when ElevenLabs is unavailable; rate limiter returns a written hint when the limit is hit | All pass; report the real-provider pass rate |
 | G12 Licences | `npx license-checker --production --onlyAllow "MIT;ISC;BSD-2-Clause;BSD-3-Clause;Apache-2.0;0BSD;CC0-1.0;Zlib;OFL-1.1;Unlicense;BlueOak-1.0.0;Python-2.0;CC-BY-4.0"` | No disallowed licences in production dependencies (GSAP's standard licence is approved by the owner; note it) |
+
+| G13 Slop scan | Automated scan of `app/`, `components/`, `content/` and `lib/` for: `lucide-react` or other icon-pack imports; emoji characters; em dashes (—) in user-facing strings; Inter, Geist or Space Grotesk; `backdrop-blur` / `backdrop-filter`; decorative `radial-gradient` or `conic-gradient` backgrounds; dot or grid background patterns; drei `Sparkles` or sparkle icons; gradients with more than one hue family; copy matching "not just", "it's not ... it's", "isn't ... it's", "more than a"; banned words (unlock, elevate, seamless, revolutionize, supercharge, next-level, magic); hard-coded fake demo data in hero cards. Also check screenshots for bento grids, 3-card feature rows, fake terminals, radial orbs and dot grids | Zero hits (or each remaining hit explained as functional, e.g. breadboard holes) |
 
 Be honest in every result. Never mark a gate as passed without running it.
 

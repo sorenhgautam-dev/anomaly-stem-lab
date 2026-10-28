@@ -160,7 +160,7 @@ These were not live-checked from here. Open each page and confirm the licence of
 | Pixabay sounds | https://pixabay.com/sound-effects/ | Pixabay Content License | Extra sound effects |
 | Fontshare | https://www.fontshare.com/ | ITF Free Font License | Clash Grotesk and General Sans |
 | Google Fonts | https://fonts.google.com/ | Mostly SIL Open Font License | JetBrains Mono |
-| Lucide | https://lucide.dev/ | ISC | Icons |
+| Lucide | https://lucide.dev/ | ISC | **Dropped 28 Oct 2026** (DESIGN.md §0 bans default icon packs). Icons are our own set in `components/icons/` |
 
 Rules: prefer building 3D objects from code. Never use assets from reference sites or anything without a clear licence. No AI-generated images of real brands or characters.
 
@@ -225,6 +225,7 @@ Rule: every misconception, hint and theory explanation must be checked against a
 | Calling AI models from the browser | Exposes API keys |
 | React Bits | MIT + Commons Clause, not truly permissive |
 | Switching to Vite | Project is on Next.js; we need its routing and API routes |
+| Copying code from Aceternity UI, Skiper UI or Animmaster Lib | Custom licences that aren't on our allowed list (section 11): study the patterns, write our own code |
 
 ---
 
@@ -245,7 +246,7 @@ All repos and npm packages below were confirmed to exist, with licences read fro
 | Basis Universal + Three.js `KTX2Loader` | repo | Apache-2.0 | Only if using big textures | Compressed textures to save GPU memory |
 | `stats.js` | 0.17.0 | MIT | Optional | Simple FPS meter (we already use r3f-perf) |
 | `ogl` | 1.0.11 | Unlicense | Skip | Good library, but a second 3D engine would add weight; Three.js covers it |
-| `@phosphor-icons/react` | 2.1.10 | MIT | Skip | Stick to one icon family (Lucide) |
+| `@phosphor-icons/react` | 2.1.10 | MIT | Skip | DESIGN.md §0 bans default icon packs; we draw our own |
 
 **Not changing:** we stay on **Next.js**, not Vite. The project is already built on Next.js, and we need its routing and server API routes for Ask Ano.
 
@@ -295,3 +296,36 @@ Also see Next.js docs for its built-in View Transitions support (`experimental.v
 | `@tsparticles/react` | 4.4.0 | MIT | Aug 2026 | Skip | 2D DOM particles; three.quarks and canvas-confetti cover this |
 
 **VFX rules:** pool and reuse particle systems, keep particle counts within the performance budget, and turn heavy effects (fluid, gradient backgrounds) off in low-quality mode.
+
+---
+
+## 11. Animated UI component libraries (checked 28 October 2026)
+
+The owner asked for these three libraries as the main source of animated UI. Their sites were opened and their licence and terms pages read in full. None of them is MIT, Apache-2.0, BSD, ISC or CC0 (CLAUDE.md §2 rule 8), so **no code is copied from any of them**. Each pattern we use was studied on the site (structure, trigger, timing, physics) and rebuilt from scratch with our tokens, fonts, icons, reduced-motion handling and quality tiers.
+
+| Library | What's free | Licence or terms, as read | Status |
+|---|---|---|---|
+| [animmasterlib.dev](https://animmasterlib.dev/) | Nothing (paid packs, $3–$8) | Terms: "non-exclusive, non-transferable license"; may not "Resell or redistribute the library or its source files"; the code stays "the intellectual property of Animmaster Lib". Advertised as "rebuilt with clean code" from popular sites | Not usable: paid, can't be redistributed, and of unclear origin. Public previews studied only |
+| [ui.aceternity.com](https://ui.aceternity.com/) | About 100 copy-paste components | "Aceternity License" (/licence): end products allowed, but "You cannot re-distribute the Item as a stock image or its source files, regardless of modifications" | Not usable as code in an MIT repo. Patterns studied |
+| [skiper-ui.com](https://skiper-ui.com/) | About 40 components marked Free | Docs: "Free to use and modify in both personal and commercial projects. Attribution to Skiper UI is required when using the free version." The author says "I don't claim to be the original creator." The Terms of Service say "You must not: … Reproduce, duplicate or copy material from skiper-ui.com" | Unclear (custom licence, contradicting terms). Waiting on the owner; patterns studied, no code copied |
+
+### Patterns studied and where they live in ANOMALY (our own code)
+| Pattern (source) | Our component | Where |
+|---|---|---|
+| Sticky scroll reveal (Aceternity) + Scroll progress 001 (Skiper) | `components/landing/HowItWorks.tsx`, `HowBench3D.tsx` | Landing: How it works, one pinned scene where the real LED experiment plays Predict, Diagnose, Break and Rebuild on a 3D bench as you scroll, one caption at a time |
+| Card stack + Draggable card (Aceternity) + Card swipe carousel (Skiper) | `components/landing/BeliefDeck.tsx`, `useDeckDrag.ts` | Landing: the belief deck (drag or flick the front card away; arrows and arrow keys; a 300 ms flick or a 140 px drag throws) |
+| Container text flip (Aceternity) + Animated number (Skiper) | `components/explore/LevelKnob.tsx`, `LevelPicker.tsx` (with `components/ui/RollingText.tsx`) | `/start` and the landing: the level knob and its one changing element tile; titles, grades and counts roll to new values |
+| Text roll navigation (Skiper) | `components/ui/RollLabel.tsx` | Header nav: two stacked copies roll up on hover and keyboard focus, centre-out |
+| Music toggle btn (Skiper) | `components/ui/SoundToggle.tsx` | The sound toggle's four equaliser bars (they settle into dots when muted) |
+| Text generate effect (Aceternity, rebuilt without blur) | `components/ui/WordReveal.tsx` | Ano's speech bubbles: each line appears word by word |
+| Following pointer (Aceternity) + Mouse follow animations (Skiper) | `components/fx/cursor.ts` (from session 1, adjusted) | The soft cursor that grows over controls, with a tiny trail and a one-hue click ripple |
+| Stateful button (Aceternity) | `components/lab/RunStatus.tsx` (with the Run pill and the result card) | Lab dock: Run, then a "Running" pill whose ring fills with the real run's progress, then the result card's check or cross |
+| Text Scroll animation, skiper31 (Skiper) | `components/ui/ScrollWords.tsx` | Landing section headlines: words rise into place one by one, scrubbed by the scroll, landing with a slight overshoot |
+| Animated number, skiper37 (Skiper) | `components/ui/ScrollCount.tsx` | Counts that count up as they come into view and land with a small spring: lab card counts, the level tile, the beliefs readout |
+| Container Scroll Animation (Aceternity) + Scroll Animation and 3D Animation categories (Animmaster previews) | `components/landing/useHeroScene.ts`, `HeroStage.tsx` | Landing hero: scrolling out dollies the camera into the stage while the headline and cards part and Ano drifts aside |
+| Card stack with gsap and rotate, skiper16 and skiper17 (Skiper) | `components/landing/LabsScene.tsx`, `components/three/LabObjectView.tsx` | Landing labs section: the two lab cards rise into place with the scroll while each card's 3D camera orbits in to its bench |
+| Svg follow scroll, skiper19 (Skiper) + Timeline (Aceternity) | `components/landing/NightTrace.tsx` | Landing's black-and-gold stretch: a gold circuit trace with pads draws down the page as you scroll, a pulse of current riding it |
+| 3D Card Effect (Aceternity) | `components/ui/Tilt.tsx`, `components/landing/LabCard.tsx` | The element tile and the lab cards tilt toward the cursor, with layers (the symbol, the caption) floating above them |
+| Animated Tooltip (Aceternity) + Custom tooltip, skiper101 (Skiper) + Hover Effect and Mouse Effect categories (Animmaster previews) | `components/three/Inspectable.tsx` | Every 3D object on the landing bench, the hero and the level shelf: hover lifts and tilts it on a spring, a click pops a label with its name and live values, a drag turns it and it eases home |
+| Physics Effect category (Animmaster previews) | `components/three/ShapesField.tsx`, `shapes.ts` (from earlier sessions, tuned) | The floating lab specimens behind headlines: the cursor pushes them on springs; a click sends a shock through them |
+| Page Transition category (Animmaster previews) | `app/globals.css` (`colour-wipe`), `components/explore/HeadlineWithAno.tsx` | Pages wipe in the destination's colour with an overshooting ease; Ano waves as level and lab select open |

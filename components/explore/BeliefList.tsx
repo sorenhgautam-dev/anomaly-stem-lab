@@ -56,7 +56,7 @@ export function BeliefList({ items }: { items: BeliefItem[] }) {
           value={lab}
           onChange={setLab}
           options={[
-            { value: "all", label: "Both" },
+            { value: "all", label: "All" },
             { value: "cell", label: "Cell" },
             { value: "prevention", label: "Prevention" },
             { value: "detection", label: "Detection" },

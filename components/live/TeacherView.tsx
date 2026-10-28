@@ -3,6 +3,7 @@
 import { PaperCard } from "@/components/ui/PaperCard";
 import { getExperiment } from "@/lib/content";
 import { classSummary } from "@/lib/live-class";
+import { LiveOff } from "./LiveOff";
 import { useRoom } from "./useRoom";
 import { VoteBars } from "./VoteBars";
 
@@ -17,7 +18,7 @@ export function TeacherView({ code }: { code: string }) {
   const { room, status } = useRoom(code);
   const def = room ? getExperiment(room.experimentId) : undefined;
   if (status === "missing") return <Plain title="No room with that code">{"Rooms close after three hours. Open a new one from any experiment with Guess together."}</Plain>;
-  if (status === "off") return <Plain title="Class rooms are off here">{"This site isn't set up for class rooms yet."}</Plain>;
+  if (status === "off") return <LiveOff />;
   if (!room || !def || def.prediction.type !== "choice") return <Plain title={`Room ${code}`}>Loading the class results…</Plain>;
 
   const s = classSummary(def, room.counts);

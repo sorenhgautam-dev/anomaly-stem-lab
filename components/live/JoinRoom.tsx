@@ -6,6 +6,7 @@ import { LearningNote } from "@/components/ui/LearningNote";
 import { PaperCard } from "@/components/ui/PaperCard";
 import { getExperiment } from "@/lib/content";
 import { roomAnswer } from "@/lib/live-class";
+import { LiveOff } from "./LiveOff";
 import { useRoom, voterToken } from "./useRoom";
 
 /*
@@ -38,7 +39,7 @@ export function JoinRoom({ code }: { code: string }) {
   }
 
   if (status === "missing") return <Note title="We couldn't find that room">{"Check the four letters on the big screen and try again."}</Note>;
-  if (status === "off") return <Note title="Guessing together is off here">{"This site isn't set up for class rooms yet."}</Note>;
+  if (status === "off") return <LiveOff />;
   if (!room || !def || def.prediction.type !== "choice") return <Note title={`Room ${code}`}>Joining the room…</Note>;
 
   const options = def.prediction.options;

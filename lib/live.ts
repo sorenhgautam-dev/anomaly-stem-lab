@@ -126,11 +126,20 @@ export function redisLive(r: Redis): LiveStore {
 
 let store: LiveStore | null | undefined;
 
+/**
+ * Whether live mode can work here: Redis is set, or this is one local server.
+ * Pages ask this to hide "Guess together" and show a kind note on /join and
+ * /teacher instead of a room that can never open (Vercel without Redis).
+ */
+export function liveAvailable(): boolean {
+  return Boolean(env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) || !process.env.VERCEL;
+}
+
 /** The live store, or null when live mode can't work here (Vercel without Redis). */
 export function liveStore(): LiveStore | null {
   if (store === undefined) {
     if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) store = redisLive(new Redis({ url: env.UPSTASH_REDIS_REST_URL, token: env.UPSTASH_REDIS_REST_TOKEN }));
-    else store = process.env.VERCEL ? null : memoryLive();
+    else store = liveAvailable() ? memoryLive() : null;
   }
   return store;
 }

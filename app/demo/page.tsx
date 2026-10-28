@@ -1,4 +1,5 @@
 import { LabExperiment } from "@/components/lab/LabExperiment";
+import { liveAvailable } from "@/lib/live";
 
 export const metadata = { title: "A one-minute tour · ANOMALY" };
 
@@ -7,5 +8,5 @@ export const metadata = { title: "A one-minute tour · ANOMALY" };
  * experiment. The lab is the same one students use; DemoTour drives it.
  */
 export default function DemoPage() {
-  return <LabExperiment id="treatment-chemo-hair" nextHref={null} mapHref="/labs/treatment/medium" demo />;
+  return <LabExperiment id="treatment-chemo-hair" nextHref={null} mapHref="/labs/treatment/medium" live={liveAvailable()} demo />;
 }

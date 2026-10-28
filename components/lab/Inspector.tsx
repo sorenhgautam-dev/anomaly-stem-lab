@@ -123,7 +123,7 @@ function CircuitPanel({ def, build, outcome }: { def: ExperimentDef; build: Buil
   );
 }
 
-export function Inspector({ className, zoom }: { className?: string; zoom: { label: string; caption: string } | null }) {
+export function Inspector({ className, zoom, live }: { className?: string; zoom: { label: string; caption: string } | null; live: boolean }) {
   const def = useLabDef();
   const build = useLabBuild();
   const result = useLab((s) => s.result);
@@ -135,6 +135,7 @@ export function Inspector({ className, zoom }: { className?: string; zoom: { lab
   const final = phase === "result" ? outcome : null;
   const rows = final ? Object.entries(final.readings).map(([key, value]) => ({ key, ...readingLabel(key, value) })).filter((r) => r.label !== null).map((r) => [r.label!, r.text] as [string, string]) : [];
   // Subtraction pass: one small toggle; the readings, Reset view and Guess together wait inside it.
+  // Guess together only where live mode can open a room (not on Vercel without Redis).
   return (
     <PaperCard className={cn("flex flex-col gap-4 p-1.5", className)} aria-label="What’s happening" role="complementary">
       <details data-inspector className="group">
@@ -156,7 +157,7 @@ export function Inspector({ className, zoom }: { className?: string; zoom: { lab
           <IconCube aria-hidden className="size-4" />
           Reset view
         </Button>
-        <GuessTogether def={def} />
+        {live && <GuessTogether def={def} />}
       </div>
       {zoom && zoomed && (
         <p className="flex items-center gap-2 text-[13px] text-ink-500">

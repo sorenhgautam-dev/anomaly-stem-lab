@@ -40,7 +40,8 @@ import { VerdictMoment } from "./VerdictMoment";
  * lab back into view, so the run and its verdict play where they can be seen.
  */
 
-export function LabExperiment({ id, nextHref, mapHref, demo = false }: { id: string; nextHref: string | null; mapHref: string; demo?: boolean }) {
+/** `live`: whether "Guess together" can open a room on this site (lib/live.ts liveAvailable). */
+export function LabExperiment({ id, nextHref, mapHref, live, demo = false }: { id: string; nextHref: string | null; mapHref: string; live: boolean; demo?: boolean }) {
   const def = getExperiment(id)!;
   const theory = theoryFor(def.theoryId);
   const start = useLab((s) => s.start);
@@ -96,7 +97,7 @@ export function LabExperiment({ id, nextHref, mapHref, demo = false }: { id: str
             {/* Subtraction pass: the goal only before the run; during the run just the experiment and the timeline (the title and learning note stay). */}
             <MissionCard def={def} compact={phase !== "build"} className="pointer-events-auto order-3 lg:order-none lg:w-[22rem]" />
             <div className="contents lg:flex lg:w-[21rem] lg:flex-col lg:items-end lg:gap-3">
-              {phase !== "running" && <Inspector zoom={zoom} className="pointer-events-auto order-4 animate-hud-right [animation-delay:380ms] motion-reduce:animate-none lg:order-none lg:w-auto" />}
+              {phase !== "running" && <Inspector zoom={zoom} live={live} className="pointer-events-auto order-4 animate-hud-right [animation-delay:380ms] motion-reduce:animate-none lg:order-none lg:w-auto" />}
             </div>
           </div>
           <div className="contents lg:flex lg:flex-row lg:items-end">

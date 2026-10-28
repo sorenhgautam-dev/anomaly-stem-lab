@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { LabExperiment } from "@/components/lab/LabExperiment";
 import { allExperimentParams, experimentsFor, getExperiment, isLab, isLevel } from "@/lib/content";
+import { liveAvailable } from "@/lib/live";
 
 export function generateStaticParams() {
   return allExperimentParams();
@@ -32,5 +33,5 @@ async function Experiment({ params }: { params: PageProps<"/labs/[lab]/[level]/[
   const next = siblings.find((e) => e.order > experiment.order);
   const mapHref = `/labs/${lab}/${level}`;
 
-  return <LabExperiment id={id} nextHref={next ? `${mapHref}/${next.id}` : null} mapHref={mapHref} />;
+  return <LabExperiment id={id} nextHref={next ? `${mapHref}/${next.id}` : null} mapHref={mapHref} live={liveAvailable()} />;
 }

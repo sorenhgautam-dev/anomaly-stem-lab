@@ -1,7 +1,21 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { getExperiment } from "@/lib/content";
 import { classSummary, ideaBehind, roomAnswer } from "@/lib/live-class";
-import { CODE, memoryLive, newCode } from "@/lib/live";
+import { CODE, liveAvailable, memoryLive, newCode } from "@/lib/live";
+
+describe("where live mode can run (no Redis keys in tests)", () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  it("runs on one local server, from its memory", () => {
+    vi.stubEnv("VERCEL", "");
+    expect(liveAvailable()).toBe(true);
+  });
+
+  it("is off on Vercel without Redis, so Guess together hides", () => {
+    vi.stubEnv("VERCEL", "1");
+    expect(liveAvailable()).toBe(false);
+  });
+});
 
 describe("live rooms (memory store)", () => {
   it("makes readable 4-letter codes", () => {

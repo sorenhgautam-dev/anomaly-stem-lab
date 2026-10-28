@@ -5,7 +5,7 @@ import { generateText, type LanguageModel } from "ai";
 import { env } from "@/lib/env";
 import { citationsFor } from "@/lib/citations";
 import { getExperiment } from "@/lib/content";
-import { writtenHint } from "./hints";
+import { offlineAnswer, writtenHint } from "./hints";
 import { healthRedirect, isPersonalHealthQuestion } from "./safety";
 import { ASK_BUDGETS, limits, type LimitStore } from "./limits";
 import { buildPrompt, cleanAnswer, contradictsVerdict, SYSTEM_PROMPT, type AskFacts } from "./prompt";
@@ -88,7 +88,9 @@ export async function askAno(
   deps: { store: LimitStore; model: LanguageModel | null } = { store: limits(), model: groqModel() },
 ): Promise<AskReply> {
   const { store, model } = deps;
-  const hint = (remaining: number): AskReply => ({ answer: writtenHint(input.focus, input.hintStep), source: "hint", remaining });
+  // "Explain it simpler" keeps its "why it happened" rung; a question gets the closest written line, with the honest note.
+  const written = () => (input.explain ? writtenHint(input.focus, input.hintStep) : offlineAnswer(input.experimentId, input.question, input.focus, input.hintStep));
+  const hint = (remaining: number): AskReply => ({ answer: written(), source: "hint", remaining });
 
   // A question about someone's own health gets the warm redirect, first and always:
   // no model call, no medical information, and it doesn't use up a question.

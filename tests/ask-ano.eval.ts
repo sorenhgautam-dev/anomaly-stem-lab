@@ -2,7 +2,7 @@ import { MockLanguageModelV3 } from "ai/test";
 import { describe, expect, it } from "vitest";
 import type { LanguageModel } from "ai";
 import { askAno, generateAnswer, type AskInput } from "@/lib/ai/askAno";
-import { writtenHint } from "@/lib/ai/hints";
+import { offlineAnswer, writtenHint } from "@/lib/ai/hints";
 import { ASK_BUDGETS, memoryStore } from "@/lib/ai/limits";
 import { buildPrompt, cleanAnswer, contradictsVerdict, MAX_WORDS, type AskFacts } from "@/lib/ai/prompt";
 import { anoVoice } from "@/lib/ai/voice";
@@ -151,9 +151,10 @@ describe("Ask Ano eval (mock provider)", () => {
 
   it("falls back to the next written hint when the provider fails", async () => {
     const failing = new MockLanguageModelV3({ doGenerate: async () => Promise.reject(new Error("down")) });
-    const reply = await askAno(input(CASES[0], { hintStep: 1 }), who, { store: memoryStore(), model: failing as unknown as LanguageModel });
+    const asked = input(CASES[0], { hintStep: 1 });
+    const reply = await askAno(asked, who, { store: memoryStore(), model: failing as unknown as LanguageModel });
     expect(reply.source).toBe("hint");
-    expect(reply.answer).toBe(writtenHint("chemo-targets-only-cancer", 1));
+    expect(reply.answer).toBe(offlineAnswer(asked.experimentId, asked.question, asked.focus, 1));
   });
 
   it("falls back to a hint when no key is set", async () => {
@@ -186,7 +187,8 @@ describe("Ask Ano eval (mock provider)", () => {
     }
     expect(replies.slice(0, -1).every((r) => r.source === "ai")).toBe(true);
     expect(replies.at(-1)).toMatchObject({ source: "hint", remaining: 0 });
-    expect(replies.at(-1)!.answer).toBe(writtenHint("chemo-targets-only-cancer", 0));
+    const last = input(CASES[ASK_BUDGETS.session.limit]);
+    expect(replies.at(-1)!.answer).toBe(offlineAnswer(last.experimentId, last.question, last.focus, 0));
   });
 
   it("returns a written hint once the per-IP limit is hit", async () => {
@@ -274,7 +276,7 @@ describe("Ask Ano route edge cases (no keys)", async () => {
   it("answers a normal question with a written hint when there's no key", async () => {
     const res = await send(ok);
     expect(res.status).toBe(200);
-    expect(await res.json()).toMatchObject({ source: "hint", answer: writtenHint("chemo-targets-only-cancer", 0) });
+    expect(await res.json()).toMatchObject({ source: "hint", answer: offlineAnswer(ok.experimentId, ok.question, ok.focus, 0) });
   });
 
   it("answers an off-topic question with a hint, never an error", async () => {

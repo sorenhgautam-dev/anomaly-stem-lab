@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { create } from "zustand";
+import { offlineAnswer } from "@/lib/ai/hints";
+import { healthRedirect, isPersonalHealthQuestion } from "@/lib/ai/safety";
 import { useLab, verdictShown } from "@/lib/store";
 
 /*
@@ -48,7 +50,8 @@ export async function askAnoRequest(question: string, mode: AskMode, explain?: s
         // "Explain it simpler" falls back to the "why it happened" rung, which explains rather than nudges.
         hintStep: mode === "simpler" ? 1 : Math.min(hintStep, 2),
         readings,
-        question: question.trim(),
+        // The server takes up to 300 characters; a longer question is trimmed, never refused.
+        question: question.trim().slice(0, 300),
         mode,
         ...(explain ? { explain: explain.slice(0, 700) } : {}),
       }),
@@ -60,6 +63,13 @@ export async function askAnoRequest(question: string, mode: AskMode, explain?: s
   } catch {
     return null;
   }
+}
+
+/** Ask Ano's reply written in the browser, for when the request can't reach the server. */
+function localAnswer(question: string): string {
+  if (isPersonalHealthQuestion(question)) return healthRedirect(question.length);
+  const { def, result, hintStep } = useLab.getState();
+  return offlineAnswer(def?.id ?? "", question, result?.diagnosis?.focus ?? def?.misconceptions[0] ?? null, Math.min(hintStep, 2));
 }
 
 export function useAskAno() {
@@ -76,11 +86,10 @@ export function useAskAno() {
     setPending(true);
     try {
       const reply = await askAnoRequest(question, "ask");
-      if (reply && (reply.source !== "hint" || !ladder)) setAnswer({ runId: lab.runId, text: reply.text });
-      else {
-        lab.nextHint();
-        setAnswer(null);
-      }
+      // Never silence: Ano always says something. If the request didn't get through, the
+      // answer comes from the lab's own words here (the warm redirect stays first).
+      setAnswer({ runId: lab.runId, text: reply?.text ?? localAnswer(question) });
+      if ((!reply || reply.source === "hint") && ladder) lab.nextHint();
     } finally {
       setPending(false);
     }

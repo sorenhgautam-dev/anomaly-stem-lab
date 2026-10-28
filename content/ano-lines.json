@@ -24,6 +24,9 @@
     "Think about what the simulator was counting. What changed first?",
     "Look at the numbers again. Which one surprised you, and why?"
   ],
+  "liveOff": [
+    "Ano's live answers are off right now, so here's a hint from the lab."
+  ],
   "noAnswer": [
     "Good question! Change one thing, run it again, and watch which number moves.",
     "I can't answer that one right now. What do you think would happen if you changed just one setting?",

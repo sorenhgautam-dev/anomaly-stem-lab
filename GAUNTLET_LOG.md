@@ -2488,3 +2488,42 @@ Causes found and fixed:
   - **Gas laws options:** "Rise/Fall in proportion" (Advanced) can't be explained without giving the answer away.
   - **Titles:** "Mass in a sealed bag", "Melting and particles" and "Activation energy and catalysts" are CLAUDE.md's names, so they stay; their intros and theory explain the words.
 - **Full list:** every content string changed this session, old → new, is in `tests/screenshots/kids-after/wording-changes.md` (generated from the previous build's source maps against today's files).
+
+---
+
+# Session 8: ANOMALY becomes a cancer science lab (28 October 2026)
+
+Brief: CodeTheCure reframe (the new CLAUDE.md, with DESIGN.md and GAUNTLET.md from the owner's newer copies), then two follow-up briefs from the owner during the session: a 3D visual upgrade, then a site-wide text polish pass.
+
+## Decisions made
+- **Newer DESIGN.md and GAUNTLET.md:** the repo copies are older (no cancer content, 13 gates). The owner's newer copies in `~/Documents/soren-test/` (saved with the new CLAUDE.md) were followed. Copying them over the repo files was blocked (DESIGN.md must not be edited), so the repo files are unchanged.
+- **CLAUDE.old.md** didn't exist; the previous CLAUDE.md was read from git (`HEAD:CLAUDE.md`, read-only) and merged into §12.
+- **Two misconception ids per experiment where the spec lists two fingerprints:** the engine diagnoses with one wrong model per id, so "nothing happens" and "only at the very end" (chemo), "same every month" and "fast at first" (tumour), "almost none" and "about half" (UV), "like a cold" and "only after a long touch" (contact) each have their own wrong model under the spec's root belief.
+- **Cells out of control as two experiments:** the spec's two questions became "Cells out of control" (Cell, Easy, 1) and "Can you catch cancer?" (Cell, Easy, 2), since the engine asks one question per experiment.
+- **UV figure:** Cancer Research UK's "over 90% of UV rays can still pass through cloud" is used (the WHO fact sheet gives no figure; WHO's 2002 "up to 80%" guide was not mixed in). The model lets over 90% through ordinary cloud.
+- **Hair regrowth wording:** "often" (NCI) and "most ... reversible" (ACS); never "always".
+- **Hidden labs:** chemistry and robotics keep code and routes; `lib/labs.ts` lists visible labs; `EXPERIMENTS` is cancer-only, `ALL_EXPERIMENTS` keeps routes working.
+- **Ask Ano safety:** a personal-health question is answered by a written warm redirect before any limit or model call (it doesn't use a question). Science questions about cells ("Will the hair cells be okay?") are not redirected.
+- **UI sources:** Aceternity, Skiper and AnimMaster forbid redistribution; React Bits is MIT + Commons Clause. Nothing was copied; existing in-house rebuilds were kept (shortlist below).
+- **3D models:** the best free fits (Sketchfab CC BY "CT Scanner" by Ng Jun Wei, "Microscope" by VeeRuby Technologies) need a Sketchfab account to download; Poly Haven's CC0 microscope is a worn vintage model; NIH 3D's microscope is AI-made with invented brand text; no free unbranded linac or UV meter exists. So every model is built in code (`components/lab3d/kit/apparatus.tsx`). The cloud puff texture is generated in the repo (no outside asset).
+- **Live mode and teacher view** don't exist in this codebase (CLAUDE.md §6 lists them as built). Not built this session: experiments came first per §11.
+
+## Needs owner
+- Copy the newer DESIGN.md and GAUNTLET.md from `~/Documents/soren-test/` into the repo (blocked for me).
+- Sketchfab CC BY models (CT scanner, microscope) if you want them instead of the code-built ones: they need an account to download; credit lines are ready in RESOURCES.md §13.
+- Keys for the live site (Groq, ElevenLabs, Upstash) and the Vercel deploy; nothing ran against real providers.
+- Live mode and teacher view: build, or drop from CLAUDE.md §6.
+
+## UI shortlist (RESOURCES.md §12, licences read 28 October 2026)
+Study-and-rebuild only: React Bits Split Text (hero words), Stack (belief deck), Tilted Card (lab cards), Carousel, Target Cursor, Count Up, Magnet; Aceternity Sticky Scroll Reveal (How it works); Skiper Rolling text and Stairs (transitions). Used directly: GSAP ScrollTrigger (pinned How it works), Lenis.
+
+## Rounds
+- **Round 0 (reframe):** cancer framing, four labs, hidden old labs, learning note, citations (41 confirmed quotes from the four trusted sources), zod checks (a missing citation id fails the build), root beliefs, `/science`, `/demo`.
+- **Round 1 (chemo and hair loss, Treatment, Medium, hero slide 1).**
+- **Round 2 (how tumours grow, Detection, Easy, hero slide 2).**
+- **Round 3 (cells out of control and can you catch cancer, Cell, Easy, hero slide 3).**
+- **Round 4 (UV on a cloudy day, Prevention, Easy).**
+- Rounds 5 and 6 (radiotherapy beams, born with it) not started; they show as "coming soon".
+- **Visual upgrade:** living cells (membrane, nucleus, wobble, rim light, split), microscope eyepieces, code-built microscope, scanner, UV meter and treatment machine, sun and clouds, curved backdrops with real benches and baked shadows.
+- **Polish pass:** `tests/e2e/polish.spec.ts` (clipped text, overlaps, idle shaking, CLS) on 10 pages at 4 widths; all fixed (see HANDOFF.md).
+- **Ship checks:** flow tests looked for the old "anomaly detected" words; they now check the real status line ("not what you guessed"), and the demo path passes. The 3D graph card's title ran into a six-digit count; the title now shrinks to fit and counts get thousands separators. Theory view shows the "Try it at home" card where the experiment has one.

@@ -1,671 +1,367 @@
-# CLAUDE.md — ANOMALY
+# CLAUDE.md: ANOMALY, the cancer science lab for students
 
-This file tells Claude Code what we are building, how it should look, and the rules to follow. Read it fully before writing code. When something here conflicts with a quick idea, this file wins.
+Read this file fully before writing any code. It is the source of truth for what ANOMALY is and how it is built. Three files go with it:
 
-> **Look and process (October 2026).** `DESIGN.md` (the "Bright Lab" redesign) is the source of truth for how ANOMALY looks. It replaces this file's dark "Bioluminescent lab" colours (§3.3), the dark visual details of the landing (§3.1) and the dark-lab look (§3.6) wherever they conflict. Everything else here still applies. `GAUNTLET.md` defines the unattended build-and-test loop (rounds, gates and handoff).
+- **DESIGN.md**: how everything looks, moves and reads.
+- **GAUNTLET.md**: how work is planned, tested and handed off.
+- **RESOURCES.md**: libraries, licences, trusted sources, UI and motion sources.
 
----
+If anything conflicts, the order of authority is: this file (Part 1), then DESIGN.md, then GAUNTLET.md, then everything else. Older notes, skills and library demos never override these files.
 
-## 1. What we are building
-
-**ANOMALY is a web app** (not a native mobile app and not a standalone game). It runs in the browser on laptops, Chromebooks and tablets, opens from a single link with no install or account, and feels like a game through its levels, effects and Ano. It is a virtual STEM lab for high school students (ages 14–18). Students build short, easy chemistry and robotics experiments in the browser. Before each run they predict the result. The simulator checks it.
-
-- **Correct prediction:** Ano congratulates the student and offers two buttons: **Next experiment** and **See the theory**. No new problem is created.
-- **Wrong prediction:** the **ANOMALY DETECTED** moment plays, the student's prediction appears as a **ghost** next to reality, and only then does Ano suggest one small change and walk them through a 3-step hint ladder.
-
-**Ano** is the face of the product: a small floating glass robot with one glowing eye. Ano greets users on the landing page, guides every experiment, delivers verdicts, celebrates, and leads users to the next level.
-
-**Elevator pitch:** ANOMALY is a virtual STEM lab where students build their own chemistry and robotics experiments, and Ano finds the wrong belief behind each mistake, then guides them to fix it.
-
-**Hackathon:** Education track. Deadline is close, so the core loop must work before any polish.
+**Before replacing the previous CLAUDE.md:** copy every project-specific fact from it (AI provider-to-task mapping, environment variable names, framework and Node versions, decisions log, folder quirks, anything else that only exists in the repo) into section 12 "Project facts". Then delete the old file. Nothing repo-specific may be lost.
 
 ---
 
-## 1.1 Site structure and navigation
+# PART 1: THE PRODUCT
 
-The landing page is a teaser, not the whole product. Users must always choose a level, then a lab, then an experiment. Ano guides each step with one short line.
+## 1. What ANOMALY is
 
-**Flow:** Landing (hero experiment teaser) → **Choose your level** → **Choose your lab** → **Experiment map** → Experiment → result → Next experiment / See the theory / Back to map.
+**ANOMALY is a web app that teaches the science of cancer to students aged 11 to 18 by letting them discover the truth for themselves.** A student guesses what will happen, watches a 3D simulation run, and sees exactly where their thinking broke. A friendly robot, Ano, guides them like a kind older student.
 
-| Route | Screen | What it shows |
+It is an **education** project for the CodeTheCure hackathon. It is not a health app: no symptom checking, no diagnosis, no treatment advice, no tracking of anyone's health. It teaches the science.
+
+**Why the name fits:** in biology, cancer literally begins as an anomaly, one cell that stops following the rules the body gives it. ANOMALY is also what students feel when reality contradicts their guess. Use this double meaning in the copy and the pitch.
+
+### The problem
+
+Most of what young people believe about cancer comes from rumours, movies, social media and half-heard conversations. Those wrong beliefs matter:
+
+- They make cancer scarier than it needs to be (for example, believing it can be caught like a cold).
+- They delay prevention and checkups (for example, believing clouds block UV, or that a tumour grows slowly and steadily so there is no hurry).
+- They confuse and frighten families during treatment (for example, not understanding why chemotherapy causes hair loss, or why radiotherapy comes from many angles).
+
+Students carry these beliefs into adulthood. Posters and leaflets rarely change them, because a belief that feels right survives being told it is wrong. It only breaks when the person sees it fail with their own eyes. That is what ANOMALY does.
+
+### The loop (every experiment)
+
+1. **Predict.** Before anything runs, the student commits to a guess (and how sure they are).
+2. **Run.** The simulation plays out in a 3D lab, with slow motion, pause and rewind.
+3. **Reveal.** The simulator judges.
+   - **Correct:** Ano celebrates, then offers "Next experiment" or "See the theory". No new problem is created.
+   - **Wrong:** the **ANOMALY moment**: the student's prediction appears as a ghost beside what really happened, the replay pauses at the exact moment the two split, and Ano explains with a three-step hint ladder until the student fixes it.
+4. **Understand.** A theory view explains what happened, why, the science, where it shows up in real life, and the sources.
+
+### How the hackathon judges it (design for every criterion)
+
+| Criterion | Points | How ANOMALY earns it |
 |---|---|---|
-| `/` | Landing | Hero "Which falls faster?" teaser and scroll journey. Ends with a clear **Start exploring** button. After the hero result, Ano says: "Want more? Pick your level." |
-| `/start` | Choose your level | Three options: **Easy** (middle school, grades 6–8), **Medium** (grades 9–10), **Advanced** (grades 11–12). Each shows a one-line description and how many experiments it has. |
-| `/start/[level]` | Choose your lab | **Chemistry** or **Robotics**, as two 3D objects (a flask and a small robot). Hover tilts them toward the cursor; clicking flies the camera into that lab. |
-| `/labs/[lab]/[level]` | Experiment map | All experiments for that lab and level as a glowing path of stars. Each star shows title, time (2–5 min) and status: done (gold), current (pulsing), locked (dim). Unlock in order; one correct run completes an experiment. |
-| `/labs/[lab]/[level]/[id]` | Experiment | The lab HUD and the predict → run → verdict loop. |
+| Pain point and relevance to cancer | 3 | The problem statement above, backed by cited facts from trusted sources, visible on the landing page and in the submission |
+| Prototype and technical execution | 10 | Everything works on the live link; unique mechanics (wrong-model diagnosis, root belief finder, exact-moment replay, live class mode); smooth, polished, tested; real simulations and real 3D |
+| Feasibility and potential impact | 4 | Free, no accounts, runs in any browser on a cheap laptop; original approach (discover, don't lecture); clear target group (students 11 to 18 and their families); real tester results |
+| Alignment with the Education category | 3 | A learning product through and through: levels by grade, teacher view, theory with sources, kid-friendly language |
 
-- A persistent top bar shows **Level · Lab · Experiment** as clickable breadcrumbs, so users can switch level or lab at any time.
-- Completing every experiment in a level shows a celebration and offers the next level up.
-- Progress is saved per lab and level in IndexedDB.
-- Optional: a 3-question warm-up on `/start` ("Not sure? Let Ano place you") that suggests a level.
+---
 
-### Experiment list
+## 2. The four labs and six experiments
 
-| Lab | Easy (grades 6–8) | Medium (grades 9–10) | Advanced (grades 11–12) |
+The labs follow the cancer story in order: what it is, preventing it, finding it early, treating it.
+
+| Lab | Experiment | Wrong belief it breaks | Build order |
 |---|---|---|---|
-| Chemistry | Melting and particles · Dissolving sugar · Mass in a sealed bag · Indicator colours (acid or base) | Gas particles and heat · Reaction speed and temperature · Neutralisation and pH · Burning in open vs sealed containers | Gas laws (PV = nRT) · Equilibrium (Le Chatelier) · Titration curves · Electrolysis · Activation energy and catalysts |
-| Robotics | Light a bulb · Switches · Series vs parallel bulbs | LED and resistor · Buttons and sensors · Two-wheel steering · Program a sequence with blocks | Line follower with feedback · Ohm's law and power budget · Gears: speed vs strength · Motor speed control (PWM) · Obstacle avoidance |
+| **Cell Lab** (what cancer is) | Cells out of control | "Cancer is a germ you can catch" | 3 |
+| | Born with it? | "Cancer is mostly passed down in families" | 6 |
+| **Prevention Lab** | UV on a cloudy day | "Clouds block the sun's UV" | 4 |
+| **Detection Lab** | How tumours grow | "Tumours grow at a steady speed" | 2 |
+| **Treatment Lab** | Why chemo causes hair loss | "Chemo only attacks cancer cells" | 1 |
+| | Radiotherapy beams | "One strong beam is best" | 5 |
 
-Each experiment JSON has `"level": "easy" | "medium" | "advanced"` and `"grades": "6-8" | "9-10" | "11-12"`. Build at least 3 experiments per lab per level for Demo Day; the rest can show as locked "coming soon" stars.
+Build in the order shown (1 to 6). Finish and test each experiment completely before starting the next. If time runs out, stop after a complete experiment, never in the middle of one.
 
-### Sandbox mode (free build)
+**Levels:** Easy (grades 6 to 8), Medium (grades 9 to 10), Advanced (grades 11 to 12). Each experiment ships at one level first (the level in its spec below); add the other levels as copy variants in `content/` when time allows. The simulation is the same at every level; only the words, the number of controls and the theory depth change.
 
-Inspiration: https://physandbox.com/ (study it if web access is available; take inspiration from how it feels, don't copy its code or assets).
-
-- Unlocks after a student finishes the first level of a lab; also reachable from the breadcrumb bar.
-- **Toolbox:** drag in objects (balls, boxes, ramps, springs, ropes, motors, magnets; in Robotics also batteries, LEDs, sensors and the brain).
-- **World sliders:** gravity, friction, air resistance, time speed.
-- **Time controls:** play, pause, step one frame, rewind.
-- **Live graphs:** click any object to see its speed, energy or position over time.
-- **Save and share:** encode the build in the URL so it can be shared as a link.
-- **The ANOMALY twist:** before pressing play, the student can predict what will happen; Ano reacts if they were right or wrong. Predictions are optional in Sandbox.
-- Libraries: `matter-js` for 2D sandboxes, `@react-three/rapier` for 3D (see RESOURCES.md).
+**The previous chemistry and robotics labs:** keep all code and routes, but hide them from navigation, lab select, experiment maps, counts, hero slides, My beliefs, the teacher view and all copy. The site must feel 100% about cancer. Their models (glassware, wires, the robot arm) are reused as cancer apparatus.
 
 ---
 
-## 2. Non-negotiable rules
+## 3. Experiment specifications
 
-1. **The simulator is the judge.** Every verdict ("Working" / "Not working yet"), every diagnosis, and every hint comes from deterministic code and written tables. Never let an AI model decide whether an experiment is correct.
-2. **AI only does the jobs listed in §7.5, one provider per job.** The main one is "Ask Ano": a button the student presses to ask their own question, capped at 5 questions per session, cached, tiny prompt, and it must never contradict the simulator. No AI job ever decides a verdict.
-3. **API keys never reach the browser.** Keys live in `.env.local` and are used only inside Next.js API routes (`app/api/*`). Never import a key into a client component.
-4. **AI failures never block the student.** API keys are required (validated at startup) and offline use is not a goal. If an AI call fails while a student uses the app, Ano shows the next written hint, and voice falls back to the browser's speech. The student never sees an error.
-5. **Experiments are easy.** 2–5 minutes each, only the parts needed, faint outlines showing where parts go, one thing to change and one thing to predict.
-6. **Cinematic landing, clear labs.** The landing page is Lusion-level spectacle. Inside the labs, clarity beats effects: the experiment is always the focus and labels are always readable.
-7. **Performance is a feature.** 60 fps on an ordinary laptop. Every heavy effect has a lower-quality fallback and a reduced-motion alternative.
-8. **Licences.** This project is MIT. Only use or copy code licensed MIT, Apache-2.0, BSD, ISC or CC0, and credit it in the README. GPL code (PhET, CircuitJS) and Prosperity code (Lygia) are study-only: read them to understand the science or technique, then write our own code. Never paste their code. If unsure of a licence, stop and ask.
-9. **Kids' privacy.** No accounts, no personal data, no stored chats. Progress saves locally in IndexedDB only.
+Every experiment has: a teaching model, controls, prediction options (equally plausible, similar length, no numbers, shuffled), a misconception entry with fingerprints and a root belief, three hints, a theory outline, two "What if?" buttons, a "Try it at home" card where safe, and the claims that must be cited. Simulations are **teaching models**: simple, honest, consistent with the sources, and labelled as models in the theory view.
 
----
+### 3.1 Why chemo causes hair loss (Treatment Lab, Medium first)
 
-## 3. Design direction: make it feel like Lusion
+- **Scene:** a dish view of three cell populations side by side: cancer cells (dividing fast), hair follicle cells (dividing fast), and a slow-dividing cell type such as nerve or muscle cells. A treatment dial introduces chemotherapy over time. A "Where in the body" panel shows a calm diagram (scalp, gut lining, tumour).
+- **Teaching model:** each population divides at its own rate; chemotherapy acts mainly on cells while they are dividing, so the chance a cell is affected per unit time rises with its division rate. Fast dividers (cancer, hair follicle, gut lining) drop noticeably; slow dividers barely change. After treatment stops, healthy populations recover over time.
+- **Controls:** chemo on or off; treatment length. Advanced adds a "how fast does this cell type divide" readout.
+- **Question:** "When chemo starts, what happens to the hair follicle cells?"
+- **Options:** Nothing happens to them · They are affected, like the cancer cells · They grow faster to make up for it · They are affected only at the very end. (Correct: affected, like the cancer cells.)
+- **Misconception:** `chemo-targets-only-cancer`; fingerprint: predicting "nothing happens" or "only at the end"; root belief `treatment-only-touches-the-cancer`.
+- **Hints:** 1 "Look at how fast each kind of cell is dividing. Which ones are busiest?" 2 "Chemo works on cells that are dividing. It can't tell which busy cell is cancer and which is hair." 3 "Hair follicle cells divide fast, so chemo affects them too. That's why hair can fall out."
+- **Theory:** what dividing means; why chemo acts on dividing cells; why hair, the gut lining and blood-forming cells can be affected; that this is usually temporary and hair usually grows back (only if confirmed by the source); why doctors accept this trade-off. Sources listed.
+- **What if?:** "Treatment is twice as long" · "The cancer cells divide slowly" (a slow-dividing cancer is affected less, which is why different cancers need different treatments; keep this gentle and sourced).
+- **Try it at home:** none (skip).
+- **Claims to cite:** chemotherapy affects cells that divide quickly, including some healthy cells (hair follicles, the lining of the mouth and gut, blood-forming cells); hair loss is a common side effect and hair usually grows back after treatment. Sources: cancer.gov, Cancer Research UK, American Cancer Society.
+- **Hero slide:** yes, slide 1.
 
-The target is an award-winning interactive studio site, not a school tool. **Take heavy inspiration from Lusion.** It is our primary reference and quality bar. Someone who knows Lusion should feel the same energy in ANOMALY: the same kind of glossy floating objects you can knock around, the lens cursor, the heavy scroll-driven camera, the kinetic 3D type, the cinematic post-processing, the satisfying sounds, the pacing and the polish. Study it closely and borrow its techniques, interaction patterns and feel as much as possible.
+### 3.2 How tumours grow (Detection Lab, Easy first)
 
-**Inspired by, not a clone.** The one line we don't cross: don't reproduce their actual assets or content. No copying their 3D models, textures, exact scene compositions, page layouts, text, logos, fonts or source code. Our objects are science objects (atoms, beakers, gears, robots, Ano), our story is Predict → Diagnose → Break → Rebuild, and our colours and type are our own tokens. Same feel and quality, our own world. This also keeps the project original for judging.
+- **Scene:** a cluster of cells in a calm scanner room. A timeline runs over "months". A growth graph draws itself. A faint "size you could notice" line appears only if a sourced statement supports it; otherwise show relative size only.
+- **Teaching model:** the number of cells doubles every fixed interval: N(t) = N0 × 2^(t / doubling time). Shown as a model, with doubling time adjustable; no claims about real doubling times unless sourced.
+- **Controls:** doubling time; how long to watch.
+- **Question:** "If you watch the tumour for a long time, how does its size change?"
+- **Options:** It grows by the same amount every month · It stays tiny for a long time, then grows fast · It grows fast at first, then slows down · It grows in bursts with long pauses. (Correct: tiny for a long time, then fast.)
+- **Misconception:** `tumour-grows-steadily`; fingerprint: "same amount every month" or "fast at first"; root belief `cancer-happens-suddenly` (the flip side: "it was tiny for years, so it must be harmless").
+- **Hints:** 1 "Watch what one doubling does when there are 8 cells, then when there are 8,000." 2 "Doubling means each step adds as much as all the steps before it, together." 3 "That's why it looks like nothing is happening for ages, and then it looks sudden. Finding it early is finding it on the flat part."
+- **Theory:** doubling; why early looks like nothing; what screening and checkups are for, kept calm and general (no survival numbers); that growth speeds differ between cancers. Sources listed.
+- **What if?:** "Doubling takes twice as long" · "Start with one cell".
+- **Try it at home:** fold a sheet of paper and count the layers each time (doubling you can hold).
+- **Claims to cite:** cancer cells divide without the usual stopping signals and can form growths (cancer.gov "What is cancer"); finding cancer early often makes it easier to treat (cancer.gov, Cancer Research UK on screening; phrase exactly as the source does).
+- **Hero slide:** yes, slide 2.
 
-| Reference | Link | What to take from it |
-|---|---|---|
-| Lusion | https://lusion.co/ | **Primary.** Floating glossy 3D objects you can knock around, refractive lens cursor, scroll that drives a camera along a 3D path, kinetic 3D letters, bloom + chromatic aberration + grain, collision sounds |
-| Active Theory | https://activetheory.net/ | Immersive WebGL worlds, seamless scene-to-scene transitions without page loads |
-| Locomotive | https://locomotive.ca/ | Smooth weighted scrolling, editorial typography, confident layout rhythm |
-| Studio Freight | https://studiofreight.com/ | Creators of Lenis; buttery scroll feel and restrained, precise motion |
-| Paragon Productions | https://www.paragonproductions.co/ | Cinematic presentation and pacing |
-| Turion Space | http://turionspace.com/ | Dark space aesthetic, sense of scale and depth |
-| Heron | https://heron.ai/ | Sleek, minimal product UI to borrow for the in-lab HUD |
+### 3.3 Cells out of control (Cell Lab, Easy first)
 
-If web access is available, open these sites and study them before designing. If not, follow the detailed breakdown below, which describes the Lusion effects we want.
+- **Scene:** two dishes. In the first, normal cells divide until the dish is full, then stop. In the second, cancer cells keep dividing and pile up. A third scene, "Contact test": a normal dish touches the cancer dish; nothing passes across, because cancer is not an infection.
+- **Teaching model:** normal cells divide while they have space and stop when crowded; cancer cells ignore the stop signal and keep dividing. Cancer starts from changes in a body's own cells, so it is not caught from another person.
+- **Controls:** dish size; cell type.
+- **Question:** "What happens when the normal cells fill the dish?"
+- **Options:** They stop dividing · They keep dividing and pile up · They start dying off · They spread to the next dish. (Correct: they stop dividing.) Second question after the contact test: "Can the cancer cells spread to the other dish?" Options: Yes, like a cold · Yes, but slowly · No, cancer isn't caught · Only if the dishes touch for a long time. (Correct: no.)
+- **Misconception:** `cancer-is-contagious`; fingerprint: predicting spread in the contact test; root belief `cancer-is-something-you-catch`.
+- **Hints:** 1 "Normal cells listen to a stop signal when they're crowded. Cancer cells don't." 2 "Cancer starts from changes inside a person's own cells." 3 "That's why you can't catch cancer from a friend or a family member. You can hug them, share a room, and be close."
+- **Theory:** what a cell is; stop signals; what goes wrong; why it is not contagious; a kind note that being close to someone with cancer is safe and good. Sources listed.
+- **What if?:** "Give the normal cells a bigger dish" · "Switch off the stop signal".
+- **Try it at home:** none (skip).
+- **Claims to cite:** cancer cells grow and divide without the signals that tell normal cells to stop (cancer.gov); cancer is not contagious, you cannot catch it from someone else (cancer.gov or American Cancer Society "Is cancer contagious?").
+- **Hero slide:** yes, slide 3.
 
-### 3.1 The Lusion effects to recreate (landing page)
+### 3.4 UV on a cloudy day (Prevention Lab, Easy first)
 
-1. **Hidden cursor → refractive lens.** Hide the system cursor. A small glass sphere (drei `MeshTransmissionMaterial`) follows the mouse with lerp smoothing and refracts whatever is behind it, like a magnifying glass.
-2. **Floating glossy science objects.** ~25 objects built from primitives in code: atoms (sphere + 3 thin torus orbits), beakers, flasks, gears, light bulbs, tiny robots. `MeshPhysicalMaterial` with high clearcoat, some iridescence. Zero gravity, slow drift, linear + angular damping so they settle when untouched.
-3. **Cursor collisions.** The cursor is an invisible kinematic physics body (Rapier). Moving through objects knocks them away realistically. Nearby objects slowly rotate to face the cursor (magnetic pull).
-4. **Moving specular light.** Highlights sweep across glossy surfaces as the cursor moves (light or environment rotation tied to pointer position).
-5. **Scroll drives a camera along a spline.** Scroll does not move the page. It sets progress `t ∈ [0,1]` along a `CatmullRomCurve3`. Four chapters: **Predict → Diagnose → Break → Rebuild**. Scrolling up retraces the path exactly. Camera position is lerped so motion feels heavy and fluid.
-6. **Kinetic 3D type.** The letters of ANOMALY are separate meshes (drei `Text3D`) that tumble in from space and snap into place at a scroll milestone, then scatter at the Break chapter and reverse when scrolling back.
-7. **Magnetic buttons.** Buttons lean toward the cursor on hover and press down in depth on click.
-8. **Post-processing.** Bloom on highlights, chromatic aberration stronger at the screen edges, subtle film grain. Keep all three subtle.
-9. **Sound.** Short glass clinks on hard collisions, a soft low click on button presses. Audio starts only after the first user click, with a visible mute toggle.
-10. **Preloader.** A percentage counter while particles assemble into the ANOMALY logo, then burst into the scene.
+- **Scene:** an outdoor view with a sun, adjustable clouds, a UV meter on a stand, and a calm skin-cell panel where small marks accumulate as "damage points" (never burns, never red skin).
+- **Teaching model:** UV reaching the ground = clear-sky UV × a cloud transmission factor; damage to skin cells accumulates with UV × time; sunscreen or shade reduces the UV that reaches the cells. Numbers shown as model values unless a source gives one.
+- **Controls:** cloud cover; time outside; sun protection on or off.
+- **Question:** "On a cloudy day, how much of the sun's UV reaches your skin compared with a clear day?"
+- **Options:** Almost none · About half · Most of it · Exactly the same. (Correct: most of it, phrased exactly as the WHO source supports; if the source gives a figure such as a share that passes through light cloud, the theory may quote it.)
+- **Misconception:** `clouds-block-uv`; fingerprint: "almost none" or "about half"; root belief `if-i-cant-see-it-it-isnt-there`.
+- **Hints:** 1 "Clouds block a lot of the light you can see. UV is a kind of light you can't see." 2 "Watch the meter while the clouds roll in." 3 "A lot of UV still gets through, so sun protection matters on cloudy days too."
+- **Theory:** what UV is; why you can't feel it; how damage adds up; simple protection (shade, clothing, hats, sunscreen) phrased as the source does. Sources listed.
+- **What if?:** "Heavy cloud" · "Put on protection halfway through".
+- **Try it at home:** UV-sensitive beads or a UV index app on a cloudy day (check the UV index with an adult).
+- **Claims to cite:** UV can pass through cloud (WHO ultraviolet radiation facts; quote the exact wording); UV exposure damages skin cells and sun protection reduces risk (WHO, Cancer Research UK).
+- **Hero slide:** no.
 
-### 3.2 The hero experiment
+### 3.5 Radiotherapy beams (Treatment Lab, Advanced first)
 
-The hero asks: **"Which falls faster?"** above a heavy metal ball and a light glass ball. The visitor taps a guess. Gravity turns on for both balls only; they land together. **ANOMALY DETECTED** flashes with a glitch, Ano appears and says one line, and the scroll journey begins. The visitor experiences the product's core idea in the first five seconds.
+- **Scene:** the robotics models become a treatment machine: a robot arm that aims a beam at a calm, abstract body outline with a target (the tumour) and healthy tissue around it. Dose shows as colour intensity, never as harm imagery.
+- **Teaching model:** dose at a point = sum over beams of beam strength × attenuation along the path (simple exponential falloff). One beam gives the full path a high dose; several weaker beams from different angles give the tumour the sum of all beams while each path through healthy tissue gets only a little.
+- **Controls:** number of beams; angles; strength per beam (total kept constant).
+- **Question:** "To give the tumour a high dose while protecting healthy tissue, which plan works best?"
+- **Options:** One strong beam straight in · Several weaker beams from different angles · One beam that moves back and forth · Several beams all from the same side. (Correct: several weaker beams from different angles.)
+- **Misconception:** `one-beam-is-best`; fingerprint: "one strong beam" or "same side"; root belief `treatment-only-touches-the-cancer`.
+- **Hints:** 1 "Follow one beam. Who else is on its path?" 2 "Add a second beam from another angle and watch where they cross." 3 "Where the beams cross, doses add up. Everywhere else, each path gets only a little."
+- **Theory:** what radiotherapy is; why beams come from several angles (crossfire); that machines rotate or aim to do this; that healthy tissue near the target can still be affected and doctors plan carefully. Sources listed.
+- **What if?:** "Nine beams" · "All beams from one side".
+- **Try it at home:** none (skip).
+- **Claims to cite:** external beam radiation therapy aims radiation at the tumour from outside the body and can be delivered from several directions to target the tumour while limiting dose to nearby healthy tissue (cancer.gov "Radiation therapy to treat cancer"; Cancer Research UK on external radiotherapy).
+- **Hero slide:** no.
 
-### 3.3 Design tokens
+### 3.6 Born with it? (Cell Lab, Medium first)
 
-The brief pins a dark Lusion-style world. Use these tokens; don't invent new colours ad hoc.
+- **Scene:** a lifetime timeline of a single cell line, with small "changes" appearing over time from everyday causes; an optional inherited change present from the start.
+- **Teaching model:** changes to cells build up over a lifetime; a cell needs several before it stops following the rules. With an inherited change, the cell starts with one already, so it may reach the threshold sooner, but most changes still appear during life. Most cancers are not mainly inherited. Any share quoted must come from the source.
+- **Controls:** inherited change on or off; exposure level (kept abstract: "more" or "less").
+- **Question:** "Where do most of the changes that lead to cancer come from?"
+- **Options:** Mostly from genes passed down in the family · Mostly from changes that happen during a person's life · Half and half, always · Only from bad luck with no causes at all. (Correct: mostly during a person's life.)
+- **Misconception:** `cancer-is-mostly-inherited`; fingerprint: "mostly from genes"; root belief `cancer-happens-suddenly` (or a dedicated root belief `its-all-decided-at-birth`).
+- **Hints:** 1 "Count the changes that appear during the timeline, with and without the inherited one." 2 "Even with a head start, most of the changes still show up during life." 3 "That's why habits and protection matter for everyone, and why only some cancers run strongly in families."
+- **Theory:** what a change in a cell is (simple); inherited vs acquired; why family history matters for some people; a calm, no-blame framing. Sources listed.
+- **What if?:** "No inherited change" · "Less exposure".
+- **Try it at home:** none (skip).
+- **Claims to cite:** cancer is caused by changes to genes that control how cells grow and divide; these can be inherited or arise during a person's lifetime; only a small share of cancers are strongly linked to inherited gene changes (cancer.gov "The genetics of cancer"; American Cancer Society). Quote the share only if the source gives it.
+- **Hero slide:** no.
 
-**Palette: "Bioluminescent lab", blue-led with tonal ramps and gradients.** Testers found single flat colours static. Every colour is a ramp of shades, and gradients carry most of the colour. Define all ramps in the Tailwind theme (`@theme` in `app/globals.css`) so components only use classes like `bg-depth-900`, `text-ion-300`, `from-ion-500`.
+### Root beliefs catalogue
 
-| Ramp | Shades (light → dark) | Role |
-|---|---|---|
-| `depth` (navy) | 700 `#132654` · 800 `#0C1A3D` · 900 `#071027` · 950 `#030712` | Backgrounds, lab walls, bench, glass panels |
-| `ion` (blue, primary) | 50 `#EEF3FF` · 100 `#DCE6FF` · 200 `#B9CCFF` · 300 `#93AEFF` · 400 `#6C8CFF` · 500 `#4A6BF5` · 600 `#3450D6` · 700 `#283FAA` · 800 `#1F3180` · 900 `#18265E` | Main accent: buttons, links, particles, current, Ano's shell glow |
-| `glow` (aqua-mint) | 200 `#A6F8E2` · 400 `#45F0C3` · 600 `#17B892` · 800 `#0B6E58` | Highlights at the bright end of blue gradients, Ano's eye, focus rings |
-| `mist` (text) | 100 `#F1F7F7` · 200 `#DCEBEA` · 400 `#9FB3BC` · 600 `#62757F` | Text: primary, secondary, muted |
-| `resolve` (gold) | 300 `#FFD27A` · 400 `#FFC24B` · 600 `#E69A12` | Correct answers and celebrations only |
-| `anomaly` (coral red) | 300 `#FF8E83` · 400 `#FF5A4E` · 600 `#D9342B` | Wrong beliefs and ANOMALY DETECTED only |
+- `cancer-is-something-you-catch`
+- `cancer-happens-suddenly` (nothing, then everything)
+- `treatment-only-touches-the-cancer`
+- `if-i-cant-see-it-it-isnt-there`
+- `its-all-decided-at-birth`
 
-**Signature gradients** (define once as Tailwind utilities or CSS variables, reuse everywhere):
-- **Background:** radial `depth-800` at top centre fading to `depth-950` at the edges, plus one or two very soft `ion-700` light blobs that drift slowly.
-- **Headings:** gradient text `ion-200 → ion-400 → glow-400`.
-- **Primary buttons:** `ion-600 → ion-400`, shifting toward `glow-400` on hover.
-- **Glass panels:** `depth-800/60` fill with a 1px gradient border `ion-400/40 → transparent`.
-- **Abstract shapes and materials:** shader gradients `ion-800 → ion-400 → glow-200`, with iridescent shifts.
-- **Verdicts:** correct `resolve-300 → resolve-600`; wrong `anomaly-300 → anomaly-600`.
-
-Usage rules:
-- Mostly `depth` shades, then `mist` text, then `ion`/`glow` as light. Use shades of the same ramp for hierarchy instead of new colours.
-- Gold and coral are reserved for verdicts so their meaning stays clear.
-- Never rely on colour alone (wrong vs correct also differ in icon, shape and sound).
-- Check text contrast (WCAG AA) on every background shade.
-
-- **Type:** a bold, expressive display font (wide, heavy, characterful, not generic) plus a readable body font, both free for commercial use and self-hostable (Fontshare, Google Fonts or similar), each with a real system fallback stack. **Not** Clash Grotesk or General Sans. The team picks the pair from 3 researched options, each with its licence checked and a screenshot of the landing title. Until then the code keeps Host Grotesk + Instrument Serif. `JetBrains Mono` only for live instrument readouts (voltmeter, scale, thermometer), because those are real instruments.
-- **Surfaces:** frosted glass panels (`backdrop-filter: blur`), thin bright edge, no heavy drop shadows. Vary corner radius by hierarchy; don't put the same radius on everything.
-- **Motion:** springy and weighted on the landing page; fast and calm (under 400 ms) inside labs.
-- **Restraint:** spend the boldness on the landing page and the ANOMALY moment. Everything else is quiet. Avoid generic tells: no fade-and-slide-up on every section, no ALL-CAPS eyebrow labels above headings, no identical rounded cards with grey shadows, no `→` appended to every button.
-
-### 3.4 Graphics quality bar: use the best 3D available
-
-Aim for the most impressive real-time 3D we can ship at 60 fps. Use these techniques, all built from our own content:
-
-**Materials and lighting**
-- Physically based materials everywhere: `MeshPhysicalMaterial` with clearcoat, iridescence, sheen and transmission for glass and glossy plastic.
-- Real reflections from HDRI environments (drei `Environment`, with `Lightformer` shapes to sculpt studio-style highlights).
-- `MeshTransmissionMaterial` for glass (Ano's shell, beakers, the lens cursor) with chromatic aberration and slight distortion.
-- `MeshReflectorMaterial` for a dark, glossy floor that reflects floating objects.
-- Soft contact shadows (`ContactShadows` or `AccumulativeShadows` + `RandomizedLight`) instead of hard shadow maps.
-
-**Custom shaders**
-- Write GLSL with `three-custom-shader-material` to extend standard materials (fracture lines, glitch, glow pulses) without losing PBR lighting.
-- Noise-driven effects (simplex/curl noise) for drifting particles, Ano's inner glow and the ANOMALY glitch.
-- A cursor-reactive fluid or ripple background pass for the landing page (a simple stable-fluids or ping-pong render-target simulation).
-
-**Particles**
-- GPU particles: `InstancedMesh` for thousands of objects, and GPGPU (Three.js `GPUComputationRenderer`) for 50k+ particles that flow, swirl around the cursor and assemble into shapes (the ANOMALY logo, Ano forming, belief nodes shattering).
-- drei `Sparkles` and `Trail` for small accents (current sparks, robot trails).
-
-**Post-processing**
-- Bloom (selective, on emissive parts only), chromatic aberration at the edges, film grain, vignette.
-- Screen-space ambient occlusion (`N8AO`) for depth, and depth of field during cinematic camera moments.
-- Tone mapping set deliberately (ACES or AgX) so colours stay rich, not washed out.
-
-**Camera and choreography**
-- Scroll-driven camera rails (GSAP ScrollTrigger + Lenis), with damped lerp for weight.
-- `@theatre/core` + `@theatre/r3f` to choreograph cinematic sequences (preloader → hero, Break chapter shatter) with keyframes instead of hand-tuned numbers.
-- Seamless scene transitions (Active Theory style): never a hard page load between landing, lab select and labs.
-
-**Interaction**
-- Rapier physics for collisions, grab-and-toss (`@use-gesture/react` for drag velocity), and the kinematic cursor body.
-- `three-mesh-bvh` for fast, accurate raycasting on hover and click.
-
-**Performance guards (always on)**
-- drei `PerformanceMonitor` + `AdaptiveDpr` to drop quality automatically when FPS falls.
-- `Instances` / `Merged` for repeated objects, compressed textures (KTX2) and Draco/Meshopt-compressed models if any are used.
-- `r3f-perf` in dev to watch draw calls and frame time.
-
-**Optional stretch:** Three.js's WebGPU renderer and TSL node materials are powerful but newer; only try them on a branch after everything works with WebGL.
-
-**Original 3D assets only.** Build objects from primitives and shaders in code, or make them in Blender. If using free assets (Poly Haven HDRIs and textures, CC0 models), check the licence and credit them in the README.
-
-### 3.6 Design revision (team feedback round 2)
-
-The first build looked too generic, too plain, and the experiment page didn't feel like a lab. These rules override earlier visual choices where they conflict. Stay within the performance budget (section 9).
-
-**1. Abstract shapes, not clip-art objects**
-Literal beakers, gears and bulbs read as generic AI art. The landing page and selection screens use abstract forms that only *hint* at science:
-- Liquid chrome or iridescent blobs with noise displacement (custom shader)
-- Metaball clusters that merge and split like molecules (drei `MarchingCubes`)
-- Glass prisms and crystals that split light into colour
-- Interlocking rings and torus knots for orbits
-- Ribbon surfaces that ripple like waves
-- Particle clouds shaped like electron orbitals
-Mix 3–4 shape families, vary scale strongly (one or two large hero forms, many small ones fading into depth), and keep generous empty space.
-
-**2. The experiment page is a laboratory**
-Each lab is a stylized, dark, futuristic laboratory in 3D, with the experiment on a bench in the centre:
-- **Chemistry lab:** glossy dark lab bench, a fume-hood frame around the experiment area, back wall of softly lit panels, shelves of abstract glassware silhouettes, volumetric light beams with drifting dust.
-- **Robotics lab:** workbench with a glowing cutting-mat grid, pegboard wall, tool silhouettes, a robot arena floor with neon lane lines.
-- Camera at bench height, subtle parallax with the mouse, soft fog for depth.
-- Instruments (scale, thermometer, multimeter) appear as physical devices on the bench with live holographic readouts above them.
-- The HUD floats as glass panels over the scene. The experiment always stays the clear focus.
-- **Approach (decided): hybrid.** One 3D room per lab, with the bench, the instruments as 3D devices and the holographic readouts. Each experiment's current 2D apparatus sits on the bench as a lit work surface, so every experiment keeps working. The two demo experiments, Light the LED and Mass in a sealed bag, get fully 3D apparatus.
-
-**3. More life and detail (never clutter)**
-- Ambient details: blinking status lights, slow holographic grids, a small data ticker, Ano idle animations (looking around, floating, blinking).
-- Bench props that react: glassware rings faintly when the bench is clicked, lights flicker when power runs.
-- Small labels and readouts in mono type on instruments.
-- A mini map of level progress in a corner.
-
-**4. VFX (pooled, GPU-instanced, off or reduced in low quality)**
-- Sparks and electric arcs on short circuits and burnouts
-- Smoke puffs and steam from reactions and burnt LEDs
-- Bubbling and fizzing in liquids; liquid pouring with a shader or metaballs
-- Heat shimmer distortion over hot objects
-- Shockwave ring and particle burst on correct (gold) and on ANOMALY (red)
-- Confetti in brand colours on level up
-- Dissolve transitions between screens
-- Very subtle screen shake on big moments (disabled with reduced motion)
-Use `three.quarks` for particle effects, drei `Sparkles` / `Trail` / `Cloud` for small accents, and custom shaders for arcs, shimmer and dissolves.
-
-**5. Voice for Ano**
-See section 7.4.
-
-### 3.7 Feedback round 3: transitions, success moment, smoothness
-
-**Page transitions (currently too plain).** Use one persistent 3D canvas across all routes (the `pmndrs/react-three-next` pattern) so scenes never reload, and pair it with `motion`'s `AnimatePresence` for the HTML layer:
-- Landing → level select: the camera dives through the largest abstract shape, which opens into the level choices.
-- Level → lab: the chosen lab object grows and the camera flies into it.
-- Experiment map → experiment: the camera zooms into the chosen star, which bursts into particles that assemble into the lab bench.
-- Back navigation plays the same move in reverse.
-- Between unrelated screens: a shader dissolve wipe in `ion` → `glow` gradient.
-- 600–900 ms, eased (no linear motion), preload the next scene before starting. Reduced motion: a quick fade.
-
-**Success moment (currently weak).** Correct prediction plays, in about 1.5 seconds and without blocking the screen:
-1. A gold shockwave ring and particle burst from the experiment (`three.quarks`).
-2. Ano spins, glows gold and says a line (voice if on).
-3. Kinetic headline: letters of a short phrase ("Nailed it", varied) pop in with a spring.
-4. A small card slides up showing **your prediction vs the result**, both ticked.
-5. A progress bar fills and the experiment's star on the mini map turns gold.
-6. **Next experiment** and **See the theory** buttons appear with a staggered fade.
-7. A soft rising chime.
-Level complete gets a bigger version with confetti in `ion`, `glow` and `resolve`. The ANOMALY moment mirrors this structure in coral with a glitch instead of a chime.
-
-**Smoothness.** Everything already working should feel smoother: ease every animation, never jump between states, keep 60 fps (section 9), lerp all camera and object movement, and add hover/press feedback to every interactive element.
-
-**Tailwind only.** All styling is Tailwind classes using the theme tokens, so teammates can check and edit styles in one place. No CSS modules, styled-components or inline styles for static values. `app/globals.css` only holds the `@theme` tokens, gradient utilities and base styles.
-
-### 3.5 Inside the labs (the HUD, Heron-style minimal UI)
-
-- **Top bar:** one thin glass strip with the mission goal, current step, and confidence setting.
-- **Centre:** the experiment, always the visual focus.
-- **Right panel:** inspector showing the selected part's live values.
-- **Bottom:** time scrubber (pause, slow motion, rewind) and the **Run** button.
-- **Ano:** floats near the experiment and flies to whichever part it is talking about.
-- **Signature moments only:** ghost vs reality, ANOMALY DETECTED glitch (RGB split, scanline flash, then calm), glowing current particles, sparks and smoke on burnouts, gold burst on correct.
+The root belief finder groups wrong guesses by these and has Ano say, in plain words, when two or more guesses share one.
 
 ---
 
-## 4. Tech stack and libraries
+## 4. Accuracy rules (non-negotiable: this is health information for children)
 
-**See RESOURCES.md** for the full researched list: every library with its checked version and licence, open-source repos to learn from (R3F examples, Next.js + WebGL starters, physics and shader demos, science simulations, robotics tools), and the licence rules for reusing code. Follow those licence rules strictly.
+1. **Only these sources:** World Health Organization (who.int), US National Cancer Institute (cancer.gov), Cancer Research UK (cancerresearchuk.org), American Cancer Society (cancer.org). No blogs, no Wikipedia, no AI summaries, no memory.
+2. **Confirm before writing.** Open the source page (Playwright or web access), find the exact claim, and record it in `content/citations.json`:
+   ```json
+   {
+     "id": "chemo-fast-dividing-cells",
+     "claim": "Chemotherapy affects cells that divide quickly, which includes some healthy cells such as those in hair follicles",
+     "source": "National Cancer Institute",
+     "url": "https://www.cancer.gov/...",
+     "quote": "exact sentence from the page",
+     "checked": "2026-10-28",
+     "usedIn": ["treatment-chemo-hair"]
+   }
+   ```
+3. **If it can't be confirmed, leave it out.** Never invent numbers, never estimate, never round in a way that changes meaning, never generalise beyond what the source says.
+4. **Simplify without making it untrue.** Prefer "most", "usually", "often" over invented percentages. If the source gives a number and it helps a child understand, use the source's number and wording.
+5. **Simulations are teaching models.** Each theory view says so in one sentence. Model values are shown without real-world units unless the source supports them.
+6. **Every hint, theory sentence and Ano line that states a fact maps to a citation id.** The gauntlet checks this.
+7. **Sources are visible** in every theory view and on the `/science` page.
 
-Use Next.js App Router with TypeScript. Install with npm. Pin versions in `package.json` once installed and check each library's official docs for current APIs before using them.
+---
 
-**Node and versions (decided).** Development stays on **Node 20**. Don't upgrade Node or bump any package's major version. Keep the majors that run on Node 20: `ai@6`, `@ai-sdk/groq@3`, `@ai-sdk/google@3`, `@ai-sdk/openai-compatible@2`, `vitest@4`. Where RESOURCES.md lists newer majors that need Node 22+ (ai 7, @ai-sdk 4, vitest 5, planck 1.4.3+), its versions don't apply. **Vercel no longer builds on Node 20** (deprecated 1 October 2026; only 22.x and 24.x are offered), so the Vercel project's Node.js Version setting is **24.x**. Set it in Project Settings, not in `package.json` `engines`, which would warn on every local install. The project builds and tests the same on Node 24.
+## 5. Gentle and kid-friendly (non-negotiable)
 
-**No 2D physics library (decided).** `planck` was evaluated and skipped. Experiments keep running on the deterministic models in `engine/`; maintain those rather than adding a physics engine.
+Some students using ANOMALY have a parent, sibling or friend living with cancer, or have lost someone. Every word and picture must be safe for them.
 
-### Core
-| Library | Purpose |
+- **Tone:** calm, kind, hopeful, honest. Never dramatic.
+- **Never:** scary or graphic imagery, death imagery, survival statistics, countdowns, blame ("they got cancer because they..."), fear-based motivation, jokes about cancer.
+- **Always:** the learning note on every lab page: "This is for learning, not medical advice. If you have questions about cancer or your health, talk to a parent, teacher or doctor."
+- **Language:** short sentences (about 15 words or fewer), one idea per sentence, everyday words. Easy level uses no science terms without an everyday explanation; Advanced may use proper terms but explains them first.
+- **No jargon labels in the UI.** Use: What's happening · Why it happened · Hint · You guessed / What really happened · You were sure / You weren't sure · What you just learned · Surprise!
+- **No emojis, no em dashes, no "it's not X, it's Y", no "unlock / elevate / seamless / magic".**
+- **Ano:** warm, reassuring, treats wrong guesses as interesting ("Lots of people think that. Let's look."), asks one guiding question before explaining, uses everyday comparisons, ends with a small nudge, never makes anyone feel dumb.
+- **Ask Ano safety:** Ano answers questions about the science shown on screen. If a student asks about their own or a family member's health ("will my mum be okay?"), Ano responds with warmth, does not give medical information or predictions, and gently suggests talking to a parent, teacher, doctor or nurse. Ano never diagnoses, never recommends treatments, never gives survival information. This behaviour is tested in the gauntlet.
+
+---
+
+## 6. Everything already built still applies
+
+All of these stay, re-pointed at the cancer experiments:
+
+- **Ano** with the teacher persona, expressions, animations and voice (ElevenLabs with browser speech fallback, captions, mute).
+- **Ask Ano** (5 per session, server-side rate limiting, one provider per task, cached, written-hint fallback) and **"Explain it simpler"**.
+- **Live "Guess with the room"** (QR join, live vote bars, reveal) and the **teacher view** (class results, most common wrong belief, what the class needs next). In a cancer context this becomes a classroom myth-busting session.
+- **Root belief finder**, **"the exact moment you were wrong" replay**, **"What if?" buttons**, **calibration meter**, **impact counter** (real counts only), **My beliefs**, **theory view**, **Try it at home** cards, **/science** page, **/demo** guided tour (uses the chemo experiment).
+- **Quality tiers** (High / Medium / Low), **validation tests**, **edge-case tests**, **the self-testing bug hunt**.
+
+Update every catalogue, content file and test to the cancer experiments. Remove or hide anything that only makes sense for the old labs.
+
+---
+
+## 7. Rules that never change
+
+- **The simulator is the judge.** Verdicts, hints, congratulations and level-ups come from code and written tables. AI only explains (Ask Ano, Explain it simpler), grounded in simulator facts and citations, and never contradicts them.
+- **Keys** live only in environment variables and are used only on the server. Never printed, logged or committed. Validate them at startup.
+- **No personal data.** No accounts, no names, no stored chats, no health information about the user is ever asked for or stored. Progress stays in the browser.
+- **Licences:** MIT, Apache-2.0, BSD, ISC, CC0, Zlib and OFL code and assets only; GSAP's standard licence is approved; React Bits is allowed (free, non-commercial project). GPL and non-commercial code is study-only. Credit everything in the README.
+- **Git:** never run commands that change state (commit, push, merge, branch, stash, reset, checkout). Suggest commit messages. No co-author lines or mentions of Claude anywhere.
+- **No questions to the owner.** Choose the option that best fits these files and log it in GAUNTLET_LOG.md under "Decisions made". Anything that truly needs the owner (a key, a licence) goes under "Needs owner" and gets a fallback.
+- **Never leave the demo path broken:** landing → chemo experiment → ANOMALY moment → theory.
+
+---
+
+## 8. Site structure
+
+| Route | Screen |
 |---|---|
-| `next`, `react`, `react-dom`, `typescript` | App framework |
-| `tailwindcss` | Styling, driven by the tokens above |
-| `zustand` | App state (current experiment, prediction, verdict, Ano state) |
-| `zod` | Validate experiment, misconception and hint JSON files at load time |
-| `idb` | Small wrapper around IndexedDB for saving progress |
-| `clsx`, `tailwind-merge` | Class name helpers |
-| `lucide-react` | Icons |
+| `/` | Landing: cancer hero carousel (chemo, tumours, cells) running the real experiments; How it works as one scroll scene; the four labs; Meet Ano; belief deck; level dial; final CTA; footer with sources and the learning note |
+| `/start` | Level select: periodic-table-style tiles, lab-instrument dial, shelf of real 3D previews |
+| `/start/[level]` | Lab select: the four cancer labs in story order |
+| `/labs/[lab]/[level]` | Experiment map |
+| `/labs/[lab]/[level]/[id]` | Experiment (the whole loop in one continuous 3D space) |
+| `/beliefs` | My beliefs: learned cards, root beliefs, calibration |
+| `/science` | Validation results and every citation |
+| `/demo` | 60-second guided tour using the chemo experiment |
+| `/join/[code]`, `/teacher/[code]` | Live mode and teacher view |
+| 404 | "LOST · IN SPACE." with Ano |
 
-### 3D, physics and motion (landing page and Ano)
-| Library | Purpose |
-|---|---|
-| `three` | WebGL engine |
-| `@react-three/fiber` | Three.js in React |
-| `@react-three/drei` | Helpers: `MeshTransmissionMaterial`, `Text3D`, `Environment`, `ContactShadows`, `Float` |
-| `@react-three/postprocessing`, `postprocessing` | Bloom, chromatic aberration, noise |
-| `@react-three/rapier` | Physics: collisions, impulses, the kinematic cursor body |
-| `gsap`, `@gsap/react` | Timelines and ScrollTrigger |
-| `lenis` | Smooth, weighted scrolling |
-| `motion` | UI animation in React (Framer Motion's current package) |
-| `maath` | Easing and damping helpers for R3F |
-| `three-custom-shader-material` | Custom GLSL on top of PBR materials (fracture, glitch, glow) |
-| `three-stdlib` | Extra Three.js utilities and loaders |
-| `three-mesh-bvh` | Fast raycasting for hover, click and cursor interaction |
-| `@theatre/core`, `@theatre/r3f` (+ `@theatre/studio` in dev) | Keyframed cinematic camera and scene choreography |
-| `@use-gesture/react` | Drag, toss and gesture velocity for grabbing objects |
-
-### Labs
-| Library | Purpose |
-|---|---|
-| `pixi.js`, `@pixi/react` | Fast 2D rendering for particles, current flow, robot trails |
-| `mathjs` | Linear solver (`lusolve`) for the circuit solver |
-| `blockly` | Drag-and-drop programming for the robot's brain |
-| `@xyflow/react` | Misconception map (React Flow) |
-| `howler` | Sound effects |
-
-### AI (server only, one job per provider, see §7.5)
-| Library | Purpose |
-|---|---|
-| `ai` | Vercel AI SDK: one API for multiple providers |
-| `@ai-sdk/groq` | Groq provider |
-| `@ai-sdk/google` | Gemini provider |
-| `@ai-sdk/openai-compatible` | Cerebras, Mistral and OpenRouter through one client |
-| `@elevenlabs/elevenlabs-js` | Ano's voice |
-| `@upstash/ratelimit`, `@upstash/redis` | Server-side rate limits and the answer cache |
-| `@t3-oss/env-nextjs` | Validate every key at startup |
-
-### Dev tools
-| Library | Purpose |
-|---|---|
-| `leva` | Live tweaking panel for shader and physics values (dev only) |
-| `r3f-perf` | FPS and draw-call monitor for the 3D scene (dev only) |
-| `vitest` | Unit tests, especially for the circuit solver and diagnosis engine |
-
-Fonts: self-host the chosen display and body fonts (§3.3) with `next/font` (`next/font/google`, or `next/font/local` with the files in `public/fonts`), JetBrains Mono via `next/font/google`.
+Breadcrumbs (Level · Lab · Experiment) on every lab page. Nothing cut off at 1440, 1280, 1024, 768 or 390 wide.
 
 ---
 
-## 5. Project structure
+## 9. Content data model
 
-```
-app/
-  page.tsx                  # Landing page (3D hero + scroll journey)
-  labs/page.tsx             # Lab select (3D: flask and robot you fly into)
-  labs/chemistry/[id]/page.tsx
-  labs/robotics/[id]/page.tsx
-  api/ask-ano/route.ts      # The ONLY place AI is called
-components/
-  landing/                  # Scene, FloatingObjects, LensCursor, CameraRail, KineticTitle, HeroExperiment, Effects
-  ano/                      # Ano3D, AnoBubble, useAno (state machine)
-  lab/                      # HUD, Inspector, TimeScrubber, RunButton, GhostOverlay, AnomalyFlash, TheoryView
-  chemistry/                # Beaker, ParticleView, Scale, Thermometer
-  robotics/                 # BuilderGrid, Parts, Wire, BlocklyBrain, Arena
-  map/                      # MisconceptionMap
-engine/
-  types.ts                  # Shared types (Experiment, Build, Prediction, Verdict, Misconception)
-  run.ts                    # runExperiment(build, prediction) → verdict + diagnosis
-  diagnose.ts               # wrong-model matching
-  conflict.ts               # pick the small edit where belief and reality disagree most
-  circuits/solver.ts        # Modified Nodal Analysis
-  circuits/models.ts        # real model + wrong models
-  robotics/kinematics.ts
-  robotics/interpreter.ts   # runs Blockly programs
-  chemistry/sim.ts
-  chemistry/models.ts
-content/
-  experiments/*.json        # one file per experiment
-  misconceptions/*.json
-  hints/*.json              # 3-step hint ladders per misconception
-  theory/*.json             # theory view content per experiment
-  ano-lines.json            # greeting, building, correct, wrong, stuck, level-up lines (several variants each)
-lib/
-  store.ts  progress.ts  sound.ts  quality.ts
-public/
-  hdri/  sounds/  fonts/
-```
+- `content/experiments/<id>.json`: id, lab, level, order, title, goal, scene, controls, question(s), options with `correct` flags and `misconceptionId` per wrong option, hints[3], theory sections, whatIf[2], tryAtHome (optional), citationIds, heroSlide (optional).
+- `content/misconceptions/<id>.json`: id, lab, title, plainWords, rootBeliefId, fingerprints, hints, citationIds.
+- `content/root-beliefs.json`: id, plainWords, anoLine.
+- `content/citations.json`: as in section 4.
+- `content/ano-lines.json`: greet, building, predict, correct, wrong, stuck, levelUp, health-question-redirect (several variants each, kid-friendly).
+- `content/levels.json`: copy variants per level.
+Validate all content with zod at build time; a missing citation id fails the build.
 
 ---
 
-## 6. The engine
+## 10. Engineering summary
 
-### 6.1 The loop (every experiment)
-
-1. Ano introduces the experiment and its goal.
-2. The student places the few parts needed (snap to outlines).
-3. The student makes a **prediction** (pick an answer, drag a slider, or draw a path).
-4. **Run.** The simulator computes the real result.
-5. Compare prediction to result:
-   - **Match →** verdict `correct`. Ano celebrates (gold). Show **Next experiment** and **See the theory**. Done.
-   - **No match →** verdict `wrong`. Run `diagnose()`. Play ANOMALY DETECTED. Show the ghost beside reality. Ano gives hint 1. Optionally show the conflict edit from `conflict()`. The student fixes and re-runs.
-6. Finishing every experiment in a level passes it and unlocks the next.
-
-### 6.2 Wrong-model diagnosis
-
-Each misconception is a **wrong-model simulator**: the same lab physics, but following the student's mistaken rule.
-
-```ts
-interface Misconception {
-  id: string;                 // "current-used-up"
-  lab: "chemistry" | "robotics";
-  title: string;              // "Current gets used up"
-  simulate: (build: Build) => Outcome;   // wrong-model result
-  hints: [string, string, string];       // nudge, principle, fix
-  conceptIds: string[];       // links into the misconception map
-}
-```
-
-`diagnose(build, prediction)`:
-1. Run the build through every wrong model for that lab.
-2. Any wrong model whose output matches the prediction (within tolerance) is a candidate.
-3. Add evidence to that misconception across runs; only label it "likely" after 2+ matching runs.
-
-`conflict(build, misconception)`: try a small set of allowed edits (add a bulb, seal the container, flip a part, change one wheel speed), run each through the real model and the wrong model, return the edit with the biggest difference. Keep the list of allowed edits per experiment in its JSON.
-
-### 6.3 Circuit solver (Robotics Lab)
-
-- Modified Nodal Analysis: build conductance matrix `G` and source vector, solve `G·v = i` with `mathjs.lusolve`.
-- Parts: battery (voltage source with small internal resistance), wire, switch, button, resistor, bulb (resistor; brightness from power `P = I²R`), LED, motor (resistor + animation), buzzer.
-- **LED model:** conducts only forward, only above ~2 V; above its current limit it **burns out** (pop, smoke, permanently dark until replaced).
-- **Short circuit:** detect near-zero resistance across a source; don't crash, show sparks and a blown fuse.
-- **Open circuit / singular matrix:** detect and treat as "no current," never throw.
-- Re-solve only when the build changes.
-- Write vitest tests for: series bulbs, parallel bulbs, backwards LED, LED without resistor, short circuit, open switch.
-
-### 6.4 Robots
-
-- Differential drive: `v = (vL + vR) / 2`, `ω = (vR − vL) / L`. Integrate position each frame.
-- Sensors read the arena canvas (brightness under a line sensor, distance by raycast).
-- Blockly blocks: `when run`, `forever`, `if sensor < value`, `set motor left/right`, `wait`. A small interpreter steps the program each frame.
-- Prediction mode: student draws the expected path; show it as a ghost trail beside the real trail.
-
-### 6.5 Chemistry
-
-- Show two levels at once: the beaker the student sees and the particles inside (zoom in to see molecules).
-- Experiments: conservation of mass (sealed vs open container on a scale), particles and heat (particles speed up, they don't grow), dissolving, reaction speed (temperature / concentration).
-- Mass is always conserved in a sealed system; an open system loses gas particles visibly.
-- Include short real-lab safety notes where relevant.
-
-### 6.6 Experiment JSON (example)
-
-```json
-{
-  "id": "robotics-led-01",
-  "lab": "robotics",
-  "level": "medium",
-  "grades": "9-10",
-  "order": 1,
-  "title": "Light the LED",
-  "goal": "Make the LED glow without burning it out.",
-  "parts": ["battery", "led", "resistor", "wire"],
-  "outlines": true,
-  "prediction": { "type": "choice", "question": "Will the LED light up?", "options": ["Yes", "No"] },
-  "misconceptions": ["led-any-direction", "no-resistor-needed"],
-  "allowedEdits": ["flip-led", "remove-resistor", "add-resistor"],
-  "theoryId": "led-basics"
-}
-```
+- **Framework:** Next.js App Router with TypeScript (see section 12 for exact versions and Node).
+- **3D:** React Three Fiber, drei, Rapier, react-postprocessing, three.quarks, custom shaders; one persistent canvas across routes.
+- **Motion:** GSAP + ScrollTrigger, Lenis, motion (Framer), react-spring; components from the UI sources in RESOURCES.md section 12, fully restyled.
+- **State and data:** zustand, zod, IndexedDB (idb), Upstash Redis for rate limits, cache, live mode and the impact counter.
+- **AI:** Vercel AI SDK; one provider per task (mapping in section 12); ElevenLabs for voice; all server-side.
+- **Testing:** vitest (unit, validation), Playwright (flows, edge cases, screenshots, accessibility with axe), the GAUNTLET.md gates.
+- **Performance budget:** steady 60 fps on the production build; at most one real transmission material; dpr capped at 1.5; one effect composer (bloom, light chromatic aberration, grain only); no React state updates per frame; one animation loop; baked shadows; quality tiers with auto-drop; Low tier smooth under 4× CPU throttling.
+- **No hydration mismatches:** never read window, storage, media queries or random values during render; use effects after mount or `dynamic(..., { ssr: false })`.
+- **Hit areas** match visible buttons exactly; minimum 44 px targets; hover effects move inner content only.
+- **Code quality:** small components with one job; logic in hooks; no duplicate code; feature folders; Tailwind only with theme tokens; fonts loaded once in `app/layout.tsx`; content in JSON, never hard-coded; TypeScript strict; `engine/` is pure TypeScript with no React.
 
 ---
 
-## 7. Ano
+## 11. Submission priorities
 
-### 7.1 States and reactions
+In order: (1) cancer framing visible everywhere and the old labs hidden; (2) experiments 1 to 4 complete and tested; (3) the live link on Vercel working in a private window; (4) experiments 5 and 6; (5) polish. Never trade (1) to (3) for polish.
 
-| State | Line (pick a variant from `ano-lines.json`) | Look |
-|---|---|---|
-| `greet` | "Hey, I'm Ano. Want to break some science?" | Assembles from particles, eye opens |
-| `building` | "Nice. What do you think will happen?" | Leans in, eye follows cursor |
-| `correct` | "Nailed it! That's exactly how a scientist thinks." | Spins, gold glow, particle burst |
-| `wrong` | "Whoa, did you see that? Let's figure out why." | Red glitch, then curious glow |
-| `stuck` | "Want a hint? Just a small one." | Flies to the part that matters |
-| `levelUp` | "Level complete! Ready for the next one?" | Celebration, flies to the next star |
+---
 
-Lines are short (one or two sentences), specific, varied, and never mock a wrong answer.
+## 12. Project facts (merge from the previous CLAUDE.md)
 
-### 7.1b Ano teaches like a great teacher, not a fact machine
+Merged from the previous CLAUDE.md (git `HEAD:CLAUDE.md`, 28 October 2026), its handoffs and the code.
 
-Testers said answers worked but were bland. Ano's written lines, hints and Ask Ano answers follow these rules:
-- **Warm and encouraging:** treat mistakes as interesting ("Ooh, a lot of scientists thought that too!"), praise thinking, not just answers.
-- **Socratic first:** guide with a question before explaining ("What do you think happens to the current after the first bulb?").
-- **Analogies and real life:** explain with everyday comparisons (current as water in pipes, particles as people in a crowded room) and where students see it in daily life.
-- **One idea at a time,** short sentences, matched to the level (Easy = simple words, Advanced = correct terms and formulas).
-- **End with a nudge:** a tiny question or "try this next" so the student keeps thinking.
-- **Never** lecture, list dry facts, or contradict the simulator.
+- **Framework and versions:** Next.js 16.4.1 (App Router, Turbopack), React 19.3.0, TypeScript 5 (strict), Tailwind CSS 4 (`@tailwindcss/turbopack`), three 0.186, @react-three/fiber 9, drei 10, zustand 5, zod 4, motion 14, gsap 3.15.0, lenis 1.3, vitest 4, @playwright/test 1.64.
+- **Node (decided):** develop on **Node 20** (currently 20.19.1). Don't upgrade Node or bump any major version. Keep the majors that run on Node 20: `ai@6`, `@ai-sdk/groq@3`, `@ai-sdk/google@3`, `@ai-sdk/openai-compatible@2`, `vitest@4`. Where RESOURCES.md lists majors that need Node 22+ (ai 7, @ai-sdk 4, vitest 5, planck 1.4.3+), they don't apply. **Vercel no longer builds on Node 20**, so the Vercel project's Node.js Version setting is **24.x**, set in Project Settings (not `package.json` `engines`). The project builds and tests the same on Node 24.
+- **No 2D physics library (decided):** `planck` was evaluated and skipped; experiments run on the deterministic models in `engine/`.
+- **AI provider-to-task mapping (one task per provider):** Groq → Ask Ano answers and "Explain it simpler" (`lib/ai/askAno.ts`, model `GROQ_MODEL`, default `llama-3.3-70b-versatile`); ElevenLabs → Ano's voice for Ask Ano answers (`lib/ai/voice.ts`, browser speech fallback); Gemini → eval grading only (`tests/ask-ano.eval.ts`, never at runtime). Proposed and validated but not wired yet: Mistral → question screening, Cerebras → answer fact-checks, OpenRouter → typed hypotheses.
+- **Environment variable names:** `GROQ_API_KEY`, `GROQ_MODEL`, `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID`, `ELEVENLABS_MODEL`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `GOOGLE_GENERATIVE_AI_API_KEY`, `GEMINI_MODEL`, `CEREBRAS_API_KEY`, `MISTRAL_API_KEY`, `OPENROUTER_API_KEY`, `ASK_ANO_DAILY_CAP` (default 300), `ANOMALY_REQUIRE_KEYS` (`1` makes every key required at startup; otherwise a missing key switches its job to the written fallback), `ANOMALY_DESIGN_SYSTEM` (`1` builds the dev-only `/design-system` pages). Keys are validated once in `lib/env.ts` (t3-env) via `instrumentation.ts`. `.env.example` lists them; never commit `.env.local`.
+- **Hosting:** Vercel, Node.js 24.x in Project Settings. Project URL: not deployed from this repo yet (needs owner).
+- **Commands:** `npm run dev`, `npm run build` (runs `scripts/content-manifest.mjs` and `scripts/gpu-benchmarks.mjs` first), `npm run test`, `npm run lint`, `npm run typecheck`, `npm run slop` (anti-slop scan), `npm run licences`, `npx playwright test` (production build on port 3100; `GAUNTLET_SKIP_BUILD=1` reuses a build, `GAUNTLET_ROUND=x` names the screenshot folder).
+- **Git workflow (decided):** the team makes every commit. Branch types: `opinion/` (tester feedback), `suggestion/` (code review), `remake/` (big rebuilds), `adjustment/` (small tweaks), `ideas/` (may be thrown away), `filing/` (file organisation), `sustaining/` (fixes, performance, maintenance), `claude-align-md` (this file). DESIGN.md, GAUNTLET.md and HANDOFF.md are kept out of git (ignored) by the owner's choice.
+- **Code conventions:** `engine/` is pure TypeScript, no React, no `any`; content lives in JSON under `content/` and is validated with zod at load; `lib/content-manifest.ts` is generated, never edited by hand; WebGL client components load with `dynamic(..., { ssr: false })`; one persistent site canvas (`components/three/SiteCanvas.tsx`) with drei `View`s per page.
+- **Repo quirks:** the Turbopack dev server can serve stale CSS for a new Tailwind `@utility`; delete its build folder (`.next` or `.next-gauntlet`) and restart. Tailwind v4 has no `pointer-events-[stroke]` (use the SVG attribute). `?quality=high|medium|low` forces a quality tier; `?debug=stats` exposes `window.__anomalyStats`. Real-GPU checks: headless Chrome with `--enable-gpu --use-angle=metal`.
+- **Decisions carried over:** hybrid labs (one 3D room per lab, apparatus on the bench); our own icon set instead of icon packs; Aceternity, Skiper and Animmaster patterns are studied and rebuilt in our own code, never copied (their licences don't allow redistribution in this MIT repo; RESOURCES.md); the experience follows the owner's lab palettes (teal, sand gold, sage, graphite and gold), with orange only on Ano.
 
-Ask Ano system prompt must include this persona plus 3–5 example answers written in this style. Rewrite all hints and lines in `content/` to match. Add teacher-quality checks to `tests/ask-ano.eval.ts` (asks a guiding question, uses an analogy or real-life link, under 80 words, correct science).
+---
 
-### 7.2 Who produces what
+# PART 2: DETAILED REFERENCE
 
-| Moment | Source | API call? |
+## A. Ano in detail
+
+| State | Trigger | Line (pick a variant) | Look |
+|---|---|---|---|
+| greet | arriving | "Hey, I'm Ano. Want to see what's really going on inside a cell?" | assembles from particles, eye opens, waves |
+| predict | before Run | "What do you think will happen? Take a guess." | leans in, eye follows cursor |
+| correct | right guess | "You got it. That's how a scientist thinks." | nods, spins, gold glow |
+| wrong | ANOMALY moment | "Whoa, did you see that? Lots of people expect what you expected. Let's look closer." | small surprised hop, then curious |
+| stuck | asks for help | "Want a hint? Just a small one." | floats to the part that matters |
+| levelUp | level complete | "Level done. Ready for the next one?" | celebration, flies to the next star |
+| healthRedirect | personal health question in Ask Ano | "That's a big question, and I'm glad you asked. I can explain the science here, but for questions about you or someone you love, a doctor, nurse, parent or teacher is the right person to talk to. Would you like to keep exploring?" | calm, still |
+
+Ano never shows a scared or three-circle face. In the cancer labs Ano is a little calmer than elsewhere: reassuring, never dramatic.
+
+## B. Who produces each moment
+
+| Moment | Source | AI call? |
 |---|---|---|
 | Verdict | Simulator, spoken by Ano | No |
-| Explanation + 3 hints | `content/hints/*.json` | No |
-| Congratulations, level-up | `content/ano-lines.json` | No |
-| Ask Ano (student's own question) | AI via `/api/ask-ano` | Yes, capped |
+| Hints and theory | content/ | No |
+| Celebrations, level-ups | content/ano-lines.json | No |
+| Ask Ano, Explain it simpler | AI, grounded in simulator facts and citations | Yes, limited |
+| Voice | ElevenLabs (pre-generated lines; live only for Ask Ano), browser fallback | Yes, limited |
 
-### 7.3 Ask Ano rules (`app/api/ask-ano/route.ts`)
+## C. Ask Ano rules
 
-- Answered by the one provider §7.5 assigns to Ask Ano. No second provider: if that call fails, Ano shows the next written hint.
-- Cap: 5 questions per session; show "3 left" on the button.
-- Cache by `(experimentId, faultCode, normalised question)`.
-- Prompt contains only: experiment title, fault code, the simulator's numbers, the verdict, and the question.
-- System instructions: speak as Ano (friendly lab partner for a teenager), explain in under 80 words in Ano's teacher style (section 7.1b), use only the facts provided, **never contradict the verdict**, stay on STEM, gently redirect anything else.
-- Use each provider's safety settings. Don't log or store the question.
+- One module (`lib/ai/askAno.ts`) and one route (`app/api/ask-ano/route.ts`). Provider for this task per section 12; fallback to the written hint; never to a different task's provider.
+- Server-side rate limiting with Upstash: about 5 per session, 20 per IP per hour, a global daily cap; cached by experiment, fault and normalised question.
+- Prompt contains only: experiment title, the relevant citation claims, the simulator's numbers, the verdict, the question. Instructions: speak as Ano (section 5), under 80 words, only the facts provided, never contradict the verdict, never give medical advice, diagnosis, treatment recommendations or survival information, redirect personal health questions to a trusted adult or doctor, stay on the science, no emojis.
+- Evaluation set `tests/ask-ano.eval.ts`: about 20 questions including at least 5 personal-health questions that must trigger the redirect, checked with a mock in CI and against the real provider before Demo Day (pass rate reported).
 
----
+## D. Live mode and teacher view in the cancer context
 
-### 7.4 Ano's voice (optional, off by default)
+- Host clicks "Guess together" on any experiment; a 4-letter code and QR appear; phones tap a prediction; live bars show the split; after the reveal, phones get the result and whether they were right, in kid language.
+- Teacher view shows: how many predicted each option, the share who predicted wrong, the most common wrong belief in plain words, and two sentences on what the class needs next. No personal data. Real data only.
 
-- A speaker toggle next to Ano's speech bubble and on every Ask Ano answer: "Listen".
-- **Written lines** (greetings, verdicts, hints, congratulations): pre-generate MP3 files once at build time with ElevenLabs (`@elevenlabs/elevenlabs-js`, server-side script), store them in `public/voice/`, and play them with Howler. No API calls at runtime.
-- **Ask Ano answers:** generate speech in a server route `app/api/ano-voice/route.ts` with ElevenLabs, behind the same rate limiter and cache (Upstash) as Ask Ano. Cache audio by answer text so repeated answers are free.
-- **Fallback:** if ElevenLabs fails, is rate-limited or out of quota, use the browser's built-in `speechSynthesis`. The student never sees an error.
-- One friendly, clear voice for Ano across the whole site. Keys only in env vars. Voice output only; never record the student's microphone.
-- Show captions (the text) whenever audio plays.
+## E. Validation tests (`tests/validation/`)
 
-### 7.5 AI jobs and providers (decided)
+For each experiment, tests that the teaching model behaves as the cited sources describe: chemo affects fast dividers more than slow dividers; doubling produces exponential growth; crowded normal cells stop dividing and cancer cells don't, and nothing crosses the contact test; cloud cover reduces but does not remove UV, and damage accumulates; crossing beams give the target the sum of doses while each path gets less; most changes arise during the timeline with or without an inherited start. Results are displayed on `/science`.
 
-- **One provider per job, one job per provider.** No provider handles two jobs, and there are no provider-to-provider fallback chains.
-- Providers in use: Groq, Gemini, Cerebras, Mistral, OpenRouter (LLMs) and ElevenLabs (voice).
-- **Each job has its own module in `lib/ai/`** (for example `lib/ai/askAno.ts`) **and its own route in `app/api/`.** No other file calls a provider.
-- **Keys are required.** The keys for every job are validated at startup with `@t3-oss/env-nextjs`. A missing or malformed key stops the server instead of failing on the first request.
-- **Fallback:** only for a call that fails while the app is in use (for example during the demo). Text jobs fall back to the next written hint, and voice to the browser's `speechSynthesis`.
-- The job → provider table goes here once the team approves it.
+## F. Definition of done (for submission)
 
-## 8. Build order
-
-Work in this order. Don't start polish before the core loop works end to end.
-
-1. **Foundation:** Next.js + Tailwind + tokens + fonts. Zustand store. Types in `engine/types.ts`.
-2. **One full loop:** one robotics experiment (light the LED) with builder, prediction, solver, verdict, ghost, ANOMALY flash, hint ladder, Next experiment / See the theory.
-3. **Circuit solver complete** with tests.
-4. **Chemistry:** conservation of mass experiment end to end.
-5. **Ano 2D first** (simple glowing orb in the HUD with lines), then Ano 3D.
-6. **Remaining experiments:** 5 levels per lab (see `content/experiments`).
-7. **Robot arena** with Blockly.
-8. **Misconception map** with shatter animation.
-9. **Landing page:** scene → objects → physics + cursor → post-processing → lens cursor → camera rail → kinetic title → hero experiment → sound → preloader.
-10. **Lab select** 3D fly-in transition.
-11. **Ask Ano** API route with caps, cache and fallback.
-12. **Polish:** micro-interactions, sounds, quality modes, reduced motion, mobile layout.
-
-After each step: run it, take a screenshot if possible, compare against this file, and fix what looks off before moving on.
-
----
-
-## 9. Quality, performance and accessibility
-
-### Performance budget (hard limits)
-
-- **Steady 60 fps** on the production build (`npm run build && npm start`). Never judge speed in dev mode.
-- **At most ONE `MeshTransmissionMaterial`** on screen (the lens cursor), at low resolution and samples. Fake all other glass with `MeshPhysicalMaterial` + environment map.
-- **dpr capped at `[1, 1.5]`**, with drei `PerformanceMonitor` + `AdaptiveDpr`.
-- **Under 150 draw calls** on the landing page; use `Instances` / `Merged` for repeats.
-- **Post-processing:** one `EffectComposer`, multisampling off; bloom + light chromatic aberration + grain only. No N8AO or depth of field on the landing page.
-- **No React state updates per frame.** Mouse, scroll and animation values live in refs or zustand transient updates.
-- **One animation loop:** Lenis and GSAP driven from the same ticker as R3F.
-- **1K HDRIs, simple colliders (spheres, boxes), shadows baked once** (`ContactShadows frames={1}`).
-- Check `r3f-perf` after every visual change and report FPS and draw calls.
-
-### No hydration mismatches
-
-The first render must be identical on server and client. Never read `window`, storage, IndexedDB, media queries, screen size, `Date.now()` or `Math.random()` during render. Read them in `useEffect` after mount, or load browser-only components with `dynamic(..., { ssr: false })`. Wait for persisted stores to hydrate before using saved values.
-
-### Other quality rules
-
-- Cap device pixel ratio at 2. Keep landing physics objects to 20–40.
-- `lib/quality.ts`: `high` / `low`. Low disables the lens cursor, chromatic aberration and reduces particles. Auto-drop to low if FPS stays under 45.
-- Respect `prefers-reduced-motion`: no camera rail flying, no glitch flashes; use fades instead.
-- Keyboard controls for all lab actions, visible focus rings (`glow` colour).
-- Ghost colours must be distinguishable for colourblind users (use shape and opacity, not only colour).
-- Captions for every sound cue.
-- Responsive down to tablet for labs; landing page works on mobile with a simplified scene.
-
----
-
-## 10. Commands and conventions
-
-```bash
-npm run dev      # local dev
-npm run build    # production build (must pass before any commit to main)
-npm run test     # vitest
-npm run lint
-```
-
-- TypeScript strict mode. No `any` in `engine/`.
-- `engine/` is pure TypeScript with no React imports, so it can be tested in isolation.
-- Content (experiments, hints, lines, theory) lives in JSON, never hard-coded in components.
-- Client components that use WebGL are loaded with `dynamic(..., { ssr: false })`.
-- Never commit `.env.local`. Required env vars: the key for each provider in §7.5 (`GROQ_API_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`, `CEREBRAS_API_KEY`, `MISTRAL_API_KEY`, `OPENROUTER_API_KEY`, `ELEVENLABS_API_KEY`), plus `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`. `.env.example` lists them all.
-
----
-
-## 10.1 Code quality rules (from team code review)
-
-These came from a review of the first build. Follow them for all new code and when touching old code.
-
-**Components (TSX)**
-- Small components with one job each. If a file passes ~150 lines or does two things, split it.
-- Typed props, no `any`. Logic goes in hooks (`hooks/` or the feature's `use*.ts`), components only render.
-- Never write the same thing twice. Repeated markup becomes a shared component; repeated logic becomes a hook or a function in `lib/`.
-
-**Files and folders**
-- Organize by feature, not by file type: everything for one feature (component, hook, styles, types, tests) lives in that feature's folder (`components/lab/`, `components/ano/`, `engine/circuits/` …). Shared pieces go in `components/ui/` and `lib/`.
-- One clear home for each thing. Before creating a file, check whether one already exists for that purpose.
-
-**Fonts**
-- Load fonts once in `app/layout.tsx` (`next/font`), expose them as CSS variables, and map them in the Tailwind theme (`font-display`, `font-body`, `font-mono`). Components only use those classes; never declare `font-family` in a component.
-
-**CSS**
-- All colours, spacing, radii and fonts come from the Tailwind theme tokens (section 3.3). No hard-coded hex values in components.
-- `app/globals.css` holds only base styles, CSS variables and a few global utilities.
-- Component variants (button sizes, states) use `class-variance-authority` + `tailwind-merge`, not copied class strings.
-- No inline `style` for static values, no `!important`, no one-off overrides.
-
-**Buttons and hit areas**
-- The clickable area must match the visible button exactly. Put padding, size and the click handler on the same element.
-- Hover effects (magnetic pull, scale) move only the inner content, never the hit area, and never shrink it.
-- Minimum target size 44 × 44 px; if a button looks smaller, make it look that size too rather than adding invisible padding.
-- 3D clickable objects: raycast against the visible mesh or a collider that matches it closely.
-- Add a dev-only `?debugHit` mode that outlines every clickable area so mismatches are easy to spot.
-
-**AI and API keys (one service, one job)**
-- One module per AI job in `lib/ai/`, each used by its own route in `app/api/` (§7.5). No other file calls an AI provider.
-- Each job uses exactly one provider. The written-hint fallback for a failed call lives inside that job's module.
-- Keys only come from environment variables, validated at startup with `@t3-oss/env-nextjs` (or zod) **before** any request is made. Never hard-code a key, never log one, never commit `.env.local`. If a key was ever committed, rotate it at the provider.
-- **Server-side rate limiting on `/api/ask-ano`.** The 5-questions counter in the UI is only for display; anyone can bypass it. Enforce limits in the route with `@upstash/ratelimit` + `@upstash/redis` (free tier): about 5 questions per session and 20 per IP per hour, plus a global daily cap below the AI providers' free quota. When a limit is hit, return the next written hint instead of an error. Store the answer cache in the same Redis. Keep the request body small and validate it with zod.
-- **No database for the MVP.** Progress stays in the browser (IndexedDB); experiments, hints and theory are JSON files. Add a database (e.g. Postgres) only for roadmap features like teacher accounts or class views.
-- "Accuracy" means grounding, not training: send the simulator's facts, a strict system prompt, 3–5 example Q&A pairs, and a fixed answer length. We do not fine-tune models.
-- Keep `tests/ask-ano.eval.ts`: about 20 sample questions with the facts sent and the points a good answer must contain (and must not contradict). Run it with a mock provider in CI and against the real provider before Demo Day, and record the pass rate.
-
-After any refactor: `npm run build`, `npm run test` and a manual click-through must all pass before moving on.
-
-## 10.2 Git workflow (decided)
-
-**The team makes every commit.** Claude Code never runs `git commit`, `git push` or `git merge`, and never creates or switches branches. After each change or phase, Claude Code:
-1. Pauses and says the change is ready.
-2. Names the branch it belongs on, using the branch types below.
-3. Lists every file it changed.
-4. Suggests a short commit message.
-
-The team commits it, then says when to continue.
-
-- **Small commits, one change each.** Changes merge into `main` only after review.
-- **No attribution.** No co-author lines and no mention of Claude in commit messages, code comments or the README.
-
-| Branch | For |
-|---|---|
-| `opinion/...` | Changes from tester feedback |
-| `suggestion/...` | Changes from the teammate's code review |
-| `remake/...` | Big rebuilds (landing page, labs) |
-| `adjustment/...` | Small tweaks (colours, buttons, spacing) |
-| `ideas/...` | Experiments that might get thrown away |
-| `filing/...` | File and folder organisation |
-| `sustaining/...` | Fixes, performance and maintenance |
-| `claude-align-md` | Updating CLAUDE.md |
-
-## 11. Definition of done (for Demo Day)
-
-- [ ] Landing page loads with the preloader and looks Lusion-level within 3 seconds
-- [ ] Hero "Which falls faster?" experiment works
-- [ ] At least 5 robotics and 4 chemistry experiments playable end to end
-- [ ] Correct → congratulations + Next experiment + See the theory
-- [ ] Wrong → ANOMALY moment + ghost + diagnosis + hints + fix
-- [ ] Misconception map updates and shatters broken beliefs
-- [ ] Ask Ano works with the cap, cache and written-hint fallback
-- [ ] 60 fps on the demo laptop, low-quality mode works
-- [ ] No API keys in client code; `npm run build` passes
-- [ ] README with GIF, live link, and run instructions
+- [ ] Landing page is about cancer, runs the real experiments in the hero, and the old labs are hidden everywhere
+- [ ] Experiments 1 to 4 (ideally 6) complete, tested, with every fact cited and sources visible
+- [ ] Gentle-content and kid-language checks pass; the learning note is on every lab page
+- [ ] Ask Ano redirects personal health questions; eval pass rate reported
+- [ ] Live link works on Vercel in a private window; env vars set
+- [ ] 60 fps on the production build; Low tier smooth; nothing cut off at any size
+- [ ] No keys in code; build and all tests pass; README has the live link, sources and credits
+- [ ] HANDOFF.md written with three sentences for the Devpost story

@@ -1,20 +1,27 @@
 # ANOMALY
 
-A virtual STEM lab where students build their own chemistry and robotics experiments, and Ano finds the wrong belief behind each mistake, then guides them to fix it.
+A cancer science lab for students aged 11 to 18. You guess what will happen, watch the real science run in 3D, and Ano, a friendly robot, shows you exactly where your thinking broke. Built for the CodeTheCure hackathon (Education).
 
-Students predict before every run. The simulator (never an AI) decides what really happens. A correct prediction earns a celebration and the next experiment. A wrong one plays the ANOMALY moment, shows the student's prediction as a dashed ghost beside reality, names the belief that predicts exactly what they said, and walks them through a three-step hint ladder and the one small change that breaks that belief.
+In biology, cancer begins as an anomaly: one cell that stops following the body's rules. ANOMALY is also what you feel when reality contradicts your guess. The simulator (never an AI) decides what really happens; a wrong guess plays the ANOMALY moment, shows your idea as a ghost beside reality, pauses the replay at the exact moment they split, and walks you through three hints.
+
+This is for learning, not medical advice. If you have questions about cancer or your health, talk to a parent, teacher or doctor.
 
 > Live demo: _add the Vercel link here_ · Demo GIF: _add it here_
 
 ## What's inside
 
-- **Landing page**: a Lusion-style 3D scroll journey (Predict → Diagnose → Break → Rebuild) with physics you can knock around, a glass lens cursor, kinetic 3D type and a "Which falls faster?" hero experiment. Runs at 60 fps at 1.5× resolution on a laptop, under 150 draw calls.
-- **Level → lab → experiment map → experiment**: three levels (Easy grades 6–8, Medium 9–10, Advanced 11–12), two labs, 21 playable experiments plus "coming soon" stars.
-  - Robotics: light a bulb, switches, series and parallel bulbs, LED and resistor, two-wheel steering, the shortcut wire, Ohm's law and power, gears, PWM motor control.
-  - Chemistry: melting and particles, dissolving, mass in a sealed bag, indicator colours, gas particles and heat, reaction speed, neutralisation, burning, gas laws, catalysts, equilibrium.
-- **Wrong-model diagnosis**: every misconception is its own simulator. If a wrong model predicts exactly what the student predicted, that belief is the diagnosis. Evidence builds up across runs.
-- **Belief map**: every belief the labs can spot; the ones Ano saw in your runs glow, and the ones you break shatter.
-- **Ask Ano**: the only AI feature, capped at 5 questions per session, cached, server-side only, with a written-hint fallback.
+- **Four labs, one story:** Cell Lab (what cancer is), Prevention Lab, Detection Lab, Treatment Lab.
+- **Five experiments:**
+  - Why chemo causes hair loss (Treatment, Medium);
+  - How tumours grow (Detection, Easy);
+  - Cells out of control and Can you catch cancer? (Cell, Easy);
+  - UV on a cloudy day (Prevention, Easy).
+  - Radiotherapy beams and Born with it? are coming soon.
+- **Every fact cited:** 41 claims confirmed on the WHO, the National Cancer Institute, Cancer Research UK and the American Cancer Society, recorded with the exact quote in `content/citations.json`. A missing citation fails the build. All of them are listed on `/science` with live validation results.
+- **Teaching models, tested:** `engine/cancer/` simulates each idea; `tests/validation/` checks every model behaves as the sources describe (14 checks, shown on `/science`).
+- **Wrong-model diagnosis, root belief finder, replay at the exact moment you were wrong, "What if?" buttons, calibration meter and a live count of busted ideas** (Upstash, real counts only).
+- **Ask Ano and Explain it simpler:** 5 questions a session, cached, server-side only. Personal health questions get a warm redirect to a trusted adult, with no medical information.
+- **A 60-second guided tour** at `/demo`.
 
 ## Run it
 
@@ -55,7 +62,12 @@ Keys are only read in `app/api/ask-ano/route.ts`. Never commit `.env.local`.
 2. If it needs new physics, add a stage model in `engine/<lab>/` and a renderer in `components/`.
 3. `npm run test`. The content tests check that exactly one answer is right, that every listed misconception disagrees with reality somewhere, and that a "try this" edit exists.
 
-## Credits and licences
+## Credits
+
+**Cancer facts:** World Health Organization, National Cancer Institute (cancer.gov), Cancer Research UK and the American Cancer Society. Every page used is listed with its date on `/science` and in `content/citations.json`.
+
+**3D models:** all built in code for this project (MIT): the cells, dishes, microscope, scanner, UV meter, treatment machine, sun, clouds (drei `Cloud` with a puff texture generated in the repo) and backdrops. See RESOURCES.md §13 for the free models we checked and why none was used.
+ and licences
 
 ANOMALY is MIT licensed. Every 3D object is built from code; no assets are copied from reference sites.
 

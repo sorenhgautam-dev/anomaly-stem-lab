@@ -1,6 +1,6 @@
-# RESOURCES.md — Libraries and open-source references for ANOMALY
+# RESOURCES.md: libraries, licences, trusted sources and UI sources for ANOMALY (cancer edition)
 
-Checked on 15 October 2026 against the npm registry and GitHub (each package exists, versions are the latest on npm that day, licences read from npm or the repo's licence file). Re-check versions when installing, and read each library's docs before using its API.
+Package checks were done on 15 and 27 October 2026 against the npm registry and GitHub (each package exists, versions are the latest on npm that day, licences read from npm or the repo's licence file). Re-check versions when installing, and read each library's docs before using its API.
 
 ## How to use open-source code (read first)
 
@@ -158,9 +158,9 @@ These were not live-checked from here. Open each page and confirm the licence of
 | Kenney | https://kenney.nl/assets | CC0 | Simple models, UI sounds, game assets |
 | Freesound | https://freesound.org/ | Varies per sound (CC0, CC BY, CC BY-NC) | Clinks, sparks, hums. Only use CC0 or CC BY; never CC BY-NC |
 | Pixabay sounds | https://pixabay.com/sound-effects/ | Pixabay Content License | Extra sound effects |
-| Fontshare | https://www.fontshare.com/ | ITF Free Font License | Clash Grotesk and General Sans |
-| Google Fonts | https://fonts.google.com/ | Mostly SIL Open Font License | JetBrains Mono |
-| Lucide | https://lucide.dev/ | ISC | **Dropped 28 Oct 2026** (DESIGN.md §0 bans default icon packs). Icons are our own set in `components/icons/` |
+| Fontsource | https://fontsource.org/ | OFL-1.1 (per font) | Self-hosted Archivo, Schibsted Grotesk and Martian Mono (`@fontsource-variable/...`) |
+| Google Fonts | https://fonts.google.com/ | Mostly SIL Open Font License | Source of the same fonts if not using Fontsource |
+
 
 Rules: prefer building 3D objects from code. Never use assets from reference sites or anything without a clear licence. No AI-generated images of real brands or characters.
 
@@ -223,9 +223,11 @@ Rule: every misconception, hint and theory explanation must be checked against a
 | Assets, layouts or code from Lusion or other reference sites | Not ours to copy |
 | Freesound clips marked CC BY-NC | Non-commercial only |
 | Calling AI models from the browser | Exposes API keys |
-| React Bits | MIT + Commons Clause, not truly permissive |
+| `lucide-react`, Heroicons, Phosphor and other stock icon packs | Owner's anti-slop list; use our own icon set (DESIGN.md 5.1) |
+| Inter, Geist, Space Grotesk | Owner's anti-slop list; use Archivo, Schibsted Grotesk, Martian Mono |
+| drei `Sparkles`, `@shadergradient/react`, decorative fluid/orb backgrounds | Owner's anti-slop list (sparkles, radial orbs, rainbow gradients) |
+| React Bits | Allowed for ANOMALY: MIT + Commons Clause only forbids selling, and this project is free and non-commercial. Check each component's licence and credit it |
 | Switching to Vite | Project is on Next.js; we need its routing and API routes |
-| Copying code from Aceternity UI, Skiper UI or Animmaster Lib | Custom licences that aren't on our allowed list (section 11): study the patterns, write our own code |
 
 ---
 
@@ -246,11 +248,11 @@ All repos and npm packages below were confirmed to exist, with licences read fro
 | Basis Universal + Three.js `KTX2Loader` | repo | Apache-2.0 | Only if using big textures | Compressed textures to save GPU memory |
 | `stats.js` | 0.17.0 | MIT | Optional | Simple FPS meter (we already use r3f-perf) |
 | `ogl` | 1.0.11 | Unlicense | Skip | Good library, but a second 3D engine would add weight; Three.js covers it |
-| `@phosphor-icons/react` | 2.1.10 | MIT | Skip | DESIGN.md §0 bans default icon packs; we draw our own |
+| `@phosphor-icons/react` | 2.1.10 | MIT | Skip | Stock icon packs are banned; we draw our own (DESIGN.md 5.1) |
 
 **Not changing:** we stay on **Next.js**, not Vite. The project is already built on Next.js, and we need its routing and server API routes for Ask Ano.
 
-Add to the "don't use" list: **React Bits** (MIT + Commons Clause, which restricts selling the software, so it's not truly permissive).
+**React Bits** (https://reactbits.dev): allowed for this free, non-commercial project (MIT + Commons Clause only forbids selling). Use with the same restyle-and-ban rules as the other component sites.
 
 ---
 
@@ -288,8 +290,8 @@ Also see Next.js docs for its built-in View Transitions support (`experimental.v
 | `three.quarks` | 0.17.1 | MIT | May 2026 | **Pick** | Main 3D particle system: sparks, smoke, steam, shockwaves, bursts |
 | `wawa-vfx` | 1.2.10 | MIT | Sept 2025 | Optional | Simpler R3F particle effects for quick bursts and trails |
 | `@funtech-inc/use-shader-fx` | 2.0.5 | MIT | Apr 2025 | Optional | Ready-made shader effects as hooks: cursor fluid, ripples, noise, gradients |
-| `webgl-fluid` | 0.4.0 | MIT | May 2026 | Optional | Packaged version of PavelDoGreat's fluid sim for a subtle cursor-reactive background |
-| `@shadergradient/react` | 2.4.20 | MIT | Dec 2025 | Optional | Animated 3D gradient backgrounds in our blue ramps (fits the "more gradients" feedback) |
+| `webgl-fluid` | 0.4.0 | MIT | May 2026 | **Skip** | Decorative fluid backgrounds read as slop; not used |
+| `@shadergradient/react` | 2.4.20 | MIT | Dec 2025 | **Skip** | Banned: produces radial-orb / rainbow gradient backgrounds |
 | `canvas-confetti` | 1.9.4 | ISC | Oct 2025 | **Pick** | Tiny, fast confetti on the HTML layer for level complete |
 | `@lottiefiles/dotlottie-react` | 0.20.0 | MIT | Oct 2026 | Optional | Lottie animations for UI badges and icons. Each LottieFiles animation has its own licence: check before using |
 | `three-nebula` | 13.3.0 | MIT | Sept 2026 | Skip | Good, but one 3D particle system (three.quarks) is enough |
@@ -299,33 +301,48 @@ Also see Next.js docs for its built-in View Transitions support (`experimental.v
 
 ---
 
-## 11. Animated UI component libraries (checked 28 October 2026)
+## 11. Trusted sources for cancer content (the only ones allowed)
 
-The owner asked for these three libraries as the main source of animated UI. Their sites were opened and their licence and terms pages read in full. None of them is MIT, Apache-2.0, BSD, ISC or CC0 (CLAUDE.md §2 rule 8), so **no code is copied from any of them**. Each pattern we use was studied on the site (structure, trigger, timing, physics) and rebuilt from scratch with our tokens, fonts, icons, reduced-motion handling and quality tiers.
-
-| Library | What's free | Licence or terms, as read | Status |
-|---|---|---|---|
-| [animmasterlib.dev](https://animmasterlib.dev/) | Nothing (paid packs, $3–$8) | Terms: "non-exclusive, non-transferable license"; may not "Resell or redistribute the library or its source files"; the code stays "the intellectual property of Animmaster Lib". Advertised as "rebuilt with clean code" from popular sites | Not usable: paid, can't be redistributed, and of unclear origin. Public previews studied only |
-| [ui.aceternity.com](https://ui.aceternity.com/) | About 100 copy-paste components | "Aceternity License" (/licence): end products allowed, but "You cannot re-distribute the Item as a stock image or its source files, regardless of modifications" | Not usable as code in an MIT repo. Patterns studied |
-| [skiper-ui.com](https://skiper-ui.com/) | About 40 components marked Free | Docs: "Free to use and modify in both personal and commercial projects. Attribution to Skiper UI is required when using the free version." The author says "I don't claim to be the original creator." The Terms of Service say "You must not: … Reproduce, duplicate or copy material from skiper-ui.com" | Unclear (custom licence, contradicting terms). Waiting on the owner; patterns studied, no code copied |
-
-### Patterns studied and where they live in ANOMALY (our own code)
-| Pattern (source) | Our component | Where |
+| Source | Link | Use |
 |---|---|---|
-| Sticky scroll reveal (Aceternity) + Scroll progress 001 (Skiper) | `components/landing/HowItWorks.tsx`, `HowBench3D.tsx` | Landing: How it works, one pinned scene where the real LED experiment plays Predict, Diagnose, Break and Rebuild on a 3D bench as you scroll, one caption at a time |
-| Card stack + Draggable card (Aceternity) + Card swipe carousel (Skiper) | `components/landing/BeliefDeck.tsx`, `useDeckDrag.ts` | Landing: the belief deck (drag or flick the front card away; arrows and arrow keys; a 300 ms flick or a 140 px drag throws) |
-| Container text flip (Aceternity) + Animated number (Skiper) | `components/explore/LevelKnob.tsx`, `LevelPicker.tsx` (with `components/ui/RollingText.tsx`) | `/start` and the landing: the level knob and its one changing element tile; titles, grades and counts roll to new values |
-| Text roll navigation (Skiper) | `components/ui/RollLabel.tsx` | Header nav: two stacked copies roll up on hover and keyboard focus, centre-out |
-| Music toggle btn (Skiper) | `components/ui/SoundToggle.tsx` | The sound toggle's four equaliser bars (they settle into dots when muted) |
-| Text generate effect (Aceternity, rebuilt without blur) | `components/ui/WordReveal.tsx` | Ano's speech bubbles: each line appears word by word |
-| Following pointer (Aceternity) + Mouse follow animations (Skiper) | `components/fx/cursor.ts` (from session 1, adjusted) | The soft cursor that grows over controls, with a tiny trail and a one-hue click ripple |
-| Stateful button (Aceternity) | `components/lab/RunStatus.tsx` (with the Run pill and the result card) | Lab dock: Run, then a "Running" pill whose ring fills with the real run's progress, then the result card's check or cross |
-| Text Scroll animation, skiper31 (Skiper) | `components/ui/ScrollWords.tsx` | Landing section headlines: words rise into place one by one, scrubbed by the scroll, landing with a slight overshoot |
-| Animated number, skiper37 (Skiper) | `components/ui/ScrollCount.tsx` | Counts that count up as they come into view and land with a small spring: lab card counts, the level tile, the beliefs readout |
-| Container Scroll Animation (Aceternity) + Scroll Animation and 3D Animation categories (Animmaster previews) | `components/landing/useHeroScene.ts`, `HeroStage.tsx` | Landing hero: scrolling out dollies the camera into the stage while the headline and cards part and Ano drifts aside |
-| Card stack with gsap and rotate, skiper16 and skiper17 (Skiper) | `components/landing/LabsScene.tsx`, `components/three/LabObjectView.tsx` | Landing labs section: the two lab cards rise into place with the scroll while each card's 3D camera orbits in to its bench |
-| Svg follow scroll, skiper19 (Skiper) + Timeline (Aceternity) | `components/landing/NightTrace.tsx` | Landing's black-and-gold stretch: a gold circuit trace with pads draws down the page as you scroll, a pulse of current riding it |
-| 3D Card Effect (Aceternity) | `components/ui/Tilt.tsx`, `components/landing/LabCard.tsx` | The element tile and the lab cards tilt toward the cursor, with layers (the symbol, the caption) floating above them |
-| Animated Tooltip (Aceternity) + Custom tooltip, skiper101 (Skiper) + Hover Effect and Mouse Effect categories (Animmaster previews) | `components/three/Inspectable.tsx` | Every 3D object on the landing bench, the hero and the level shelf: hover lifts and tilts it on a spring, a click pops a label with its name and live values, a drag turns it and it eases home |
-| Physics Effect category (Animmaster previews) | `components/three/ShapesField.tsx`, `shapes.ts` (from earlier sessions, tuned) | The floating lab specimens behind headlines: the cursor pushes them on springs; a click sends a shock through them |
-| Page Transition category (Animmaster previews) | `app/globals.css` (`colour-wipe`), `components/explore/HeadlineWithAno.tsx` | Pages wipe in the destination's colour with an overshooting ease; Ano waves as level and lab select open |
+| World Health Organization: cancer | https://www.who.int/health-topics/cancer | Global facts, prevention, UV and sun safety |
+| WHO: ultraviolet radiation | https://www.who.int/health-topics/ultraviolet-radiation | UV through clouds, skin damage |
+| US National Cancer Institute (cancer.gov) | https://www.cancer.gov/about-cancer | What cancer is, how it starts, treatments (chemotherapy, radiation therapy), side effects |
+| Cancer Research UK | https://www.cancerresearchuk.org/about-cancer | Plain-language explanations of cancer biology, causes, treatment |
+| American Cancer Society | https://www.cancer.org/cancer/understanding-cancer.html | Myths and facts, inherited vs acquired changes, treatment basics |
+
+Rules: open the page, confirm the exact claim, record claim + URL + date in `content/citations.json`. No other sources (no blogs, no Wikipedia, no AI summaries). If a claim can't be confirmed on these sites, leave it out. These links were not live-checked from here; verify each page exists when you open it.
+
+
+---
+
+## 12. UI and motion sources to use (owner's list)
+
+Use these as the main sources for animated UI, scroll and motion. Restyle everything with our tokens, fonts and icons; never use anything that breaks DESIGN.md section 0; check and credit licences.
+
+| Source | Link | Use |
+|---|---|---|
+| AnimMasterLib | https://animmasterlib.dev/ | Animated UI components |
+| Aceternity UI | https://ui.aceternity.com/ | Text reveals, hover and scroll effects, card stacks (skip sparkles, beams, aurora, dot grids, bento) |
+| Skiper UI | https://skiper-ui.com/ | Interactive components and transitions |
+| React Bits | https://reactbits.dev/ | Animated React components (allowed: free, non-commercial project) |
+| GSAP + ScrollTrigger | https://gsap.com/ | Timelines, scroll-driven camera and scenes |
+| Lenis | https://lenis.darkroom.engineering/ | Smooth weighted scrolling, synced with GSAP and R3F |
+---
+
+## 13. 3D assets used (checked 28 October 2026)
+
+Every 3D model on the site is built in code from primitives, lathes and the kit's materials (DESIGN.md §8 model standard), so there are no third-party model licences to carry:
+
+| Asset | Where | Made from | Licence |
+|---|---|---|---|
+| Living cells (membrane, nucleus, wobble, rim) | `components/lab3d/kit/bio/cell-material.ts`, `Dish3D.tsx`, `Cluster.tsx` | Instanced icosahedra with shader additions to three's PBR materials | Ours (MIT) |
+| Petri dish, microscope view | `components/lab3d/kit/bio/` | Lathe geometry, drei `View` | Ours (MIT) |
+| Microscope, ring scanner, UV meter, treatment machine | `components/lab3d/kit/apparatus.tsx` | drei `RoundedBox`, three primitives, canvas-printed labels | Ours (MIT) |
+| Sun and clouds | `components/lab3d/kit/sky.tsx` | drei `Clouds`/`Cloud` (MIT) with `public/textures/cloud.png`, a puff texture generated in the repo by a noise script; a glow sprite for the sun | Ours (MIT) |
+| Curved backdrop | `components/lab3d/kit/Cove.tsx` | Generated geometry | Ours (MIT) |
+
+Free models checked and **not used**:
+- **Need an account to download:** Sketchfab "CT Scanner" by Ng Jun Wei (CC BY 4.0, https://sketchfab.com/3d-models/cb17c5eed1cd43a2aa2787a8ec4bb612) and "Microscope" by VeeRuby Technologies Pvt Ltd (CC BY 4.0, https://sketchfab.com/3d-models/2435e338bf7541a4b919e53df50eeeea). If the owner downloads either, credit it as "<title> by <author>, CC BY 4.0, via Sketchfab" here and in the README.
+- **Poor fit:** Poly Haven "Industrial Microscope" by Lukas Walzer (CC0) is a worn vintage model, and NIH 3D 3DPX-022786 is AI-made with invented brand text.
+- **Nothing suitable:** no free, unbranded linac or UV meter was found.

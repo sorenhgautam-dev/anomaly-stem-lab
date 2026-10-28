@@ -2527,3 +2527,4 @@ Study-and-rebuild only: React Bits Split Text (hero words), Stack (belief deck),
 - **Visual upgrade:** living cells (membrane, nucleus, wobble, rim light, split), microscope eyepieces, code-built microscope, scanner, UV meter and treatment machine, sun and clouds, curved backdrops with real benches and baked shadows.
 - **Polish pass:** `tests/e2e/polish.spec.ts` (clipped text, overlaps, idle shaking, CLS) on 10 pages at 4 widths; all fixed (see HANDOFF.md).
 - **Ship checks:** flow tests looked for the old "anomaly detected" words; they now check the real status line ("not what you guessed"), and the demo path passes. The 3D graph card's title ran into a six-digit count; the title now shrinks to fit and counts get thousands separators. Theory view shows the "Try it at home" card where the experiment has one.
+- **Licences:** GSAP's standard licence (approved in CLAUDE.md §7) is now listed in `npm run licences:documented`, which passes.

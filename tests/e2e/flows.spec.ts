@@ -6,8 +6,8 @@ import { watchConsole } from "./gates";
  * fails on a console error, hydration warning or failed request.
  */
 
-const LED = "/labs/robotics/medium/robotics-led";
-const BAG = "/labs/chemistry/easy/chemistry-sealed-bag";
+const CHEMO = "/labs/treatment/medium/treatment-chemo-hair";
+const TUMOUR = "/labs/detection/easy/detection-tumour-growth";
 
 async function experiment(page: Page, path: string) {
   await page.goto(path);
@@ -31,8 +31,8 @@ async function expectCorrect(page: Page) {
 }
 
 async function expectAnomaly(page: Page) {
-  // The ANOMALY word shows for under two seconds; its screen-reader status says so.
-  await expect(page.getByText(/anomaly detected/i)).toBeAttached();
+  // The ANOMALY word shows for under two seconds; its status (and the pill under it) says so.
+  await expect(page.getByText(/not what you guessed/i).first()).toBeAttached();
   // What stays: the verdict, the Result card's reality row and the hint ladder.
   await expect(page.locator('main[data-verdict="wrong"]')).toBeAttached();
   await expect(page.getByRole("button", { name: /change something and try again/i })).toBeVisible();
@@ -53,48 +53,47 @@ test.describe("G5 flows", () => {
     await expect(page).toHaveURL(/\/start$/);
     await page.locator('a[href="/start/medium"]:visible').first().click();
     await expect(page).toHaveURL(/\/start\/medium$/);
-    await page.locator('a[href="/labs/robotics/medium"]:visible, button:visible:has-text("Robotics")').first().click();
-    await expect(page).toHaveURL(/\/labs\/robotics\/medium$/, { timeout: 20_000 });
-    await page.locator(`a[href="${LED}"]:visible`).first().click();
-    await expect(page).toHaveURL(new RegExp(`${LED}$`));
-    await expect(page.getByRole("radio", { name: "Stay dark", exact: true })).toBeVisible();
+    await page.locator('a[href="/labs/treatment/medium"]:visible').first().click();
+    await expect(page).toHaveURL(/\/labs\/treatment\/medium$/, { timeout: 20_000 });
+    await page.locator(`a[href="${CHEMO}"]:visible`).first().click();
+    await expect(page).toHaveURL(new RegExp(`${CHEMO}$`));
+    await expect(page.getByRole("radio", { name: "Nothing happens to them", exact: true })).toBeVisible();
   });
 
-  test("Light the LED: correct prediction, then the theory", async ({ page }) => {
-    await experiment(page, LED);
-    expect(await predictAndRun(page, "Stay dark")).toBe("correct");
-    await expectCorrect(page);
-  });
-
-  test("Light the LED: wrong prediction shows the ANOMALY moment", async ({ page }) => {
-    await experiment(page, LED);
-    expect(await predictAndRun(page, "Glow")).toBe("wrong");
+  test("demo path: landing → chemo experiment → ANOMALY moment → theory", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("link", { name: "Try it" }).first().click();
+    await expect(page).toHaveURL(new RegExp(`${CHEMO}$`));
+    expect(await predictAndRun(page, "Nothing happens to them")).toBe("wrong");
     await expectAnomaly(page);
-  });
-
-  test("Mass in a sealed bag: correct prediction, then the theory", async ({ page }) => {
-    await experiment(page, BAG);
-    expect(await predictAndRun(page, "Gets lighter")).toBe("correct");
+    await page.getByRole("button", { name: /Change something and try again/ }).click();
+    expect(await predictAndRun(page, "They are affected, like the cancer cells")).toBe("correct");
     await expectCorrect(page);
   });
 
-  test("Mass in a sealed bag: wrong prediction shows the ANOMALY moment", async ({ page }) => {
-    await experiment(page, BAG);
-    expect(await predictAndRun(page, "Stays the same")).toBe("wrong");
+  test("How tumours grow: correct prediction, then the theory", async ({ page }) => {
+    await experiment(page, TUMOUR);
+    expect(await predictAndRun(page, "It stays tiny for a long time, then grows fast")).toBe("correct");
+    await expectCorrect(page);
+  });
+
+  test("How tumours grow: wrong prediction shows the ANOMALY moment", async ({ page }) => {
+    await experiment(page, TUMOUR);
+    expect(await predictAndRun(page, "It grows by the same amount every month")).toBe("wrong");
     await expectAnomaly(page);
   });
 
   test("back navigation and breadcrumbs", async ({ page }) => {
-    await page.goto("/labs/robotics/medium");
-    await page.locator(`a[href="${LED}"]:visible`).first().click();
-    await expect(page).toHaveURL(new RegExp(`${LED}$`));
+    await page.goto("/labs/treatment/medium");
+    await page.locator(`a[href="${CHEMO}"]:visible`).first().click();
+    await expect(page).toHaveURL(new RegExp(`${CHEMO}$`));
     await page.goBack();
-    await expect(page).toHaveURL(/\/labs\/robotics\/medium$/);
+    await expect(page).toHaveURL(/\/labs\/treatment\/medium$/);
     await page.goForward();
-    await expect(page).toHaveURL(new RegExp(`${LED}$`));
+    await expect(page).toHaveURL(new RegExp(`${CHEMO}$`));
     const crumbs = page.getByRole("navigation", { name: /breadcrumb|where you are/i });
-    await crumbs.locator('a[href="/labs/robotics/medium"]').click();
-    await expect(page).toHaveURL(/\/labs\/robotics\/medium$/);
+    await crumbs.locator('a[href="/labs/treatment/medium"]').click();
+    await expect(page).toHaveURL(/\/labs\/treatment\/medium$/);
     await crumbs.locator('a[href="/start"]').click();
     await expect(page).toHaveURL(/\/start$/);
   });
@@ -137,28 +136,4 @@ test.describe("G5 flows", () => {
     await expect.poll(current).toMatch(/1 of 3/);
   });
 
-  test("hero teaser: which falls faster, wrong then right, and the headline stays on screen", async ({ page }) => {
-    await page.goto("/");
-    // Every letter of the visible headline sits inside the viewport (the verdict words are long).
-    const fits = () =>
-      page.evaluate(() => {
-        const h = [...document.querySelectorAll("h1")].find((e) => e.checkVisibility());
-        return !!h && [...h.querySelectorAll("[data-roll-letter]")].every((l) => {
-          const r = l.getBoundingClientRect();
-          return r.left >= -1 && r.right <= window.innerWidth + 1;
-        });
-      });
-    await page.getByRole("button", { name: "Try it" }).click();
-    await page.getByRole("radio", { name: "Steel first" }).click();
-    await page.getByRole("button", { name: "Drop them" }).click();
-    await expect(page.getByRole("heading", { name: /anomaly detected/i })).toBeVisible({ timeout: 15_000 });
-    await page.waitForTimeout(1500);
-    expect(await fits(), "ANOMALY DETECTED. stays on screen").toBe(true);
-    await page.getByRole("button", { name: "Drop again" }).click();
-    await page.getByRole("radio", { name: "Same time" }).click();
-    await page.getByRole("button", { name: "Drop them" }).click();
-    await expect(page.getByRole("heading", { name: /nailed it/i })).toBeVisible({ timeout: 15_000 });
-    await page.waitForTimeout(1500);
-    expect(await fits(), "NAILED IT. stays on screen").toBe(true);
-  });
 });

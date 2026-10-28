@@ -62,7 +62,7 @@ test.describe("G8 reduced motion", () => {
     save("reduced-motion", { landingAnimationsStillRunning: running });
     expect.soft(running, "CSS animations still running with reduced motion").toBe(0);
     await page.goto("/labs/chemistry/easy/chemistry-sealed-bag");
-    await page.getByRole("radio", { name: "Less", exact: true }).click();
+    await page.getByRole("radio", { name: "Gets lighter", exact: true }).click();
     await page.getByRole("button", { name: /^Run/ }).click();
     await expect(page.locator("main[data-verdict]")).toBeVisible({ timeout: 30_000 });
   });

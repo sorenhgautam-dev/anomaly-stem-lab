@@ -5,8 +5,8 @@ import { ROUND } from "./gates";
 /*
  * G10 performance (GAUNTLET.md §5, DESIGN.md §9.2) on the production build:
  * frame times sampled in the page with requestAnimationFrame, draw calls from
- * the scene's stats probe (?debug=stats), then again on the Low tier with the
- * CPU throttled 4×. Lab pages are also sampled during a run, when the VFX
+ * the scene's stats probe (?debug=stats), then on the Medium tier, then again
+ * on the Low tier with the CPU throttled 4×. Lab pages are also sampled during a run, when the VFX
  * and the camera move peak. Records the WebGL renderer so a software-GL run is never
  * mistaken for a real measurement. Writes tests/.results/perf-round-N.json.
  */
@@ -14,7 +14,7 @@ import { ROUND } from "./gates";
 const TARGETS: { name: string; path: string; run?: string }[] = [
   { name: "landing", path: "/" },
   { name: "led", path: "/labs/robotics/medium/robotics-led", run: "Glow" },
-  { name: "sealed-bag", path: "/labs/chemistry/easy/chemistry-sealed-bag", run: "The same" },
+  { name: "sealed-bag", path: "/labs/chemistry/easy/chemistry-sealed-bag", run: "Stays the same" },
   { name: "labs", path: "/start/medium" },
   { name: "design-system", path: "/design-system" },
 ];
@@ -90,6 +90,11 @@ for (const t of TARGETS) {
     await page.waitForTimeout(3500);
     const normal = await sample(page, 4000);
     const normalRun = t.run ? await sampleRun(page, t.run) : undefined;
+    // The middle tier (DESIGN.md §9.2): dpr 1, fewer particles, no iridescence.
+    await page.goto(`${t.path}?debug=stats&quality=medium`);
+    await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(2500);
+    const medium = await sample(page, 3000);
     const cdp = await page.context().newCDPSession(page);
     await page.goto(`${t.path}?debug=stats&quality=low`);
     await page.waitForLoadState("networkidle");
@@ -108,6 +113,6 @@ for (const t of TARGETS) {
     const throttled = await sample(page, 4000);
     const throttledRun = t.run ? await sampleRun(page, t.run) : undefined;
     await cdp.send("Emulation.setCPUThrottlingRate", { rate: 1 });
-    results[t.name] = { normal, normalRun, lowTier4xCpu: throttled, lowTier4xCpuRun: throttledRun, throttleCheck: { workMsBefore: Math.round(before), workMsAfter: Math.round(after) } };
+    results[t.name] = { normal, normalRun, mediumTier: medium, lowTier4xCpu: throttled, lowTier4xCpuRun: throttledRun, throttleCheck: { workMsBefore: Math.round(before), workMsAfter: Math.round(after) } };
   });
 }

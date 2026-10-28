@@ -35,7 +35,7 @@ async function expectAnomaly(page: Page) {
   await expect(page.getByText(/anomaly detected/i)).toBeAttached();
   // What stays: the verdict, the Result card's reality row and the hint ladder.
   await expect(page.locator('main[data-verdict="wrong"]')).toBeAttached();
-  await expect(page.getByRole("button", { name: /change something and run again/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: /change something and try again/i })).toBeVisible();
 }
 
 test.describe("G5 flows", () => {
@@ -74,13 +74,13 @@ test.describe("G5 flows", () => {
 
   test("Mass in a sealed bag: correct prediction, then the theory", async ({ page }) => {
     await experiment(page, BAG);
-    expect(await predictAndRun(page, "Less")).toBe("correct");
+    expect(await predictAndRun(page, "Gets lighter")).toBe("correct");
     await expectCorrect(page);
   });
 
   test("Mass in a sealed bag: wrong prediction shows the ANOMALY moment", async ({ page }) => {
     await experiment(page, BAG);
-    expect(await predictAndRun(page, "The same")).toBe("wrong");
+    expect(await predictAndRun(page, "Stays the same")).toBe("wrong");
     await expectAnomaly(page);
   });
 
@@ -135,5 +135,30 @@ test.describe("G5 flows", () => {
     await page.mouse.move(box.x + box.width * 0.2, y, { steps: 8 });
     await page.mouse.up();
     await expect.poll(current).toMatch(/1 of 3/);
+  });
+
+  test("hero teaser: which falls faster, wrong then right, and the headline stays on screen", async ({ page }) => {
+    await page.goto("/");
+    // Every letter of the visible headline sits inside the viewport (the verdict words are long).
+    const fits = () =>
+      page.evaluate(() => {
+        const h = [...document.querySelectorAll("h1")].find((e) => e.checkVisibility());
+        return !!h && [...h.querySelectorAll("[data-roll-letter]")].every((l) => {
+          const r = l.getBoundingClientRect();
+          return r.left >= -1 && r.right <= window.innerWidth + 1;
+        });
+      });
+    await page.getByRole("button", { name: "Try it" }).click();
+    await page.getByRole("radio", { name: "Steel first" }).click();
+    await page.getByRole("button", { name: "Drop them" }).click();
+    await expect(page.getByRole("heading", { name: /anomaly detected/i })).toBeVisible({ timeout: 15_000 });
+    await page.waitForTimeout(1500);
+    expect(await fits(), "ANOMALY DETECTED. stays on screen").toBe(true);
+    await page.getByRole("button", { name: "Drop again" }).click();
+    await page.getByRole("radio", { name: "Same time" }).click();
+    await page.getByRole("button", { name: "Drop them" }).click();
+    await expect(page.getByRole("heading", { name: /nailed it/i })).toBeVisible({ timeout: 15_000 });
+    await page.waitForTimeout(1500);
+    expect(await fits(), "NAILED IT. stays on screen").toBe(true);
   });
 });

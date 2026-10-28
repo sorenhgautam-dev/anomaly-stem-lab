@@ -205,3 +205,8 @@ next-env.d.ts
 
 # A second dev server for the gauntlet (next.config.ts distDir)
 /.next-gauntlet/
+
+# Local working docs (kept on disk, not on GitHub)
+/DESIGN.md
+/GAUNTLET.md
+/HANDOFF.md

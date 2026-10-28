@@ -1,23 +1,23 @@
 {
   "greet": [
-    "Hi, I'm Ano! You guess first, then we test it. Ready?",
-    "Hey, I'm Ano. Let's see if your guess holds up.",
-    "Hi! I'm Ano. Make a guess, then we'll see what really happens."
+    "Hey, I'm Ano. Want to see what's really going on inside a cell?",
+    "Hi, I'm Ano! You guess first, then we look at the real science.",
+    "Hello! I'm Ano. Make a guess, then let's see what really happens."
   ],
   "building": [
-    "Nice. So, what do you think will happen?",
-    "Looking good. Make your guess before you press Run.",
-    "Almost ready. What's your guess this time?"
+    "What do you think will happen? Take a guess.",
+    "Ready when you are. What's your guess?",
+    "Have a think first. What do you expect to see?"
   ],
   "correct": [
-    "Nailed it! That's how a real scientist thinks.",
+    "You got it. That's how a scientist thinks.",
     "Spot on. Your guess matched what really happened.",
-    "You got it! Peek at the theory to see why it works."
+    "Nice thinking! Peek at the theory to see why it works."
   ],
   "wrong": [
-    "Whoa, did you see that? Let's work out why.",
-    "Huh, not what you guessed. That's the fun part!",
-    "Surprise! Lots of people guess that. Let's find out what happened."
+    "Whoa, did you see that? Lots of people expect what you expected. Let's look closer.",
+    "Surprise! Lots of people think that. Let's look.",
+    "Interesting! That's a really common guess. Let's find out what happened."
   ],
   "stuck": [
     "Here's a little hint. Check it out below.",
@@ -30,16 +30,30 @@
     "Good thinking! Watch the numbers while it runs. What do you notice?"
   ],
   "levelUp": [
-    "Level done! Ready for the next one?",
-    "You finished the whole level. Want to try a harder one?"
+    "Level done. Ready for the next one?",
+    "You finished the whole level. Want to try the next one?"
   ],
   "headlines": {
-    "correct": ["Nailed it.", "Spot on.", "You got it.", "That's right."],
-    "wrong": ["Not quite.", "Plot twist.", "Surprise.", "Look again."]
+    "correct": [
+      "Nailed it.",
+      "Spot on.",
+      "You got it.",
+      "That's right."
+    ],
+    "wrong": [
+      "Not quite.",
+      "Plot twist.",
+      "Surprise.",
+      "Look again."
+    ]
   },
   "hero": {
     "wrong": "Whoa, they landed together! That surprises lots of people. Let's find out why.",
     "correct": "Nailed it! Weight doesn't change how fast things fall. The air barely slows these balls.",
     "next": "Want more? Pick your level."
-  }
+  },
+  "healthRedirect": [
+    "That's a big question, and I'm glad you asked. I can explain the science here, but for questions about you or someone you love, a doctor, nurse, parent or teacher is the right person to talk to. Would you like to keep exploring?",
+    "Thank you for asking me that. It sounds important. I can only explain the science on this screen. A parent, teacher, doctor or nurse is the right person for questions about you or your family. Shall we keep exploring together?"
+  ]
 }

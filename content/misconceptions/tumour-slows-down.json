@@ -1,0 +1,13 @@
+{
+  "id": "tumour-slows-down",
+  "lab": "detection",
+  "title": "Tumours grow fast, then slow down",
+  "belief": "A tumour grows fast at the start, then slows down as it gets bigger.",
+  "conceptIds": [
+    "cell-division",
+    "doubling"
+  ],
+  "citationIds": [
+    "cancer-cells-keep-doubling-cruk"
+  ]
+}

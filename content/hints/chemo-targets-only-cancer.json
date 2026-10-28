@@ -1,0 +1,8 @@
+{
+  "misconceptionId": "chemo-targets-only-cancer",
+  "hints": [
+    "Look at how fast each kind of cell is dividing. Which ones are busiest?",
+    "Chemo works on cells that are dividing. It can't tell which busy cell is cancer and which is hair.",
+    "Hair follicle cells divide fast, so chemo affects them too. That's why hair can fall out."
+  ]
+}

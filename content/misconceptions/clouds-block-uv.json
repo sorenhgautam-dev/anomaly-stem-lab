@@ -1,0 +1,14 @@
+{
+  "id": "clouds-block-uv",
+  "lab": "prevention",
+  "title": "Clouds block the sun's UV",
+  "belief": "If it's cloudy, the sun's UV can't get through. You only need protection on sunny days.",
+  "conceptIds": [
+    "uv",
+    "sun-safety"
+  ],
+  "citationIds": [
+    "uv-through-clouds-cruk",
+    "uv-invisible"
+  ]
+}

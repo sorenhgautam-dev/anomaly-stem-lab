@@ -1,3 +1,4 @@
+import { cancerModels } from "./cancer";
 import { chemistryModels } from "./chemistry";
 import { circuitModels } from "./circuits";
 import { robotModels } from "./robotics";
@@ -8,7 +9,7 @@ import type { LabModels, Simulate, StageId } from "./types";
  * experiments name a stage (real model) and misconception ids (wrong models).
  */
 
-const LABS: LabModels[] = [circuitModels, robotModels, chemistryModels];
+const LABS: LabModels[] = [cancerModels, circuitModels, robotModels, chemistryModels];
 
 export function realModel(stage: StageId): Simulate {
   for (const lab of LABS) {

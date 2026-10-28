@@ -1,0 +1,124 @@
+{
+  "id": "prevention-uv-cloudy",
+  "lab": "prevention",
+  "level": "easy",
+  "grades": "6-8",
+  "order": 1,
+  "title": "UV on a cloudy day",
+  "goal": "Find out how much of the sun's UV gets through the clouds.",
+  "intro": "UV is a kind of light from the sun. You can't see it or feel it. Clouds are rolling in. How much UV still reaches your skin?",
+  "minutes": 3,
+  "stage": "uv",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "slider",
+      "id": "cloud",
+      "label": "Cloud cover",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "initial": 60
+    },
+    {
+      "type": "slider",
+      "id": "minutes",
+      "label": "Time outside",
+      "min": 15,
+      "max": 120,
+      "step": 15,
+      "unit": "minutes",
+      "initial": 60
+    },
+    {
+      "type": "toggle",
+      "id": "protection",
+      "label": "Sun protection",
+      "onLabel": "On",
+      "offLabel": "Off",
+      "initial": false
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "On a cloudy day, how much of the sun's UV reaches your skin compared with a clear day?",
+    "options": [
+      "Almost none",
+      "About half",
+      "Most of it",
+      "Exactly the same"
+    ]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      {
+        "when": {
+          "reading": "uv.share",
+          "op": "<",
+          "value": 0.15
+        },
+        "answer": "Almost none"
+      },
+      {
+        "when": {
+          "reading": "uv.share",
+          "op": "<",
+          "value": 0.6
+        },
+        "answer": "About half"
+      },
+      {
+        "when": {
+          "reading": "uv.share",
+          "op": "<",
+          "value": 0.97
+        },
+        "answer": "Most of it"
+      }
+    ],
+    "otherwise": "Exactly the same"
+  },
+  "misconceptions": [
+    "clouds-block-uv",
+    "clouds-halve-uv"
+  ],
+  "allowedEdits": [
+    {
+      "id": "heavy",
+      "label": "Make it heavy cloud",
+      "edit": {
+        "op": "set",
+        "setting": "cloud",
+        "value": 100
+      }
+    },
+    {
+      "id": "protect",
+      "label": "Put on sun protection",
+      "edit": {
+        "op": "set",
+        "setting": "protection",
+        "value": true
+      }
+    }
+  ],
+  "theoryId": "uv-clouds",
+  "citationIds": [
+    "uv-invisible",
+    "uv-through-clouds-cruk",
+    "uv-through-clouds"
+  ],
+  "tryAtHome": {
+    "title": "Check the UV on a cloudy day",
+    "steps": [
+      "With an adult, open a weather app that shows the UV index.",
+      "Check it on a sunny day, then on a cloudy day.",
+      "Or put UV-sensitive beads by a window and watch them change colour."
+    ],
+    "watch": "Is the UV index still above zero when it's cloudy?",
+    "safety": "Do this with an adult. Never look straight at the sun."
+  }
+}

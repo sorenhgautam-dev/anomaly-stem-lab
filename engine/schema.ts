@@ -2,6 +2,7 @@ import { z } from "zod";
 import type {
   AnswerRule,
   Condition,
+  EditDef,
   ExperimentDef,
   HintDef,
   MisconceptionDef,
@@ -14,7 +15,7 @@ import type {
  * instead of breaking an experiment at run time.
  */
 
-const labId = z.enum(["chemistry", "robotics"]);
+const labId = z.enum(["cell", "prevention", "detection", "treatment", "chemistry", "robotics"]);
 const levelId = z.enum(["easy", "medium", "advanced"]);
 const grades = z.enum(["6-8", "9-10", "11-12"]);
 const stageId = z.enum([
@@ -33,6 +34,12 @@ const stageId = z.enum([
   "gaslaw",
   "catalyst",
   "equilibrium",
+  "chemo",
+  "tumour",
+  "cells",
+  "uv",
+  "beams",
+  "inherit",
 ]);
 const partKind = z.enum(["battery", "wire", "switch", "resistor", "bulb", "led", "motor", "buzzer"]);
 const propValue = z.union([z.number(), z.boolean(), z.string()]);
@@ -147,7 +154,8 @@ export const answerRuleSchema: z.ZodType<AnswerRule> = z.discriminatedUnion("kin
   z.object({ kind: z.literal("value"), reading: z.string() }),
 ]);
 
-const editDef = z.discriminatedUnion("op", [
+/** One small change to a build (EditDef). Also used by content/what-if.json. */
+export const editDef: z.ZodType<EditDef> = z.discriminatedUnion("op", [
   z.object({ op: z.literal("toggle-prop"), slot: z.string(), prop: z.string() }),
   z.object({ op: z.literal("place"), slot: z.string(), kind: partKind, props: props.optional() }),
   z.object({ op: z.literal("remove"), slot: z.string() }),
@@ -158,7 +166,7 @@ const editDef = z.discriminatedUnion("op", [
 
 export const experimentSchema: z.ZodType<ExperimentDef> = z
   .object({
-    id: z.string().regex(/^(robotics|chemistry)-[a-z0-9-]+$/),
+    id: z.string().regex(/^(robotics|chemistry|cell|prevention|detection|treatment)-[a-z0-9-]+$/),
     lab: labId,
     level: levelId,
     grades,
@@ -179,6 +187,9 @@ export const experimentSchema: z.ZodType<ExperimentDef> = z
     allowedEdits: z.array(z.object({ id: z.string(), label: z.string(), edit: editDef })),
     theoryId: z.string(),
     safety: z.string().optional(),
+    citationIds: z.array(z.string().regex(/^[a-z0-9-]+$/)).optional(),
+    tryAtHome: z.object({ title: z.string().min(1), steps: z.array(z.string().min(1)).min(1), watch: z.string().min(1), safety: z.string().min(1) }).optional(),
+    heroSlide: z.number().int().min(1).max(3).optional(),
   })
   .superRefine((def, ctx) => {
     const expected = { easy: "6-8", medium: "9-10", advanced: "11-12" }[def.level];
@@ -218,6 +229,7 @@ export const misconceptionSchema: z.ZodType<MisconceptionDef> = z.object({
   belief: z.string().min(1),
   conceptIds: z.array(z.string()),
   sources: z.array(z.string().min(1)).optional(),
+  citationIds: z.array(z.string().regex(/^[a-z0-9-]+$/)).optional(),
 });
 
 export const hintSchema: z.ZodType<HintDef> = z.object({
@@ -232,4 +244,6 @@ export const theorySchema: z.ZodType<TheoryDef> = z.object({
   equation: z.string().optional(),
   realWorld: z.string().min(1),
   sources: z.array(z.string().min(1)).optional(),
+  citationIds: z.array(z.string().regex(/^[a-z0-9-]+$/)).optional(),
+  model: z.string().min(1).optional(),
 });

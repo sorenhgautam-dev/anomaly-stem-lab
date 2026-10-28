@@ -1,0 +1,49 @@
+[
+  {
+    "id": "treatment-only-touches-the-cancer",
+    "title": "Treatment only touches the cancer",
+    "plainWords": "treatment only touches the cancer cells",
+    "anoLine": "Lots of guesses here come from one idea: that treatment only reaches the cancer. Let's look at who else is busy dividing.",
+    "misconceptions": [
+      "chemo-targets-only-cancer",
+      "chemo-hits-healthy-last"
+    ]
+  },
+  {
+    "id": "cancer-happens-suddenly",
+    "title": "Nothing, then everything",
+    "plainWords": "cancer appears all at once, out of nowhere",
+    "anoLine": "These guesses share one idea: that cancer appears all at once. Let's watch what doubling really does.",
+    "misconceptions": [
+      "tumour-grows-steadily",
+      "tumour-slows-down"
+    ]
+  },
+  {
+    "id": "cancer-is-something-you-catch",
+    "title": "Cancer is something you catch",
+    "plainWords": "cancer is something you can catch from someone",
+    "anoLine": "These guesses share one idea: that cancer can be caught. Let's look at where it really starts.",
+    "misconceptions": [
+      "cancer-is-contagious",
+      "cancer-spreads-on-long-contact"
+    ]
+  },
+  {
+    "id": "if-i-cant-see-it-it-isnt-there",
+    "title": "If I can't see it, it isn't there",
+    "plainWords": "if you can't see something, it can't be there",
+    "anoLine": "These guesses share one idea: that what you can't see isn't there. Let's watch the meter instead of the sky.",
+    "misconceptions": [
+      "clouds-block-uv",
+      "clouds-halve-uv"
+    ]
+  },
+  {
+    "id": "its-all-decided-at-birth",
+    "title": "It's all decided at birth",
+    "plainWords": "it's all decided by the genes you're born with",
+    "anoLine": "These guesses share one idea: that it's all decided at birth. Let's count where the changes really come from.",
+    "misconceptions": []
+  }
+]

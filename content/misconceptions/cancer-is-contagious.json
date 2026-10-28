@@ -1,0 +1,15 @@
+{
+  "id": "cancer-is-contagious",
+  "lab": "cell",
+  "title": "Cancer can be caught, like a cold",
+  "belief": "Cancer spreads from person to person, like a cold. Being close to someone with cancer is risky.",
+  "conceptIds": [
+    "contagion",
+    "gene-changes"
+  ],
+  "citationIds": [
+    "cancer-not-contagious",
+    "cancer-not-contagious-acs",
+    "myths-common-acs"
+  ]
+}

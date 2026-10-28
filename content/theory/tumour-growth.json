@@ -1,0 +1,22 @@
+{
+  "id": "tumour-growth",
+  "title": "Why doubling hides, then surprises",
+  "body": [
+    "A tumour is a lump of cells.",
+    "Cells make new cells by dividing. One cell splits into two, two become four, and so on.",
+    "Cancer cells don't stop dividing when there are enough of them. So they keep doubling.",
+    "Doubling starts slowly. 8 cells become 16. Later, 8,000 become 16,000 in the same time.",
+    "So for a long time the cluster looks tiny. Then it seems to grow all of a sudden.",
+    "Screening looks for signs of cancer in people with no symptoms, before they are noticeable. Cancer may be easier to treat when it is found early."
+  ],
+  "realWorld": "When cancer is found at an early stage, treatment is more likely to be successful.",
+  "model": "This is a teaching model. Its months and doubling times show the idea; they aren't real growth speeds.",
+  "citationIds": [
+    "cancer-forms-tumours",
+    "cells-divide-in-two",
+    "cancer-cells-keep-doubling-cruk",
+    "screening-purpose-cruk",
+    "early-detection-easier-to-treat",
+    "early-detection-easier-to-treat-cruk"
+  ]
+}

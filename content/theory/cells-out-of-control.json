@@ -1,0 +1,20 @@
+{
+  "id": "cells-out-of-control",
+  "title": "Why normal cells stop and cancer cells don't",
+  "body": [
+    "Your body makes new cells by dividing, when it needs them.",
+    "Cells send messages to each other. They stop dividing when growth or healing is complete.",
+    "Cancer cells ignore the signals that tell cells to stop dividing.",
+    "So cancer cells keep doubling. They can form a lump called a tumour.",
+    "This starts from changes to genes that control how cells grow and divide."
+  ],
+  "realWorld": "A cut heals because cells divide to replace damaged ones. Then they stop when healing is complete.",
+  "model": "This is a teaching model. Real cells are far smaller and more complicated; the dishes show the idea.",
+  "citationIds": [
+    "normal-cells-stop-when-needed",
+    "normal-cells-stop-when-needed-cruk",
+    "cancer-cells-ignore-stop-signals",
+    "cancer-cells-keep-doubling-cruk",
+    "cancer-starts-from-gene-changes"
+  ]
+}

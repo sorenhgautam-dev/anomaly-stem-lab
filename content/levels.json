@@ -3,27 +3,27 @@
     "id": "easy",
     "title": "Easy",
     "grades": "Grades 6–8",
-    "line": "Light bulbs, switches, melting ice and dissolving sugar. Quick builds, big surprises.",
+    "line": "What a cancer cell is, how a tumour grows and what UV does. Short and calm.",
     "symbol": "Ea",
-    "teaser": "current-used-up",
-    "ano": "Easy! Quick builds and big surprises. Ready for your first guess?"
+    "teaser": "cancer-is-contagious",
+    "ano": "Easy! Cells, tumours and sunshine. Ready for your first guess?"
   },
   {
     "id": "medium",
     "title": "Medium",
     "grades": "Grades 9–10",
-    "line": "Light an LED, steer a robot, heat up gases and speed up reactions.",
+    "line": "Why chemo can cause hair loss, and where cancer's changes come from.",
     "symbol": "Md",
-    "teaser": "no-resistor-needed",
-    "ano": "Medium! LEDs, robots and acids. Things get a bit trickier now."
+    "teaser": "chemo-targets-only-cancer",
+    "ano": "Medium! Treatments and cells. Things get a bit trickier now."
   },
   {
     "id": "advanced",
     "title": "Advanced",
     "grades": "Grades 11–12",
-    "line": "Gears, motor speed, power, gas laws, catalysts and reactions that balance out.",
+    "line": "How radiotherapy aims its beams so healthy tissue gets less.",
     "symbol": "Ad",
-    "teaser": "big-gear-faster",
-    "ano": "Advanced! Gears, gas laws and balancing reactions. Bring your best guesses."
+    "teaser": "chemo-targets-only-cancer",
+    "ano": "Advanced! Beams and planning. Bring your best guesses."
   }
 ]

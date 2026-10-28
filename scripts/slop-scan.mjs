@@ -135,6 +135,11 @@ for (const root of ROOTS) {
     });
     found.push(...fakeDemoHits(file, rawLines), ...gradientBlockHits(file, code));
     for (const h of found) {
+      // A citation's "quote" is the source's own sentence, copied verbatim as evidence and never shown as our copy.
+      if (/content[\\/]citations\.json$/.test(file) && /^\s*"quote":/.test(rawLines[h.line - 1])) {
+        allowed.push({ file, ...h, reason: "verbatim source quote in content/citations.json (never shown as our copy)" });
+        continue;
+      }
       const ok = [rawLines[h.line - 1], rawLines[h.line - 2] ?? ""].map((l) => l.match(/slop-ok:\s*(.+?)(\*\/|$)/)).find(Boolean);
       (ok ? allowed : hits).push({ file, ...h, reason: ok?.[1].trim() });
     }

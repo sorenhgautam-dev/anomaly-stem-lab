@@ -1,0 +1,14 @@
+{
+  "id": "tumour-grows-steadily",
+  "lab": "detection",
+  "title": "Tumours grow at a steady speed",
+  "belief": "A tumour grows by the same amount every month, like a plant growing a little each day.",
+  "conceptIds": [
+    "cell-division",
+    "doubling"
+  ],
+  "citationIds": [
+    "cancer-cells-keep-doubling-cruk",
+    "cells-divide-in-two"
+  ]
+}

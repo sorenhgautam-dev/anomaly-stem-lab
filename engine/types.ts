@@ -16,7 +16,11 @@
  * engine/<lab>/ and is wired up in engine/registry.ts.
  */
 
-export type LabId = "chemistry" | "robotics";
+/**
+ * The four cancer labs (CLAUDE.md §2), in story order, then the earlier
+ * chemistry and robotics labs, which stay routable but hidden from the site.
+ */
+export type LabId = "cell" | "prevention" | "detection" | "treatment" | "chemistry" | "robotics";
 
 /** Difficulty levels (CLAUDE.md §1.1), each tied to a school grade band. */
 export type LevelId = "easy" | "medium" | "advanced";
@@ -42,7 +46,14 @@ export type StageId =
   | "burn"
   | "gaslaw"
   | "catalyst"
-  | "equilibrium";
+  | "equilibrium"
+  // cancer labs (engine/cancer)
+  | "chemo"
+  | "tumour"
+  | "cells"
+  | "uv"
+  | "beams"
+  | "inherit";
 
 /** A tunable value on a part or a control (ohms, volts, flipped, °C). */
 export type PropValue = number | boolean | string;
@@ -368,6 +379,19 @@ export interface ExperimentDef {
   theoryId: string;
   /** Short real-lab safety note (chemistry). */
   safety?: string;
+  /** Ids in content/citations.json that back every fact this experiment states (cancer labs). */
+  citationIds?: string[];
+  /** A safe version to try at home with an adult, where one exists. */
+  tryAtHome?: TryAtHome;
+  /** Which landing hero slide shows this experiment (1, 2 or 3), if any. */
+  heroSlide?: number;
+}
+
+export interface TryAtHome {
+  title: string;
+  steps: string[];
+  watch: string;
+  safety: string;
 }
 
 /** Nudge, principle, fix. */
@@ -386,6 +410,8 @@ export interface MisconceptionDef {
   conceptIds: string[];
   /** Where this misconception is documented (research papers, OpenStax). RESOURCES.md §6. */
   sources?: string[];
+  /** Citation ids (content/citations.json) behind the facts its hints state (cancer labs). */
+  citationIds?: string[];
 }
 
 /** Hint ladder (content/hints/<misconceptionId>.json). */
@@ -406,6 +432,10 @@ export interface TheoryDef {
   realWorld: string;
   /** Reliable sources the explanation was checked against (e.g. OpenStax sections). */
   sources?: string[];
+  /** Citation ids (content/citations.json) for every fact in the body (cancer labs). */
+  citationIds?: string[];
+  /** One line saying the simulation is a teaching model (cancer labs). */
+  model?: string;
 }
 
 /** A wrong-model simulator plus its text. */

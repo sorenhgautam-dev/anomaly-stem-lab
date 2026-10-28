@@ -1,0 +1,8 @@
+{
+  "id": "chemo-hits-healthy-last",
+  "lab": "treatment",
+  "title": "Healthy cells only feel it at the end",
+  "belief": "Chemo deals with the cancer first. Healthy cells only feel it right at the end.",
+  "conceptIds": ["chemotherapy", "cell-division"],
+  "citationIds": ["chemo-acts-on-dividing-cells-cruk", "chemo-affects-healthy-fast-cells"]
+}

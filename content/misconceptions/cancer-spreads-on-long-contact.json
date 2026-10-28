@@ -1,0 +1,13 @@
+{
+  "id": "cancer-spreads-on-long-contact",
+  "lab": "cell",
+  "title": "Cancer spreads with a long touch",
+  "belief": "A quick touch is fine, but being close to someone with cancer for a long time could pass it on.",
+  "conceptIds": [
+    "contagion",
+    "gene-changes"
+  ],
+  "citationIds": [
+    "cancer-not-contagious-acs"
+  ]
+}

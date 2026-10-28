@@ -1,0 +1,8 @@
+{
+  "id": "chemo-targets-only-cancer",
+  "lab": "treatment",
+  "title": "Chemo only touches the cancer",
+  "belief": "Chemo goes straight to the cancer cells. Healthy cells don't feel it at all.",
+  "conceptIds": ["chemotherapy", "cell-division"],
+  "citationIds": ["chemo-acts-on-dividing-cells-cruk", "chemo-affects-healthy-fast-cells", "chemo-hair-loss-common-acs"]
+}

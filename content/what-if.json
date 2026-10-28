@@ -1,0 +1,113 @@
+{
+  "chemistry-burning": [
+    {"id": "seal-jar", "label": "Seal the jar", "edits": [{"op": "set", "setting": "sealed", "value": true}], "show": [{"key": "scale.end", "label": "Scale after", "name": "the scale at the end", "unit": "g", "digits": 2}]},
+    {"id": "more-wool", "label": "Use 4 g of steel wool", "edits": [{"op": "set", "setting": "wool", "value": 4}], "show": [{"key": "scale.end", "label": "Scale after", "name": "the scale at the end", "unit": "g", "digits": 2}]},
+    {"id": "less-wool", "label": "Use 1 g of steel wool", "edits": [{"op": "set", "setting": "wool", "value": 1}], "show": [{"key": "scale.end", "label": "Scale after", "name": "the scale at the end", "unit": "g", "digits": 2}]}
+  ],
+  "chemistry-catalyst": [
+    {"id": "double", "label": "Double the catalyst", "edits": [{"op": "set", "setting": "catalyst", "value": 2}], "show": [{"key": "catalyst.end", "label": "Catalyst after", "name": "the catalyst left at the end", "unit": "g", "digits": 2}]},
+    {"id": "none", "label": "Leave the catalyst out", "edits": [{"op": "set", "setting": "catalyst", "value": 0}], "show": [{"key": "o2.ml", "label": "Oxygen made", "name": "the oxygen made", "unit": "mL", "digits": 0}]}
+  ],
+  "chemistry-dissolving": [
+    {"id": "more-sugar", "label": "Use 50 g of sugar", "edits": [{"op": "set", "setting": "sugar", "value": 50}], "show": [{"key": "scale.end", "label": "Scale after", "name": "the scale at the end", "unit": "g", "digits": 2}]},
+    {"id": "less-sugar", "label": "Use 10 g of sugar", "edits": [{"op": "set", "setting": "sugar", "value": 10}], "show": [{"key": "scale.end", "label": "Scale after", "name": "the scale at the end", "unit": "g", "digits": 2}]}
+  ],
+  "chemistry-equilibrium": [
+    {"id": "ice-bath", "label": "Use an ice bath (0 °C)", "edits": [{"op": "set", "setting": "temperature", "value": 0}], "show": [{"key": "color.end", "label": "How brown after", "name": "how brown the tube was at the end", "unit": "%", "digits": 0, "scale": 100}]},
+    {"id": "hot-bath", "label": "Use a hot bath (80 °C)", "edits": [{"op": "set", "setting": "temperature", "value": 80}], "show": [{"key": "color.end", "label": "How brown after", "name": "how brown the tube was at the end", "unit": "%", "digits": 0, "scale": 100}]}
+  ],
+  "chemistry-gas-heat": [
+    {"id": "hotter", "label": "Heat it to 90 °C", "edits": [{"op": "set", "setting": "temperature", "value": 90}], "show": [{"key": "particles.speedRatio", "label": "Particle speed", "name": "the particle speed", "unit": "×", "digits": 2}]},
+    {"id": "no-heat", "label": "Don't heat it (20 °C)", "edits": [{"op": "set", "setting": "temperature", "value": 20}], "show": [{"key": "particles.speedRatio", "label": "Particle speed", "name": "the particle speed", "unit": "×", "digits": 2}]}
+  ],
+  "chemistry-gas-laws": [
+    {"id": "squeeze", "label": "Squeeze it to 15 mL", "edits": [{"op": "set", "setting": "volume", "value": 15}], "show": [{"key": "pressure.end", "label": "Pressure after", "name": "the pressure at the end", "unit": "kPa", "digits": 0}]},
+    {"id": "release", "label": "Don't squeeze it (60 mL)", "edits": [{"op": "set", "setting": "volume", "value": 60}], "show": [{"key": "pressure.end", "label": "Pressure after", "name": "the pressure at the end", "unit": "kPa", "digits": 0}]}
+  ],
+  "chemistry-indicator": [
+    {"id": "lemon", "label": "Try lemon juice", "edits": [{"op": "set", "setting": "liquid", "value": "lemon"}], "show": [{"key": "ph", "label": "pH", "name": "the pH", "unit": "", "digits": 1}]},
+    {"id": "water", "label": "Try water", "edits": [{"op": "set", "setting": "liquid", "value": "water"}], "show": [{"key": "ph", "label": "pH", "name": "the pH", "unit": "", "digits": 1}]},
+    {"id": "baking-soda", "label": "Try baking soda in water", "edits": [{"op": "set", "setting": "liquid", "value": "baking-soda"}], "show": [{"key": "ph", "label": "pH", "name": "the pH", "unit": "", "digits": 1}]}
+  ],
+  "chemistry-melting": [
+    {"id": "full-power", "label": "Heater on full (200 W)", "edits": [{"op": "set", "setting": "power", "value": 200}], "show": [{"key": "temp.duringMelt", "label": "While melting", "name": "the thermometer while the ice melted", "unit": "°C", "digits": 1}, {"key": "temp.end", "label": "End temperature", "name": "the water at the end", "unit": "°C", "digits": 1}]},
+    {"id": "low-power", "label": "Heater on low (100 W)", "edits": [{"op": "set", "setting": "power", "value": 100}], "show": [{"key": "temp.duringMelt", "label": "While melting", "name": "the thermometer while the ice melted", "unit": "°C", "digits": 1}, {"key": "temp.end", "label": "End temperature", "name": "the water at the end", "unit": "°C", "digits": 1}]}
+  ],
+  "chemistry-neutralisation": [
+    {"id": "exact", "label": "Add exactly 25 mL", "edits": [{"op": "set", "setting": "base", "value": 25}], "show": [{"key": "ph", "label": "pH", "name": "the pH", "unit": "", "digits": 1}]},
+    {"id": "lots", "label": "Add 40 mL", "edits": [{"op": "set", "setting": "base", "value": 40}], "show": [{"key": "ph", "label": "pH", "name": "the pH", "unit": "", "digits": 1}]},
+    {"id": "none", "label": "Add no base", "edits": [{"op": "set", "setting": "base", "value": 0}], "show": [{"key": "ph", "label": "pH", "name": "the pH", "unit": "", "digits": 1}]}
+  ],
+  "chemistry-reaction-speed": [
+    {"id": "hotter", "label": "Make the hot water 90 °C", "edits": [{"op": "set", "setting": "hot", "value": 90}], "show": [{"key": "hot.finish", "label": "Hot tablet done at", "name": "the hot tablet's finish time", "unit": "s", "digits": 0}]},
+    {"id": "warm-cold", "label": "Warm the cold water to 40 °C", "edits": [{"op": "set", "setting": "cold", "value": 40}], "show": [{"key": "cold.finish", "label": "Cold tablet done at", "name": "the cold tablet's finish time", "unit": "s", "digits": 0}]}
+  ],
+  "chemistry-sealed-bag": [
+    {"id": "seal-bag", "label": "Seal the bag", "edits": [{"op": "set", "setting": "sealed", "value": true}], "show": [{"key": "scale.end", "label": "Scale after", "name": "the scale at the end", "unit": "g", "digits": 2}]},
+    {"id": "open-bag", "label": "Open the bag", "edits": [{"op": "set", "setting": "sealed", "value": false}], "show": [{"key": "scale.end", "label": "Scale after", "name": "the scale at the end", "unit": "g", "digits": 2}]},
+    {"id": "more-soda", "label": "Use 10 g of baking soda", "edits": [{"op": "set", "setting": "soda", "value": 10}], "show": [{"key": "co2.made", "label": "Gas made", "name": "the gas made", "unit": "g", "digits": 2}]}
+  ],
+  "robotics-gears": [
+    {"id": "small-output", "label": "Small 8-tooth output gear", "edits": [{"op": "set", "setting": "driven", "value": 8}], "show": [{"key": "driven.rpm", "label": "Output gear", "name": "the output gear", "unit": "rpm", "digits": 0}]},
+    {"id": "big-motor-gear", "label": "Big 36-tooth motor gear", "edits": [{"op": "set", "setting": "driver", "value": 36}], "show": [{"key": "driven.rpm", "label": "Output gear", "name": "the output gear", "unit": "rpm", "digits": 0}]},
+    {"id": "equal-gears", "label": "Two gears the same size", "edits": [{"op": "set", "setting": "driver", "value": 12}, {"op": "set", "setting": "driven", "value": 12}], "show": [{"key": "driven.rpm", "label": "Output gear", "name": "the output gear", "unit": "rpm", "digits": 0}]}
+  ],
+  "robotics-led": [
+    {"id": "add-resistor", "label": "Put in a 100 Ω resistor", "edits": [{"op": "place", "slot": "r", "kind": "resistor", "props": {"ohms": 100}}], "show": [{"key": "led.current", "label": "LED current", "name": "the current through the LED", "unit": "mA", "digits": 1, "scale": 1000}]},
+    {"id": "no-resistor", "label": "No resistor, just a wire", "edits": [{"op": "place", "slot": "r", "kind": "wire"}], "show": [{"key": "led.current", "label": "LED current", "name": "the current through the LED", "unit": "mA", "digits": 1, "scale": 1000}]},
+    {"id": "flip-led", "label": "Flip the LED round", "edits": [{"op": "toggle-prop", "slot": "led", "prop": "flipped"}], "show": [{"key": "led.current", "label": "LED current", "name": "the current through the LED", "unit": "mA", "digits": 1, "scale": 1000}]}
+  ],
+  "robotics-light-bulb": [
+    {"id": "second-wire", "label": "Add the second wire", "edits": [{"op": "place", "slot": "wire-2", "kind": "wire"}], "show": [{"key": "bulb.brightness", "label": "Bulb brightness", "name": "the bulb's brightness", "unit": "%", "digits": 0, "scale": 100}]},
+    {"id": "no-first-wire", "label": "Take out the first wire", "edits": [{"op": "remove", "slot": "wire-1"}], "show": [{"key": "bulb.brightness", "label": "Bulb brightness", "name": "the bulb's brightness", "unit": "%", "digits": 0, "scale": 100}]}
+  ],
+  "robotics-ohms-law": [
+    {"id": "use-10", "label": "Swap in a 10 Ω resistor", "edits": [{"op": "place", "slot": "r", "kind": "resistor", "props": {"ohms": 10}}], "show": [{"key": "r.temperature", "label": "Resistor temperature", "name": "the resistor", "unit": "°C", "digits": 0}]},
+    {"id": "use-100", "label": "Swap in a 100 Ω resistor", "edits": [{"op": "place", "slot": "r", "kind": "resistor", "props": {"ohms": 100}}], "show": [{"key": "r.temperature", "label": "Resistor temperature", "name": "the resistor", "unit": "°C", "digits": 0}]},
+    {"id": "use-1k", "label": "Swap in a 1 kΩ resistor", "edits": [{"op": "place", "slot": "r", "kind": "resistor", "props": {"ohms": 1000}}], "show": [{"key": "r.temperature", "label": "Resistor temperature", "name": "the resistor", "unit": "°C", "digits": 0}]}
+  ],
+  "robotics-parallel": [
+    {"id": "add-bulb-b", "label": "Add bulb B", "edits": [{"op": "place", "slot": "bulb-b", "kind": "bulb"}], "show": [{"key": "bulb-a.brightness", "label": "Bulb A brightness", "name": "bulb A's brightness", "unit": "%", "digits": 0, "scale": 100}]},
+    {"id": "add-two", "label": "Add bulbs B and C", "edits": [{"op": "place", "slot": "bulb-b", "kind": "bulb"}, {"op": "place", "slot": "bulb-c", "kind": "bulb"}], "show": [{"key": "batt.current", "label": "Battery current", "name": "the current from the battery", "unit": "A", "digits": 2}]}
+  ],
+  "robotics-pwm": [
+    {"id": "duty-100", "label": "Duty cycle 100%", "edits": [{"op": "set", "setting": "duty", "value": 100}], "show": [{"key": "motor.rpm", "label": "Motor speed", "name": "the motor speed", "unit": "rpm", "digits": 0}]},
+    {"id": "duty-20", "label": "Duty cycle 20%", "edits": [{"op": "set", "setting": "duty", "value": 20}], "show": [{"key": "motor.rpm", "label": "Motor speed", "name": "the motor speed", "unit": "rpm", "digits": 0}]}
+  ],
+  "robotics-series": [
+    {"id": "flip-battery", "label": "Flip the battery round", "edits": [{"op": "toggle-prop", "slot": "batt", "prop": "flipped"}], "show": [{"key": "bulb-b.brightness", "label": "Bulb B brightness", "name": "bulb B's brightness", "unit": "%", "digits": 0, "scale": 100}]},
+    {"id": "remove-b", "label": "Take out bulb B", "edits": [{"op": "remove", "slot": "bulb-b"}], "show": [{"key": "bulb-a.brightness", "label": "Bulb A brightness", "name": "bulb A's brightness", "unit": "%", "digits": 0, "scale": 100}]}
+  ],
+  "robotics-shortcut": [
+    {"id": "add-shortcut", "label": "Add the shortcut wire", "edits": [{"op": "place", "slot": "shortcut", "kind": "wire"}], "show": [{"key": "bulb-a.brightness", "label": "Bulb A brightness", "name": "bulb A's brightness", "unit": "%", "digits": 0, "scale": 100}]},
+    {"id": "flip-battery", "label": "Flip the battery round", "edits": [{"op": "toggle-prop", "slot": "batt", "prop": "flipped"}], "show": [{"key": "bulb-b.brightness", "label": "Bulb B brightness", "name": "bulb B's brightness", "unit": "%", "digits": 0, "scale": 100}]}
+  ],
+  "robotics-steering": [
+    {"id": "left-100", "label": "Left wheel 100%", "edits": [{"op": "set", "setting": "left", "value": 100}], "show": [{"key": "robot.turn", "label": "Turned", "name": "the robot", "unit": "°", "digits": 0, "signWords": ["left", "right"]}]},
+    {"id": "same-speed", "label": "Both wheels 80%", "edits": [{"op": "set", "setting": "left", "value": 80}, {"op": "set", "setting": "right", "value": 80}], "show": [{"key": "robot.turn", "label": "Turned", "name": "the robot", "unit": "°", "digits": 0, "signWords": ["left", "right"]}]}
+  ],
+  "robotics-switches": [
+    {"id": "flip-switch", "label": "Flip the switch", "edits": [{"op": "toggle-prop", "slot": "switch", "prop": "closed"}], "show": [{"key": "bulb.brightness", "label": "Bulb brightness", "name": "the bulb's brightness", "unit": "%", "digits": 0, "scale": 100}]},
+    {"id": "flip-battery", "label": "Flip the battery round", "edits": [{"op": "toggle-prop", "slot": "batt", "prop": "flipped"}], "show": [{"key": "bulb.brightness", "label": "Bulb brightness", "name": "the bulb's brightness", "unit": "%", "digits": 0, "scale": 100}]}
+  ],
+  "treatment-chemo-hair": [
+    {"id": "long", "label": "Treatment twice as long", "edits": [{"op": "set", "setting": "length", "value": "long"}], "show": [{"key": "hair.min", "label": "Hair cells at their lowest", "name": "the hair follicle cells at their lowest", "unit": "%", "digits": 0}, {"key": "cancer.end", "label": "Cancer cells at the end", "name": "the cancer cells at the end", "unit": "%", "digits": 0}]},
+    {"id": "slow-cancer", "label": "The cancer cells divide slowly", "edits": [{"op": "set", "setting": "cancerRate", "value": "slow"}], "show": [{"key": "cancer.end", "label": "Cancer cells at the end", "name": "the cancer cells at the end", "unit": "%", "digits": 0}]}
+  ],
+  "detection-tumour-growth": [
+    {"id": "slow-doubling", "label": "Doubling takes twice as long", "edits": [{"op": "set", "setting": "doubling", "value": 4}], "show": [{"key": "cells.end", "label": "Cells at the end", "name": "the cells at the end", "unit": "", "digits": 0}]},
+    {"id": "one-cell", "label": "Start with one cell", "edits": [{"op": "set", "setting": "start", "value": 1}], "show": [{"key": "cells.end", "label": "Cells at the end", "name": "the cells at the end", "unit": "", "digits": 0}]}
+  ],
+  "cell-out-of-control": [
+    {"id": "big-dish", "label": "Give them a bigger dish", "edits": [{"op": "set", "setting": "dish", "value": "big"}], "show": [{"key": "normal.end", "label": "Normal cells at the end", "name": "the normal cells at the end", "unit": "", "digits": 0}]},
+    {"id": "signal-off", "label": "Switch off the stop signal", "edits": [{"op": "set", "setting": "signal", "value": "off"}], "show": [{"key": "normal.end", "label": "Normal cells at the end", "name": "the normal cells at the end", "unit": "", "digits": 0}]}
+  ],
+  "cell-contact-test": [
+    {"id": "long-touch", "label": "Let them touch for a long time", "edits": [{"op": "set", "setting": "touch", "value": "long"}], "show": [{"key": "spread.end", "label": "Cells that crossed", "name": "the cells that crossed over", "unit": "", "digits": 0}]},
+    {"id": "apart", "label": "Move the dishes apart", "edits": [{"op": "set", "setting": "scene", "value": "fill"}], "show": [{"key": "spread.end", "label": "Cells that crossed", "name": "the cells that crossed over", "unit": "", "digits": 0}]}
+  ],
+  "prevention-uv-cloudy": [
+    {"id": "heavy", "label": "Heavy cloud", "edits": [{"op": "set", "setting": "cloud", "value": 100}], "show": [{"key": "uv.share", "label": "UV getting through", "name": "the UV getting through", "unit": "%", "digits": 0, "scale": 100}]},
+    {"id": "protect-halfway", "label": "Put on protection halfway through", "edits": [{"op": "set", "setting": "protection", "value": true}, {"op": "set", "setting": "protectAt", "value": 50}], "show": [{"key": "damage.end", "label": "Damage points", "name": "the damage points", "unit": "", "digits": 0}]}
+  ]
+}

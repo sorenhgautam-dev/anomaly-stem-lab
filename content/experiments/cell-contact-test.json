@@ -1,0 +1,110 @@
+{
+  "id": "cell-contact-test",
+  "lab": "cell",
+  "level": "easy",
+  "grades": "6-8",
+  "order": 2,
+  "title": "Can you catch cancer?",
+  "goal": "Find out if cancer cells can cross to someone else's cells.",
+  "intro": "These two dishes stand for two people. One dish has cancer cells. Now the dishes touch. Can the cancer cells spread to the other dish?",
+  "minutes": 2,
+  "stage": "cells",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "choice",
+      "id": "scene",
+      "label": "The dishes are",
+      "options": [
+        {
+          "value": "contact",
+          "label": "Touching"
+        },
+        {
+          "value": "fill",
+          "label": "Apart"
+        }
+      ],
+      "initial": "contact"
+    },
+    {
+      "type": "choice",
+      "id": "touch",
+      "label": "How long they touch",
+      "options": [
+        {
+          "value": "short",
+          "label": "A short time"
+        },
+        {
+          "value": "long",
+          "label": "A long time"
+        }
+      ],
+      "initial": "short"
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "Can the cancer cells spread to the other dish?",
+    "options": [
+      "Yes, like a cold",
+      "Yes, but slowly",
+      "No, cancer isn't caught",
+      "Only if the dishes touch for a long time"
+    ]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      {
+        "when": {
+          "reading": "spread.early",
+          "op": ">",
+          "value": 0
+        },
+        "answer": "Yes, like a cold"
+      },
+      {
+        "when": {
+          "reading": "spread.end",
+          "op": ">",
+          "value": 0
+        },
+        "answer": "Only if the dishes touch for a long time"
+      }
+    ],
+    "otherwise": "No, cancer isn't caught"
+  },
+  "misconceptions": [
+    "cancer-is-contagious",
+    "cancer-spreads-on-long-contact"
+  ],
+  "allowedEdits": [
+    {
+      "id": "long-touch",
+      "label": "Let them touch for a long time",
+      "edit": {
+        "op": "set",
+        "setting": "touch",
+        "value": "long"
+      }
+    },
+    {
+      "id": "apart",
+      "label": "Move the dishes apart",
+      "edit": {
+        "op": "set",
+        "setting": "scene",
+        "value": "fill"
+      }
+    }
+  ],
+  "theoryId": "cancer-not-caught",
+  "citationIds": [
+    "cancer-starts-from-gene-changes",
+    "cancer-not-contagious",
+    "cancer-not-contagious-acs"
+  ]
+}

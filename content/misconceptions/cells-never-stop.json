@@ -1,0 +1,13 @@
+{
+  "id": "cells-never-stop",
+  "lab": "cell",
+  "title": "Cells just keep dividing",
+  "belief": "Cells keep making new cells for as long as they can. Nothing tells them to stop.",
+  "conceptIds": [
+    "cell-division",
+    "stop-signals"
+  ],
+  "citationIds": [
+    "normal-cells-stop-when-needed-cruk"
+  ]
+}

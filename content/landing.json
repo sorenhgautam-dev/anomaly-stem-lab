@@ -1,95 +1,202 @@
 {
-  "descriptor": "A science lab where you guess what will happen, then test it. Ano helps you find out why.",
+  "descriptor": "A cancer science lab for students. Guess what will happen, then watch the real science. Ano helps you find out why.",
   "slides": [
     {
-      "id": "gravity",
-      "left": "Predict",
-      "right": "Test it.",
-      "ano": { "expression": "happy", "move": "wave" },
-      "result": { "title": "Heavy ball, light ball", "confidence": "High" },
-      "run": { "guess": "same" },
-      "belief": { "title": "Heavy and light land together", "detail": "Same size, same drop: they hit the floor at the same moment" },
-      "href": null
-    },
-    {
-      "id": "led",
+      "id": "treatment",
       "left": "Guess",
-      "right": "Break it.",
-      "ano": { "expression": "surprised", "move": "hop" },
-      "result": { "title": "Backwards LED", "confidence": "Medium" },
-      "run": { "experiment": "robotics-led", "edits": ["add-resistor"], "guess": "Glow", "reading": { "key": "led.current", "scale": 1000, "digits": 1, "unit": "mA" } },
-      "belief": { "detail": "An LED only lets current through one way" },
-      "href": "/labs/robotics/medium/robotics-led"
+      "right": "Test it.",
+      "ano": {
+        "expression": "happy",
+        "move": "wave"
+      },
+      "result": {
+        "title": "Chemo and hair",
+        "confidence": "High"
+      },
+      "run": {
+        "experiment": "treatment-chemo-hair",
+        "edits": [],
+        "guess": "Nothing happens to them",
+        "reading": {
+          "key": "hair.min",
+          "scale": 1,
+          "digits": 0,
+          "unit": "%"
+        }
+      },
+      "answers": {
+        "Nothing happens to them": "Nothing happens",
+        "They are affected, like the cancer cells": "Hair cells affected"
+      },
+      "belief": {
+        "title": "Chemo acts on busy cells",
+        "detail": "Hair follicle cells divide fast, so they're affected too"
+      },
+      "href": "/labs/treatment/medium/treatment-chemo-hair"
     },
     {
-      "id": "bag",
+      "id": "detection",
       "left": "Think",
       "right": "Prove it.",
-      "ano": { "expression": "thinking", "move": "nod" },
-      "result": { "title": "Fizz in a sealed bag", "confidence": "High" },
-      "run": { "experiment": "chemistry-sealed-bag", "edits": ["seal-bag"], "guess": "Gets lighter", "reading": { "key": "scale.end", "scale": 1, "digits": 1, "unit": "g" } },
-      "belief": { "detail": "In a sealed bag, the gas can't get out" },
-      "href": "/labs/chemistry/easy/chemistry-sealed-bag"
+      "ano": {
+        "expression": "thinking",
+        "move": "nod"
+      },
+      "result": {
+        "title": "How tumours grow",
+        "confidence": "High"
+      },
+      "run": {
+        "experiment": "detection-tumour-growth",
+        "edits": [],
+        "guess": "It grows by the same amount every month",
+        "reading": {
+          "key": "cells.end",
+          "scale": 1,
+          "digits": 0,
+          "unit": "cells"
+        }
+      },
+      "answers": {
+        "It grows by the same amount every month": "Same every month",
+        "It stays tiny for a long time, then grows fast": "Tiny, then fast"
+      },
+      "belief": {
+        "title": "Doubling hides, then surprises",
+        "detail": "That's why finding it early matters"
+      },
+      "href": "/labs/detection/easy/detection-tumour-growth"
+    },
+    {
+      "id": "cell",
+      "left": "Predict",
+      "right": "See it.",
+      "ano": {
+        "expression": "curious",
+        "move": "hop"
+      },
+      "result": {
+        "title": "Cells out of control",
+        "confidence": "Medium"
+      },
+      "run": {
+        "experiment": "cell-out-of-control",
+        "edits": [],
+        "guess": "They keep dividing and pile up",
+        "reading": {
+          "key": "normal.end",
+          "scale": 1,
+          "digits": 0,
+          "unit": "cells"
+        }
+      },
+      "answers": {
+        "They keep dividing and pile up": "Keep going",
+        "They stop dividing": "Normal cells stop"
+      },
+      "belief": {
+        "title": "Normal cells know when to stop",
+        "detail": "Cancer cells ignore the stop signal and keep going"
+      },
+      "href": "/labs/cell/easy/cell-out-of-control"
     }
   ],
   "tryIt": "Try it",
   "lowerBand": {
-    "heading": "Find out where your guess went wrong.",
-    "body": "Guess what will happen, then press Run. If you're wrong, Ano helps you find out why.",
-    "chip": { "title": "How it works", "subtitle": "Guess, run it, see what happens" },
-    "meta": ["A science lab", "where you guess first"],
-    "explore": "Explore {count} experiments in chemistry and robotics"
-  },
-  "hero": {
-    "left": "Which falls",
-    "right": "faster?",
-    "setup": "Two balls, the same size. The steel one is about three times heavier than the glass one. Make your guess, then drop them.",
-    "options": [
-      { "id": "heavy", "label": "Steel first" },
-      { "id": "light", "label": "Glass first" },
-      { "id": "same", "label": "Same time" }
+    "heading": "Learn why your intuition tripped.",
+    "body": "Some popular ideas about cancer are wrong, even when they seem to make sense. Guess first, then watch the real science.",
+    "chip": {
+      "title": "How it works",
+      "subtitle": "Guess, run it, see what really happens"
+    },
+    "meta": [
+      "A science lab where you guess first",
+      "Powered by Ano"
     ],
-    "correct": "same",
-    "drop": "Drop them",
-    "retry": "Drop again",
-    "back": "Back to the featured experiments",
-    "balls": { "steel": "Steel · 4.1 kg", "glass": "Glass · 1.3 kg" },
-    "result": { "title": "Which falls faster?" },
-    "wrong": "Whoa, they landed together! That surprises lots of people. When air barely slows things down, weight doesn't change how fast they fall.",
-    "correctLine": "Nailed it! Weight doesn't change how fast things fall. The air barely slows these balls down.",
-    "next": "Want more? Pick your level.",
-    "beliefs": {
-      "before": { "title": "Does the heavier ball land first?", "detail": "Drop them and find out" },
-      "heavy": { "title": "Heavier didn't mean faster", "detail": "They landed together, so weight didn't change the fall" },
-      "light": { "title": "Lighter didn't mean faster", "detail": "They landed together, so weight didn't change the fall" },
-      "same": { "title": "Heavy and light land together", "detail": "Same size, same drop, same moment" }
-    }
+    "explore": "Explore {count} experiments about cancer"
   },
   "how": {
     "title": "How it works",
     "steps": [
-      { "id": "predict", "title": "Guess", "body": "Every experiment starts with your guess. You pick an answer before you press Run. Then the lab shows what really happens." },
-      { "id": "diagnose", "title": "Find the idea", "body": "If your guess is wrong, Ano tries some common wrong ideas on your build. The one that gives your answer is probably the idea behind your guess." },
-      { "id": "break", "title": "Break it", "body": "Ano picks one small change where that idea is most wrong. You run it and watch the idea break." },
-      { "id": "rebuild", "title": "Fix it", "body": "Fix your build and run it again. Keep the idea that matches what really happens." }
+      {
+        "id": "predict",
+        "title": "Guess",
+        "body": "Every experiment starts with your guess. Here's one: when chemo starts, what happens to the hair follicle cells?"
+      },
+      {
+        "id": "run",
+        "title": "Run",
+        "body": "Press Run and watch the real simulation. Chemo works on cells while they divide, so watch the busy dishes."
+      },
+      {
+        "id": "reveal",
+        "title": "Reveal",
+        "body": "Your guess was \"nothing happens\". Ano shows your idea beside what really happened, and the moment they split."
+      },
+      {
+        "id": "understand",
+        "title": "Understand",
+        "body": "Hair follicle cells divide fast, so chemo affects them too. Most hair loss from chemo is reversible once treatment is over."
+      }
     ]
   },
-  "labs": { "title": "Two labs, one rule", "body": "You always guess first. Then the lab shows you what really happens.", "cta": "Pick a level first" },
+  "labs": {
+    "title": "Four labs, one story",
+    "body": "What cancer is, preventing it, finding it early and treating it. You always guess first.",
+    "cta": "Pick a level first"
+  },
   "meetAno": {
     "title": "Meet Ano",
     "body": "Your lab partner. When an experiment surprises you, Ano helps you find out why, one small step at a time.",
     "voice": "Ano's voice",
     "lines": {
-      "happy": "Hi, I'm Ano! You guess first, then we test it. Ready?",
-      "curious": "Ooh, nice. So, what do you think will happen?",
-      "thinking": "Hmm. Which part do you think matters most here?",
-      "surprised": "Whoa, did you see that? Let's work out why.",
-      "celebrating": "Nailed it! That's how a real scientist thinks."
+      "happy": "Hey, I'm Ano. Want to see what's really going on inside a cell?",
+      "curious": "Ooh. So, what do you think will happen?",
+      "thinking": "Hmm. Which cells are the busiest here?",
+      "surprised": "Whoa, did you see that? Lots of people expect that. Let's look closer.",
+      "celebrating": "You got it. That's how a scientist thinks."
     }
   },
-  "beliefs": { "title": "Ideas to test", "body": "Lots of people think these are true. Each one has an experiment that puts it to the test." },
-  "levels": { "title": "Pick your level", "body": "Turn the knob to your grade. The big tile shows your level. Its experiments sit on the shelf below." },
-  "cta": { "left": "Your", "right": "turn.", "button": "Start experimenting" },
-  "footer": { "line": "A science lab for curious students. Your progress stays on this device.", "credits": "Credits" },
-  "captions": { "landing": "Two thuds at the same moment", "anomaly": "Glitchy beeps", "correct": "Bright chime" }
+  "beliefs": {
+    "title": "Ideas to test",
+    "body": "Lots of people believe these. Each one has an experiment that puts it to the test."
+  },
+  "levels": {
+    "title": "Pick your level",
+    "body": "Turn the knob to your grade. The big tile shows your level. Its experiments sit on the shelf below."
+  },
+  "cta": {
+    "left": "Your",
+    "right": "turn.",
+    "line": "Guess first. Then watch the real science.",
+    "button": "Start experimenting"
+  },
+  "footer": {
+    "line": "A cancer science lab for curious students. Your progress stays on this device.",
+    "credits": "Credits",
+    "sources": "Sources"
+  },
+  "learningNote": "This is for learning, not medical advice. If you have questions about cancer or your health, talk to a parent, teacher or doctor.",
+  "captions": {
+    "anomaly": "Glitchy beeps",
+    "correct": "Bright chime"
+  },
+  "problem": {
+    "title": "Why wrong ideas about cancer matter",
+    "lines": [
+      {
+        "text": "Some popular ideas about cancer are wrong, but they can still seem to make sense.",
+        "citation": "myths-common"
+      },
+      {
+        "text": "Wrong ideas can cause needless worry, and get in the way of good choices about prevention and treatment.",
+        "citation": "myths-common"
+      },
+      {
+        "text": "When people don't know how cancer starts, they may think it can be caught. That can spread fear.",
+        "citation": "myths-common-acs"
+      }
+    ],
+    "close": "Guessing first, then seeing the real science, is how a wrong idea breaks."
+  }
 }

@@ -1,5 +1,25 @@
 [
   {
+    "id": "cell",
+    "title": "Cell Lab",
+    "line": "What is a cancer cell? Watch cells divide and find out when they stop."
+  },
+  {
+    "id": "prevention",
+    "title": "Prevention Lab",
+    "line": "Step outside with a UV meter and see what the sun is really doing."
+  },
+  {
+    "id": "detection",
+    "title": "Detection Lab",
+    "line": "Watch a tiny cluster of cells grow under the scanner, month by month."
+  },
+  {
+    "id": "treatment",
+    "title": "Treatment Lab",
+    "line": "See what treatments do inside the body, and why they work the way they do."
+  },
+  {
     "id": "robotics",
     "title": "Robotics Lab",
     "line": "Wire up circuits, drive robots and see what electricity really does."

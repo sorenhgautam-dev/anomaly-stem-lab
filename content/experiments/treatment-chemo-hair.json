@@ -1,0 +1,41 @@
+{
+  "id": "treatment-chemo-hair",
+  "lab": "treatment",
+  "level": "medium",
+  "grades": "9-10",
+  "order": 1,
+  "title": "Why chemo causes hair loss",
+  "goal": "Find out what chemotherapy does to cells that divide fast.",
+  "intro": "Chemotherapy, or chemo, is a cancer treatment. It works on cells while they divide. Here are three kinds of cells. What happens to each one when chemo starts?",
+  "minutes": 3,
+  "stage": "chemo",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    { "type": "toggle", "id": "chemo", "label": "Chemo", "onLabel": "On", "offLabel": "Off", "initial": true },
+    { "type": "choice", "id": "length", "label": "How long", "options": [{ "value": "short", "label": "Short" }, { "value": "long", "label": "Long" }], "initial": "short" },
+    { "type": "choice", "id": "cancerRate", "label": "The cancer cells divide", "options": [{ "value": "fast", "label": "Fast" }, { "value": "slow", "label": "Slowly" }], "initial": "fast" }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "When chemo starts, what happens to the hair follicle cells?",
+    "options": ["Nothing happens to them", "They grow faster to make up for it", "They are affected, like the cancer cells", "They are affected only at the very end"]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "hair.peak", "op": ">", "value": 105 }, "answer": "They grow faster to make up for it" },
+      { "when": { "reading": "hair.early", "op": ">", "value": 5 }, "answer": "They are affected, like the cancer cells" },
+      { "when": { "reading": "hair.min", "op": "<", "value": 95 }, "answer": "They are affected only at the very end" }
+    ],
+    "otherwise": "Nothing happens to them"
+  },
+  "misconceptions": ["chemo-targets-only-cancer", "chemo-hits-healthy-last"],
+  "allowedEdits": [
+    { "id": "long", "label": "Make the treatment long", "edit": { "op": "set", "setting": "length", "value": "long" } },
+    { "id": "off", "label": "Switch chemo off", "edit": { "op": "set", "setting": "chemo", "value": false } }
+  ],
+  "theoryId": "chemo-hair",
+  "citationIds": ["chemo-acts-on-dividing-cells", "chemo-acts-on-dividing-cells-cruk", "chemo-affects-healthy-fast-cells"],
+  "heroSlide": 1
+}

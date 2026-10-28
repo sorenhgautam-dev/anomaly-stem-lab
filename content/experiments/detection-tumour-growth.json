@@ -1,0 +1,120 @@
+{
+  "id": "detection-tumour-growth",
+  "lab": "detection",
+  "level": "easy",
+  "grades": "6-8",
+  "order": 1,
+  "title": "How tumours grow",
+  "goal": "Watch how a cluster of cells grows when every cell keeps doubling.",
+  "intro": "A tumour is a lump of cells. Cancer cells keep dividing, and each one splits into two. Watch the cluster under the scanner. How will its size change?",
+  "minutes": 3,
+  "stage": "tumour",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "slider",
+      "id": "doubling",
+      "label": "Time to double",
+      "min": 1,
+      "max": 4,
+      "step": 0.5,
+      "unit": "months",
+      "initial": 2
+    },
+    {
+      "type": "slider",
+      "id": "months",
+      "label": "How long to watch",
+      "min": 12,
+      "max": 36,
+      "step": 6,
+      "unit": "months",
+      "initial": 30
+    },
+    {
+      "type": "slider",
+      "id": "start",
+      "label": "Cells at the start",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "unit": "cells",
+      "initial": 8
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "If you watch the tumour for a long time, how does its size change?",
+    "options": [
+      "It grows by the same amount every month",
+      "It grows fast at first, then slows down",
+      "It stays tiny for a long time, then grows fast",
+      "It grows in bursts with long pauses"
+    ]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      {
+        "when": {
+          "reading": "growth.ratio",
+          "op": ">",
+          "value": 1.5
+        },
+        "answer": "It stays tiny for a long time, then grows fast"
+      },
+      {
+        "when": {
+          "reading": "growth.ratio",
+          "op": "<",
+          "value": 0.67
+        },
+        "answer": "It grows fast at first, then slows down"
+      }
+    ],
+    "otherwise": "It grows by the same amount every month"
+  },
+  "misconceptions": [
+    "tumour-grows-steadily",
+    "tumour-slows-down"
+  ],
+  "allowedEdits": [
+    {
+      "id": "short-watch",
+      "label": "Watch for 12 months",
+      "edit": {
+        "op": "set",
+        "setting": "months",
+        "value": 12
+      }
+    },
+    {
+      "id": "slow-doubling",
+      "label": "Make each doubling take 4 months",
+      "edit": {
+        "op": "set",
+        "setting": "doubling",
+        "value": 4
+      }
+    }
+  ],
+  "theoryId": "tumour-growth",
+  "citationIds": [
+    "cancer-forms-tumours",
+    "cancer-cells-keep-doubling-cruk",
+    "cells-divide-in-two"
+  ],
+  "tryAtHome": {
+    "title": "Doubling you can hold",
+    "steps": [
+      "Take a sheet of paper.",
+      "Fold it in half and count the layers: 2.",
+      "Fold it again: 4 layers. Again: 8.",
+      "Keep folding until you can't fold any more."
+    ],
+    "watch": "The first folds hardly add anything. The last ones add a lot. That's doubling.",
+    "safety": "Safe to do anywhere. Mind the sharp paper edges."
+  },
+  "heroSlide": 2
+}

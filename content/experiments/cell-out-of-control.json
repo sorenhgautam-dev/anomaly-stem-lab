@@ -1,0 +1,110 @@
+{
+  "id": "cell-out-of-control",
+  "lab": "cell",
+  "level": "easy",
+  "grades": "6-8",
+  "order": 1,
+  "title": "Cells out of control",
+  "goal": "Find out what normal cells do when their dish is full.",
+  "intro": "Your body makes new cells when it needs them. Here are two dishes of cells. What will the normal cells do when their dish fills up?",
+  "minutes": 3,
+  "stage": "cells",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "choice",
+      "id": "dish",
+      "label": "Dish size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "big",
+          "label": "Big"
+        }
+      ],
+      "initial": "small"
+    },
+    {
+      "type": "choice",
+      "id": "signal",
+      "label": "Stop signal",
+      "options": [
+        {
+          "value": "on",
+          "label": "On"
+        },
+        {
+          "value": "off",
+          "label": "Off"
+        }
+      ],
+      "initial": "on"
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "What happens when the normal cells fill the dish?",
+    "options": [
+      "They keep dividing and pile up",
+      "They stop dividing",
+      "They start dying off",
+      "They spread to the next dish"
+    ]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      {
+        "when": {
+          "reading": "normal.afterFull",
+          "op": ">",
+          "value": 5
+        },
+        "answer": "They keep dividing and pile up"
+      },
+      {
+        "when": {
+          "reading": "normal.lost",
+          "op": ">",
+          "value": 5
+        },
+        "answer": "They start dying off"
+      }
+    ],
+    "otherwise": "They stop dividing"
+  },
+  "misconceptions": [
+    "cells-never-stop"
+  ],
+  "allowedEdits": [
+    {
+      "id": "big-dish",
+      "label": "Give them a bigger dish",
+      "edit": {
+        "op": "set",
+        "setting": "dish",
+        "value": "big"
+      }
+    },
+    {
+      "id": "signal-off",
+      "label": "Switch off the stop signal",
+      "edit": {
+        "op": "set",
+        "setting": "signal",
+        "value": "off"
+      }
+    }
+  ],
+  "theoryId": "cells-out-of-control",
+  "citationIds": [
+    "normal-cells-stop-when-needed",
+    "normal-cells-stop-when-needed-cruk",
+    "cancer-cells-ignore-stop-signals"
+  ],
+  "heroSlide": 3
+}

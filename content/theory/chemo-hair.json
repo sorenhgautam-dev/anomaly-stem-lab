@@ -1,0 +1,14 @@
+{
+  "id": "chemo-hair",
+  "title": "Why chemo can cause hair loss",
+  "body": [
+    "Your body makes new cells by dividing. One cell splits into two.",
+    "Chemo works on cells while they divide. Cancer cells divide much more often than most normal cells, so chemo can damage and destroy them.",
+    "Some healthy cells divide fast too. The cells that make hair grow are one example. So are the cells lining the mouth and gut, and the blood-making cells in bone marrow.",
+    "Chemo can't tell a busy cancer cell from a busy hair cell. That's why some types of chemo make hair fall out.",
+    "Healthy cells can replace or repair themselves, so this damage doesn't usually last. Most hair loss from chemo is reversible once treatment is over."
+  ],
+  "realWorld": "Hair often grows back 2 to 3 months after chemo ends.",
+  "model": "This is a teaching model. Its numbers show the idea; they aren't real doses or times.",
+  "citationIds": ["cells-divide-in-two", "chemo-acts-on-dividing-cells-cruk", "chemo-affects-healthy-fast-cells", "chemo-affects-healthy-fast-cells-acs", "chemo-hair-loss-common", "chemo-hair-loss-common-acs", "side-effects-often-temporary-cruk", "hair-usually-grows-back-acs", "hair-usually-grows-back"]
+}

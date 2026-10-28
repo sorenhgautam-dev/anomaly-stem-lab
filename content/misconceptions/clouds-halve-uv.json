@@ -1,0 +1,13 @@
+{
+  "id": "clouds-halve-uv",
+  "lab": "prevention",
+  "title": "Clouds cut UV in half",
+  "belief": "Clouds block about half of the UV, so a cloudy day is only half as risky.",
+  "conceptIds": [
+    "uv",
+    "sun-safety"
+  ],
+  "citationIds": [
+    "uv-through-clouds-cruk"
+  ]
+}

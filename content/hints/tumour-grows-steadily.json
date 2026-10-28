@@ -1,0 +1,8 @@
+{
+  "misconceptionId": "tumour-grows-steadily",
+  "hints": [
+    "Watch what one doubling does when there are 8 cells, then when there are 8,000.",
+    "Doubling means each step adds as much as all the steps before it, together.",
+    "That's why it looks like nothing is happening for ages, and then it looks sudden. Finding it early is finding it on the flat part."
+  ]
+}

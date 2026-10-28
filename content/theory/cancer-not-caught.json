@@ -1,0 +1,18 @@
+{
+  "id": "cancer-not-caught",
+  "title": "Why you can't catch cancer",
+  "body": [
+    "Cancer starts from changes to genes inside a person's own cells.",
+    "In general, cancer is not contagious. It doesn't spread from person to person like a cold.",
+    "You can't catch cancer from someone else. Touching, holding hands, sharing meals and breathing the same air can't spread it.",
+    "So it's safe to hug, sit with and help someone who has cancer. Being close is a kind thing to do."
+  ],
+  "realWorld": "When people don't know how cancer develops, they may think it spreads between people. That idea can cause fear.",
+  "model": "This is a teaching model. The two dishes stand for two people's cells; real bodies are far more complicated.",
+  "citationIds": [
+    "cancer-starts-from-gene-changes",
+    "cancer-not-contagious",
+    "cancer-not-contagious-acs",
+    "myths-common-acs"
+  ]
+}

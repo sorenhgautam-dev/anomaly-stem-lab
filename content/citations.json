@@ -1,0 +1,465 @@
+[
+  {
+    "id": "chemo-acts-on-dividing-cells",
+    "claim": "Chemotherapy works by killing cancer cells and other fast-growing cells, or stopping them from growing.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/treatment/types/chemotherapy",
+    "quote": "Chemotherapy works by killing or stopping the growth of cancer and other fast-growing cells.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "treatment-chemo-hair"
+    ]
+  },
+  {
+    "id": "chemo-acts-on-dividing-cells-cruk",
+    "claim": "Chemotherapy damages cells that are dividing. Cancer cells divide much more often than most normal cells, so chemotherapy can damage and destroy them.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/treatment/chemotherapy/side-effects",
+    "quote": "Chemotherapy damages dividing cells. Cancer cells divide much more often than most normal cells. So chemotherapy can damage and destroy them.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "chemo-hair",
+      "chemo-hits-healthy-last",
+      "chemo-targets-only-cancer",
+      "treatment-chemo-hair"
+    ]
+  },
+  {
+    "id": "chemo-affects-healthy-fast-cells",
+    "claim": "Chemotherapy can also kill or slow healthy cells that grow and divide quickly, such as cells lining the mouth and intestines and the cells that make hair grow.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/treatment/types/chemotherapy",
+    "quote": "Chemotherapy not only kills fast-growing cancer cells, but also kills or slows the growth of healthy cells that grow and divide quickly. Examples are cells that line your mouth and intestines and those that cause your hair to grow.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "chemo-hair",
+      "chemo-hits-healthy-last",
+      "chemo-targets-only-cancer",
+      "treatment-chemo-hair"
+    ]
+  },
+  {
+    "id": "chemo-affects-healthy-fast-cells-acs",
+    "claim": "The normal cells most likely to be damaged by chemo are blood-forming cells in the bone marrow, hair follicles, and cells in the mouth, digestive tract and reproductive system.",
+    "source": "American Cancer Society",
+    "url": "https://www.cancer.org/cancer/treatment-types/chemotherapy/chemotherapy-side-effects.html",
+    "quote": "The normal cells most likely to be damaged by chemo are: [list] Blood-forming cells in the bone marrow / Hair follicles / Cells in the mouth, digestive tract, and reproductive system",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "chemo-hair"
+    ]
+  },
+  {
+    "id": "chemo-hair-loss-common",
+    "claim": "Some types of chemotherapy make hair fall out, on the head and on other parts of the body.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/hair-loss",
+    "quote": "Some types of chemotherapy cause the hair on your head and other parts of your body to fall out.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "chemo-hair"
+    ]
+  },
+  {
+    "id": "chemo-hair-loss-common-acs",
+    "claim": "Chemotherapy kills fast-growing cells, including the cells in hair follicles, which is why some chemo can cause hair loss or thinning.",
+    "source": "American Cancer Society",
+    "url": "https://www.cancer.org/cancer/side-effects/hair-skin-nails/hair-loss/coping-with-hair-loss.html",
+    "quote": "Chemotherapy works by killing fast-growing cells. Unfortunately, that includes the cells in your hair follicles. This is why some chemo can cause hair loss or thinning.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "chemo-hair",
+      "chemo-targets-only-cancer"
+    ]
+  },
+  {
+    "id": "hair-usually-grows-back",
+    "claim": "After chemotherapy, hair often grows back 2 to 3 months after treatment has ended.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/treatment/side-effects/hair-loss",
+    "quote": "After chemotherapy. Hair often grows back in 2 to 3 months after treatment has ended.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "chemo-hair"
+    ]
+  },
+  {
+    "id": "hair-usually-grows-back-acs",
+    "claim": "Most hair loss caused by chemo is reversible once treatment is over.",
+    "source": "American Cancer Society",
+    "url": "https://www.cancer.org/cancer/side-effects/hair-skin-nails/hair-loss/coping-with-hair-loss.html",
+    "quote": "Most chemo-induced hair loss is reversible once treatment is over.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "chemo-hair"
+    ]
+  },
+  {
+    "id": "side-effects-often-temporary-cruk",
+    "claim": "Normal cells can replace or repair the healthy cells that chemotherapy damages, so the damage to healthy cells doesn't usually last.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/treatment/chemotherapy/side-effects",
+    "quote": "But normal cells can replace or repair the healthy cells that are damaged by chemotherapy. So the damage to healthy cells doesn't usually last.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "chemo-hair"
+    ]
+  },
+  {
+    "id": "side-effects-often-temporary",
+    "claim": "Chemotherapy side effects often get better or go away after treatment is finished.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/treatment/types/chemotherapy",
+    "quote": "Side effects often get better or go away after you have finished chemotherapy.",
+    "checked": "2026-10-28",
+    "usedIn": []
+  },
+  {
+    "id": "cancer-cells-keep-doubling-cruk",
+    "claim": "Unlike normal cells, cancer cells don't stop growing and dividing when there are enough of them, so they keep doubling and form a lump (tumour) that grows in size.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/what-is-cancer/how-cancer-start-grow-spread/cancer-cells",
+    "quote": "Unlike normal cells, cancer cells don't stop growing and dividing when there are enough of them. So the cells keep doubling, forming a lump (tumour) that grows in size.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "cells-out-of-control",
+      "detection-tumour-growth",
+      "tumour-grows-steadily",
+      "tumour-growth",
+      "tumour-slows-down"
+    ]
+  },
+  {
+    "id": "cancer-cells-ignore-stop-signals",
+    "claim": "Cancer cells ignore the signals that normally tell cells to stop dividing or to die.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/understanding/what-is-cancer",
+    "quote": "ignore signals that normally tell cells to stop dividing or to die (a process known as programmed cell death, or apoptosis).",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "cell-out-of-control",
+      "cells-out-of-control"
+    ]
+  },
+  {
+    "id": "normal-cells-stop-when-needed",
+    "claim": "Normally, cells grow and multiply by cell division to make new cells as the body needs them; old or damaged cells die and new cells take their place.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/understanding/what-is-cancer",
+    "quote": "Normally, human cells grow and multiply (through a process called cell division) to form new cells as the body needs them. When cells grow old or become damaged, they die, and new cells take their place.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "cell-out-of-control",
+      "cells-out-of-control"
+    ]
+  },
+  {
+    "id": "normal-cells-stop-when-needed-cruk",
+    "claim": "Cells send chemical messages to each other so that they stop growing and dividing when growth or healing is complete.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/what-is-cancer/how-cancer-start-grow-spread/how-cells-and-tissues-grow",
+    "quote": "Cells send chemical messages to each other so that they stop growing and dividing when growth or healing is complete.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "cell-out-of-control",
+      "cells-never-stop",
+      "cells-out-of-control"
+    ]
+  },
+  {
+    "id": "cells-divide-in-two",
+    "claim": "A cell doubles by dividing into two: two cells become four, and so on.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/what-is-cancer/how-cancer-start-grow-spread/how-cells-and-tissues-grow",
+    "quote": "When cells become damaged or die the body makes new cells to replace them. This process is called cell division. So, a cell doubles by dividing into two. Two cells become four and so on.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "chemo-hair",
+      "detection-tumour-growth",
+      "tumour-grows-steadily",
+      "tumour-growth"
+    ]
+  },
+  {
+    "id": "cancer-forms-tumours",
+    "claim": "Abnormal or damaged cells that keep multiplying may form tumours, which are lumps of tissue.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/understanding/what-is-cancer",
+    "quote": "These cells may form tumors, which are lumps of tissue.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "detection-tumour-growth",
+      "tumour-growth"
+    ]
+  },
+  {
+    "id": "cancer-starts-from-gene-changes",
+    "claim": "Cancer is caused by changes to genes that control how cells work, especially how they grow and divide.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/understanding/what-is-cancer",
+    "quote": "Cancer is a genetic disease—that is, it is caused by changes to genes that control the way our cells function, especially how they grow and divide.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "cancer-not-caught",
+      "cell-contact-test",
+      "cells-out-of-control"
+    ]
+  },
+  {
+    "id": "cancer-not-contagious",
+    "claim": "In general, cancer is not contagious: it does not easily spread from person to person.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/causes-prevention/risk/myths",
+    "quote": "In general, no. Cancer is not a contagious disease that easily spreads from person to person.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "cancer-is-contagious",
+      "cancer-not-caught",
+      "cell-contact-test"
+    ]
+  },
+  {
+    "id": "cancer-not-contagious-acs",
+    "claim": "You can't catch cancer from someone else; close contact such as touching, holding hands, sharing meals or breathing the same air can't spread it.",
+    "source": "American Cancer Society",
+    "url": "https://www.cancer.org/cancer/risk-prevention/understanding-cancer-risk/is-cancer-contagious.html",
+    "quote": "But you can’t “catch” cancer from someone else. Close contact like touching, holding hands, sharing meals, kissing, having sex, or breathing the same air can’t spread cancer.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "cancer-is-contagious",
+      "cancer-not-caught",
+      "cancer-spreads-on-long-contact",
+      "cell-contact-test"
+    ]
+  },
+  {
+    "id": "early-detection-easier-to-treat",
+    "claim": "Cancer screening looks for cancer before symptoms appear, when cancer may be easier to treat.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/screening",
+    "quote": "Cancer screening means looking for cancer before symptoms appear, when cancer may be easier to treat.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "tumour-growth"
+    ]
+  },
+  {
+    "id": "early-detection-easier-to-treat-cruk",
+    "claim": "When cancer is found at an early stage, treatment is more likely to be successful.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/spot-cancer-early/why-is-early-diagnosis-important",
+    "quote": "When cancer is found at an early stage, treatment is more likely to be successful.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "tumour-growth"
+    ]
+  },
+  {
+    "id": "screening-purpose-cruk",
+    "claim": "Cancer screening is for people with no symptoms; it looks for possible signs of cancer before they are noticeable.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/spot-cancer-early/screening",
+    "quote": "Cancer screening is for people with no symptoms. It looks for possible signs of cancer before they are noticeable.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "tumour-growth"
+    ]
+  },
+  {
+    "id": "uv-through-clouds-cruk",
+    "claim": "Clouds block some UV, but over 90% of UV rays can still pass through cloud and cause sunburn.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/causes-of-cancer/sun-uv-and-cancer/the-uv-index-and-sunburn-risk",
+    "quote": "Clouds block some UV, but over 90% of UV rays can still pass through cloud and cause sunburn.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "clouds-block-uv",
+      "clouds-halve-uv",
+      "prevention-uv-cloudy",
+      "uv-clouds"
+    ]
+  },
+  {
+    "id": "uv-through-clouds",
+    "claim": "UV levels are highest under cloudless skies but can be high even when it is cloudy.",
+    "source": "World Health Organization",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/ultraviolet-radiation",
+    "quote": "Cloud cover: UVR levels are highest under cloudless skies but can be high even with cloud cover.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "prevention-uv-cloudy",
+      "uv-clouds"
+    ]
+  },
+  {
+    "id": "uv-invisible",
+    "claim": "UV radiation can't be seen or felt.",
+    "source": "World Health Organization",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/ultraviolet-radiation",
+    "quote": "Ultraviolet radiation (UVR) can neither be seen nor felt.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "clouds-block-uv",
+      "prevention-uv-cloudy",
+      "uv-clouds"
+    ]
+  },
+  {
+    "id": "uv-invisible-cruk",
+    "claim": "You can't feel UV rays, so the temperature outside doesn't tell you whether you're at risk of skin damage; the warmth you feel is infrared.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/causes-of-cancer/sun-uv-and-cancer/how-does-the-sun-and-uv-cause-cancer",
+    "quote": "You can’t tell whether you are at risk of skin damage and sunburn from the temperature outside. This is because you can’t feel UV rays. The warmth you feel from the sun is a different type of ray, called infrared.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "uv-clouds"
+    ]
+  },
+  {
+    "id": "uv-damages-skin-cells",
+    "claim": "Too much UV from the sun or sunbeds can damage the DNA in skin cells; if enough damage builds up, cells can grow out of control and lead to skin cancer.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/causes-of-cancer/sun-uv-and-cancer/how-does-the-sun-and-uv-cause-cancer",
+    "quote": "Too much UV radiation from the sun or sunbeds can damage the DNA in our skin cells. DNA tells our cells how to function. If enough DNA damage builds up over time, it can cause cells to grow out of control, which can lead to skin cancer.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "uv-clouds"
+    ]
+  },
+  {
+    "id": "skin-cancer-uv-main-cause",
+    "claim": "Too much UV exposure is the main cause of skin cancer in the UK.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/causes-of-cancer/sun-uv-and-cancer/how-does-the-sun-and-uv-cause-cancer",
+    "quote": "Too much exposure to UV radiation is the main cause of skin cancer in the UK.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "uv-clouds"
+    ]
+  },
+  {
+    "id": "sun-protection-reduces-risk",
+    "claim": "Skin cancer is highly preventable. WHO recommends limiting time in the midday sun, seeking shade, wearing protective clothing, a broad-brimmed hat and wraparound UV-blocking sunglasses, and using broad-spectrum sunscreen on skin that clothes can't cover.",
+    "source": "World Health Organization",
+    "url": "https://www.who.int/news-room/fact-sheets/detail/ultraviolet-radiation",
+    "quote": "Skin cancer is highly preventable. WHO recommends the following measures to protect against excessive exposure to UVR. [list] Limit time in the midday sun. / Seek shade. / Wear protective clothing. / Wear a broad brimmed hat to protect the eyes, face, ears and neck. / Wear wraparound-style sunglasses that provide 99 to 100% UV-A and UV-B protection. / Use broad-spectrum sunscreen on skin areas that cannot be covered by clothes.",
+    "checked": "2026-10-28",
+    "usedIn": []
+  },
+  {
+    "id": "sun-protection-reduces-risk-cruk",
+    "claim": "Cancer Research UK's three sun-safety steps: spend time in the shade, cover up with clothes, a wide-brimmed hat and UV-protection sunglasses, and apply sunscreen (at least SPF 30, 4 or 5 stars).",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/causes-of-cancer/sun-uv-and-cancer/sun-safety",
+    "quote": "By using these three steps together, you can protect your skin and enjoy the sun safely: [list] Spend time in the shade, especially between 11am and 3pm in the UK. / Cover up with clothes, a wide-brimmed hat and UV protection sunglasses. / Apply sunscreen with at least SPF 30 and 4 or 5 stars. Use it generously, reapply regularly and use together with shade and clothing.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "uv-clouds"
+    ]
+  },
+  {
+    "id": "radiotherapy-external-beam",
+    "claim": "External beam radiation therapy comes from a machine that aims radiation at the cancer.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy/external-beam",
+    "quote": "External beam radiation therapy comes from a machine that aims radiation at your cancer.",
+    "checked": "2026-10-28",
+    "usedIn": []
+  },
+  {
+    "id": "radiotherapy-several-angles",
+    "claim": "The external beam machine does not touch you, but can move around you and send radiation to part of your body from many directions.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy",
+    "quote": "The machine is large and may be noisy. It does not touch you, but can move around you, sending radiation to a part of your body from many directions.",
+    "checked": "2026-10-28",
+    "usedIn": []
+  },
+  {
+    "id": "radiotherapy-beams-meet",
+    "claim": "When many small beams are aimed at a tumour from different directions, each beam has very little effect on the tissue it passes through, and the dose is delivered where they all meet.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy/external-beam",
+    "quote": "In stereotactic radiosurgery, many small beams of radiation are aimed at the tumor from different directions. Each beam has very little effect on the tissue it passes through, but a precisely targeted dose of radiation is delivered to the site where all the beams come together.",
+    "checked": "2026-10-28",
+    "usedIn": []
+  },
+  {
+    "id": "radiotherapy-healthy-tissue",
+    "claim": "Radiation can also affect nearby healthy cells, and damage to healthy cells can cause side effects.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy",
+    "quote": "Radiation not only kills or slows the growth of cancer cells, it can also affect nearby healthy cells. Damage to healthy cells can cause side effects.",
+    "checked": "2026-10-28",
+    "usedIn": []
+  },
+  {
+    "id": "radiotherapy-planned-cruk",
+    "claim": "The treatment team carefully plans radiotherapy to give a high dose to the cancer while sparing as much healthy tissue as possible.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/treatment/radiotherapy/external/what",
+    "quote": "Your treatment team carefully plans the radiotherapy to give a high dose to the cancer. While sparing as much healthy tissue as possible.",
+    "checked": "2026-10-28",
+    "usedIn": []
+  },
+  {
+    "id": "genes-inherited-or-acquired",
+    "claim": "Gene changes that cause cancer can be inherited, can come from things in the environment, or can happen because of errors when cells divide.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/understanding/what-is-cancer",
+    "quote": "Genetic changes that cause cancer can be inherited or arise from certain environmental exposures. Genetic changes can also happen because of errors that occur as cells divide.",
+    "checked": "2026-10-28",
+    "usedIn": []
+  },
+  {
+    "id": "most-changes-during-life",
+    "claim": "Most cancers (90 to 95 percent) are caused by gene changes that happen during a person's lifetime, from ageing and from things in the environment.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/causes-prevention/risk/myths",
+    "quote": "The remaining 90 to 95 percent of cancers are caused by mutations that happen during a person’s lifetime as a natural result of aging and exposure to environmental factors, such as tobacco smoke and radiation.",
+    "checked": "2026-10-28",
+    "usedIn": []
+  },
+  {
+    "id": "inherited-small-share",
+    "claim": "Only about 5 to 10 percent of cancers are caused by harmful gene changes inherited from a parent.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/causes-prevention/risk/myths",
+    "quote": "Only about 5 to 10 percent of cancers are caused by harmful mutations that are inherited from a person’s parents.",
+    "checked": "2026-10-28",
+    "usedIn": []
+  },
+  {
+    "id": "myths-common",
+    "claim": "Some popular ideas about cancer are scientifically wrong but can seem to make sense, and wrong ideas can cause needless worry and get in the way of good prevention and treatment decisions.",
+    "source": "National Cancer Institute",
+    "url": "https://www.cancer.gov/about-cancer/causes-prevention/risk/myths",
+    "quote": "Certain popular ideas about how cancer starts and spreads—though scientifically wrong—can seem to make sense, especially when those ideas are rooted in old theories. But wrong ideas about cancer can lead to needless worry and even hinder good prevention and treatment decisions. This page provides the latest science-based information about some common cancer myths and misconceptions.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "landing"
+    ]
+  },
+  {
+    "id": "myths-common-acs",
+    "claim": "When people don't know how cancer develops, they may wrongly believe it can spread between people, which can cause fear.",
+    "source": "American Cancer Society",
+    "url": "https://www.cancer.org/cancer/risk-prevention/understanding-cancer-risk/is-cancer-contagious.html",
+    "quote": "When people don’t know how cancer develops, they may believe it can spread between people. This misunderstanding can cause fear and spread misinformation.",
+    "checked": "2026-10-28",
+    "usedIn": [
+      "cancer-is-contagious",
+      "cancer-not-caught",
+      "landing"
+    ]
+  },
+  {
+    "id": "myths-common-cruk",
+    "claim": "Stories about cancer causes are popular in the news and on social media, but some things people hear, read or see are not supported by good evidence.",
+    "source": "Cancer Research UK",
+    "url": "https://www.cancerresearchuk.org/about-cancer/causes-of-cancer/cancer-myths-questions",
+    "quote": "Stories about possible cancer causes make for hot topics in the news and on social media. But some things you hear, read or see are not supported by good evidence.",
+    "checked": "2026-10-28",
+    "usedIn": []
+  }
+]

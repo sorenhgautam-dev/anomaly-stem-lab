@@ -1,9 +1,9 @@
 import landing from "@/content/landing.json";
 import { beliefItems, type BeliefItem } from "@/lib/beliefs";
-import { BeliefWall } from "./BeliefWall";
+import { BeliefDeck } from "./BeliefDeck";
 import { SectionHeading } from "./SectionHeading";
 
-/* The belief wall section: nine real beliefs, alternating labs. */
+/* The belief deck section: nine real beliefs, alternating labs, one card at a time. */
 
 const COUNT = 9;
 
@@ -21,11 +21,11 @@ function wallBeliefs(): BeliefItem[] {
 
 export function BeliefSection() {
   return (
-    <section aria-labelledby="belief-wall" className="mx-auto w-full max-w-7xl px-4 py-24 sm:px-8 sm:py-32">
-      <SectionHeading id="belief-wall" title={landing.beliefs.title}>
+    <section aria-labelledby="belief-deck" className="mx-auto grid w-full max-w-7xl items-center gap-12 overflow-x-clip px-4 py-24 sm:px-8 sm:py-32 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+      <SectionHeading id="belief-deck" title={landing.beliefs.title}>
         {landing.beliefs.body}
       </SectionHeading>
-      <BeliefWall beliefs={wallBeliefs()} />
+      <BeliefDeck beliefs={wallBeliefs()} />
     </section>
   );
 }

@@ -3,7 +3,7 @@
 import { useEffect, type RefObject } from "react";
 import landing from "@/content/landing.json";
 import { centreOf, fx } from "@/lib/fx";
-import { anomalySting, resolveChime, unlockAudio } from "@/lib/sound";
+import { anomalySting, resolveChime, resumeAudio } from "@/lib/sound";
 import { toast } from "@/components/ui/Toast";
 import { DROP_SECONDS, landingTime, DROP } from "./drop-sim";
 import { useDrop } from "./drop-store";
@@ -21,7 +21,7 @@ export function useDropRun(view: RefObject<HTMLElement | null>, headline: RefObj
 
   useEffect(() => {
     if (phase !== "dropping") return;
-    unlockAudio();
+    resumeAudio();
     const thud = window.setTimeout(() => toast(`[${landing.captions.landing}]`, 2200), landingTime(DROP.g) * 1000);
     const done = window.setTimeout(() => {
       useDrop.getState().finish();

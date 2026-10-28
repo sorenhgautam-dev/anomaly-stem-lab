@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
+import { startTransition, useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
 import { useReducedMotion } from "@/lib/motion";
 
 /*
@@ -18,12 +18,13 @@ export function useCarousel(count: number, { interval = 7000, disabled = false }
   const reduced = useReducedMotion();
   const drag = useRef<{ x: number; y: number; id: number } | null>(null);
 
-  const go = useCallback((i: number) => setIndex(((i % count) + count) % count), [count]);
+  // Slide changes render as a transition: React spreads the hero's re-render over frames instead of one long click (it was ~110 ms).
+  const go = useCallback((i: number) => startTransition(() => setIndex(((i % count) + count) % count)), [count]);
   const playing = !disabled && !userPaused && !hovered && !reduced;
 
   useEffect(() => {
     if (!playing) return;
-    const id = window.setTimeout(() => setIndex((i) => (i + 1) % count), interval);
+    const id = window.setTimeout(() => startTransition(() => setIndex((i) => (i + 1) % count)), interval);
     return () => window.clearTimeout(id);
   }, [playing, index, count, interval]);
 

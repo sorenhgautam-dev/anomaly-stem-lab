@@ -2,31 +2,45 @@ import { ViewTransition } from "react";
 import { EXPERIMENTS } from "@/lib/content";
 import { BeliefSection } from "@/components/landing/BeliefSection";
 import { FinalCta } from "@/components/landing/FinalCta";
+import { featuredCards } from "@/components/landing/featured";
 import { Hero } from "@/components/landing/Hero";
+import { howSequence } from "@/components/landing/how-sequence";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { LabsSection } from "@/components/landing/LabsSection";
-import { LevelsStrip } from "@/components/landing/LevelsStrip";
+import { LevelDialSection } from "@/components/landing/LevelDialSection";
 import { MeetAno } from "@/components/landing/MeetAno";
+import { NightTrace } from "@/components/landing/NightTrace";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
 
+/** The hero's cards and How it works, run through the simulator once (the engine is deterministic). */
+const FEATURED = featuredCards();
+const HOW = howSequence();
+
 /*
  * The landing page (DESIGN.md §7.1): the hero carousel with the "Which falls
- * faster?" teaser, then How it works, the two labs, Meet Ano, the belief
- * wall, the levels strip and the final call to action.
+ * faster?" teaser; then a black and gold stretch (Robotics' graphite and
+ * gold) for How it works, the two labs and Meet Ano; then an earthy sage one
+ * (Chemistry's sage, sand gold and teal) for the belief deck, the level dial,
+ * the final call to action and the footer: the page itself is sage paper,
+ * and the black and gold stretch is one rounded block on it, inset like the
+ * hero's frame.
  */
 export default function Home() {
   return (
-    <ViewTransition default="sunrise-wipe">
-      <div className="flex flex-col bg-cream-50">
+    <ViewTransition enter="colour-wipe" exit="colour-wipe" default="none">
+      <div className="flex flex-col bg-paper-sage">
         <SmoothScroll />
         <main className="flex flex-col">
-          <Hero count={EXPERIMENTS.length} />
-          <HowItWorks />
-          <LabsSection />
-          <MeetAno />
+          <Hero count={EXPERIMENTS.length} featured={FEATURED} />
+          <div className="relative bg-paper-night md:mx-3 md:rounded-frame">
+            <NightTrace />
+            <HowItWorks sequence={HOW} />
+            <LabsSection />
+            <MeetAno />
+          </div>
           <BeliefSection />
-          <LevelsStrip />
+          <LevelDialSection />
           <FinalCta />
         </main>
         <SiteFooter />

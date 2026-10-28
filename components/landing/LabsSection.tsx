@@ -1,23 +1,34 @@
 import landing from "@/content/landing.json";
 import { EXPERIMENTS, LAB_INFO } from "@/lib/content";
 import { LabCard } from "./LabCard";
+import { LabsScene } from "./LabsScene";
 import { SectionHeading } from "./SectionHeading";
 
-/* The two labs (DESIGN.md §7.1), with real experiment counts from content/. */
+/*
+ * The two labs (DESIGN.md §7.1 item 2), in the landing's black and gold
+ * stretch (app/page.tsx), with real experiment counts from content/. On wide
+ * screens the section pins and the two cards rise and turn into place with
+ * the scroll while their 3D cameras fly in to each bench (LabObjectView
+ * reads scenes.labs). Pattern studied from Skiper's "Card stack with gsap
+ * and rotate", our own code.
+ */
 export function LabsSection() {
   const labs = (["chemistry", "robotics"] as const).map((id) => LAB_INFO.find((l) => l.id === id)!);
   return (
-    <section aria-labelledby="labs" className="mx-auto w-full max-w-7xl px-4 py-24 sm:px-8 sm:py-32">
-      <SectionHeading id="labs" title={landing.labs.title}>
-        {landing.labs.body}
-      </SectionHeading>
-      <div className="mt-12 grid gap-6 md:grid-cols-2">
-        {labs.map((lab, i) => (
-          <div key={lab.id} className="reveal" style={{ ["--reveal-end" as string]: `${75 + i * 12}%` }}>
-            <LabCard lab={lab.id} title={lab.title} line={lab.line} count={EXPERIMENTS.filter((e) => e.lab === lab.id).length} cta={landing.labs.cta} />
-          </div>
-        ))}
+    <LabsScene labelledBy="labs">
+      <div className="mx-auto w-full max-w-7xl px-4 py-24 sm:px-8 sm:py-32">
+        <SectionHeading id="labs" title={landing.labs.title} light className="mx-auto text-center">
+          {landing.labs.body}
+        </SectionHeading>
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          {labs.map((lab) => (
+            // A gold hairline keeps each card's edge on the night block (Robotics' graphite card would melt into it).
+            <div key={lab.id} data-labs-card className="rounded-frame ring-1 ring-robo-gold/40">
+              <LabCard lab={lab.id} title={lab.title} line={lab.line} count={EXPERIMENTS.filter((e) => e.lab === lab.id).length} cta={landing.labs.cta} scrollScene />
+            </div>
+          ))}
+        </div>
       </div>
-    </section>
+    </LabsScene>
   );
 }

@@ -35,7 +35,7 @@ export function DropScene({ track }: { track: React.RefObject<HTMLElement | null
       steel: new MeshPhysicalMaterial({ color: "#d9dde4", metalness: 1, roughness: 0.2, clearcoat: 0.6 }),
       // Glass faked with gloss, tint and transparency: real transmission over
       // the transparent site canvas reads as flat white.
-      glass: new MeshPhysicalMaterial({ color: P.volt[100], transparent: true, opacity: high ? 0.42 : 0.55, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0.05, iridescence: 0.7, iridescenceIOR: 1.4, specularIntensity: 1 }),
+      glass: new MeshPhysicalMaterial({ color: P.volt[100], transparent: true, opacity: high ? 0.42 : 0.55, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0.05, specularIntensity: 1 }),
       ghost: new MeshStandardMaterial({ color: P.volt[300], emissive: P.volt[400], emissiveIntensity: 0.35, transparent: true, opacity: 0.38, depthWrite: false }),
       floor: new MeshPhysicalMaterial({ color: P.cream[100], roughness: 0.55, clearcoat: 0.3 }),
       ledge: new MeshPhysicalMaterial({ color: P.white, roughness: 0.3, clearcoat: 0.8 }),

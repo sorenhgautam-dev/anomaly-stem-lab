@@ -104,6 +104,26 @@ const MODELS: Record<string, () => ReactNode> = {
       </mesh>
     </group>
   ),
+  "treatment-radiotherapy-beams": () => (
+    <group>
+      <mesh position={[0, 0.03, 0]} scale={[0.28, 1, 0.2]}>
+        <cylinderGeometry args={[1, 1, 0.06, 48]} />
+        <meshPhysicalMaterial color="#EFE3D6" roughness={0.6} />
+      </mesh>
+      {[0, 1.26, 2.51, 3.77, 5.03].map((a) => (
+        <mesh key={a} position={[0, 0.065, 0]} rotation={[-Math.PI / 2, 0, -a]}>
+          <planeGeometry args={[0.07, 0.62]} />
+          <meshBasicMaterial color={LAB.robotics.teal} transparent opacity={0.35} depthWrite={false} />
+        </mesh>
+      ))}
+      <Cluster count={() => 20} color={LAB.robotics.gold} radius={0.045} position={[0, 0.09, 0]} />
+    </group>
+  ),
+  "cell-born-with-it": () => (
+    <Dish3D radius={0.3}>
+      <Colony count={() => 1} room={12} radius={0.05} size={0.12} color={LAB.chemistry.sage} />
+    </Dish3D>
+  ),
   "cell-contact-test": () => (
     <Dish3D radius={0.3}>
       <Colony count={() => 60} room={60} radius={0.26} color={LAB.chemistry.sage} />

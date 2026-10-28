@@ -1,0 +1,8 @@
+{
+  "id": "same-side-is-gentlest",
+  "lab": "treatment",
+  "title": "Beams from one side touch less",
+  "belief": "If every beam comes from one side, only that side of the body gets any. That must be gentlest.",
+  "conceptIds": ["radiotherapy", "dose"],
+  "citationIds": ["radiotherapy-several-angles", "radiotherapy-planned-cruk"]
+}

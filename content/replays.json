@@ -24,5 +24,7 @@
   "detection-tumour-growth": {"watch": [{"key": "cells", "label": "Cells in the cluster", "name": "the cluster", "unit": "cells", "digits": 0}]},
   "cell-out-of-control": {"watch": [{"key": "normal", "label": "Normal cells", "name": "the normal dish", "unit": "cells", "digits": 0}]},
   "cell-contact-test": {"watch": [{"key": "spread", "label": "Cells that crossed", "name": "the count of cells that crossed", "unit": "cells", "digits": 0}]},
-  "prevention-uv-cloudy": {"watch": [{"key": "uv", "label": "UV reaching the skin", "name": "the UV meter", "unit": "%", "digits": 0, "scale": 100}]}
+  "prevention-uv-cloudy": {"watch": [{"key": "uv", "label": "UV reaching the skin", "name": "the UV meter", "unit": "%", "digits": 0, "scale": 100}]},
+  "treatment-radiotherapy-beams": {"watch": [{"key": "angles.target", "label": "Tumour dose, spread plan", "name": "the spread plan's tumour dose", "unit": "%", "digits": 0}, {"key": "side.healthy", "label": "Healthy dose, one-side plan", "name": "the one-side plan's healthy dose", "unit": "%", "digits": 0}]},
+  "cell-born-with-it": {"watch": [{"key": "during", "label": "Changes during life", "name": "the count of changes during life", "unit": "", "digits": 0}]}
 }

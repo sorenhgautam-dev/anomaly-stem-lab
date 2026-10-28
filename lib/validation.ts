@@ -1,5 +1,7 @@
+import { beamsWrongModels, simulateBeams } from "@/engine/cancer/beams";
 import { cellsWrongModels, simulateCells } from "@/engine/cancer/cells";
 import { chemoWrongModels, simulateChemo } from "@/engine/cancer/chemo";
+import { inheritWrongModels, simulateInherit } from "@/engine/cancer/inherit";
 import { simulateTumour, tumourWrongModels } from "@/engine/cancer/tumour";
 import { simulateUv, uvWrongModels } from "@/engine/cancer/uv";
 import type { Build, ExperimentDef, PropValue } from "@/engine/types";
@@ -134,6 +136,79 @@ export const VALIDATION: ValidationCheck[] = [
     title: "The wrong idea 'clouds block UV' lets almost none through, so the simulator can tell it apart.",
     citations: [],
     run: () => uvWrongModels["clouds-block-uv"](def, build({ cloud: 60 })).readings["uv.share"] < 0.2,
+  },
+  {
+    experiment: "Radiotherapy beams",
+    title: "Where beams from different angles meet, their doses add up: the tumour gets about as much from five weaker beams as from one strong beam.",
+    citations: ["radiotherapy-beams-meet"],
+    run: () => {
+      const r = simulateBeams(def, build({ beams: 5 })).readings;
+      return r["angles.target"] >= 90 && r["angles.target"] > 4 * r["beam.share"];
+    },
+  },
+  {
+    experiment: "Radiotherapy beams",
+    title: "One strong beam also gives the healthy tissue on its path a high dose, more than the tumour gets.",
+    citations: ["radiotherapy-healthy-tissue"],
+    run: () => {
+      const r = simulateBeams(def, build()).readings;
+      return r["one.healthy"] > r["one.target"];
+    },
+  },
+  {
+    experiment: "Radiotherapy beams",
+    title: "Spreading the beams all around gives each healthy spot much less than one strong beam, so the spread plan is judged best with 3 to 9 beams.",
+    citations: ["radiotherapy-several-angles", "radiotherapy-planned-cruk"],
+    run: () => [3, 4, 5, 6, 7, 8, 9].every((beams) => {
+      const r = simulateBeams(def, build({ beams })).readings;
+      return r.best === 1 && r["angles.healthy"] < r["one.healthy"] / 2;
+    }),
+  },
+  {
+    experiment: "Radiotherapy beams",
+    title: "Spreading the dose across more beams (3, then 5, then 9) gives each path less where the beams go in.",
+    citations: ["radiotherapy-beams-meet"],
+    run: () => {
+      const skin = [3, 5, 9].map((beams) => simulateBeams(def, build({ beams })).readings["angles.skin"]);
+      return skin.every((d, i) => i === 0 || d < skin[i - 1]);
+    },
+  },
+  {
+    experiment: "Radiotherapy beams",
+    title: "The wrong idea 'weak beams don't add up' picks one strong beam, so the simulator can tell it apart.",
+    citations: [],
+    run: () => beamsWrongModels["one-beam-is-best"](def, build()).readings.best === 0,
+  },
+  {
+    experiment: "Born with it?",
+    title: "With or without a change from birth, and with fewer or more exposures, most of a cell line's changes appear during life.",
+    citations: ["genes-inherited-or-acquired", "most-changes-during-life"],
+    run: () =>
+      [true, false].every((inherited) =>
+        ["less", "more"].every((exposure) => simulateInherit(def, build({ inherited, exposure })).readings["share.life"] >= 0.6),
+      ),
+  },
+  {
+    experiment: "Born with it?",
+    title: "A change from birth is a head start: the cell line reaches its five changes sooner, but still needs changes during life.",
+    citations: ["genes-inherited-or-acquired"],
+    run: () => {
+      const withIt = simulateInherit(def, build({ inherited: true, exposure: "more" })).readings;
+      const without = simulateInherit(def, build({ inherited: false, exposure: "more" })).readings;
+      return withIt["threshold.at"] < without["threshold.at"] && withIt["changes.life"] >= 4;
+    },
+  },
+  {
+    experiment: "Born with it?",
+    title: "Fewer everyday exposures mean fewer changes during life.",
+    citations: ["most-changes-during-life"],
+    run: () => simulateInherit(def, build({ exposure: "less" })).readings["changes.life"] < simulateInherit(def, build({ exposure: "more" })).readings["changes.life"],
+  },
+  {
+    experiment: "Born with it?",
+    title: "The wrong idea 'cancer is mostly passed down' puts most changes at birth, so the simulator can tell it apart.",
+    citations: [],
+    run: () => inheritWrongModels["cancer-is-mostly-inherited"](def, build()).readings["share.life"] <= 0.4,
   },
 ];
 

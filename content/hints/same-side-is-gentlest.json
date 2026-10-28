@@ -1,0 +1,9 @@
+{
+  "misconceptionId": "same-side-is-gentlest",
+  "hints": [
+    "Look where the beams go into the body. Are they close together?",
+    "Beams from one side overlap on the way in. Their doses add up there too.",
+    "Spread the beams all around. Then each path gets only a little, and only the tumour gets them all."
+  ],
+  "ask": "Where do the beams from one side go in? Do they share the same skin?"
+}

@@ -1,0 +1,9 @@
+{
+  "misconceptionId": "one-beam-is-best",
+  "hints": [
+    "Follow one beam. Who else is on its path?",
+    "Add a second beam from another angle and watch where they cross.",
+    "Where the beams cross, doses add up. Everywhere else, each path gets only a little."
+  ],
+  "ask": "Follow the strong beam all the way through. Which healthy spots does it touch?"
+}

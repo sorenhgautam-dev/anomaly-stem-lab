@@ -1,6 +1,8 @@
 import type { LabModels } from "../types";
+import { beamsWrongModels, simulateBeams } from "./beams";
 import { cellsWrongModels, simulateCells } from "./cells";
 import { chemoWrongModels, simulateChemo } from "./chemo";
+import { inheritWrongModels, simulateInherit } from "./inherit";
 import { simulateTumour, tumourWrongModels } from "./tumour";
 import { simulateUv, uvWrongModels } from "./uv";
 
@@ -16,11 +18,15 @@ export const cancerModels: LabModels = {
     tumour: simulateTumour,
     cells: simulateCells,
     uv: simulateUv,
+    beams: simulateBeams,
+    inherit: simulateInherit,
   },
   wrongModels: {
     ...chemoWrongModels,
     ...tumourWrongModels,
     ...cellsWrongModels,
     ...uvWrongModels,
+    ...beamsWrongModels,
+    ...inheritWrongModels,
   },
 };

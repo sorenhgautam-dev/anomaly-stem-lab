@@ -1,0 +1,15 @@
+{
+  "id": "radiotherapy-beams",
+  "title": "Why radiotherapy aims from many angles",
+  "body": [
+    "Radiotherapy uses radiation to treat cancer. External beam radiotherapy comes from a machine that aims radiation at the cancer.",
+    "Dose means how much radiation a spot receives. A beam gives a dose to every spot on its path, including healthy tissue.",
+    "Radiation can also affect nearby healthy cells. Damage to healthy cells can cause side effects.",
+    "So the machine can move around the person. It sends radiation from many directions.",
+    "Each weaker beam has very little effect on the tissue it passes through. Where all the beams meet, the doses add up.",
+    "The treatment team plans this carefully. They aim to give a high dose to the cancer while sparing as much healthy tissue as possible."
+  ],
+  "realWorld": "This crossfire idea is why a radiotherapy machine moves around the person during treatment.",
+  "model": "This is a teaching model. Its doses are made-up scores shown as colour, not real radiation doses.",
+  "citationIds": ["radiotherapy-external-beam", "radiotherapy-healthy-tissue", "radiotherapy-several-angles", "radiotherapy-beams-meet", "radiotherapy-planned-cruk"]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "cancer-is-mostly-inherited",
+  "lab": "cell",
+  "title": "Cancer is mostly passed down",
+  "belief": "Most cancer comes from genes passed down in a family. The changes are there from birth.",
+  "conceptIds": ["genes", "cell-changes"],
+  "citationIds": ["most-changes-during-life", "inherited-small-share"]
+}

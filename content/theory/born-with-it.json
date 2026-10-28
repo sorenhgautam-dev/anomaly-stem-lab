@@ -1,0 +1,15 @@
+{
+  "id": "born-with-it",
+  "title": "Where cancer's changes come from",
+  "body": [
+    "Genes are instructions inside each cell. Cancer is caused by changes to genes that control how cells grow and divide.",
+    "Some gene changes are passed down from a parent. Others happen during a person's life.",
+    "Changes during life can come from things in the environment. They can also come from errors when cells divide.",
+    "Only about 5 to 10 percent of cancers are caused by harmful gene changes passed down from a parent.",
+    "The other 90 to 95 percent come from changes during a person's lifetime. These come with ageing and from things like tobacco smoke and radiation.",
+    "No one chooses the genes they are born with. A change from birth is nobody's fault."
+  ],
+  "realWorld": "This is why protecting yourself, like using sun protection, matters for everyone.",
+  "model": "This is a teaching model. Its changes and its five-change rule are made up to show the idea.",
+  "citationIds": ["cancer-starts-from-gene-changes", "genes-inherited-or-acquired", "inherited-small-share", "most-changes-during-life", "sun-protection-reduces-risk"]
+}

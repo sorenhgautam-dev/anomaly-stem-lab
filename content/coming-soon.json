@@ -28,15 +28,5 @@
     "lab": "chemistry",
     "level": "advanced",
     "title": "Electrolysis: splitting compounds with electricity"
-  },
-  {
-    "lab": "treatment",
-    "level": "advanced",
-    "title": "Radiotherapy beams"
-  },
-  {
-    "lab": "cell",
-    "level": "medium",
-    "title": "Born with it?"
   }
 ]

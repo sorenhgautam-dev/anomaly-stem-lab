@@ -1,0 +1,8 @@
+{
+  "id": "one-beam-is-best",
+  "lab": "treatment",
+  "title": "One strong beam is best",
+  "belief": "Weak beams can't do much on their own. One strong beam straight at the tumour must work best.",
+  "conceptIds": ["radiotherapy", "dose"],
+  "citationIds": ["radiotherapy-beams-meet", "radiotherapy-healthy-tissue"]
+}

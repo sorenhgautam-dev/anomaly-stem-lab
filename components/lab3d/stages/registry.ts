@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import type { ExperimentDef, StageId } from "@/engine/types";
 import type { ShotsFor } from "../shots";
+import { BeamsStage3D, beamsShots } from "./BeamsStage3D";
 import { BurnStage3D, burnShots } from "./BurnStage3D";
 import { CatalystStage3D, catalystShots } from "./CatalystStage3D";
 import { CellsStage3D, cellsShots } from "./CellsStage3D";
@@ -13,6 +14,7 @@ import { GasHeatStage3D, gasHeatShots } from "./GasHeatStage3D";
 import { GasLawStage3D, gasLawShots } from "./GasLawStage3D";
 import { GearsStage3D, gearsShots } from "./GearsStage3D";
 import { IndicatorStage3D, indicatorShots } from "./IndicatorStage3D";
+import { InheritStage3D, inheritShots } from "./InheritStage3D";
 import { MeltStage3D, meltShots } from "./MeltStage3D";
 import { NeutraliseStage3D, neutraliseShots } from "./NeutraliseStage3D";
 import { PwmStage3D, pwmShots } from "./PwmStage3D";
@@ -50,13 +52,13 @@ const STAGES: Record<StageId, Stage3D> = {
   gaslaw: { Stage: GasLawStage3D, shots: gasLawShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: each dot is an air molecule. Squeezed into less space, they hit the plunger more often." } },
   catalyst: { Stage: CatalystStage3D, shots: catalystShots },
   equilibrium: { Stage: EquilibriumStage3D, shots: equilibriumShots, zoom: { label: "Zoom to particles", caption: "Zoomed in: brown pairs are nitrogen dioxide (NO₂), grey ones are dinitrogen tetroxide (N₂O₄)." } },
-  // The cancer labs. Stages not built yet (beams, inherit) borrow the chemo bench; no experiment uses them until they're built.
+  // The cancer labs.
   chemo: { Stage: ChemoStage3D, shots: chemoShots },
   tumour: { Stage: TumourStage3D, shots: tumourShots },
   cells: { Stage: CellsStage3D, shots: cellsShots, zoom: undefined },
   uv: { Stage: UvStage3D, shots: uvShots },
-  beams: { Stage: ChemoStage3D, shots: chemoShots },
-  inherit: { Stage: ChemoStage3D, shots: chemoShots },
+  beams: { Stage: BeamsStage3D, shots: beamsShots },
+  inherit: { Stage: InheritStage3D, shots: inheritShots },
 };
 
 export function stage3d(def: ExperimentDef): Stage3D {

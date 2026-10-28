@@ -202,7 +202,8 @@
     "usedIn": [
       "cancer-not-caught",
       "cell-contact-test",
-      "cells-out-of-control"
+      "cells-out-of-control",
+      "cell-born-with-it"
     ]
   },
   {
@@ -344,7 +345,9 @@
     "url": "https://www.who.int/news-room/fact-sheets/detail/ultraviolet-radiation",
     "quote": "Skin cancer is highly preventable. WHO recommends the following measures to protect against excessive exposure to UVR. [list] Limit time in the midday sun. / Seek shade. / Wear protective clothing. / Wear a broad brimmed hat to protect the eyes, face, ears and neck. / Wear wraparound-style sunglasses that provide 99 to 100% UV-A and UV-B protection. / Use broad-spectrum sunscreen on skin areas that cannot be covered by clothes.",
     "checked": "2026-10-28",
-    "usedIn": []
+    "usedIn": [
+      "cell-born-with-it"
+    ]
   },
   {
     "id": "sun-protection-reduces-risk-cruk",
@@ -364,7 +367,9 @@
     "url": "https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy/external-beam",
     "quote": "External beam radiation therapy comes from a machine that aims radiation at your cancer.",
     "checked": "2026-10-28",
-    "usedIn": []
+    "usedIn": [
+      "treatment-radiotherapy-beams"
+    ]
   },
   {
     "id": "radiotherapy-several-angles",
@@ -373,7 +378,9 @@
     "url": "https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy",
     "quote": "The machine is large and may be noisy. It does not touch you, but can move around you, sending radiation to a part of your body from many directions.",
     "checked": "2026-10-28",
-    "usedIn": []
+    "usedIn": [
+      "treatment-radiotherapy-beams"
+    ]
   },
   {
     "id": "radiotherapy-beams-meet",
@@ -382,7 +389,9 @@
     "url": "https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy/external-beam",
     "quote": "In stereotactic radiosurgery, many small beams of radiation are aimed at the tumor from different directions. Each beam has very little effect on the tissue it passes through, but a precisely targeted dose of radiation is delivered to the site where all the beams come together.",
     "checked": "2026-10-28",
-    "usedIn": []
+    "usedIn": [
+      "treatment-radiotherapy-beams"
+    ]
   },
   {
     "id": "radiotherapy-healthy-tissue",
@@ -391,7 +400,9 @@
     "url": "https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy",
     "quote": "Radiation not only kills or slows the growth of cancer cells, it can also affect nearby healthy cells. Damage to healthy cells can cause side effects.",
     "checked": "2026-10-28",
-    "usedIn": []
+    "usedIn": [
+      "treatment-radiotherapy-beams"
+    ]
   },
   {
     "id": "radiotherapy-planned-cruk",
@@ -400,7 +411,9 @@
     "url": "https://www.cancerresearchuk.org/about-cancer/treatment/radiotherapy/external/what",
     "quote": "Your treatment team carefully plans the radiotherapy to give a high dose to the cancer. While sparing as much healthy tissue as possible.",
     "checked": "2026-10-28",
-    "usedIn": []
+    "usedIn": [
+      "treatment-radiotherapy-beams"
+    ]
   },
   {
     "id": "genes-inherited-or-acquired",
@@ -409,7 +422,9 @@
     "url": "https://www.cancer.gov/about-cancer/understanding/what-is-cancer",
     "quote": "Genetic changes that cause cancer can be inherited or arise from certain environmental exposures. Genetic changes can also happen because of errors that occur as cells divide.",
     "checked": "2026-10-28",
-    "usedIn": []
+    "usedIn": [
+      "cell-born-with-it"
+    ]
   },
   {
     "id": "most-changes-during-life",
@@ -418,7 +433,9 @@
     "url": "https://www.cancer.gov/about-cancer/causes-prevention/risk/myths",
     "quote": "The remaining 90 to 95 percent of cancers are caused by mutations that happen during a person’s lifetime as a natural result of aging and exposure to environmental factors, such as tobacco smoke and radiation.",
     "checked": "2026-10-28",
-    "usedIn": []
+    "usedIn": [
+      "cell-born-with-it"
+    ]
   },
   {
     "id": "inherited-small-share",
@@ -427,7 +444,9 @@
     "url": "https://www.cancer.gov/about-cancer/causes-prevention/risk/myths",
     "quote": "Only about 5 to 10 percent of cancers are caused by harmful mutations that are inherited from a person’s parents.",
     "checked": "2026-10-28",
-    "usedIn": []
+    "usedIn": [
+      "cell-born-with-it"
+    ]
   },
   {
     "id": "myths-common",

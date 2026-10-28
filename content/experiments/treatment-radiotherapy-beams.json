@@ -1,0 +1,62 @@
+{
+  "id": "treatment-radiotherapy-beams",
+  "lab": "treatment",
+  "level": "advanced",
+  "grades": "11-12",
+  "order": 2,
+  "title": "Radiotherapy beams",
+  "goal": "Find the beam plan that gives the tumour its dose and spares healthy tissue.",
+  "intro": "Radiotherapy aims beams of radiation at a tumour from outside the body. Dose means how much radiation a spot receives. Four plans use the same total strength. Which one protects healthy tissue best?",
+  "minutes": 4,
+  "stage": "beams",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "slider",
+      "id": "beams",
+      "label": "Beams in the spread plans",
+      "min": 3,
+      "max": 9,
+      "step": 1,
+      "unit": "beams",
+      "initial": 5
+    },
+    {
+      "type": "slider",
+      "id": "gap",
+      "label": "Angle between same-side beams",
+      "min": 0,
+      "max": 20,
+      "step": 5,
+      "unit": "°",
+      "initial": 10
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "To give the tumour a high dose while protecting healthy tissue, which plan works best?",
+    "options": [
+      "One strong beam straight in",
+      "Several weaker beams from different angles",
+      "One beam that slides side to side",
+      "Several beams all from the same side"
+    ]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "best", "op": "==", "value": 0 }, "answer": "One strong beam straight in" },
+      { "when": { "reading": "best", "op": "==", "value": 1 }, "answer": "Several weaker beams from different angles" },
+      { "when": { "reading": "best", "op": "==", "value": 2 }, "answer": "One beam that slides side to side" }
+    ],
+    "otherwise": "Several beams all from the same side"
+  },
+  "misconceptions": ["one-beam-is-best", "same-side-is-gentlest"],
+  "allowedEdits": [
+    { "id": "nine", "label": "Use nine beams", "edit": { "op": "set", "setting": "beams", "value": 9 } },
+    { "id": "one-side", "label": "Send every beam from one side", "edit": { "op": "set", "setting": "gap", "value": 0 } }
+  ],
+  "theoryId": "radiotherapy-beams",
+  "citationIds": ["radiotherapy-external-beam", "radiotherapy-several-angles", "radiotherapy-beams-meet"]
+}

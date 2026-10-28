@@ -18,6 +18,14 @@ const KNOWN: Record<string, { label: string; unit: string; digits?: number }> = 
   "damage.end": { label: "Damage points", unit: "", digits: 0 },
   "normal.room": { label: "Room in the dish", unit: "", digits: 0 },
   "spread.end": { label: "Cells that crossed over", unit: "", digits: 0 },
+  "one.healthy": { label: "One beam: most on healthy", unit: "%", digits: 0 },
+  "angles.target": { label: "Spread plan: tumour dose", unit: "%", digits: 0 },
+  "angles.healthy": { label: "Spread plan: most on healthy", unit: "%", digits: 0 },
+  "slide.target": { label: "Sliding beam: tumour dose", unit: "%", digits: 0 },
+  "side.healthy": { label: "One side: most on healthy", unit: "%", digits: 0 },
+  "changes.inherited": { label: "Changes from birth", unit: "", digits: 0 },
+  "changes.life": { label: "Changes during life", unit: "", digits: 0 },
+  "share.life": { label: "Share from life", unit: "%", digits: 0 },
   "scale.start": { label: "Scale before", unit: "g", digits: 2 },
   "scale.end": { label: "Scale after", unit: "g", digits: 2 },
   "co2.made": { label: "Gas made", unit: "g", digits: 2 },
@@ -67,6 +75,7 @@ const KNOWN: Record<string, { label: string; unit: string; digits?: number }> = 
 
 const PERCENT_FROM_FRACTION = new Set([
   "uv.share",
+  "share.life",
   "sugar.dissolved",
   "melt.fraction",
   "no2.fraction",

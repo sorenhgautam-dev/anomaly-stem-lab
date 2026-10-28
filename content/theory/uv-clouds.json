@@ -7,7 +7,7 @@
     "Clouds block some UV, but over 90% of UV rays can still pass through cloud.",
     "Too much UV can damage the DNA in skin cells. That damage can build up over time.",
     "Too much UV is the main cause of skin cancer in the UK.",
-    "You can protect your skin: spend time in the shade, cover up with clothes, a wide-brimmed hat and sunglasses, and use sunscreen."
+    "You can protect your skin. Spend time in the shade. Cover up with clothes, a wide-brimmed hat and sunglasses. Use sunscreen too."
   ],
   "realWorld": "UV can be high even when it's cloudy, so check the UV index on cool or grey days too.",
   "model": "This is a teaching model. Its numbers are shares of a clear day and made-up damage points, not a real UV index.",

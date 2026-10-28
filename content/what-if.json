@@ -109,5 +109,13 @@
   "prevention-uv-cloudy": [
     {"id": "heavy", "label": "Heavy cloud", "edits": [{"op": "set", "setting": "cloud", "value": 100}], "show": [{"key": "uv.share", "label": "UV getting through", "name": "the UV getting through", "unit": "%", "digits": 0, "scale": 100}]},
     {"id": "protect-halfway", "label": "Put on protection halfway through", "edits": [{"op": "set", "setting": "protection", "value": true}, {"op": "set", "setting": "protectAt", "value": 50}], "show": [{"key": "damage.end", "label": "Damage points", "name": "the damage points", "unit": "", "digits": 0}]}
+  ],
+  "treatment-radiotherapy-beams": [
+    {"id": "nine", "label": "Nine beams", "edits": [{"op": "set", "setting": "beams", "value": 9}], "show": [{"key": "angles.skin", "label": "Most where beams go in, spread plan", "name": "the most any spot gets where the beams go in", "unit": "%", "digits": 0}]},
+    {"id": "one-side", "label": "All beams from one side", "edits": [{"op": "set", "setting": "gap", "value": 0}], "show": [{"key": "side.healthy", "label": "Most on healthy tissue, one-side plan", "name": "the most any healthy spot gets", "unit": "%", "digits": 0}]}
+  ],
+  "cell-born-with-it": [
+    {"id": "no-inherited", "label": "No change from birth", "edits": [{"op": "set", "setting": "inherited", "value": false}], "show": [{"key": "share.life", "label": "Changes that came during life", "name": "the share of changes from life", "unit": "%", "digits": 0, "scale": 100}]},
+    {"id": "less", "label": "Fewer everyday exposures", "edits": [{"op": "set", "setting": "exposure", "value": "less"}], "show": [{"key": "changes.life", "label": "Changes during life", "name": "the changes during life", "unit": "", "digits": 0}]}
   ]
 }

@@ -1,0 +1,60 @@
+{
+  "id": "cell-born-with-it",
+  "lab": "cell",
+  "level": "medium",
+  "grades": "9-10",
+  "order": 1,
+  "title": "Born with it?",
+  "goal": "Find out where most of the changes that lead to cancer come from.",
+  "intro": "Cancer starts with changes to the genes inside a cell. After several changes, a cell can stop following the rules. Some people are born with one change already. Where do most changes come from?",
+  "minutes": 3,
+  "stage": "inherit",
+  "parts": [],
+  "outlines": false,
+  "controls": [
+    {
+      "type": "toggle",
+      "id": "inherited",
+      "label": "A change from birth",
+      "onLabel": "Yes",
+      "offLabel": "No",
+      "initial": true
+    },
+    {
+      "type": "choice",
+      "id": "exposure",
+      "label": "Everyday exposures",
+      "options": [
+        { "value": "less", "label": "Fewer" },
+        { "value": "more", "label": "More" }
+      ],
+      "initial": "more"
+    }
+  ],
+  "prediction": {
+    "type": "choice",
+    "question": "Where do most of the changes that lead to cancer come from?",
+    "options": [
+      "Mostly from genes passed down in the family",
+      "Mostly from changes that happen during a person's life",
+      "Half and half, always",
+      "Only from bad luck with no causes at all"
+    ]
+  },
+  "answer": {
+    "kind": "cases",
+    "cases": [
+      { "when": { "reading": "causes.unknown", "op": ">", "value": 0 }, "answer": "Only from bad luck with no causes at all" },
+      { "when": { "reading": "share.life", "op": ">=", "value": 0.6 }, "answer": "Mostly from changes that happen during a person's life" },
+      { "when": { "reading": "share.life", "op": "<=", "value": 0.4 }, "answer": "Mostly from genes passed down in the family" }
+    ],
+    "otherwise": "Half and half, always"
+  },
+  "misconceptions": ["cancer-is-mostly-inherited"],
+  "allowedEdits": [
+    { "id": "no-inherited", "label": "Take away the change from birth", "edit": { "op": "set", "setting": "inherited", "value": false } },
+    { "id": "less", "label": "Fewer everyday exposures", "edit": { "op": "set", "setting": "exposure", "value": "less" } }
+  ],
+  "theoryId": "born-with-it",
+  "citationIds": ["cancer-starts-from-gene-changes", "genes-inherited-or-acquired", "most-changes-during-life"]
+}

@@ -3,10 +3,12 @@
     "id": "treatment-only-touches-the-cancer",
     "title": "Treatment only touches the cancer",
     "plainWords": "treatment only touches the cancer cells",
-    "anoLine": "Lots of guesses here come from one idea: that treatment only reaches the cancer. Let's look at who else is busy dividing.",
+    "anoLine": "Lots of guesses here come from one idea: that treatment only reaches the cancer. Let's look at what else it touches on the way.",
     "misconceptions": [
       "chemo-targets-only-cancer",
-      "chemo-hits-healthy-last"
+      "chemo-hits-healthy-last",
+      "one-beam-is-best",
+      "same-side-is-gentlest"
     ]
   },
   {
@@ -44,6 +46,8 @@
     "title": "It's all decided at birth",
     "plainWords": "it's all decided by the genes you're born with",
     "anoLine": "These guesses share one idea: that it's all decided at birth. Let's count where the changes really come from.",
-    "misconceptions": []
+    "misconceptions": [
+      "cancer-is-mostly-inherited"
+    ]
   }
 ]

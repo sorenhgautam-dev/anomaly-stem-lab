@@ -2,16 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Lightbulb } from "lucide-react";
+import { IconHint } from "@/components/icons/icons";
 import { getExperiment, isLab, isLevel, labInfo, levelInfo } from "@/lib/content";
 import { cn } from "@/lib/cn";
 import { BreadcrumbBar, type Crumb } from "@/components/ui/BreadcrumbBar";
 import { Logo } from "@/components/ui/Logo";
+import { SoundToggle } from "@/components/ui/SoundToggle";
 
 /*
  * The top bar on every explore page (CLAUDE.md §1.1, DESIGN.md §5): the logo,
  * Level · Lab · Experiment as clickable breadcrumbs (switch level or lab at
- * any time) and a link to My beliefs.
+ * any time) and a link to My beliefs. Over a lab's walls every piece sits
+ * on a card.
  */
 
 export function crumbsFor(pathname: string): Crumb[] {
@@ -40,18 +42,23 @@ export function ExploreBar({ className }: { className?: string }) {
   const pathname = usePathname();
   const onBeliefs = pathname.startsWith("/beliefs");
   const crumbs = crumbsFor(pathname);
+  // On a lab's pages (its map and experiments) the bar floats over the lab's colours (teal or graphite), so the logo gets a card like the buttons (DESIGN.md §8).
+  const inLab = pathname.startsWith("/labs/");
   return (
     <header className={cn("relative z-30 flex flex-wrap items-center justify-between gap-3 px-4 pt-4 sm:px-6 md:px-8 md:pt-5", className)}>
-      <Logo />
+      <Logo className={inLab ? "bg-white pl-1 pr-4 shadow-warm-sm hover:bg-cream-100" : undefined} />
       {crumbs.length > 0 && <BreadcrumbBar items={crumbs} className="order-3 w-full justify-center sm:order-none sm:w-auto" />}
-      <Link
-        href="/beliefs"
-        aria-current={onBeliefs ? "page" : undefined}
-        className={cn("inline-flex h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold shadow-warm-sm transition-colors", onBeliefs ? "bg-ink-900 text-white" : "bg-white text-ink-900 hover:bg-cream-100")}
-      >
-        <Lightbulb aria-hidden className="size-4" strokeWidth={1.9} />
-        My beliefs
-      </Link>
+      <div className="flex items-center gap-2">
+        <SoundToggle />
+        <Link
+          href="/beliefs"
+          aria-current={onBeliefs ? "page" : undefined}
+          className={cn("inline-flex h-11 items-center gap-2 rounded-full px-4 text-sm font-semibold shadow-warm-sm transition-colors", onBeliefs ? "bg-ink-900 text-white" : "bg-white text-ink-900 hover:bg-cream-100")}
+        >
+          <IconHint aria-hidden className="size-4" />
+          My ideas
+        </Link>
+      </div>
     </header>
   );
 }

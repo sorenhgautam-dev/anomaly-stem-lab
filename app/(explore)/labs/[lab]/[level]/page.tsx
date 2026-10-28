@@ -2,9 +2,8 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { ExperimentPath, type MapStar } from "@/components/explore/ExperimentPath";
 import { ExploreBar } from "@/components/explore/ExploreBar";
+import { HeadlineWithAno } from "@/components/explore/HeadlineWithAno";
 import { Frame } from "@/components/ui/Frame";
-import { SpeechBubble } from "@/components/ui/SpeechBubble";
-import { SplitHeadline } from "@/components/ui/SplitHeadline";
 import { comingSoonFor, experimentsFor, isLab, isLevel, LAB_IDS, LEVEL_IDS, labInfo, levelInfo } from "@/lib/content";
 
 export function generateStaticParams() {
@@ -37,14 +36,17 @@ async function MapForLabAndLevel({ params }: { params: PageProps<"/labs/[lab]/[l
   const info = levelInfo(level);
 
   return (
-    <Frame tint={lab === "chemistry" ? "chem" : "robo"} morph={`lab-${lab}`}>
+    <Frame tint={lab === "chemistry" ? "teal" : "night"} morph={`lab-${lab}`}>
       <ExploreBar />
-      <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 pb-40 pt-10 sm:px-8 md:pt-14">
-        <SplitHeadline className="md:justify-start md:gap-[0.22em]" left={labInfo(lab).title.replace(" Lab", "")} right={`${info.title}.`} sizeClassName="text-[clamp(3.25rem,15vw,6rem)] md:text-[clamp(4rem,8vw,7.5rem)]" />
-        <SpeechBubble
-          text={experiments.length > 0 ? "Pick the next experiment. Each one is a short build and one prediction. Finish one to unlock the next." : "These experiments are still being built. Try another level or lab for now."}
-          tail="top"
-          className="mt-6 max-w-md"
+      <main className="relative mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 pb-28 pt-10 sm:px-8 md:pt-14">
+        <HeadlineWithAno
+          className="text-white"
+          left={labInfo(lab).title.replace(" Lab", "")}
+          right={`${info.title}.`}
+          line={experiments.length > 0 ? "Pick the next experiment. You build a little, then guess. Finish one and the next one opens." : "These experiments are still being built. Try another level or lab for now."}
+          expression="happy"
+          action={{ move: "wave", key: 1 }}
+          sizeClassName="text-[clamp(3.25rem,15vw,6rem)] md:text-[clamp(4rem,8vw,7.5rem)]"
         />
         <ExperimentPath lab={lab} level={level} stars={stars} nextLevel={next ? { id: next, title: levelInfo(next).title } : null} />
       </main>

@@ -1,8 +1,11 @@
 import { create } from "zustand";
 import { conflict, type ConflictEdit } from "@/engine/conflict";
 import { applyEdit, initialBuild } from "@/engine/edits";
-import { runExperiment } from "@/engine/run";
+import { matches } from "@/engine/match";
+import { realModel } from "@/engine/registry";
+import { runExperiment, simulateOutcome } from "@/engine/run";
 import type { Build, CircuitPartKind, EditDef, Evidence, ExperimentDef, Prediction, RunResult } from "@/engine/types";
+import { applyWhatIf, type WhatIf } from "@/lib/what-if";
 
 /*
  * State for one experiment session (CLAUDE.md §4: current experiment,
@@ -21,6 +24,19 @@ export type Confidence = "guess" | "fairly" | "certain";
 
 /** 0 = no hint yet, 3 = the whole ladder (nudge, principle, fix) shown. */
 export type HintStep = 0 | 1 | 2 | 3;
+
+/**
+ * A "What if?" run: the student's build with one variation, run straight
+ * away to explore. It isn't a test of a guess, so it never counts toward
+ * progress, never plays the verdict moment and never adds diagnosis evidence.
+ */
+export interface Explore {
+  variant: WhatIf;
+  /** Readings of the run before the change (for "went from … to …"), or null. */
+  before: Record<string, number> | null;
+  /** The build before the change, so "Undo the change" can go back. */
+  from: Build;
+}
 
 interface LabState {
   def: ExperimentDef | null;
@@ -41,6 +57,8 @@ interface LabState {
   runId: number;
   /** Diagnosis evidence carried across runs (seeded from saved progress). */
   evidence: Evidence;
+  /** Set while a "What if?" run plays and shows its result. */
+  explore: Explore | null;
 
   start: (def: ExperimentDef, evidence: Evidence) => void;
   /** Saved evidence arrived (IndexedDB loads after the page): seed it without restarting the attempt. */
@@ -56,6 +74,8 @@ interface LabState {
   place: (slot: string, kind?: CircuitPartKind) => void;
   /** Run the simulator. The verdict shows when playback ends (reveal()). */
   run: () => RunResult | null;
+  /** Apply a "What if?" variation and run it at once (no prediction needed). */
+  whatIf: (variant: WhatIf) => RunResult | null;
   reveal: () => void;
   nextHint: () => void;
   /** Apply the suggested conflict edit and get ready to run again. */
@@ -77,6 +97,7 @@ export const useLab = create<LabState>()((set, get) => ({
   armed: null,
   runId: 0,
   evidence: {},
+  explore: null,
 
   start: (def, evidence) =>
     set({
@@ -91,6 +112,7 @@ export const useLab = create<LabState>()((set, get) => ({
       selected: null,
       armed: null,
       evidence,
+      explore: null,
     }),
 
   // Only fills empty evidence: a run's own diagnosis evidence is never overwritten.
@@ -103,6 +125,7 @@ export const useLab = create<LabState>()((set, get) => ({
       phase: s.phase === "running" ? s.phase : "build",
       result: s.phase === "running" ? s.result : null,
       conflict: s.phase === "running" ? s.conflict : null,
+      explore: s.phase === "running" ? s.explore : null,
       ano: s.phase === "result" ? "building" : s.ano === "greet" ? "building" : s.ano,
     })),
 
@@ -125,8 +148,9 @@ export const useLab = create<LabState>()((set, get) => ({
   },
 
   run: () => {
-    const { def, build, prediction, evidence } = get();
-    if (!def || !build || !prediction) return null;
+    const { def, build, prediction, evidence, phase } = get();
+    // A double click (or Enter held down) mustn't start a second run over the first.
+    if (!def || !build || !prediction || phase === "running") return null;
     const result = runExperiment(def, build, prediction, evidence);
     const focus = result.diagnosis?.focus ?? null;
     // Show something useful in the inspector: the first bulb or LED.
@@ -140,13 +164,43 @@ export const useLab = create<LabState>()((set, get) => ({
       hintStep: 0,
       conflict: focus ? conflict(def, build, focus) : null,
       evidence: result.diagnosis?.evidence ?? s.evidence,
+      explore: null,
+    }));
+    return result;
+  },
+
+  whatIf: (variant) => {
+    const { def, build, prediction, result: last, phase } = get();
+    if (!def || !build || phase === "running") return null;
+    const next = applyWhatIf(build, variant);
+    const outcome = simulateOutcome(def, next, realModel(def.stage));
+    // The verdict field is filled honestly for the shared result shape, but a What if? is never judged.
+    const result: RunResult = {
+      verdict: prediction && matches(def.prediction, prediction, outcome.result) ? "correct" : "wrong",
+      outcome,
+      diagnosis: null,
+      goalMet: true,
+    };
+    set((s) => ({
+      build: next,
+      result,
+      phase: "running",
+      runId: s.runId + 1,
+      hintStep: 0,
+      conflict: null,
+      armed: null,
+      explore: { variant, before: last ? last.outcome.readings : null, from: build },
     }));
     return result;
   },
 
   reveal: () => {
-    const { result } = get();
+    const { result, explore } = get();
     if (!result) return;
+    if (explore) {
+      set({ phase: "result", ano: "building", hintStep: 0 });
+      return;
+    }
     set({
       phase: "result",
       ano: result.verdict === "correct" ? "correct" : "wrong",
@@ -166,6 +220,7 @@ export const useLab = create<LabState>()((set, get) => ({
       conflict: null,
       hintStep: 0,
       ano: "building",
+      explore: null,
     });
   },
 
@@ -174,3 +229,8 @@ export const useLab = create<LabState>()((set, get) => ({
     if (def) get().start(def, evidence);
   },
 }));
+
+/** The verdict the lab shows: only after a judged run's playback, never for a "What if?" run. */
+export function verdictShown(s: Pick<LabState, "phase" | "result" | "explore">): "correct" | "wrong" | null {
+  return s.phase === "result" && !s.explore ? (s.result?.verdict ?? null) : null;
+}

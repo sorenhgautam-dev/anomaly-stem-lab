@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { getExperiment, theoryFor } from "@/lib/content";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useProgress } from "@/lib/progress";
+import { cn } from "@/lib/cn";
 import { useLab, verdictShown } from "@/lib/store";
 import { ExploreBar } from "@/components/explore/ExploreBar";
 import { LabStage } from "@/components/lab3d/LabStage";
@@ -19,7 +20,6 @@ import { DemoTour } from "./DemoTour";
 import { ExplainSimpler } from "./ExplainSimpler";
 import { Inspector } from "./Inspector";
 import { LabDefProvider } from "./lab-def";
-import { LabMicroscope } from "./LabMicroscope";
 import { MissionCard } from "./MissionCard";
 import { playback } from "./playback";
 import { PredictDock } from "./PredictDock";
@@ -93,14 +93,14 @@ export function LabExperiment({ id, nextHref, mapHref, demo = false }: { id: str
         <div data-lab-hud className="pointer-events-none relative z-20 flex flex-1 flex-col gap-4 p-4 lg:min-h-dvh lg:justify-between lg:px-8 lg:pb-6 lg:pt-24">
           {/* Below lg the two rows dissolve into one column, reordered: dock, Ano, mission, inspector. */}
           <div className="contents lg:flex lg:flex-row lg:items-start lg:justify-between">
-            <MissionCard def={def} className="pointer-events-auto order-3 lg:order-none lg:w-[22rem]" />
+            {/* Subtraction pass: the goal only before the run; during the run just the experiment and the timeline (the title and learning note stay). */}
+            <MissionCard def={def} compact={phase !== "build"} className="pointer-events-auto order-3 lg:order-none lg:w-[22rem]" />
             <div className="contents lg:flex lg:w-[21rem] lg:flex-col lg:items-end lg:gap-3">
-              <Inspector zoom={zoom} className="pointer-events-auto order-4 animate-hud-right [animation-delay:380ms] motion-reduce:animate-none lg:order-none lg:w-full" />
-              {(def.stage === "chemo" || def.stage === "cells") && phase !== "result" && <LabMicroscope stage={def.stage} className="hidden w-52 lg:flex xl:w-60" />}
+              {phase !== "running" && <Inspector zoom={zoom} className="pointer-events-auto order-4 animate-hud-right [animation-delay:380ms] motion-reduce:animate-none lg:order-none lg:w-auto" />}
             </div>
           </div>
           <div className="contents lg:flex lg:flex-row lg:items-end">
-            <AnoDock className="pointer-events-auto order-2 animate-hud-up [animation-delay:560ms] motion-reduce:animate-none lg:order-none lg:w-[16rem] lg:shrink-0 xl:w-[19rem]" />
+            <AnoDock className={cn("pointer-events-auto order-2 animate-hud-up [animation-delay:560ms] motion-reduce:animate-none lg:order-none lg:w-[16rem] lg:shrink-0 xl:w-[19rem]", phase === "running" && "invisible")} />
             <PaperCard data-lab-dock className="pointer-events-auto order-1 animate-hud-up rounded-sheet p-4 [animation-delay:460ms] motion-reduce:animate-none sm:p-5 lg:order-none lg:min-w-0 lg:flex-1 xl:mx-auto xl:max-w-[58rem]">
               <div key={phase === "result" ? `result-${runId}` : phase} className="flex animate-fade-up flex-col gap-5 motion-reduce:animate-none">
                 {phase === "build" && (

@@ -4,5 +4,6 @@
     "Watch the normal dish closely as it fills up. What happens to the new cells?",
     "Normal cells listen to a stop signal when they're crowded. Cancer cells don't.",
     "So normal cells stop dividing once the dish is full. Only the cancer dish keeps piling up."
-  ]
+  ],
+  "ask": "What do normal cells do once their dish is full?"
 }

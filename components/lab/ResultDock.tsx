@@ -9,6 +9,7 @@ import { rootLine, rootMatchFor } from "@/lib/root-beliefs";
 import { useLab } from "@/lib/store";
 import type { WhatIf } from "@/lib/what-if";
 import { Button } from "@/components/ui/Button";
+import { More } from "@/components/ui/More";
 import { ResultCard } from "@/components/ui/ResultCard";
 import { LevelProgress } from "./LevelProgress";
 import { ExplainSimpler } from "./ExplainSimpler";
@@ -66,7 +67,6 @@ export function ResultDock({ nextHref, mapHref, onTheory, onWhatIf, timeScale }:
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
           <div className="animate-pop-in motion-reduce:animate-none">{card}</div>
           <div className="flex flex-1 flex-col gap-3">
-            <LevelProgress />
             <div className="flex flex-wrap gap-2">
               <Button href={nextHref ?? mapHref} size="lg" className="animate-fade-up [animation-delay:200ms] motion-reduce:animate-none">
                 {nextHref ? "Next experiment" : "Finish the level"}
@@ -75,15 +75,19 @@ export function ResultDock({ nextHref, mapHref, onTheory, onWhatIf, timeScale }:
                 <IconBook aria-hidden className="size-4" />
                 See the theory
               </Button>
-              <Button variant="ghost" href={mapHref} transitionTypes={["nav-back"]} className="animate-fade-up [animation-delay:360ms] motion-reduce:animate-none">
-                <IconMap aria-hidden className="size-4" />
-                Back to map
-              </Button>
             </div>
           </div>
         </div>
-        <WhatIfRow onRun={onWhatIf} />
-        <TimeScrubber timeScale={timeScale} />
+        {/* Subtraction pass: everything else waits behind one small More. */}
+        <More>
+          <LevelProgress />
+          <WhatIfRow onRun={onWhatIf} />
+          <TimeScrubber timeScale={timeScale} />
+          <Button variant="ghost" href={mapHref} transitionTypes={["nav-back"]} className="self-start">
+            <IconMap aria-hidden className="size-4" />
+            Back to map
+          </Button>
+        </More>
       </div>
     );
   }
@@ -99,10 +103,8 @@ export function ResultDock({ nextHref, mapHref, onTheory, onWhatIf, timeScale }:
         {/* Left: what happened (the card, then the replay that stops where it split). Right: why, and what to try. */}
         <div className="flex flex-col gap-3 sm:w-72 sm:shrink-0">
           <div className="animate-pop-in motion-reduce:animate-none">{card}</div>
-          {moment && <ReplayPanel key={runId} moment={moment} runId={runId} timeScale={timeScale} />}
         </div>
         <div className="min-w-0 flex-1">
-          {result.diagnosis?.ghost && <p className="text-[14px] text-ink-500">The see-through ghost shows your guess. It sits next to what really happened.</p>}
           {/* Ano's diagnosis: worded apart from the student's own "You were sure" chip. */}
           {belief && (
             <p className="mt-2 text-[15px] leading-relaxed text-ink-900">
@@ -124,7 +126,7 @@ export function ResultDock({ nextHref, mapHref, onTheory, onWhatIf, timeScale }:
               ))}
             </ol>
           )}
-          {hints && hintStep >= 2 && <ExplainSimpler key={runId} text={hints[1]} className="mt-3" />}
+
           <div className="mt-4 flex flex-wrap gap-2">
             {suggestion && (
               <Button onClick={tryConflict} icon={<IconHint aria-hidden className="size-4" />}>
@@ -141,10 +143,16 @@ export function ResultDock({ nextHref, mapHref, onTheory, onWhatIf, timeScale }:
               Change something and try again
             </Button>
           </div>
-          <WhatIfRow onRun={onWhatIf} className="mt-4" />
         </div>
       </div>
-      <TimeScrubber timeScale={timeScale} />
+      {/* Subtraction pass: the replay graph, What if?, Explain it simpler and the scrubber wait behind one small More. The replay still pauses the bench at the split. */}
+      <More>
+        {moment && <ReplayPanel key={runId} moment={moment} runId={runId} timeScale={timeScale} />}
+        {result.diagnosis?.ghost && <p className="text-[14px] text-ink-500">The see-through ghost shows your guess. It sits next to what really happened.</p>}
+        {hints && hintStep >= 2 && <ExplainSimpler key={runId} text={hints[1]} />}
+        <WhatIfRow onRun={onWhatIf} />
+        <TimeScrubber timeScale={timeScale} />
+      </More>
     </div>
   );
 }

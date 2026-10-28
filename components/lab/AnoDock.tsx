@@ -54,7 +54,8 @@ function useLine(answer: string | null): string {
     const root = rootMatchFor(result?.diagnosis?.focus ?? null, suspected);
     return root ? rootLine(root) : pick(anoLines.wrong, runId);
   }
-  if (ano === "stuck" && hints && hintStep > 0) return pick(anoLines.stuck, hintStep);
+  // Another hint: Ano asks this idea's own guiding question (the panel holds the fuller hint, so nothing is said twice).
+  if (ano === "stuck" && hints && hintStep > 0) return hintsFor(result?.diagnosis?.focus ?? def.misconceptions[0])?.ask ?? pick(anoLines.stuck, hintStep);
   return prediction ? "Locked in. Press Run when you're ready." : pick(anoLines.building, runId);
 }
 

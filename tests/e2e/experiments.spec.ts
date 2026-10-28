@@ -8,7 +8,7 @@ import { EXPERIMENTS } from "../../lib/content";
 import { formatReadout } from "../../lib/readout";
 import { replayMoment } from "../../lib/replay";
 import { applyWhatIf, usefulWhatIfs } from "../../lib/what-if";
-import { watchConsole } from "./gates";
+import { watchConsole, openMore } from "./gates";
 
 /*
  * Every experiment, every guess, on the production build: each wrong guess
@@ -82,6 +82,7 @@ for (const def of EXPERIMENTS) {
       if (m) {
         await expect(replay, `${def.id} "${option}": replay pauses`).toHaveAttribute("data-replay", "paused", { timeout: 20_000 });
         await expect(replay).toContainText(`${formatReadout(m.real, m.readout)} (your idea: ${formatReadout(m.ghost, m.readout)})`);
+        await openMore(page);
         await page.getByRole("button", { name: "Keep watching" }).click();
       } else {
         await expect(replay).toHaveCount(0);
@@ -98,6 +99,7 @@ for (const def of EXPERIMENTS) {
     let build = start;
     let before = real;
     for (const v of usefulWhatIfs(def.id, start)) {
+      await openMore(page);
       const button = page.locator(`[data-what-if="${v.id}"]`);
       if ((await button.count()) === 0) continue;
       await button.click();

@@ -1,6 +1,6 @@
 "use client";
 
-import { IconCube, IconMolecule } from "@/components/icons/icons";
+import { IconArrowRight, IconCube, IconMolecule } from "@/components/icons/icons";
 import { partInSlot } from "@/engine/edits";
 import type { Build, CircuitPartKind, ExperimentDef, Outcome, PropValue } from "@/engine/types";
 import { cn } from "@/lib/cn";
@@ -14,6 +14,7 @@ import { PART_NAMES } from "./BuildControls";
 import { readingLabel } from "./readings";
 import { CountUp } from "@/components/ui/CountUp";
 import { useLabBuild, useLabDef } from "./lab-def";
+import { GuessTogether } from "@/components/live/GuessTogether";
 
 /*
  * "What's happening" (the inspector, DESIGN.md §7.5 right, CLAUDE.md §3.5): the selected part's
@@ -133,9 +134,15 @@ export function Inspector({ className, zoom }: { className?: string; zoom: { lab
   const outcome = phase === "build" ? null : (result?.outcome ?? null);
   const final = phase === "result" ? outcome : null;
   const rows = final ? Object.entries(final.readings).map(([key, value]) => ({ key, ...readingLabel(key, value) })).filter((r) => r.label !== null).map((r) => [r.label!, r.text] as [string, string]) : [];
+  // Subtraction pass: one small toggle; the readings, Reset view and Guess together wait inside it.
   return (
-    <PaperCard className={cn("flex flex-col gap-4 p-4 sm:p-5", className)} aria-label="What’s happening" role="complementary">
-      <p className="type-label text-ink-500">What’s happening</p>
+    <PaperCard className={cn("flex flex-col gap-4 p-1.5", className)} aria-label="What’s happening" role="complementary">
+      <details data-inspector className="group">
+        <summary className="inline-flex h-11 cursor-pointer list-none items-center gap-2 rounded-full px-3.5 text-[14px] font-semibold text-ink-900 hover:bg-ink-900/[0.05] [&::-webkit-details-marker]:hidden">
+          What’s happening
+          <IconArrowRight aria-hidden className="size-3.5 rotate-90 transition-transform duration-200 ease-out-soft group-open:-rotate-90 motion-reduce:transition-none" />
+        </summary>
+        <div className="flex w-[min(20rem,calc(100vw-3rem))] flex-col gap-4 p-3 pt-2">
       {def.stage === "circuit" ? (
         <CircuitPanel def={def} build={build} outcome={outcome} />
       ) : rows.length ? (
@@ -149,6 +156,7 @@ export function Inspector({ className, zoom }: { className?: string; zoom: { lab
           <IconCube aria-hidden className="size-4" />
           Reset view
         </Button>
+        <GuessTogether def={def} />
       </div>
       {zoom && zoomed && (
         <p className="flex items-center gap-2 text-[13px] text-ink-500">
@@ -156,6 +164,8 @@ export function Inspector({ className, zoom }: { className?: string; zoom: { lab
           {zoom.caption}
         </p>
       )}
+        </div>
+      </details>
     </PaperCard>
   );
 }

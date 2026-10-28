@@ -418,6 +418,8 @@ export interface MisconceptionDef {
 export interface HintDef {
   misconceptionId: string;
   hints: HintLadder;
+  /** Ano's own guiding question for this idea: asked, never the panel's words again. */
+  ask?: string;
 }
 
 /** "See the theory" (content/theory/<id>.json). */

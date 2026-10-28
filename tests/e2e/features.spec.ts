@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { SHOTS, watchConsole } from "./gates";
+import { SHOTS, watchConsole, openMore } from "./gates";
 
 /*
  * The new features on the production build: the replay that stops at the
@@ -43,6 +43,7 @@ test.describe("new features", () => {
     // The simulator's numbers: the real hair dish has dropped while the idea keeps it at 100%.
     await expect(replay).toContainText(/\d+% \(your idea: 100%\)/);
     await expect(bubble(page)).toContainText(/Right here, at \d+\.\d s, the hair follicle dish was at \d+%\. Your idea said 100%\./);
+    await openMore(page);
     await page.screenshot({ path: `${SHOTS}/feature-replay-paused-1440.png` });
     await page.getByRole("button", { name: "Keep watching" }).click();
     await expect(replay).toHaveAttribute("data-replay", "watching");
@@ -61,6 +62,7 @@ test.describe("new features", () => {
   test("What if? runs a variation at once, with real numbers, and never counts", async ({ page }) => {
     await open(page, MELT);
     expect(await predictAndRun(page, "They are affected, like the cancer cells", "Certain")).toBe("correct");
+    await openMore(page);
     await page.locator('[data-what-if="long"]').click();
     await expect(page.locator("main[data-explore]")).toBeAttached();
     await expect(page.locator("[data-what-if-result]")).toBeVisible({ timeout: 30_000 });
@@ -79,12 +81,14 @@ test.describe("new features", () => {
 
   test("root belief finder: two wrong guesses from one idea, in the lab and on My ideas", async ({ page }) => {
     await page.goto("/beliefs");
+    await openMore(page);
     await expect(page.locator("#root-ideas")).toBeVisible();
     await expect(page.getByText(/No surprises yet/)).toBeVisible();
     await open(page, MELT);
     expect(await predictAndRun(page, "Nothing happens to them")).toBe("wrong");
     await expect(page.locator("[data-root-belief]")).toHaveCount(0);
     await page.goto("/beliefs");
+    await openMore(page);
     await expect(page.getByText(/No pattern yet/)).toBeVisible();
     await open(page, MELT);
     expect(await predictAndRun(page, "They are affected only at the very end")).toBe("wrong");
@@ -92,6 +96,7 @@ test.describe("new features", () => {
     await expect(page.locator('[data-root-belief="treatment-only-touches-the-cancer"]')).toContainText(line);
     await expect(bubble(page)).toContainText(line);
     await page.goto("/beliefs");
+    await openMore(page);
     const card = page.locator('[data-root="treatment-only-touches-the-cancer"]');
     await expect(card).toContainText(line);
     await expect(card.getByRole("link", { name: /Why chemo causes hair loss/ })).toHaveAttribute("href", MELT);
@@ -102,6 +107,7 @@ test.describe("new features", () => {
     await open(page, MELT);
     expect(await predictAndRun(page, "Nothing happens to them")).toBe("wrong");
     await page.getByRole("button", { name: "Another hint" }).click();
+    await openMore(page);
     const simpler = page.getByRole("button", { name: /Explain it simpler/ });
     await expect(simpler).toBeVisible();
     await simpler.click();
@@ -116,6 +122,7 @@ test.describe("new features", () => {
   });
 
   test("impact counter: friendly line without Redis, real number when the server has one", async ({ page }) => {
+    test.skip(true, "The owner hid the impact counter (with the belief deck) in the subtraction pass, 28 October 2026; the code stays.");
     await page.goto("/");
     const counter = page.locator("[data-impact]");
     await counter.scrollIntoViewIfNeeded();
@@ -185,6 +192,7 @@ test.describe("Ask Ano edge cases", () => {
     await page.getByRole("button", { name: "Ask", exact: true }).click();
     await expect(page.getByRole("button", { name: /Ask Ano · 0 left/ })).toBeDisabled();
     await expect(page.getByText(/used all 5 questions/)).toBeVisible();
+    await openMore(page);
     await expect(page.getByRole("button", { name: /No questions left|Explain it simpler/ }).first()).toBeVisible();
     problems.splice(0, problems.length, ...problems.filter((p) => !/api\/ask-ano|Failed to load resource/.test(p)));
   });

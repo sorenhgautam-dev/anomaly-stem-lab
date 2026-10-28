@@ -5,14 +5,14 @@
     "Hello! I'm Ano. Make a guess, then let's see what really happens."
   ],
   "building": [
-    "What do you think will happen? Take a guess.",
-    "Ready when you are. What's your guess?",
-    "Have a think first. What do you expect to see?"
+    "What do you think will happen? Pick the guess that feels right.",
+    "Before you run it: which answer would surprise you most?",
+    "Have a think first. What do you expect to happen, and why?"
   ],
   "correct": [
     "You got it. That's how a scientist thinks.",
     "Spot on. Your guess matched what really happened.",
-    "Nice thinking! Peek at the theory to see why it works."
+    "Nice thinking! Can you say why it happened in your own words?"
   ],
   "wrong": [
     "Whoa, did you see that? Lots of people expect what you expected. Let's look closer.",
@@ -20,14 +20,14 @@
     "Interesting! That's a really common guess. Let's find out what happened."
   ],
   "stuck": [
-    "Here's a little hint. Check it out below.",
-    "Need a nudge? There's a small hint just below.",
-    "Stuck? That's okay. Take a look at the hint below."
+    "Try this: which cells changed the most, and which barely changed at all?",
+    "Think about what the simulator was counting. What changed first?",
+    "Look at the numbers again. Which one surprised you, and why?"
   ],
   "noAnswer": [
-    "Great question! Run it again and watch closely. What changes?",
-    "Hmm, I can’t answer that one right now. Try changing one thing and run it again.",
-    "Good thinking! Watch the numbers while it runs. What do you notice?"
+    "Good question! Change one thing, run it again, and watch which number moves.",
+    "I can't answer that one right now. What do you think would happen if you changed just one setting?",
+    "Watch the numbers while it runs. Which one changes first?"
   ],
   "levelUp": [
     "Level done. Ready for the next one?",

@@ -127,6 +127,9 @@ test.describe("sliders and runs", () => {
   });
 });
 
+const CHEMO_LAB = "/labs/treatment/medium/treatment-chemo-hair";
+const CHEMO_MAP = "/labs/treatment/medium";
+
 test.describe("storage", () => {
   test("first visit, return visit and cleared storage", async ({ page }) => {
     test.setTimeout(120_000);
@@ -135,18 +138,19 @@ test.describe("storage", () => {
     await page.reload();
     await expect(page.getByText(/0 busted · 0 still testing · \d+ not tested yet/)).toBeVisible();
     await expect(page.getByText(/No surprises yet/)).toBeVisible();
-    await open(page, MELT);
-    expect(await run(page, "Keep rising")).toBe("wrong");
+    // A cancer idea (My beliefs counts only the visible labs' ideas).
+    await open(page, CHEMO_LAB);
+    expect(await run(page, "Nothing happens to them")).toBe("wrong");
     await page.getByRole("button", { name: /Change something and try again/ }).click();
     // Busting the idea reports one real bust to the live counter, and only that.
     const bust = page.waitForRequest((r) => r.url().endsWith("/api/impact") && r.method() === "POST");
-    expect(await run(page, "Stay at 0 °C")).toBe("correct");
-    expect((await bust).postDataJSON()).toEqual({ experimentId: "chemistry-melting", misconceptionId: "melting-temp-rises" });
+    expect(await run(page, "They are affected, like the cancer cells")).toBe("correct");
+    expect((await bust).postDataJSON()).toEqual({ experimentId: "treatment-chemo-hair", misconceptionId: "chemo-targets-only-cancer" });
     // Return visit: a fresh load reads the saved progress.
     await page.goto("/beliefs");
     await expect(page.getByText(/1 busted · 0 still testing/)).toBeVisible();
-    await page.goto(MAP);
-    await expect(page.locator(`a[href="${MELT}"]`).first()).toBeVisible();
+    await page.goto(CHEMO_MAP);
+    await expect(page.locator(`a[href="${CHEMO_LAB}"]`).first()).toBeVisible();
     await clearStorage(page);
     await page.goto("/beliefs");
     await expect(page.getByText(/0 busted · 0 still testing/)).toBeVisible();

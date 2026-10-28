@@ -152,3 +152,8 @@ export async function shoot(page: Page, name: string, width: number, full = fals
   await page.screenshot({ path: `${SHOTS}/${name}-${width}.png` });
   if (full) await page.screenshot({ path: `${SHOTS}/${name}-${width}-full.png`, fullPage: true });
 }
+
+/** Open every "More" drawer and the "What's happening" toggle on the page (the subtraction pass hides extras behind them). */
+export async function openMore(page: Page): Promise<void> {
+  await page.evaluate(() => document.querySelectorAll<HTMLDetailsElement>("details[data-more], details[data-inspector]").forEach((d) => (d.open = true)));
+}

@@ -4,5 +4,6 @@
     "Look at the last few months on the graph. Is the line flattening or climbing?",
     "Each doubling adds as many cells as all the doublings before it.",
     "So the cluster keeps speeding up. In this model it never levels off."
-  ]
+  ],
+  "ask": "Does doubling ever get smaller? Watch the last few months closely."
 }

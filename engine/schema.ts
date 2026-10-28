@@ -235,6 +235,7 @@ export const misconceptionSchema: z.ZodType<MisconceptionDef> = z.object({
 export const hintSchema: z.ZodType<HintDef> = z.object({
   misconceptionId: z.string(),
   hints: z.tuple([z.string().min(1), z.string().min(1), z.string().min(1)]),
+  ask: z.string().min(1).optional(),
 });
 
 export const theorySchema: z.ZodType<TheoryDef> = z.object({

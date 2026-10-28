@@ -4,5 +4,6 @@
     "Watch the meter as the clouds thicken. Does it drop to half?",
     "Clouds block some UV, but most of it still gets through.",
     "So a cloudy day can still need protection: shade, clothes, a hat and sunscreen."
-  ]
+  ],
+  "ask": "Watch the UV meter as the clouds roll in. Does it drop by half?"
 }

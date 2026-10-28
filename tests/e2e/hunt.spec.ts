@@ -4,7 +4,7 @@ import { initialBuild } from "../../engine/edits";
 import { realModel } from "../../engine/registry";
 import { runExperiment, simulateOutcome } from "../../engine/run";
 import { EXPERIMENTS } from "../../lib/content";
-import { watchConsole } from "./gates";
+import { watchConsole, openMore } from "./gates";
 
 /*
  * The bug hunt's eyes: every page and every lab state at 1440, 1024 and 390
@@ -121,6 +121,7 @@ for (const def of EXPERIMENTS) {
       await expect(page.locator('main[data-verdict="correct"]')).toBeAttached({ timeout: 40_000 });
       await page.waitForTimeout(2600);
       await shot(page, `${def.id}-4-correct-${w}`);
+      await openMore(page);
       const whatIf = page.locator("[data-what-if]").first();
       if (await whatIf.count()) {
         await whatIf.click();

@@ -30,4 +30,11 @@ describe("How it works: the real chemo experiment, step by step", () => {
     expect(seq.steps[3].dishes.hair).toBeGreaterThan(seq.steps[2].dishes.hair);
     expect(seq.steps[3].dishes.slow).toBeGreaterThan(95);
   });
+  it("judges any guess with the simulator: the right one is right, with no ghost", () => {
+    const right = howSequence(String(real.result.value));
+    expect(right.right).toBe(true);
+    expect(right.steps[2].verdict).toBe("correct");
+    expect(right.steps[2].ghostHair).toBeNull();
+    for (const option of seq.options.filter((o) => o !== real.result.value)) expect(howSequence(option).steps[2].verdict).toBe("wrong");
+  });
 });

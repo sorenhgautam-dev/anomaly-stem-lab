@@ -5,7 +5,8 @@ import { Vector3 } from "three";
 import { useLab } from "@/lib/store";
 import { LAB } from "@/lib/tokens";
 import { labView, setAnchor } from "../lab-state";
-import { Colony, Dish3D } from "../kit/bio/Dish3D";
+import { Colony } from "../kit/bio/Dish3D";
+import { Field3D } from "../kit/bio/Field3D";
 import { Readout } from "../kit/chem/instruments";
 import { useSnapshot } from "../kit/chem/heat/useSnapshot";
 import { orbit, type StageShots } from "../shots";
@@ -14,7 +15,7 @@ import { useStageValues } from "../useStageValues";
 /*
  * Cells out of control and the contact test, in 3D (stage "cells",
  * engine/cancer/cells.ts), in the teal Cell Lab.
- *  - Fill: two dishes side by side. Normal cells (sage) fill their dish and
+ *  - Fill: two microscope fields side by side (Field3D). Normal cells (sage) fill their field and
  *    stop; cancer cells (gold) keep dividing and pile up in a second layer.
  *  - Contact: the cancer dish and another person's dish of normal cells sit
  *    touching. The simulator decides what crosses: nothing does. After a
@@ -57,29 +58,30 @@ export function CellsStage3D() {
   if (scene === "contact") {
     return (
       <group>
-        <Dish3D radius={0.28} position={[-gap, 0, 0]} gel="#EAE6EE">
-          <Colony count={() => Math.min(300, snap.now.cancer ?? 4)} room={70} radius={0.24} color={LAB.chemistry.gold} />
-        </Dish3D>
-        <Dish3D radius={0.28} position={[gap, 0, 0]}>
-          <Colony count={() => 70} room={70} radius={0.24} color={LAB.chemistry.sage} />
-          <Colony count={() => snap.now.spread ?? 0} room={30} radius={0.12} color={LAB.chemistry.gold} y={0.07} />
+        <Field3D radius={0.28} position={[-gap, 0, 0]}>
+          <Colony count={() => Math.min(300, snap.now.cancer ?? 4)} room={70} radius={0.24} color={LAB.chemistry.gold} glow={0.32} />
+        </Field3D>
+        <Field3D radius={0.28} position={[gap, 0, 0]}>
+          <Colony count={() => 70} room={70} radius={0.24} color={LAB.chemistry.sage} glow={0.32} />
+          <Colony count={() => snap.now.spread ?? 0} room={30} radius={0.12} color={LAB.chemistry.gold} glow={0.32} y={0.07} />
           {sv.ghost && <Colony count={() => snap.ghost?.spread ?? 0} room={30} radius={0.12} color="#ffffff" opacity={0.5} y={0.08} />}
-        </Dish3D>
-        <Readout text={() => "Person A: cancer cells"} height={0.08} position={[-gap, 0.34, 0]} />
-        <Readout text={() => `Person B: normal cells\n${Math.round(snap.now.spread ?? 0)} crossed over`} height={0.08} position={[gap, 0.34, 0]} />
+        </Field3D>
+        {/* Staggered heights, so the two labels never overlap on a narrow screen. */}
+        <Readout text={() => "Person A: cancer cells"} height={0.07} position={[-gap, 0.5, -0.05]} />
+        <Readout text={() => `Person B: normal cells\n${Math.round(snap.now.spread ?? 0)} crossed over`} height={0.07} position={[gap, 0.3, 0.05]} />
         <Readout text={() => ((snap.now.touching ?? 0) > 0.5 ? "Touching" : sv.outcome ? "Apart" : "Ready")} style="screen" height={0.06} position={[0, 0.58, -0.3]} />
       </group>
     );
   }
   return (
     <group>
-      <Dish3D radius={big ? 0.36 : 0.28} position={[-gap, 0, 0]}>
-        <Colony count={() => snap.now.normal ?? 4} room={room} radius={big ? 0.32 : 0.24} color={LAB.chemistry.sage} />
+      <Field3D radius={big ? 0.36 : 0.28} position={[-gap, 0, 0]}>
+        <Colony count={() => snap.now.normal ?? 4} room={room} radius={big ? 0.32 : 0.24} color={LAB.chemistry.sage} glow={0.32} />
         {sv.ghost && <Colony count={() => snap.ghost?.normal ?? 4} room={room} radius={big ? 0.32 : 0.24} color="#ffffff" opacity={0.45} y={0.07} />}
-      </Dish3D>
-      <Dish3D radius={0.28} position={[gap, 0, 0]} gel="#EAE6EE">
-        <Colony count={() => Math.min(300, snap.now.cancer ?? 4)} room={60} radius={0.24} color={LAB.chemistry.gold} />
-      </Dish3D>
+      </Field3D>
+      <Field3D radius={0.28} position={[gap, 0, 0]}>
+        <Colony count={() => Math.min(300, snap.now.cancer ?? 4)} room={60} radius={0.24} color={LAB.chemistry.gold} glow={0.32} />
+      </Field3D>
       <Readout text={() => `Normal cells\n${Math.round(snap.now.normal ?? 4)}${(snap.now.full ?? 0) > 0.5 ? ", dish full" : ""}`} height={0.08} position={[-gap, 0.36, 0]} />
       <Readout text={() => `Cancer cells\n${Math.round(snap.now.cancer ?? 4)}`} height={0.08} position={[gap, 0.36, 0]} />
     </group>

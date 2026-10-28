@@ -5,7 +5,6 @@ import { RoundedBox } from "@react-three/drei";
 import { CylinderGeometry, TorusGeometry } from "three";
 import { useQuality } from "@/lib/quality";
 import { LAB } from "@/lib/tokens";
-import { canvasTexture, decalMaterial, MONO, SANS } from "./detail";
 import { kitMaterial } from "./materials";
 
 /*
@@ -13,34 +12,12 @@ import { kitMaterial } from "./materials";
  * §8 "model quality"): real proportions, bevelled and rounded parts, small
  * details (knobs, screws, bezels, printed labels) and the kit's PBR
  * materials (glossy white plastic, black trim, brushed steel, the lab's
- * accent). Each is one clear object a 12-year-old recognises: a microscope,
+ * accent), with no tiny printed text (it reads as cheap up close). Each is
+ * one clear object a 12-year-old recognises: a microscope,
  * a ring scanner with its couch, a UV meter on a tripod and a treatment
  * machine with its gantry, head and couch. Sizes are in metres-ish world
  * units, around a 1 m bench.
  */
-
-function Label({ text, width, height, position, rotation, color = "#1d1b1a", bg = "transparent", mono = false }: { text: string; width: number; height: number; position: [number, number, number]; rotation?: [number, number, number]; color?: string; bg?: string; mono?: boolean }) {
-  const material = useMemo(() => {
-    const tex = canvasTexture(`label-${text}-${color}-${bg}-${mono}`, 512, Math.round((512 * height) / width), (ctx, w, h) => {
-      ctx.clearRect(0, 0, w, h);
-      if (bg !== "transparent") {
-        ctx.fillStyle = bg;
-        ctx.fillRect(0, 0, w, h);
-      }
-      ctx.fillStyle = color;
-      ctx.font = `600 ${Math.round(h * 0.56)}px ${mono ? MONO : SANS}`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(text, w / 2, h / 2);
-    });
-    return decalMaterial(`label-${text}-${color}-${bg}-${mono}`, tex);
-  }, [text, width, height, color, bg, mono]);
-  return (
-    <mesh position={position} rotation={rotation} material={material}>
-      <planeGeometry args={[width, height]} />
-    </mesh>
-  );
-}
 
 /** A compound light microscope: foot, curved arm, stage with slide clips, nosepiece with three objectives, eyepiece tube, focus knobs, lamp. */
 export function Microscope3D({ children }: { children?: ReactNode }) {
@@ -87,7 +64,6 @@ export function Microscope3D({ children }: { children?: ReactNode }) {
           <cylinderGeometry args={[0.017, 0.019, 0.1, 24]} />
         </mesh>
       ))}
-      <Label text="ANOMALY 400×" width={0.16} height={0.03} position={[0, 0.06, 0.252]} />
     </group>
   );
 }
@@ -112,7 +88,6 @@ export function Scanner3D({ children }: { children?: ReactNode }) {
         </mesh>
         {/* The front display, top right of the ring */}
         <RoundedBox args={[0.2, 0.11, 0.02]} radius={0.012} smoothness={3} position={[0.3, 0.36, 0.17]} rotation={[0, 0, -0.55]} material={black} />
-        <Label text="SCAN" width={0.15} height={0.05} position={[0.3, 0.36, 0.182]} rotation={[0, 0, -0.55]} color={LAB.robotics.teal} mono />
         <group>{children}</group>
       </group>
       {/* The couch slides through the bore: a long rounded top on a pedestal, with a soft sage mattress */}
@@ -154,7 +129,6 @@ export function UvMeter3D({ children }: { children?: ReactNode }) {
             <cylinderGeometry args={[0.022, 0.022, 0.012, 24]} />
           </mesh>
         ))}
-        <Label text="UV METER" width={0.18} height={0.03} position={[0, -0.15, 0.047]} />
       </group>
     </group>
   );

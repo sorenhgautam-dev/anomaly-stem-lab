@@ -2,44 +2,34 @@
 
 import { cn } from "@/lib/cn";
 import { LAB } from "@/lib/tokens";
-import { MicroscopeCells, MicroscopeView } from "@/components/lab3d/kit/bio/Microscope";
+import { MicroscopeMix, MicroscopeView } from "@/components/lab3d/kit/bio/Microscope";
 import type { HowBench } from "./how-sequence";
 
 /*
- * How it works' bench (DESIGN.md §7.1 item 2): the real chemo experiment's
- * three kinds of cells, each seen down its own microscope, each at the
- * engine's value for the step. Colonies ease between steps, so scrolling
- * plays the experiment. In Reveal a see-through colony in the hair view
- * shows the guess's idea beside what really happened. The three eyepieces
- * fill the panel: no empty floor.
+ * How it works' microscope (DESIGN.md §7.1 item 2): the real chemo
+ * experiment's three kinds of cells mixed in one dark field, each at the
+ * engine's value for the step: cancer cells gold, hair follicle cells teal,
+ * slow-dividing cells sage. Cells shrink away and refill between steps, so
+ * scrolling plays the experiment. The guess's idea for the hair cells shows
+ * on their bar under the field (HowItWorks), so the field stays clear.
  */
 
-const ROOM = 48;
-const cells = (pct: number) => (pct / 100) * ROOM * 1.1;
+const ROOM = 30;
+const cells = (pct: number) => (pct / 100) * ROOM;
 
 export function HowChemo3D({ bench, label, className }: { bench: HowBench; label: string; className?: string }) {
-  const groups = [
-    { key: "cancer", title: "Cancer cells", value: bench.dishes.cancer, color: LAB.robotics.gold },
-    { key: "hair", title: "Hair follicle cells", value: bench.dishes.hair, color: LAB.robotics.teal },
-    { key: "slow", title: "Slow-dividing cells", value: bench.dishes.slow, color: LAB.chemistry.sage },
-  ] as const;
+  const d = bench.dishes;
+  const hit = (pct: number) => () => Math.max(0, 1 - pct / 100);
   return (
-    <div role="group" aria-label={label} className={cn("grid grid-cols-3 gap-2 px-2 pb-4 pt-16 sm:gap-4 sm:px-4", className)}>
-      {groups.map((g) => (
-        <MicroscopeView
-          key={g.key}
-          label={`${g.title} under the microscope, ${Math.round(g.value)}% of the start`}
-          surroundClassName="[--surround:var(--color-robo-stage)]"
-          caption={
-            <span className="flex flex-col">
-              <span className="text-[13px] font-semibold text-cream-100 sm:text-[15px]">{g.title}</span>
-              <span className="type-readout text-[13px] text-robo-gold">{Math.round(g.value)}%</span>
-            </span>
-          }
-        >
-          <MicroscopeCells count={() => cells(g.value)} room={ROOM} color={g.color} faded={() => Math.max(0, 1 - g.value / 100)} ghost={g.key === "hair" && bench.ghostHair !== null ? () => cells(bench.ghostHair ?? 100) : null} slide={g.key === "cancer" ? "#F1EEF3" : "#EEF2EA"} />
-        </MicroscopeView>
-      ))}
-    </div>
+    <MicroscopeView label={label} rim="metal" className={cn("w-full", className)} surroundClassName="[--surround:var(--color-robo-stage)]">
+      <MicroscopeMix
+        room={ROOM}
+        groups={[
+          { key: "cancer", color: LAB.robotics.gold, count: () => cells(d.cancer), faded: hit(d.cancer) },
+          { key: "hair", color: LAB.robotics.teal, count: () => cells(d.hair), faded: hit(d.hair) },
+          { key: "slow", color: LAB.chemistry.sage, count: () => cells(d.slow), faded: hit(d.slow) },
+        ]}
+      />
+    </MicroscopeView>
   );
 }

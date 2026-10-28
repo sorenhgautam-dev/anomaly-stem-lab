@@ -1,14 +1,11 @@
 import { ViewTransition } from "react";
 import { EXPERIMENTS } from "@/lib/content";
-import { BeliefSection } from "@/components/landing/BeliefSection";
 import { FinalCta } from "@/components/landing/FinalCta";
 import { featuredCards } from "@/components/landing/featured";
 import { Hero } from "@/components/landing/Hero";
 import { howSequence } from "@/components/landing/how-sequence";
 import { HowItWorks } from "@/components/landing/HowItWorks";
 import { LabsSection } from "@/components/landing/LabsSection";
-import { LevelDialSection } from "@/components/landing/LevelDialSection";
-import { MeetAno } from "@/components/landing/MeetAno";
 import { ProblemSection } from "@/components/landing/ProblemSection";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { SmoothScroll } from "@/components/ui/SmoothScroll";
@@ -16,6 +13,8 @@ import { SmoothScroll } from "@/components/ui/SmoothScroll";
 /** The hero's cards and How it works, run through the simulator once (the engine is deterministic). */
 const FEATURED = featuredCards();
 const HOW = howSequence();
+// The same sequence for every option, so a visitor can try any guess (all from the simulator, at build time).
+const HOW_BY_GUESS = Object.fromEntries(HOW.options.map((o) => [o, howSequence(o)]));
 
 /*
  * The landing page (DESIGN.md §7.1): the hero carousel of three cancer
@@ -35,12 +34,10 @@ export default function Home() {
           <Hero count={EXPERIMENTS.length} featured={FEATURED} />
           <ProblemSection />
           <div className="relative bg-paper-night md:mx-3 md:rounded-frame">
-            <HowItWorks sequence={HOW} />
+            <HowItWorks sequences={HOW_BY_GUESS} initial={HOW.guess} />
             <LabsSection />
-            <MeetAno />
           </div>
-          <BeliefSection />
-          <LevelDialSection />
+          {/* Hidden in the subtraction pass (owner, 28 October 2026): Meet Ano, the belief deck with the impact counter, and the level dial. Their code stays. */}
           <FinalCta />
         </main>
         <SiteFooter />

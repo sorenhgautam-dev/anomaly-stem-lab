@@ -56,12 +56,30 @@ const from = new Vector3();
 const dir = new Vector3();
 
 /** Spots on a disc, packed by the golden angle so a growing colony fills the dish evenly from the middle out. */
-function spots(count: number, radius: number): Vector3[] {
+export function spots(count: number, radius: number): Vector3[] {
   const out: Vector3[] = [];
   const golden = Math.PI * (3 - Math.sqrt(5));
   for (let i = 0; i < count; i++) {
     const r = radius * Math.sqrt((i + 0.5) / count);
     out.push(new Vector3(Math.cos(i * golden) * r, 0, Math.sin(i * golden) * r));
+  }
+  return out;
+}
+
+/**
+ * Deal a spiral of spots to `kinds` groups of cells: within each run of
+ * `kinds` spots the groups take turns in a shuffled order (the same every
+ * load), so each group still fills from the middle out but the kinds sit
+ * mixed, never in tidy spiral arms.
+ */
+export function dealSpots(all: Vector3[], kinds: number): Vector3[][] {
+  const out: Vector3[][] = Array.from({ length: kinds }, () => []);
+  for (let block = 0; block * kinds < all.length; block++) {
+    const order = Array.from({ length: kinds }, (_, g) => g).sort((a, b) => hash01(block * 7 + a * 13) - hash01(block * 7 + b * 13));
+    order.forEach((g, k) => {
+      const spot = all[block * kinds + k];
+      if (spot) out[g].push(spot);
+    });
   }
   return out;
 }
@@ -73,20 +91,23 @@ function spots(count: number, radius: number): Vector3[] {
  * been hit. A new cell splits off its parent: it starts inside it, the pair
  * pinches into a peanut, then the new cell glides to its own spot. Two
  * instanced meshes: the see-through membranes and the darker nuclei.
+ * `at` gives the colony its own spots (one layer), so several colonies can
+ * share one field without landing on each other (MicroscopeMix).
  */
-export function Colony({ count, room, radius = 0.3, size = 0.034, color, faded = () => 0, y = 0.024, opacity = 1 }: { count: Getter<number>; room: number; radius?: number; size?: number; color: string; faded?: Getter<number>; y?: number; opacity?: number }) {
+export function Colony({ count, room, radius = 0.3, size = 0.034, color, faded = () => 0, y = 0.024, opacity = 1, at, glow = 0 }: { count: Getter<number>; room: number; radius?: number; size?: number; color: string; faded?: Getter<number>; y?: number; opacity?: number; at?: Vector3[]; glow?: number }) {
   const tier = useQuality((s) => s.level);
   const skin = useRef<InstancedMesh>(null);
   const core = useRef<InstancedMesh>(null);
   const geometry = useMemo(() => new IcosahedronGeometry(1, tier === "low" ? 2 : 3), [tier]);
   const coreGeometry = useMemo(() => new IcosahedronGeometry(1, 1), []);
-  const mats = useMemo(() => cellMaterials(color, tier, { see: opacity }), [color, tier, opacity]);
+  const mats = useMemo(() => cellMaterials(color, tier, { see: opacity, glow }), [color, tier, opacity, glow]);
   const layout = useMemo(() => {
+    if (at) return at.slice(0, MAX);
     const first = spots(room, radius);
     // The second layer sits in the dips of the first, a little smaller.
     const second = spots(MAX - room, radius * 0.86).map((p) => p.clone().add(new Vector3(0.012, size * 1.5, 0.012)));
     return [...first, ...second].slice(0, MAX);
-  }, [room, radius, size]);
+  }, [room, radius, size, at]);
   const shown = useRef<number[]>(new Array(MAX).fill(0));
   const base = useMemo(() => new Color(color), [color]);
   const grey = useMemo(() => new Color("#cfd3cf"), []);
@@ -105,12 +126,13 @@ export function Colony({ count, room, radius = 0.3, size = 0.034, color, faded =
     const m = skin.current;
     const c = core.current;
     if (!m || !c) return;
-    const n = Math.max(0, Math.min(MAX, count()));
+    const n = Math.max(0, Math.min(layout.length, count()));
     const fade = Math.max(0, Math.min(1, faded()));
     const k = Math.min(1, delta * 4);
     mats.tick(state.clock.elapsedTime);
-    ((mats.membrane as MeshStandardMaterial).color as Color).copy(base).lerp(grey, fade * 0.6);
-    for (let i = 0; i < MAX; i++) {
+    // Hit cells grey a little; glowing cells (on a dark field) keep more of their colour so the kinds stay easy to tell apart.
+    ((mats.membrane as MeshStandardMaterial).color as Color).copy(base).lerp(grey, fade * (glow > 0 ? 0.3 : 0.6));
+    for (let i = 0; i < layout.length; i++) {
       // Each cell eases in or out: a split when it appears, a soft shrink when it goes.
       const want = i < Math.floor(n) ? 1 : i < n ? n - Math.floor(n) : 0;
       shown.current[i] += (want - shown.current[i]) * k;
@@ -135,6 +157,8 @@ export function Colony({ count, room, radius = 0.3, size = 0.034, color, faded =
       o.updateMatrix();
       c.setMatrixAt(i, o.matrix);
     }
+    // Only the colony's own spots draw (a colony with its own spots has fewer than MAX).
+    m.count = c.count = layout.length;
     m.instanceMatrix.needsUpdate = true;
     c.instanceMatrix.needsUpdate = true;
   });

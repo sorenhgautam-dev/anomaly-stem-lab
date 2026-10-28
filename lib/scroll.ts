@@ -24,5 +24,23 @@ export function scrollKit(): { gsap: typeof gsap; ScrollTrigger: typeof ScrollTr
 
 export const scenes = { hero: 0, labs: 1 };
 
+/** The page's smooth scroller while one runs (components/ui/SmoothScroll.tsx), so jumps go through it instead of fighting it. */
+let smooth: { scrollTo: (target: number, options?: { duration?: number }) => void } | null = null;
+
+export function setSmoothScroller(s: typeof smooth): void {
+  smooth = s;
+}
+
+/** Glide the page to `top` (px from the top of the document): through Lenis when it runs, else natively (instantly with reduced motion). */
+export function scrollPageTo(top: number): void {
+  if (smooth) smooth.scrollTo(top, { duration: 0.9 });
+  else window.scrollTo({ top, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+}
+
+/** An element's top, in px from the top of the document (offsetTop is only relative to its positioned parent). */
+export function pageTop(el: HTMLElement): number {
+  return el.getBoundingClientRect().top + window.scrollY;
+}
+
 /** Wide screens with a fine pointer and full motion: where sections pin and scrub. */
 export const SCRUB_MEDIA = "(min-width: 1024px) and (pointer: fine) and (prefers-reduced-motion: no-preference)";

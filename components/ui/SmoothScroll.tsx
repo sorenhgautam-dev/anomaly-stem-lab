@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { prefersReducedMotion } from "@/lib/motion";
-import { scrollKit } from "@/lib/scroll";
+import { scrollKit, setSmoothScroller } from "@/lib/scroll";
+import { useQuality } from "@/lib/quality";
 
 /*
  * Smooth, weighted scrolling (DESIGN.md §9.1) with Lenis, plus smooth jumps
@@ -16,13 +17,17 @@ import { scrollKit } from "@/lib/scroll";
  * on the 3D canvas, so the page still scrolls if WebGL is unavailable.
  */
 export function SmoothScroll() {
+  // The Low tier scrolls natively: the browser scrolls off the main thread, so a slow CPU can't make the page lag behind the wheel.
+  const low = useQuality((s) => s.level === "low");
   useEffect(() => {
     const { gsap, ScrollTrigger } = scrollKit();
-    if (prefersReducedMotion() || window.matchMedia("(pointer: coarse)").matches) return;
-    const lenis = new Lenis({ autoRaf: false, lerp: 0.1, wheelMultiplier: 0.95, anchors: { offset: -16 } });
+    if (low || prefersReducedMotion() || window.matchMedia("(pointer: coarse)").matches) return;
+    // Fast and direct (owner's brief): a short 1 s glide at normal wheel speed, never lagging behind the wheel or trackpad.
+    const lenis = new Lenis({ autoRaf: false, lerp: 0, duration: 1, easing: (t) => 1 - Math.pow(1 - t, 3), wheelMultiplier: 1, anchors: { offset: -16 } });
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
+    setSmoothScroller(lenis);
     lenis.on("scroll", ScrollTrigger.update);
     const root = document.documentElement;
     let target = 0;
@@ -39,11 +44,12 @@ export function SmoothScroll() {
       if (!raf) raf = requestAnimationFrame(settle);
     });
     return () => {
+      setSmoothScroller(null);
       gsap.ticker.remove(tick);
       cancelAnimationFrame(raf);
       root.style.removeProperty("--scroll-skew");
       lenis.destroy();
     };
-  }, []);
+  }, [low]);
   return null;
 }

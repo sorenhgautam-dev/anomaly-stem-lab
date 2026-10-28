@@ -7,6 +7,9 @@ import { useReducedMotion } from "@/lib/motion";
  * The hero carousel's behaviour (DESIGN.md §7.1): auto-advance every 7 s,
  * paused on hover or focus or by the pause button (WCAG 2.2.2), and never
  * with reduced motion; arrows and dots; swipe with a finger or a mouse drag.
+ * It also waits while the carousel is off screen or the tab is hidden: the
+ * slides differ in height on phones, and a slide change far above the
+ * reader would shift the page under them.
  */
 
 const SWIPE_PX = 50;
@@ -17,10 +20,28 @@ export function useCarousel(count: number, { interval = 7000, disabled = false }
   const [userPaused, setUserPaused] = useState(false);
   const reduced = useReducedMotion();
   const drag = useRef<{ x: number; y: number; id: number } | null>(null);
+  const [el, setEl] = useState<HTMLElement | null>(null);
+  const [onScreen, setOnScreen] = useState(true);
+
+  useEffect(() => {
+    if (!el) return;
+    let seen = true;
+    const update = () => setOnScreen(seen && document.visibilityState === "visible");
+    const io = new IntersectionObserver(([e]) => {
+      seen = e.isIntersecting;
+      update();
+    }, { threshold: 0.2 });
+    io.observe(el);
+    document.addEventListener("visibilitychange", update);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", update);
+    };
+  }, [el]);
 
   // Slide changes render as a transition: React spreads the hero's re-render over frames instead of one long click (it was ~110 ms).
   const go = useCallback((i: number) => startTransition(() => setIndex(((i % count) + count) % count)), [count]);
-  const playing = !disabled && !userPaused && !hovered && !reduced;
+  const playing = !disabled && !userPaused && !hovered && !reduced && onScreen;
 
   useEffect(() => {
     if (!playing) return;
@@ -29,6 +50,7 @@ export function useCarousel(count: number, { interval = 7000, disabled = false }
   }, [playing, index, count, interval]);
 
   const bind = {
+    ref: setEl,
     onPointerEnter: (e: PointerEvent) => e.pointerType === "mouse" && setHovered(true),
     onPointerLeave: () => setHovered(false),
     onFocusCapture: () => setHovered(true),

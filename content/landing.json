@@ -138,7 +138,16 @@
         "title": "Understand",
         "body": "Hair follicle cells divide fast, so chemo affects them too. Most hair loss from chemo is reversible once treatment is over."
       }
-    ]
+    ],
+    "revealRight": "You guessed right! Ano shows what really happened, then asks you why.",
+    "revealWrong": "Your guess was \"{guess}\". Ano shows your idea beside what really happened, and the moment they split.",
+    "choose": "Pick a guess",
+    "cellsLeft": "healthy cells left",
+    "bars": {
+      "cancer": "Cancer cells",
+      "hair": "Hair follicle cells",
+      "slow": "Slow-dividing cells"
+    }
   },
   "labs": {
     "title": "Four labs, one story",
@@ -182,21 +191,33 @@
     "correct": "Bright chime"
   },
   "problem": {
-    "title": "Why wrong ideas about cancer matter",
-    "lines": [
+    "title": "Myths · spread fast.",
+    "myths": [
       {
-        "text": "Some popular ideas about cancer are wrong, but they can still seem to make sense.",
-        "citation": "myths-common"
+        "myth": "You can catch cancer from someone.",
+        "fact": "You can't. It starts from changes in a person's own cells.",
+        "citations": [
+          "cancer-not-contagious-acs",
+          "cancer-starts-from-gene-changes"
+        ]
       },
       {
-        "text": "Wrong ideas can cause needless worry, and get in the way of good choices about prevention and treatment.",
-        "citation": "myths-common"
+        "myth": "Chemo only affects cancer cells.",
+        "fact": "It also affects other cells that divide fast, like hair cells. That's why hair can fall out.",
+        "citations": [
+          "chemo-affects-healthy-fast-cells",
+          "chemo-hair-loss-common"
+        ]
       },
       {
-        "text": "When people don't know how cancer starts, they may think it can be caught. That can spread fear.",
-        "citation": "myths-common-acs"
+        "myth": "A tumour grows slowly and steadily.",
+        "fact": "Its cells keep doubling, and each doubling adds more than the last. Found early, treatment is more likely to work.",
+        "citations": [
+          "cancer-cells-keep-doubling-cruk",
+          "early-detection-easier-to-treat-cruk"
+        ]
       }
     ],
-    "close": "Guessing first, then seeing the real science, is how a wrong idea breaks."
+    "close": "Guess first. Then watch the real science."
   }
 }

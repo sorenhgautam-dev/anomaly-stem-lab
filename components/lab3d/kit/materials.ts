@@ -3,10 +3,11 @@ import type { Quality } from "@/lib/quality";
 import { LAB, PALETTE as P } from "@/lib/tokens";
 
 /*
- * Shared materials for the 3D apparatus kit (DESIGN.md §8): glossy white
- * plastic, matte orange, ink, metal, faked glass (real transmission is kept
- * for one object per screen, CLAUDE.md §9) and translucent liquids. Built
- * once per tier; Low swaps physical materials for standard ones.
+ * Shared materials for the 3D apparatus kit (DESIGN.md §8), in one soft
+ * clay look: matte solids in a narrow roughness band with a soft sheen,
+ * satin metals, faked glass (real transmission is kept for one object per
+ * screen, CLAUDE.md §9) and translucent liquids. Built once per tier; Low
+ * swaps physical materials for standard ones.
  */
 
 type Kind =
@@ -39,25 +40,28 @@ function make(kind: Kind, tier: Quality, tint = "#ffffff"): Material {
     const { color, roughness = 0.4, metalness = 0, transparent, opacity, side, depthWrite } = o ?? {};
     return new MeshStandardMaterial(defined({ color, roughness, metalness, transparent, opacity, side, depthWrite }));
   };
+  // The soft clay look (owner's brief, 28 October 2026): every solid is matte in one narrow roughness band, with no mirror coat and a soft sheen that catches the rim light. Only glass, film and liquids stay glossy.
+  const clay = (color: string, roughness = 0.62) => phys({ color, roughness, sheen: 0.35, sheenRoughness: 0.8, sheenColor: new Color(color).lerp(new Color(P.white), 0.5) });
   switch (kind) {
     case "plastic":
-      return phys({ color: P.white, roughness: 0.22, clearcoat: 0.8, clearcoatRoughness: 0.15 });
+      return clay(P.white, 0.58);
     case "clay":
-      return phys({ color: tint, roughness: 0.75, clearcoat: 0.15, sheen: 0.4, sheenColor: tint });
+      return clay(tint, 0.66);
     case "board":
-      return phys({ color: P.cream[50], roughness: 0.5, clearcoat: 0.4 });
+      return clay(P.cream[50], 0.64);
     case "ink":
-      return phys({ color: "#1d1b1a", roughness: 0.35, clearcoat: 0.6 });
+      return clay("#1d1b1a", 0.62);
     case "metal":
-      return phys({ color: "#d4d8de", metalness: 1, roughness: 0.28 });
+      // Satin metal: soft highlights, never mirror-sharp.
+      return phys({ color: "#d4d8de", metalness: 0.75, roughness: 0.45 });
     case "copper":
-      return phys({ color: "#d58a52", metalness: 1, roughness: 0.32 });
+      return phys({ color: "#d58a52", metalness: 0.75, roughness: 0.45 });
     case "rubber":
-      return phys({ color: "#2a2826", roughness: 0.85 });
+      return clay("#2a2826", 0.72);
     case "orange":
-      return phys({ color: P.apricot[500], roughness: 0.45, clearcoat: 0.35 });
+      return clay(P.apricot[500], 0.6);
     case "volt":
-      return phys({ color: P.volt[500], roughness: 0.35, clearcoat: 0.5 });
+      return clay(P.volt[500], 0.6);
     case "glass":
       // Faked glass (real transmission is kept for one object, CLAUDE.md §9): thin, glossy, bright at its walls.
       return phys({ color: P.white, transparent: true, opacity: low ? 0.3 : 0.2, roughness: 0.02, clearcoat: 1, clearcoatRoughness: 0.02, ior: 1.5, specularIntensity: 1, envMapIntensity: 1.6, side: DoubleSide, depthWrite: false });
@@ -65,28 +69,24 @@ function make(kind: Kind, tier: Quality, tint = "#ffffff"): Material {
       // Zip-bag film: soft, milky plastic, not glass: more opaque and rougher, with a satin sheen on its crinkles and no mirror coat.
       return phys({ color: P.white, transparent: true, opacity: low ? 0.42 : 0.36, roughness: 0.38, clearcoat: 0.15, clearcoatRoughness: 0.5, sheen: 0.8, sheenColor: P.white, specularIntensity: 0.6, envMapIntensity: 0.9, side: DoubleSide, depthWrite: false });
     case "steel":
-      // Brushed stainless: the scale's pan, terminals and contacts.
-      return phys({ color: "#cfd2d6", metalness: 1, roughness: 0.34 });
+      // Brushed stainless, satin: the field rim, the scale's pan, terminals and contacts.
+      return phys({ color: "#cfd2d6", metalness: 0.75, roughness: 0.45 });
     case "black":
-      // Matte black ABS: battery holders, bezels, robotics trim.
-      return phys({ color: LAB.robotics.trim, roughness: 0.55, clearcoat: 0.25, clearcoatRoughness: 0.4 });
+      return clay(LAB.robotics.trim, 0.64);
     case "insulation":
-      // Wire insulation: soft graphite with a satin sheen.
-      return phys({ color: "#2b2c31", roughness: 0.42, clearcoat: 0.55, clearcoatRoughness: 0.25 });
+      return clay("#2b2c31", 0.6);
     case "gold":
-      return phys({ color: LAB.robotics.gold, roughness: 0.32, metalness: 0.25, clearcoat: 0.7 });
+      return clay(LAB.robotics.gold, 0.56);
     case "sand":
-      return phys({ color: LAB.chemistry.gold, roughness: 0.4, clearcoat: 0.5 });
+      return clay(LAB.chemistry.gold, 0.6);
     case "sage":
-      return phys({ color: LAB.chemistry.sage, roughness: 0.55, clearcoat: 0.3 });
+      return clay(LAB.chemistry.sage, 0.64);
     case "teal":
-      return phys({ color: LAB.robotics.teal, roughness: 0.35, clearcoat: 0.6 });
+      return clay(LAB.robotics.teal, 0.58);
     case "satin":
-      // Lab casework in a tint: a satin lacquer with a soft clearcoat (Chemistry's bench and hood).
-      return phys({ color: tint, roughness: 0.48, clearcoat: 0.35, clearcoatRoughness: 0.35 });
+      return clay(tint, 0.6);
     case "matte":
-      // Lab casework in a tint, matte (Robotics' white worktop and black trim).
-      return phys({ color: tint, roughness: 0.62, clearcoat: 0.12, clearcoatRoughness: 0.5 });
+      return clay(tint, 0.68);
   }
 }
 

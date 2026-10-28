@@ -50,18 +50,27 @@ function addLife(material: MeshStandardMaterial | MeshPhysicalMaterial, rim: Col
 
 /**
  * A colony's two materials. `see` makes the whole cell see-through (a ghost:
- * the student's idea). Low tier keeps the wobble but drops clearcoat and sheen.
+ * the student's idea). `glow` (0..1) lets the cell give off a little of its
+ * own colour, for cells on a dark microscope field, where reflected light
+ * alone washes the colours out. Low tier keeps the wobble but drops
+ * clearcoat and sheen.
  */
-export function cellMaterials(color: string, tier: Quality, { see = 1 }: { see?: number } = {}): CellMaterials {
+export function cellMaterials(color: string, tier: Quality, { see = 1, glow = 0 }: { see?: number; glow?: number } = {}): CellMaterials {
   const time = { value: 0 };
   const base = new Color(color);
   // The rim is the cell's own colour, lifted toward white: a soft glow at the edge, never a hard outline.
-  const rim = base.clone().lerp(new Color(P.white), 0.55).multiplyScalar(0.45 * see);
+  // Glowing cells (on a dark field) keep the rim close to their own colour, so pale ones like sage don't read as white.
+  const rim = base.clone().lerp(new Color(P.white), glow > 0 ? 0.15 : 0.55).multiplyScalar(0.45 * see);
   const membraneOpacity = 0.74 * see;
   const membrane =
     tier === "low"
       ? new MeshStandardMaterial({ color: base, roughness: 0.35, transparent: true, opacity: membraneOpacity, depthWrite: false })
       : new MeshPhysicalMaterial({ color: base, roughness: 0.28, clearcoat: 0.6, clearcoatRoughness: 0.35, sheen: 1, sheenColor: base.clone().lerp(new Color(P.white), 0.5), sheenRoughness: 0.5, transparent: true, opacity: membraneOpacity, depthWrite: false });
+  if (glow > 0) {
+    membrane.emissive = base.clone();
+    membrane.emissiveIntensity = glow;
+    if (membrane instanceof MeshPhysicalMaterial) membrane.sheen = 0.25;
+  }
   addLife(membrane, rim, 0.06, time);
   // The nucleus: the same hue, much deeper, matte.
   const deep = base.clone().lerp(new Color(P.ink[900]), 0.45);

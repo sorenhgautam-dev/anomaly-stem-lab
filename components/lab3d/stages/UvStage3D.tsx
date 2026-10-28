@@ -2,16 +2,14 @@
 
 import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { RoundedBox } from "@react-three/drei";
 import { Vector3, type Group } from "three";
-import { useQuality } from "@/lib/quality";
 import { LAB } from "@/lib/tokens";
 import { labView, setAnchor } from "../lab-state";
 import { Colony } from "../kit/bio/Dish3D";
+import { Field3D } from "../kit/bio/Field3D";
 import { Readout } from "../kit/chem/instruments";
 import { useSnapshot } from "../kit/chem/heat/useSnapshot";
 import { UvMeter3D } from "../kit/apparatus";
-import { kitMaterial } from "../kit/materials";
 import { orbit, type StageShots } from "../shots";
 import { useStageValues } from "../useStageValues";
 import { FluffyCloud, Sun } from "../kit/sky";
@@ -20,9 +18,9 @@ import { FluffyCloud, Sun } from "../kit/sky";
  * UV on a cloudy day, in 3D (stage "uv", engine/cancer/uv.ts), in the sunny
  * Prevention Lab: a warm gold sun, clouds that roll in as the simulator's
  * cloud cover rises, a UV meter on a stand with its teal face reading the
- * share of a clear day's UV that gets through, and a calm skin-cell panel
- * where small teal marks add up as damage points. Never burns, never red
- * skin. After a wrong guess the meter's ghost label shows the student's idea.
+ * share of a clear day's UV that gets through, and skin cells under a
+ * microscope field where small gold marks add up as damage points. Never
+ * burns, never red skin. After a wrong guess the meter's ghost label shows the student's idea.
  */
 
 
@@ -38,7 +36,6 @@ export function uvShots(): StageShots {
 }
 
 export function UvStage3D() {
-  const tier = useQuality((s) => s.level);
   const sv = useStageValues();
   const snap = useSnapshot(sv);
   const cloud = useRef<Group>(null);
@@ -74,12 +71,12 @@ export function UvStage3D() {
         <UvMeter3D />
       </group>
       <Readout text={() => `UV getting through\n${Math.round((snap.now.uv ?? 1) * 100)}% of a clear day`} style="screen" height={0.07} position={[0.55, 1.05, 0.08]} />
-      {/* The skin-cell panel: calm beige, with damage points adding up as small teal marks. */}
-      <group position={[-0.45, 0, 0.15]}>
-        <RoundedBox args={[0.72, 0.05, 0.52]} radius={0.02} smoothness={3} position={[0, 0.025, 0]} material={kitMaterial("satin", tier, "#EFE3D6")} />
-        <Colony count={() => Math.min(300, (snap.now.damage ?? 0) * 1.2)} room={300} radius={0.22} size={0.012} color={LAB.prevention.teal} y={0.06} />
-      </group>
-      <Readout text={() => `Skin cells\n${Math.round(snap.now.damage ?? 0)} damage points`} height={0.08} position={[-0.45, 0.32, 0.15]} />
+      {/* Skin cells under the microscope: calm sage cells, with damage points adding up as small gold marks among them. */}
+      <Field3D radius={0.32} position={[-0.5, 0, -0.12]}>
+        <Colony count={() => 46} room={46} radius={0.27} size={0.034} color={LAB.prevention.sage} glow={0.32} />
+        <Colony count={() => Math.min(300, (snap.now.damage ?? 0) * 1.2)} room={300} radius={0.26} size={0.011} color={LAB.prevention.wall} glow={0.5} y={0.05} />
+      </Field3D>
+      <Readout text={() => `Skin cells\n${Math.round(snap.now.damage ?? 0)} damage points`} height={0.08} position={[-0.5, 0.34, -0.12]} />
     </group>
   );
 }

@@ -66,6 +66,7 @@ function Benches({ tone, values }: { tone: StageTone; values: Partial<Record<Sta
   }, [gl, scene, camera]);
   const bench = (t: StageTone, node: React.ReactNode) => (
     <group
+      key={t}
       ref={(g) => {
         groups.current[t] = g;
       }}

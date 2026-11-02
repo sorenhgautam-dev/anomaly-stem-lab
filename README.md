@@ -6,7 +6,7 @@
 
 **A free cancer science lab for students aged 11 to 18, right in the browser.**
 
-[Live demo: add the Vercel link here] · Built for **CodeTheCure** (Education)
+(https://anomaly-stem-lab.vercel.app/start) · Built for **CodeTheCure** (Education)
 
 <br />
 
